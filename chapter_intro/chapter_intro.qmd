@@ -14,6 +14,23 @@ revealjs-plugins:
   - revealjs-text-resizer
 ---
 
+<!-- ---
+title: "Introduction"
+subtitle: "FMB819: R을 이용한 데이터분석"
+# date: "`r Sys.Date()`"
+format: 
+  revealjs:
+    theme: simple
+    transition: fade
+    transition-speed: fast
+    scrollable: true
+    #toc: true
+    chalkboard: TRUE
+revealjs-plugins:
+  - revealjs-text-resizer
+# Thanks to https://github.com/gadenbuie/revealjs-text-resizer#readme
+--- -->
+
 ```{r setup, include = FALSE, warning = FALSE, message = FALSE}
 options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(
