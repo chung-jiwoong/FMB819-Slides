@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="chapter_regext_files/libs/clipboard/clipboard.min.js"></script>
+<script src="chapter_regext_files/libs/quarto-html/tabby.min.js"></script>
+<script src="chapter_regext_files/libs/quarto-html/popper.min.js"></script>
+<script src="chapter_regext_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="chapter_regext_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="chapter_regext_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="chapter_regext_files/libs/quarto-html/quarto-syntax-highlighting-48ffa3e5b9d089919c6712c39e5b00f2.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.41">
+
+  <title>FMB819: R을 이용한 데이터분석</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="chapter_regext_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="chapter_regext_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="chapter_regext_files/libs/revealjs/dist/theme/quarto-2f366650f320edcfcf53d73c80250a32.css">
+  <link rel="stylesheet" href="default">
+  <link rel="stylesheet" href="../css/kubs.css">
+  <link rel="stylesheet" href="../css/kubs-fonts.css">
+  <link href="chapter_regext_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="chapter_regext_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="chapter_regext_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="chapter_regext_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="chapter_regext_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="chapter_regext_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <link href="chapter_regext_files/libs/countdown/countdown.css" rel="stylesheet">
+
+  <script src="chapter_regext_files/libs/countdown/countdown.js"></script>
+
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">FMB819: R을 이용한 데이터분석</h1>
+  <p class="subtitle"><span style="font-size:1.5em; color:#a01616;">Linear Regression Extensions</span></p>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="todays-agenda" class="slide level2 scrollable">
+<h2>Today’s Agenda</h2>
+<ul>
+<li><p>데이터의 특성과 변수 간 관계에 따라, <strong>기본 모델에서 벗어나야 하는 경우</strong>가 있음.</p></li>
+<li><p>3가지 중요한 변형을 살펴볼 것임:</p>
+<ol type="1">
+<li><strong><em>비선형 관계 (Non-linear relationships)</em></strong>: 로그 및 다항식 모델</li>
+<li><strong><em>변수 간 교차 (Interaction terms)</em></strong></li>
+<li><strong><em>표준화 회귀 (Standardized regression)</em></strong></li>
+</ol></li>
+<li><p>이 경우에도 <strong>OLS(최소자승법)</strong> 추정 방법 사용</p></li>
+<li><p>실증 분석 예제: (i) <em>대학 등록금</em>과 <em>소득 잠재력</em>, (ii) <em>임금</em>, <em>교육 수준</em> 및 <em>성별</em>, (iii) <em>학급 규모</em>와 <em>학생 성취도</em></p></li>
+</ul>
+</section>
+<section>
+<section id="non-linear-relationships" class="title-slide slide level1 center">
+<h1>Non-Linear Relationships</h1>
+
+</section>
+<section id="accounting-for-non-linear-relationships" class="slide level2 scrollable">
+<h2>Accounting for Non-Linear Relationships</h2>
+<p>2 가지 모형:</p>
+<ol type="1">
+<li><p><strong><em>Log</em></strong> models</p></li>
+<li><p><strong><em>Polynomial</em></strong> models</p></li>
+</ol>
+</section>
+<section id="log-모델" class="slide level2">
+<h2>Log 모델</h2>
+<ul>
+<li><p>지금까지 본 모델들은 <strong><em>수준-수준(Level-Level)</em></strong> 모델로 볼 수 있음. 종속 변수와 독립 변수가 원래 단위(수준)로 측정됨.</p>
+<ul>
+<li>화폐단위(원), 연도, 학생 수, 퍼센트(%) 등</li>
+</ul></li>
+<li><p>종속 변수 및/또는 독립 변수에 <strong>자연로그(Natural Logarithm)</strong> 를 취하면 3가지 유형의 회귀 모델을 정의할 수 있음<br>
+(표기 남용: <span class="math inline">\(\ln(x) = \log_{e}(x) = \log(x)\)</span>)</p>
+<ul>
+<li><p><strong><em>로그 - 수준(Log - Level)</em></strong>: <span class="math inline">\(\quad \log(y_i) = b_0 + b_1 x_{1,i} + ... + e_i\)</span></p></li>
+<li><p><strong><em>수준 - 로그(Level - Log)</em></strong>: <span class="math inline">\(\quad y_i = b_0 + b_1 \log(x_{1,i}) + ... + e_i\)</span></p></li>
+<li><p><strong><em>로그 - 로그(Log - Log)</em></strong>: <span class="math inline">\(\quad \log(y_i) = b_0 + b_1 \log(x_{1,i}) + ... + e_i\)</span></p></li>
+</ul></li>
+</ul>
+</section>
+<section id="자연로그-함수-기본-개념" class="slide level2">
+<h2>(자연)로그 함수: 기본 개념</h2>
+
+<img data-src="chapter_regext_files/figure-revealjs/unnamed-chunk-1-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section id="자연로그-함수-기본-개념-1" class="slide level2">
+<h2>(자연)로그 함수: 기본 개념</h2>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Natural_logarithm">자연로그 함수</a>는 지수 함수의 역함수로 정의됨, 즉 <span class="math inline">\(\log(\exp(x))=x\)</span></li>
+</ul>
+<p><span class="math inline">\(\rightarrow\)</span> 모든 <span class="math inline">\(x\)</span>에 대해 <span class="math inline">\(\exp(x)&gt;0\)</span> 이므로, <strong>자연로그 함수는 0보다 큰 값에서만 정의됨</strong>! (즉, 0에서는 정의되지 않음)</p>
+<ul>
+<li>변수에 로그를 취하려면 값이 0 또는 음수가 아닌지 확인해야 함! 종속 변수 또는 독립 변수에 로그를 적용할 때 항상 유의해야 함.</li>
+</ul>
+</section>
+<section id="자연로그-함수-기본-개념-2" class="slide level2">
+<h2>(자연)로그 함수: 기본 개념</h2>
+<ul>
+<li>데이터 분포가 <strong>한쪽으로 치우친 경우(Skewed Distributions)</strong>, 로그를 취하면 더 정규 분포(Normal Distribution)에 가까워짐.</li>
+</ul>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="chapter_regext_files/figure-revealjs/unnamed-chunk-2-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="chapter_regext_files/figure-revealjs/unnamed-chunk-3-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="로그-모델-간단한-해석" class="slide level2">
+<h2>로그 모델: 간단한 해석</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 22%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>모델</th>
+<th style="text-align: center;">회귀 모델</th>
+<th style="text-align: center;"><span class="math inline">\(b_1\)</span> 해석</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>수준 - 수준</strong></td>
+<td style="text-align: center;"><span class="math inline">\(y = b_0 + b_1 x + e\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(x\)</span>가 1 단위 증가하면, 평균적으로 <span class="math inline">\(y\)</span>는 <span class="math inline">\(b_1\)</span> 단위 변화</td>
+</tr>
+<tr class="even">
+<td><strong>로그 - 수준</strong></td>
+<td style="text-align: center;"><span class="math inline">\(\log(y) = b_0 + b_1 x + e\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(x\)</span>가 1 단위 증가하면, 평균적으로 <span class="math inline">\(y\)</span>는 <span class="math inline">\(b_1 \times 100\)</span>% 변화</td>
+</tr>
+<tr class="odd">
+<td><strong>수준 - 로그</strong></td>
+<td style="text-align: center;"><span class="math inline">\(y = b_0 + b_1 \log(x)  + e\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(x\)</span>가 1% 증가하면, 평균적으로 <span class="math inline">\(y\)</span>는 <span class="math inline">\(b_1 / 100\)</span> 단위 변화</td>
+</tr>
+<tr class="even">
+<td><strong>로그 - 로그</strong></td>
+<td style="text-align: center;"><span class="math inline">\(\log(y) = b_0 + b_1 \log(x) + e\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(x\)</span>가 1% 증가하면, 평균적으로 <span class="math inline">\(y\)</span>는 <span class="math inline">\(b_1\)</span>% 변화</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>이는 해석은 <a href="https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faqhow-do-i-interpret-a-regression-model-when-some-variables-are-log-transformed/">수학적으로 쉽게 도출 가능</a>합니다.</p></li>
+<li><p>⚠️ <strong>위 해석은</strong> <span class="math inline">\(x\)</span>의 작은 변화와 <span class="math inline">\(b_1\)</span>이 작은 경우에만 유효: <span class="math inline">\(x\)</span>의 변화가 클 경우 또는 <span class="math inline">\(b_1\)</span> 값이 크다면, 해석이 달라질 수 있음.</p></li>
+</ul>
+</section>
+<section id="gen_log" class="slide level2">
+<h2>로그 모델: 일반적인 해석</h2>
+<p><span class="math inline">\(x\)</span>의 임의의 증가 <span class="math inline">\(\Delta x\)</span> 와 임의의 <span class="math inline">\(b_1\)</span>에 대해<br>
+<span class="math inline">\((\Delta x = 5\% = 0.05 \implies 1 + \Delta x = 1.05)\)</span></p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 22%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>모델</th>
+<th style="text-align: center;">회귀 모델</th>
+<th style="text-align: center;"><span class="math inline">\(b_1\)</span> 해석</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>수준 - 수준</strong></td>
+<td style="text-align: center;"><span class="math inline">\(y = b_0 + b_1 x + e\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(x\)</span>가 1 단위 증가하면, 평균적으로 <span class="math inline">\(y\)</span>는 <span class="math inline">\(b_1\)</span> 단위 변화</td>
+</tr>
+<tr class="even">
+<td><strong>로그 - 수준</strong></td>
+<td style="text-align: center;"><span class="math inline">\(\log(y) = b_0 + b_1 x + e\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(x\)</span>가 1 단위 증가하면, 평균적으로 <span class="math inline">\(y\)</span>는 <span class="math inline">\((e^{b_1} - 1) \times 100\)</span>% 변화</td>
+</tr>
+<tr class="odd">
+<td><strong>수준 - 로그</strong></td>
+<td style="text-align: center;"><span class="math inline">\(y = b_0 + b_1 \log(x)  + e\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\Delta x\)</span>% 증가하면, 평균적으로 <span class="math inline">\(y\)</span>는 <span class="math inline">\(b_1 \times \log(1 + \Delta x)\)</span> 단위 변화</td>
+</tr>
+<tr class="even">
+<td><strong>로그 - 로그</strong></td>
+<td style="text-align: center;"><span class="math inline">\(\log(y) = b_0 + b_1 \log(x) + e\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\Delta x\)</span>% 증가하면, 평균적으로 <span class="math inline">\(y\)</span>는 <span class="math inline">\(((1 + \Delta x)^{b_1} - 1) \times 100\)</span>% 변화</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>위 해석이 왜 유효한지 알고 싶다면? <a href="#/log_approx"><strong>부록: 로그 근사 (Appendix: Log Approximation)</strong></a> 참고</li>
+</ul>
+</section>
+<section id="로그-모델을-언제-사용해야-할까" class="slide level2 scrollable">
+<h2>로그 모델을 언제 사용해야 할까?</h2>
+<ol type="1">
+<li><span class="math inline">\(x\)</span>와 <span class="math inline">\(y\)</span>의 관계가 로그 또는 지수 함수처럼 보이는 경우</li>
+</ol>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="chapter_regext_files/figure-revealjs/unnamed-chunk-4-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="chapter_regext_files/figure-revealjs/unnamed-chunk-5-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="로그-모델을-언제-사용해야-할까-1" class="slide level2 scrollable">
+<h2>로그 모델을 언제 사용해야 할까?</h2>
+<ol type="1">
+<li><span class="math inline">\(x\)</span>와 <span class="math inline">\(y\)</span>의 관계가 로그 또는 지수 함수처럼 보이는 경우</li>
+</ol>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="chapter_regext_files/figure-revealjs/unnamed-chunk-6-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="chapter_regext_files/figure-revealjs/unnamed-chunk-7-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="로그-모델을-언제-사용해야-할까-2" class="slide level2 scrollable">
+<h2>로그 모델을 언제 사용해야 할까?</h2>
+<ol type="1">
+<li><p><span class="math inline">\(x\)</span>와 <span class="math inline">\(y\)</span>의 관계가 <strong>로그 함수</strong> 또는 <strong>지수 함수</strong>처럼 보이는 경우</p></li>
+<li><p><a href="https://en.wikipedia.org/wiki/Elasticity_(economics)"><strong><em>탄력성(elasticity)</em></strong></a>을 쉽게 해석하기 위해</p></li>
+</ol>
+<p><span class="math inline">\(x\)</span>에 대한 <span class="math inline">\(y\)</span>의 탄력성:<br>
+<span class="math inline">\(x\)</span>가 <strong>1% 증가</strong>할 때, <span class="math inline">\(y\)</span>가 <strong>몇 % 변화하는지</strong>를 나타냄</p>
+</section>
+<section id="다른-형태의-비선형-관계를-고려" class="slide level2">
+<h2>다른 형태의 비선형 관계를 고려</h2>
+<p><span class="math inline">\(x\)</span>와 <span class="math inline">\(y\)</span>의 관계가 <strong>지수 함수(exponential) 또는 로그 함수(logarithm)</strong>가 아니라면?</p>
+<p><span class="math inline">\(\rightarrow\)</span> <strong><em>다항 회귀(polynomial regression)</em></strong>: 회귀 변수에 다항식을 적용!</p>
+</section>
+<section id="다항식polynomial" class="slide level2">
+<h2>다항식(polynomial)? 🤔</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="chapter_regext_files/figure-revealjs/unnamed-chunk-8-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="chapter_regext_files/figure-revealjs/unnamed-chunk-9-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="다항식-회귀-polynomial-regressions" class="slide level2">
+<h2>다항식 회귀 (Polynomial Regressions)</h2>
+<ul>
+<li><p>시각적 또는 예상되는 관계에 따라 <strong>회귀식에 높은 차수의 독립 변수를 추가</strong></p></li>
+<li><p><code>R</code>에서 다항식 회귀 사용법</p></li>
+</ul>
+<div class="columns">
+<div class="column" style="width:50%;">
+
+</div><div class="column" style="width:50%;">
+
+</div></div>
+</section>
+<section id="다항식-회귀-polynomial-regressions-1" class="slide level2">
+<h2>다항식 회귀 (Polynomial Regressions)</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong><em>2차 다항식 회귀</em></strong></p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="chapter_regext_files/figure-revealjs/unnamed-chunk-12-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<p><strong><em>3차 다항식 회귀</em></strong></p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="chapter_regext_files/figure-revealjs/unnamed-chunk-13-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="section" class="slide level2">
+<h2></h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="chapter_regext_files/figure-html/curve_fitting.png" class="quarto-figure quarto-figure-center" width="378" height="600"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="task-1" class="slide level2 scrollable" data-background-color="#ffebf0">
+<h2>Task 1</h2>
+<div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
+<p></p><div class="countdown" id="timer_71fcd562" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+</div>
+<ol type="1">
+<li><p>데이터를 <a href="https://www.dropbox.com/s/2v5mb04nzw2u7bd/college_tuition_income.csv?dl=1">여기</a>에서 다운로드하여 불러오시오. 이 데이터셋은 미국 대학의 등록금과 졸업생의 예상 소득 정보를 포함하고 있다. 데이터에 대한 자세한 설명은 <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-03-10/readme.md">여기</a>에서 확인할 수 있음.</p></li>
+<li><p>예상 중간 경력 소득(<code>mid_career_pay</code>)을 종속 변수(𝑦축)로 하고, 주 외 등록금(<code>out_of_state_tuition</code>)을 독립 변수(𝑥축)로 하는 산점도를 생성하시오. 관계가 대체로 선형적이라고 볼 수 있는가, 아니면 비선형적인가? 선형 회귀선과 2차 다항 회귀선을 함께 적합하기 위해 <code>geom_smooth(method = "lm", se = F) + geom_smooth(method = "lm", se = F, formula = y ~ poly(x, 2, raw= T))</code>을 사용하시오. 이번 경우 어느 모델이 더 적절한가?</p></li>
+<li><p>주 외 등록금을 1000으로 나눈 새로운 변수를 생성하시오. 이를 이용하여 예상 중간 경력 소득을 회귀 분석하시오. 회귀 계수를 해석하시오.</p></li>
+<li><p>예상 중간 경력 소득을 주 외 등록금을 1000으로 나눈 변수와 그 제곱 항을 포함하여 회귀 분석하시오. <em>힌트:</em> <code>poly(x, 2, raw = T)</code> 또는 <code>x + I(x^2)</code>를 사용할 수 있음. 제곱 항의 계수가 양수라는 것은 무엇을 의미하는가?</p></li>
+</ol>
+</section></section>
+<section>
+<section id="interaction-terms" class="title-slide slide level1 center">
+<h1>Interaction Terms</h1>
+
+</section>
+<section id="교차-변수-interacting-regressors" class="slide level2">
+<h2>교차 변수 (Interacting Regressors)</h2>
+<ul>
+<li><p><strong><em>한 변수의 효과가 다른 변수의 값에 따라 달라질 것</em></strong>이라고 가정하는 경우.</p>
+<ul>
+<li><em>예제:</em> 교육 수준이 임금에 미치는 영향이 성별에 따라 달라질 수 있음.</li>
+</ul></li>
+<li><p>만약 <span class="math inline">\(x_1\)</span>과 <span class="math inline">\(x_2\)</span>를 상호작용 변수로 추가한다면, 회귀 모형을 다음과 같이 만듬:</p></li>
+</ul>
+<p><span class="math display">\[y_i =  b_0 + b_1 x_{1,i} + b_2 x_{2,i} + b_3x_{1,i} \times x_{2,i} + ... + e_i\]</span></p>
+<ul>
+<li><p><span class="math inline">\(b_1\)</span>, <span class="math inline">\(b_2\)</span>, 그리고 <span class="math inline">\(b_3\)</span>의 해석은 <span class="math inline">\(x_1\)</span>과 <span class="math inline">\(x_2\)</span>의 유형(연속형 또는 범주형)에 따라 달라짐.</p></li>
+<li><p>우선, 하나의 독립 변수가 <strong><em>더미(범주형) 변수</em></strong>이고, 다른 하나가 <strong><em>연속형 변수</em></strong>인 경우를 살펴보겠음.</p></li>
+<li><p>이러한 개념을 익히면 다음과 같은 경우에도 적용 가능:</p>
+<ul>
+<li><p>두 개의 독립 변수가 모두 더미(범주형) 변수인 경우,</p></li>
+<li><p>두 개의 독립 변수가 모두 연속형 변수인 경우.</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="교차-변수-interacting-regressors-1" class="slide level2">
+<h2>교차 변수 (Interacting Regressors)</h2>
+<ul>
+<li><p><em>STAR</em> 실험 데이터: 작은 학급과 일반 학급의 효과는 교사의 경험에 따라 어떻게 달라지는가?</p></li>
+<li><p>회귀 모형은 다음과 같이 변함:</p></li>
+</ul>
+<p><span class="math display">\[ \textrm{score}_i = \color{#d96502}{b_0} + \color{#027D83}{b_1} \textrm{small}_i + \color{#02AB0D}{b_2} \textrm{experience}_i + \color{#d90502}{b_3} \textrm{small}_i \times \textrm{experience}_i + e_i\]</span></p>
+<ul>
+<li>교사 경력이 10년인 경우 작은 학급의 효과는?</li>
+</ul>
+<p><span class="math display">\[
+\mathbb{E}[\textrm{score}_i | \textrm{small}_i = 1 \textrm{ &amp; experience}_i = 10] = \color{#d96502}{b_0} + \color{#027D83}{b_1} + \color{#02AB0D}{b_2}*10 + \color{#d90502}{b_3}*10
+\]</span></p>
+<p><span class="math display">\[
+\mathbb{E}[\textrm{score}_i | \textrm{small}_i = 0 \textrm{ &amp; experience}_i = 10] = \color{#d96502}{b_0} + \color{#02AB0D}{b_2}*10
+\]</span></p>
+<p><span class="math display">\[
+\begin{split}
+\mathbb{E}[\textrm{score}_i &amp;| \textrm{small}_i = 1 \textrm{ &amp; experience}_i = 10] - \mathbb{E}[\textrm{score}_i | \textrm{small}_i = 0 \textrm{ &amp; experience}_i = 10] \\
+&amp;= \color{#d96502}{b_0} + \color{#027D83}{b_1} + \color{#02AB0D}{b_2}*10 + \color{#d90502}{b_3}*10 - (\color{#d96502}{b_0} + \color{#02AB0D}{b_2}*10) \\
+&amp;= \color{#027D83}{b_1} + \color{#d90502}{b_3}*10
+\end{split}
+\]</span></p>
+</section>
+<section id="교차-변수-interacting-regressors-2" class="slide level2">
+<h2>교차 변수 (Interacting Regressors)</h2>
+<p><code>math</code> 점수에 대한 회귀 분석을 실행한 결과 (모든 학년 포함):</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = math ~ small + experience + small * experience, 
+    data = star_df)
+
+Coefficients:
+         (Intercept)             smallTRUE            experience  
+            534.1919               15.8906                1.3305  
+smallTRUE:experience  
+             -0.3034  </code></pre>
+</div>
+</div>
+<p><strong><em>해석</em></strong></p>
+<ul>
+<li><p>교차항은 작은 학급의 효과가 교사의 경험에 따라 달라지도록 함.</p></li>
+<li><p>작은 학급에 배정되는 것이 math 점수에 긍정적인 영향을 줌.</p></li>
+<li><p>그러나 이 효과는 교사의 경험이 많아질수록 감소함.</p></li>
+</ul>
+</section>
+<section id="교차-변수-시각화" class="slide level2">
+<h2>교차 변수: 시각화</h2>
+<p><span class="math display">\[ \textrm{score}_i = \color{#d96502}{b_0} + \color{#027D83}{b_1} \textrm{small}_i + \color{#02AB0D}{b_2} \textrm{experience}_i + \color{#d90502}{b_3} \textrm{small}_i * \textrm{experience}_i + e_i\]</span></p>
+
+<img data-src="chapter_regext_files/figure-html/graph_base.png" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"></section>
+<section id="교차-변수-시각화-1" class="slide level2">
+<h2>교차 변수: 시각화</h2>
+<p><span class="math display">\[ \textrm{score}_i = \color{#d96502}{b_0} + \color{#027D83}{b_1} \textrm{small}_i + \color{#02AB0D}{b_2} \textrm{experience}_i + \color{#d90502}{b_3} \textrm{small}_i * \textrm{experience}_i + e_i\]</span></p>
+
+<img data-src="chapter_regext_files/figure-html/graph_reg.png" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"></section>
+<section id="교차-변수-시각화-2" class="slide level2">
+<h2>교차 변수: 시각화</h2>
+<p><span class="math display">\[ \textrm{score}_i = \color{#d96502}{b_0} + \color{#027D83}{b_1} \textrm{small}_i + \color{#02AB0D}{b_2} \textrm{experience}_i + \color{#d90502}{b_3} \textrm{small}_i * \textrm{experience}_i + e_i\]</span></p>
+
+<img data-src="chapter_regext_files/figure-html/graph_reg_b0.png" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"></section>
+<section id="교차-변수-시각화-3" class="slide level2">
+<h2>교차 변수: 시각화</h2>
+<p><span class="math display">\[ \textrm{score}_i = \color{#d96502}{b_0} + \color{#027D83}{b_1} \textrm{small}_i + \color{#02AB0D}{b_2} \textrm{experience}_i + \color{#d90502}{b_3} \textrm{small}_i * \textrm{experience}_i + e_i\]</span></p>
+
+<img data-src="chapter_regext_files/figure-html/graph_reg_b0_b1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"></section>
+<section id="교차-변수-시각화-4" class="slide level2">
+<h2>교차 변수: 시각화</h2>
+<p><span class="math display">\[ \textrm{score}_i = \color{#d96502}{b_0} + \color{#027D83}{b_1} \textrm{small}_i + \color{#02AB0D}{b_2} \textrm{experience}_i + \color{#d90502}{b_3} \textrm{small}_i * \textrm{experience}_i + e_i\]</span></p>
+
+<img data-src="chapter_regext_files/figure-html/graph_reg_b0_b1_b2.png" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"></section>
+<section id="교차-변수-시각화-5" class="slide level2">
+<h2>교차 변수: 시각화</h2>
+<p><span class="math display">\[ \textrm{score}_i = \color{#d96502}{b_0} + \color{#027D83}{b_1} \textrm{small}_i + \color{#02AB0D}{b_2} \textrm{experience}_i + \color{#d90502}{b_3} \textrm{small}_i * \textrm{experience}_i + e_i\]</span></p>
+
+<img data-src="chapter_regext_files/figure-html/graph_reg_b0_b1_b2_b3.png" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"></section>
+<section id="task-2" class="slide level2 scrollable" data-background-color="#ffebf0">
+<h2>Task 2</h2>
+<div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
+<p></p><div class="countdown" id="timer_597ea0a8" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+</div>
+<p><strong>CPS1985 데이터 분석</strong></p>
+<ol type="1">
+<li><p><code>AER</code> 패키지에서 <code>CPS1985</code> 데이터를 불러오시오.</p></li>
+<li><p>변수의 정의를 확인하기 위해 도움말을 참조하시오: <code>?CPS1985</code></p></li>
+<li><p>해당 데이터에서 사람들이 <strong>파트타임</strong> 또는 <strong>풀타임</strong>으로 근무하는지 여부가 중요한가? 그 이유는 무엇인가?</p></li>
+<li><p><code>wage</code> 변수의 자연 로그 값을 저장하는 <code>log_wage</code> 변수를 생성하시오.</p></li>
+<li><p><code>log_wage</code>를 <code>gender</code>와 <code>education</code>에 대해 회귀 분석을 수행하고 이를 <code>reg1</code>으로 저장하시오. 각 계수를 해석하시오.</p></li>
+<li><p><code>log_wage</code>를 <code>gender</code>, <code>education</code> 및 <code>gender*education</code> (상호작용 변수)로 회귀 분석을 수행하고 이를 <code>reg2</code>로 저장하시오. 각 계수를 해석하시오. <strong>성별 임금 격차가 교육 수준이 증가할수록 줄어드는가?</strong></p></li>
+<li><p>해당 상호작용 효과를 시각적으로 나타내는 그래프를 생성하시오. (<em>힌트:</em> <code>aes</code>에서 <code>color = gender</code>를 사용하고, <code>geom_smooth(method = "lm", se = F)</code>를 활용하여 성별별 회귀선을 그리시오.)</p></li>
+</ol>
+</section></section>
+<section>
+<section id="standardized-regression" class="title-slide slide level1 center">
+<h1>Standardized Regression</h1>
+
+</section>
+<section id="표준화-회귀-분석-standardized-regression" class="slide level2">
+<h2>표준화 회귀 분석 (Standardized Regression)</h2>
+<ul>
+<li>변수를 <strong>표준화(standardizing)</strong> 한다는 것이 무엇을 의미하는지 정의해 보자.</li>
+</ul>
+<blockquote>
+<p><strong><em>표준화</em></strong>란 변수 <span class="math inline">\(z\)</span>의 평균을 빼고, 그 값을 변수의 표준편차로 나누는 것을 의미함:</p>
+</blockquote>
+<p><span class="math display">\[ z_i^{stand} = \frac{z_i - \bar z}{\sigma(z)}\]</span></p>
+<ul>
+<li><p>여기서, <span class="math inline">\(\bar z\)</span>는 <span class="math inline">\(z\)</span>의 평균이고, <span class="math inline">\(\sigma(z)\)</span>는 <span class="math inline">\(z\)</span>의 표준편차를 의미함. 즉, <span class="math inline">\(\sigma(z) = \sqrt{\textrm{Var}(z)}\)</span>.</p></li>
+<li><p>이제 <span class="math inline">\(z^{stand}\)</span>는 평균이 0이고, 표준편차가 1이 됨, 즉:</p></li>
+</ul>
+<p><span class="math display">\[\overline{z^{stand}} = 0, \quad \sigma(z^{stand}) = 1\]</span></p>
+<ul>
+<li><p>직관적으로 표준화는 <strong><em>변수들을 동일한 척도로 변환</em></strong>하여 비교할 수 있도록 해줌.</p></li>
+<li><p>우리의 <strong>학급 규모(class size)와 학생 성과(student performance)</strong> 예제에서 표준화를 사용하면:</p>
+<ul>
+<li>효과의 <strong>크기(magnitude)</strong> 해석이 쉬워지고,<br>
+</li>
+<li><strong>각 변수의 상대적 중요성</strong>을 비교할 수 있음.</li>
+</ul></li>
+</ul>
+</section>
+<section id="표준화-회귀-분석-시각화" class="slide level2">
+<h2>표준화 회귀 분석: 시각화</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="chapter_regext_files/figure-html/graph_before.png" class="quarto-figure quarto-figure-center" width="1200"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="chapter_regext_files/figure-html/graph_after.png" class="quarto-figure quarto-figure-center" width="1200"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="표준화-회귀-분석-시각화-1" class="slide level2">
+<h2>표준화 회귀 분석: 시각화</h2>
+<p><strong><em>종속 변수</em></strong> <span class="math inline">\(y\)</span>가 표준화된 경우: <span class="math inline">\(\color{#d90502}{y^{stand}} = b_0 + \sum_{k=1}^Kb_kx_k +e\)</span></p>
+<ul>
+<li><p><span class="math inline">\(b_k\)</span>는 <span class="math inline">\(x_k\)</span>가 한 단위 증가할 때 <span class="math inline">\(y^{stand}\)</span>가 얼마나 변하는지를 나타냄.</p></li>
+<li><p><span class="math inline">\(y^{stand}\)</span>가 1 증가하면 이는 <span class="math inline">\(y\)</span>가 <strong>한 표준편차만큼 증가</strong>한다는 의미. 따라서 <span class="math inline">\(b_k\)</span>는 <span class="math inline">\(y\)</span> <strong>표준편차의 비율로서</strong> <span class="math inline">\(y\)</span>의 변화를 측정함.</p></li>
+</ul>
+<p><strong><em>설명 변수</em></strong> <span class="math inline">\(x_k\)</span>가 표준화된 경우: <span class="math inline">\(y = b_0 + \sum_{k=1}^Kb_k\color{#d90502}{x_k^{stand}} +e\)</span></p>
+<ul>
+<li><p><span class="math inline">\(b_k\)</span>는 <span class="math inline">\(x_k^{stand}\)</span>가 한 단위 증가할 때 <span class="math inline">\(y\)</span>가 얼마나 변하는지를 나타냄.</p></li>
+<li><p><span class="math inline">\(x_k^{stand}\)</span>가 1 증가하면 이는 <span class="math inline">\(x_k\)</span>가 한 표준편차만큼 증가한다는 의미. 따라서 <span class="math inline">\(b_k\)</span>는 <span class="math inline">\(x_k\)</span>가 한 표준편차 증가할 때 예측되는 <span class="math inline">\(y\)</span>의 변화를 측정함.</p></li>
+</ul>
+</section>
+<section id="task-3" class="slide level2 scrollable" data-background-color="#ffebf0">
+<h2>Task 3</h2>
+<div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
+<p></p><div class="countdown" id="timer_f1f4c01c" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+</div>
+<p><a href="https://www.dropbox.com/s/wwp2cs9f0dubmhr/grade5.dta?dl=1">학년별 성적 데이터</a>: 데이터를 불러오기 위해서는 <code>haven</code> 패키지의 <code>read_dta()</code> 함수를 사용. 아래는 평균 수학 시험 점수를 전체 독립 변수 세트에 대해 회귀 분석한 결과:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>      (Intercept)          classize     disadvantaged school_enrollment 
+     78.560725298       0.003320773      -0.389333008       0.000758258 
+           female         religious 
+      0.923710499       2.876146701 </code></pre>
+</div>
+</div>
+<ol type="1">
+<li><p>표준화된 수학 점수 변수 생성: <code>avgmath_stand</code>라는 새로운 변수를 만들어 표준화된 수학 점수를 저장하시오. scale() 함수를 (mutate와 함께) 사용하거나, 기본 R을 사용하여 직접 계산할 수 있음.</p></li>
+<li><p>표준화된 수학 점수를 종속 변수로 회귀 분석: 표준화된 수학 점수를 종속 변수로 사용하여 전체 회귀 분석을 수행하시오. 각 계수의 크기와 의미를 해석하시오.</p></li>
+<li><p>연속형 독립 변수 표준화: 각 연속형 독립 변수에 대해 <code>변수명_stand</code> 형태의 표준화된 변수를 만드시오. <code>religious</code> 변수를 표준화하는 것이 적절한가?</p></li>
+<li><p>표준화된 독립 변수로 회귀 분석: <code>avgmath_stand</code>를 종속 변수로 하고, 표준화된 모든 독립 변수 및 <code>religious</code>를 포함하여 회귀 분석을 수행하시오. 각 독립 변수가 상대적으로 얼마나 중요한지 논의하시오.</p></li>
+</ol>
+</section>
+<section id="다음-수업-예고" class="slide level2">
+<h2>다음 수업 예고</h2>
+<ul>
+<li><p>지금까지 우리는 항상 전체 모집단에서 <strong>표본</strong>을 추출하여 작업해 왔음.</p></li>
+<li><p>매번 새로운 표본을 모집단에서 다시 추출한다고 가정하면:</p>
+<ul>
+<li><p>같은 결과를 얻을 수 있을까?</p></li>
+<li><p>다시 말해, 우리의 추정치(부호, 크기)가 단순히 <strong>무작위성에 의해 결정되지 않았다는 것</strong>을 얼마나 확신할 수 있을까?</p></li>
+</ul></li>
+<li><p>이러한 질문들에 대한 답을 찾기 위해:</p>
+<ul>
+<li><p><strong>표본 추출(sampling)</strong> 개념을 소개하고,</p></li>
+<li><p><strong>통계적 추론(statistical inference)</strong>이 무엇이며, 어떻게 수행하는지 알아볼 것임.</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="인과-관계를-찾아가는-길" class="slide level2">
+<h2>🔍 인과 관계를 찾아가는 길</h2>
+<p>✅ 데이터를 어떻게 다룰까?: 읽기(Read), 정리(Tidy), 시각화(Visualize)…</p>
+<p>✅ <strong><em>변수간 관계를 어떻게 요약할까?</em></strong> …단순 / 다중 선형 회귀…비선형회귀, 교차변수…</p>
+<p>✅ 인과 관계(Causality)란 무엇인가?</p>
+<p>❌ 전체 모집단을 관측하지 못하면 어떻게 할까?</p>
+<p>❌ 우리의 연구 결과가 단순한 무작위(Randomness) 때문일 수도 있을까?</p>
+<p>❌ 실제로 외생성을 어떻게 찾아낼 수 있을까?</p>
+</section>
+<section class="slide level2">
+
+<p><link href="https://fonts.googleapis.com/css2?family=Pacifico&amp;display=swap" rel="stylesheet"></p>
+<div style="display: flex; justify-content: center; align-items: center; height: 70vh;">
+<h2 style="color: #ff6666; text-align: center; font-family: 'Pacifico', cursive; font-size: 50px;">
+<p>THE END!</p>
+</h2>
+</div>
+</section></section>
+<section>
+<section id="appendix" class="title-slide slide level1 center">
+<h1>Appendix</h1>
+
+</section>
+<section id="log_approx" class="slide level2">
+<h2>로그 모델: 근사값</h2>
+<p>이전에 제시된 근사값들이 왜 성립하는가?</p>
+<p><strong><em>로그-레벨 (Log-Level)</em></strong></p>
+<p><strong>일반적인 해석:</strong> <span class="math inline">\(x\)</span>가 <strong>1 단위 증가</strong>할 때, 평균적으로 <span class="math inline">\(y\)</span>는 <span class="math inline">\((e^{b_1} - 1) \times 100\)</span> <strong>퍼센트 변화</strong>함.</p>
+<p><strong>단순 해석:</strong> <span class="math inline">\(x\)</span>가 <strong>1 단위 증가</strong>할 때, 평균적으로 <span class="math inline">\(y\)</span>는 <span class="math inline">\(b_1 \times 100\)</span> <strong>퍼센트 변화</strong>함.</p>
+<ul>
+<li>이는 작은 값의 <span class="math inline">\(b_1\)</span>에 대해 다음 식이 성립하기 때문: <span class="math inline">\(e^{b_1} \approx 1 + b_1 \iff b_1 \approx e^{b_1} - 1\)</span></li>
+</ul>
+<p><span class="math inline">\(\rightarrow\)</span> <span class="math inline">\(b_1 = \color{#d90502}{0.04}\)</span>일 때, <span class="math inline">\(e^{b_1} - 1 = e^{0.04} - 1 = 0.0408\)</span></p>
+<p><span class="math inline">\(\rightarrow\)</span> <span class="math inline">\(b_1 = \color{#d90502}{0.5}\)</span>일 때, <span class="math inline">\(e^{b_1} - 1 = e^{0.5} - 1 = 0.6487\)</span></p>
+</section>
+<section id="로그-모델-근사값" class="slide level2">
+<h2>로그 모델: 근사값</h2>
+<p>이전에 제시된 근사값들이 왜 성립하는가?</p>
+<p><strong><em>레벨-로그 (Level-Log)</em></strong></p>
+<p><strong>일반적인 해석:</strong> <span class="math inline">\(x\)</span>가 <strong><span class="math inline">\(\Delta x\)</span> 퍼센트 증가</strong>할 때, 평균적으로 <span class="math inline">\(y\)</span>는 <span class="math inline">\(b_1 \times log(1 + \Delta x)\)</span> <strong>단위 변화</strong>함.</p>
+<p><strong>단순 해석:</strong> <span class="math inline">\(x\)</span>가 <strong>1% 증가</strong>할 때, 평균적으로 <span class="math inline">\(y\)</span>는 <span class="math inline">\(b_1 / 100\)</span> <strong>단위 변화</strong>함.</p>
+<ul>
+<li>이는 작은 값의 <span class="math inline">\(\Delta x\)</span>에 대해 다음 식이 성립하기 때문: <span class="math inline">\(log(1 + \Delta x) \approx \Delta x\)</span></li>
+</ul>
+<p><span class="math inline">\(\rightarrow\)</span> <span class="math inline">\(\Delta x = \color{#d90502}{1\%}=0.01\)</span>일 때, <span class="math inline">\(log(1+\Delta x) = log(1.01) = 0.01\)</span> (따라서 단순 해석에서 <span class="math inline">\(/100\)</span>이 추가됨)</p>
+<p><span class="math inline">\(\rightarrow\)</span> <span class="math inline">\(\Delta x = \color{#d90502}{20\%}=0.20\)</span>일 때, <span class="math inline">\(log(1+\Delta x) = log(1.20) = 0.18\)</span></p>
+</section>
+<section id="로그-모델-근사값-1" class="slide level2">
+<h2>로그 모델: 근사값</h2>
+<p>이전에 제시된 근사값들이 왜 성립하는가?</p>
+<p><strong><em>로그-로그 (Log-Log)</em></strong></p>
+<p><strong>일반적인 해석:</strong> <span class="math inline">\(x\)</span>가 <strong><span class="math inline">\(\Delta x\)</span> 퍼센트 증가</strong>할 때, 평균적으로 <span class="math inline">\(y\)</span>는 <span class="math inline">\(((1 + \Delta x)^{b_1} - 1) \times 100\)</span> <strong>퍼센트 변화</strong>함.</p>
+<p><strong>단순 해석:</strong> <span class="math inline">\(x\)</span>가 <strong>1% 증가</strong>할 때, 평균적으로 <span class="math inline">\(y\)</span>는 <span class="math inline">\(b_1\)</span> <strong>퍼센트 변화</strong>함.</p>
+<ul>
+<li>이는 작은 값의 <span class="math inline">\(|b_1| \times \Delta x\)</span>에 대해 다음 식이 성립하기 때문: <span class="math inline">\((1 + \Delta x)^{b_1} \approx 1 + b_1 \times \Delta x \iff b_1 \times \Delta x \times 100 \approx ((1 + \Delta x)^{b_1} - 1) \times 100\)</span></li>
+</ul>
+<p><span class="math inline">\(\rightarrow\)</span> <span class="math inline">\(\Delta x = \color{#d90502}{1\%}=0.01\)</span>이고 <span class="math inline">\(b_1 = \color{#d90502}{0.5}\)</span>일 때,<br>
+<span class="math inline">\(((1+\Delta x)^{b_1} - 1) \times 100 = (1.01^{0.5} - 1) \times 100 = 0.5\)</span></p>
+<p><span class="math inline">\(\rightarrow\)</span> <span class="math inline">\(\Delta x = \color{#d90502}{10\%}=0.10\)</span>이고 <span class="math inline">\(b_1 = \color{#d90502}{10}\)</span>일 때,<br>
+<span class="math inline">\(((1+\Delta x)^{b_1} - 1) \times 100= (1.1^{10} - 1) \times 100 = 159.37\)</span></p>
+<p><a href="#/gen_log">돌아가기</a></p>
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="chapter_regext_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="chapter_regext_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="chapter_regext_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="chapter_regext_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="chapter_regext_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="chapter_regext_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="chapter_regext_files/libs/revealjs/plugin/reveal-text-resizer/revealjs-text-resizer.js"></script>
+  <script src="chapter_regext_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="chapter_regext_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="chapter_regext_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="chapter_regext_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="chapter_regext_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'fast',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, RevealTextResizer, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+
+    <script>
+
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
+      // slide changes (different for each slide format).
+
+      (function () {
+
+        // dispatch for htmlwidgets
+
+        function fireSlideEnter() {
+
+          const event = window.document.createEvent("Event");
+
+          event.initEvent("slideenter", true, true);
+
+          window.document.dispatchEvent(event);
+
+        }
+
+    
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          fireSlideEnter();
+
+    
+
+          // dispatch for shiny
+
+          if (window.jQuery) {
+
+            if (previousSlide) {
+
+              window.jQuery(previousSlide).trigger("hidden");
+
+            }
+
+            if (currentSlide) {
+
+              window.jQuery(currentSlide).trigger("shown");
+
+            }
+
+          }
+
+        }
+
+    
+
+        // hookup for slidy
+
+        if (window.w3c_slidy) {
+
+          window.w3c_slidy.add_observer(function (slide_num) {
+
+            // slide_num starts at position 1
+
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
+          });
+
+        }
+
+    
+
+      })();
+
+    </script>
+
+    
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>

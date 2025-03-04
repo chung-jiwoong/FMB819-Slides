@@ -1,0 +1,158 @@
+/*
+Quarto Reveal.js CSS
+Modified from Xaringan (remark.js) styles
+*/
+
+/* General font adjustments */
+.reveal {
+    font-size: 23px;
+    color: #353632;
+}
+
+/* Links */
+a, a > code {
+  color: #d90502;
+  text-decoration: none;
+}
+
+/* Footnotes */
+.footnote {
+  position: absolute;
+  bottom: 1em;
+  padding-right: 4em;
+  font-size: 85%;
+}
+
+/* Background and inverse slides */
+.inverse {
+  background-color: #ffebf0;
+  color: #353632;
+}
+
+.inverse h1, .inverse h2, .inverse h3 {
+  color: #0729a6;
+  line-height: 1.0em;
+}
+
+/* Two-column layout */
+.left-column {
+  width: 30%;
+  float: left;
+  padding-right: 2%;
+}
+
+.right-column {
+  width: 68%;
+  float: right;
+  padding-top: 1em;
+}
+
+/* Adjusting blockquotes */
+blockquote {
+  border-left: solid 5px lightgray;
+  padding-left: 1em;
+}
+
+/* Title Slide */
+.title-slide {
+  background-color: #fff;
+  background-position: 9% 30%;
+  background-size: 300px;
+  padding-left: 50px;
+}
+
+.title-slide h1 {
+  color: #515151;
+  font-weight: normal;
+  font-size: 45px;
+  text-align: left;
+}
+
+.title-slide h2 {
+  color: #d90502;
+  font-size: 35px;
+  text-align: left;
+}
+
+.title-slide h3 {
+  font-size: 28px;
+  color: #666666;
+  text-align: left;
+}
+
+/* Footer */
+.my-footer {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    height: 60px;
+    width: 100%;
+}
+
+/* Section Dividers */
+.title-slide-section-red {
+  background-color: #d90502;
+  padding-left: 50px;
+}
+
+.title-slide-section-grey {
+  background-color: #515151;
+  padding-left: 50px;
+}
+
+.title-slide-final {
+  background-color: #fff;
+  text-align: center;
+}
+
+.title-slide-final h1 {
+  color: #d90502;
+}
+
+/* Global Slide Padding Adjustments */
+.reveal .slides {
+  padding-left: 50px;
+}
+
+/* Text Color Adjustments */
+strong {
+  color: #d90502;
+}
+
+.blue {
+  color: #0000CC;
+  font-weight: bold;
+}
+
+.grey {
+  color: #515151;
+}
+
+.lightgrey {
+  color: #818181;
+}
+
+.black {
+  color: black;
+  font-weight: bold;
+}
+
+.white {
+  color: white;
+}
+
+h1 {
+  color: #d90502;
+}
+
+h3 {
+  color: #515151;
+}
+
+/* Font size classes */
+.big {
+  font-size: 1.5em;
+}
+
+.large { font-size: 120% }
+.small { font-size: 90% }

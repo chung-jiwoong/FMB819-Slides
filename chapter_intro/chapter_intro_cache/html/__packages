@@ -1,0 +1,17 @@
+tidyverse
+ggplot2
+tibble
+tidyr
+readr
+purrr
+dplyr
+stringr
+forcats
+lubridate
+pander
+ggthemes
+gapminder
+countdown
+xaringanExtra
+gganimate
+DiagrammeR

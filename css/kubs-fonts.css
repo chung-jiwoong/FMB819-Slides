@@ -1,0 +1,44 @@
+/* Add Maven for code font (Quarto Reveal.js version) */
+@import url(https://fonts.googleapis.com/css?family=Inconsolata);
+@import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+@import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+@import url(https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700);
+
+body {
+    font-family: 'Droid Serif', 'Palatino Linotype', 'Book Antiqua', Palatino, 'Microsoft YaHei', 'Songti SC', serif;
+}
+
+h1, h2, h3 {
+    font-family: 'Yanone Kaffeesatz';
+    font-weight: normal;
+}
+
+/* Code blocks styling in Quarto Reveal.js */
+.reveal pre code {
+    font-family: 'Inconsolata', monospace;
+    color: #515151;
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-radius: 5px;
+    display: block;
+    overflow-x: auto;
+}
+
+/* Inline code styling */
+.reveal code {
+    font-family: 'Inconsolata', monospace;
+    color: #515151;
+    background-color: rgba(217, 5, 2, 0.2);
+    border-radius: 5px;
+    padding: 0px 2px 1px 2px;
+}
+
+/* Syntax highlighting adjustment for Quarto */
+.hljs {
+    background-color: #ffff88;
+}
+
+/* Code block line highlighting */
+.reveal pre code .hljs-line {
+    background-color: #ffff88;
+}

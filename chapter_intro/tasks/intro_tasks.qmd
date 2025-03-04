@@ -1,0 +1,117 @@
+---
+title: "Introduction - Tasks"
+#author: "Florian Oswald, Gustave Kenedi and Pierre Villedieu"
+#date: "`r Sys.Date()`"
+output: html_document
+---
+
+## Task 1 
+
+
+1.  새로운 R 스크립트를 생성하시오 (`File > New File > R Script`) 파일을 `lecture_intro.R`로 저장하시오.
+
+2.  다음 코드를 스크립트에 입력하고 실행하시오. 코드를 실행하려면 `Ctrl` + `Enter` (코드를 강조 표시하거나 커서를 코드 줄 끝에 놓으면 실행).
+
+```{r, echo=T, eval=T}
+4 * 8
+```
+
+3.  첫 번째 줄만 실행하면 무슨 일이 일어나는지 확인하시오. (객체 생성)
+
+```{r, echo=T, eval=T}
+x = 5 # 또는 x <- 5
+x
+```
+
+4.  `x`의 세제곱을 할당하는 `x_3`이라는 새로운 객체를 만드시오. 할당할 때 `=` 또는 `<-`를 사용.
+
+```{r, echo=T, eval=T}
+x_3 = x^3
+x_3
+```
+
+
+
+## Task 2
+
+1.  `help(read.csv)` 또는 구글을 사용하여 `.csv` 파일을 가져오는 방법을 찾아보시오. 단, "Import Dataset" 버튼을 사용하거나 패키지를 설치하지 마시오.
+
+2.  [gun_murders.csv](https://www.dropbox.com/s/zuk0qcfm3kyzs4e/gun_murders.csv?dl=1) 파일을 새로운 객체 `murders`에 저장하시오. 이 파일은 2010년 미국 주별 총기 살인 사건 데이터를 포함. (힌트: 객체는 `=` 또는 `<-`를 사용하여 생성)
+
+```{r, echo=T}
+link <- "https://www.dropbox.com/s/zuk0qcfm3kyzs4e/gun_murders.csv?dl=1"
+
+murders <- read.csv(link)
+```
+
+3.  `murders`가 `data.frame` 형식인지 확인하시오 (`class(murders)`):
+
+```{r, error = TRUE}
+class(murder)
+```
+
+**오류가 발생하네요: "object 'murder' not found." 이유가 뭘까요? 간단합니다. 오타 때문입니다!
+올바른 객체 이름은 `murders` 인데, `murder`라고 입력했기 때문입니다. 오류 메시지에서 ``"object x not found"``가 표s시되면, 이는 현재 환경(environment)에 해당 이름의 객체가 존재하지 않는다는 의미입니다. 즉, 아직 객체를 생성하지 않았거나 코드에 작은 오타가 있을 가능성이 큽니다.
+항상 오류 메시지를 주의 깊게 읽어보세요!**
+
+```{r, echo=T}
+class(murders)
+```
+
+4.  `murders`에 포함된 변수를 확인하시오:
+
+```{r, echo=T}
+names(murders)
+```
+
+5.  작업 공간에서 `murders`를 클릭하여 내용을 확인하시오 `total` 변수는 무엇을 의미하는가?
+
+```{r, echo=T}
+View(murders)
+```
+
+**`total` 변수는 2010년 기준 각 주(State)별 총 총기 살인(Gun Murders) 수를 나타냅니다.**
+
+
+
+
+## Task 3 
+
+
+1.  `murders` 데이터프레임에는 몇 개의 관측값(observations)이 있는가?
+
+```{r, echo=T}
+nrow(murders)
+```
+
+2.  몇 개의 변수? 각 변수의 데이터 유형(data type)은 무엇인가?
+
+```{r, echo=T}
+str(murders)
+```
+
+3.  "`:`" 연산자는 `1:10`처럼 사용하면 *1부터 10까지의 연속된 숫자 생성*을 의미함. 이를 활용하여 `murders`의 10번부터 25번 행을 포함하는 새로운 객체 `murders_2`를 만드시오.
+
+```{r, echo=T}
+murders_2 <- murders[10:25,]
+nrow(murders_2)
+```
+
+4.  `state`와 `total` 열만 포함하는 `murders_3` 객체를 만드시오. (`c` 함수가 벡터를 생성함)
+
+```{r, echo=T}
+murders_3 <- murders[, c("state", "total")]
+```
+
+
+5.  아래 코드를 실행하여 10,000명당 살인 사건 수를 나타내는 `total_percap` 변수를 생성하시오.
+
+```{r, echo=T}
+murders$total_percap = (murders$total / murders$population) * 10000
+```
+
+`murders` 객체를 클릭하여 새 변수를 확인해 보시오.
+
+```{r, echo=T}
+head(murders)
+```

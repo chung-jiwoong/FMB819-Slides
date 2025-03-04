@@ -1,0 +1,1838 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="chapter_causality_files/libs/clipboard/clipboard.min.js"></script>
+<script src="chapter_causality_files/libs/quarto-html/tabby.min.js"></script>
+<script src="chapter_causality_files/libs/quarto-html/popper.min.js"></script>
+<script src="chapter_causality_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="chapter_causality_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="chapter_causality_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="chapter_causality_files/libs/quarto-html/quarto-syntax-highlighting-48ffa3e5b9d089919c6712c39e5b00f2.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.41">
+
+  <title>FMB819: R을 이용한 데이터분석</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="chapter_causality_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="chapter_causality_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="chapter_causality_files/libs/revealjs/dist/theme/quarto-2f366650f320edcfcf53d73c80250a32.css">
+  <link rel="stylesheet" href="default">
+  <link rel="stylesheet" href="../css/kubs.css">
+  <link rel="stylesheet" href="../css/kubs-fonts.css">
+  <link href="chapter_causality_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="chapter_causality_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="chapter_causality_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="chapter_causality_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="chapter_causality_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="chapter_causality_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <link href="chapter_causality_files/libs/countdown/countdown.css" rel="stylesheet">
+
+  <script src="chapter_causality_files/libs/countdown/countdown.js"></script>
+
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">FMB819: R을 이용한 데이터분석</h1>
+  <p class="subtitle"><span style="font-size:1.5em; color:#a01616;">Introduction to Causality</span></p>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="todays-agenda" class="slide level2">
+<h2>Today’s Agenda</h2>
+<ul>
+<li><p>인과관계(Causality) vs.&nbsp;상관관계(Correlation)</p></li>
+<li><p>잠재 결과 프레임워크(Potential Outcomes Framework) (a.k.a. Rubin의 인과 모델)</p></li>
+<li><p>무작위 통제 실험(Randomized Controlled Trials, RCTs)</p></li>
+<li><p>학급 규모(class size)와 학생 성취(student performance)에 대한 실증 분석 심화</p></li>
+</ul>
+</section>
+<section id="인과관계의-개념" class="slide level2">
+<h2>인과관계의 개념</h2>
+<p><strong><em>인과관계(Causality)</em></strong>란 무엇을 의미하는가?</p>
+<ul>
+<li><p><code>X</code>가 <code>Y</code>를 <em>유발한다(causes)</em>.. 의미?</p></li>
+<li><p>만약 <strong><em>다른 모든 것은 그대로 둔 채(unchanged)</em></strong> 우리가 <code>X</code>의 값을 <strong>변경(intervene and change)</strong>한다면,</p></li>
+<li><p>그 결과로 <code>Y</code>도 <strong><em>변화</em></strong>하게 된다는 의미.</p></li>
+<li><p>여기서 핵심은 <strong>“다른 모든 것은 변하지 않는다”</strong>는 가정임.<br>
+이는 흔히 <strong>“세테리스 파리부스(ceteris paribus, all else equal)”</strong> 가정이라고 불림.</p></li>
+<li><p><strong>주의할 점:</strong> 이것은 <code>X</code>가 <code>Y</code>를 유발하는 <strong>유일한 요인</strong>이라는 뜻이 아님!</p></li>
+</ul>
+</section>
+<section id="상관관계-vs.-인과관계" class="slide level2">
+<h2>상관관계 vs.&nbsp;인과관계</h2>
+<ul>
+<li><p><strong><em>“상관관계는 인과관계가 아니다”</em></strong>라는 말은 매우 흔하게 사용됨.<br>
+그런데 왜 이것이 사실인지 설명할 수 있는가?</p></li>
+<li><p><strong>일부 상관관계는 명백히 인과관계를 의미하지 않음.</strong><br>
+(<a href="https://www.tylervigen.com/spurious-correlations">예: 가짜 상관관계 모음</a>)</p></li>
+</ul>
+
+<img data-src="../img/photos/spurious.png" class="quarto-figure quarto-figure-center r-stretch" width="800"></section>
+<section id="상관관계-vs.-인과관계-흡연과-폐암" class="slide level2">
+<h2>상관관계 vs.&nbsp;인과관계: 흡연과 폐암</h2>
+<ul>
+<li><p>그러나 모든 상관관계가 쉽게 기각될 수 있는 것은 아님.</p></li>
+<li><p><strong>흡연이 폐암을 유발하는가?</strong></p></li>
+</ul>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li><p>오늘날 우리는 답이 <em>“예(YES)”</em>라는 것을 알고 있음!</p></li>
+<li><p>하지만 <strong>1950년대</strong>로 돌아가 보자.</p>
+<ul>
+<li>당시 폐암 사망률이 급격히 증가하기 시작함…<br>
+</li>
+<li>… 그리고 그 이전에 <strong>담배 소비가 빠르게 증가</strong>했음.</li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../img/photos/Smoking_lung_cancer.png" class="quarto-figure quarto-figure-center" width="400"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+<ul>
+<li>이 그래프만 보면, “흡연이 폐암을 유발한다”고 쉽게 결론 내릴 수 있음.</li>
+</ul>
+</section>
+<section id="상관관계-vs.-인과관계-흡연과-폐암-1" class="slide level2">
+<h2>상관관계 vs.&nbsp;인과관계: 흡연과 폐암</h2>
+<ul>
+<li>당시에는 여전히 회의적인 사람들이 많았으며, 유명한 통계학자들조차도 이를 의심했음.</li>
+</ul>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>거시적 교란 요인 (Macro Confounding Factors)</strong></p>
+<ul>
+<li><p>폐암을 유발할 수 있는 <em>다른 거시적 요인</em>들도 1900년~1950년 사이에 변화했음:</p>
+<ul>
+<li>도로 포장(tarring of roads),</li>
+<li>자동차 배기가스(납 함유 가솔린 연기) 흡입,</li>
+<li>전반적인 대기 오염 증가.</li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>자기 선택 편향 (Self Selection)</strong></p>
+<ul>
+<li><p>흡연자와 비흡연자는 원래부터 다를 가능성이 있음:</p>
+<ul>
+<li><p><strong>관측 가능한 특징에 따른 선택(selection on observables):</strong> 연령, 교육 수준, 소득 등.</p></li>
+<li><p><strong>관측 불가능한 특징에 따른 선택(selection on unobservables):</strong> 유전자 (Fisher가 제안한 <a href="https://en.wikipedia.org/wiki/Ronald_Aylmer_Fisher">가설적 유전자 교란 이론</a>).<br>
+</p></li>
+</ul></li>
+</ul>
+</div></div>
+</section>
+<section id="상관관계-vs.-인과관계-다른-예시들" class="slide level2">
+<h2>상관관계 vs.&nbsp;인과관계: 다른 예시들</h2>
+<div>
+<ul>
+<li class="fragment"><p><strong><em>교육 연수(years of education)</em></strong>와 <strong><em>소득(income)</em></strong> 간의 관측된 상관관계가 실제로 교육의 인과적 효과를 반영하지 않을 수도 있는 이유는?</p>
+<ul>
+<li class="fragment">개인이 교육 수준을 선택하는 방식이 다를 수 있음. 고등 교육을 받는 사람들은 원래부터 높은 선천적 능력을 가졌거나, 학교 생활을 즐기며 학업에 강한 성향을 가질 가능성이 높음. <span class="math inline">\(\rightarrow\)</span> <strong><em>자기 선택 편향(Self-selection)</em></strong></li>
+</ul></li>
+<li class="fragment"><p><strong><em>고용률(employment rate)</em></strong>과 <strong><em>최저임금(minimum wage)</em></strong> 간의 관측된 상관관계가 실제로 최저임금의 인과적 효과를 반영하지 않을 수도 있는 이유는?</p>
+<ul>
+<li class="fragment">정책 결정자들은 고용률이 높은 시기에 최저임금을 인상할 가능성이 있음 <span class="math inline">\(\rightarrow\)</span> <strong><em>역인과관계(reverse causality) / 동시성(simultaneity)</em></strong></li>
+</ul></li>
+<li class="fragment"><p><strong><em>경제 성장(economic growth)</em></strong>과 <strong><em>금융 발전(financial development)</em></strong> 간의 관측된 상관관계가 실제로 금융 부문의 인과적 효과를 반영하지 않을 수도 있는 이유는?</p>
+<ul>
+<li class="fragment"><strong>경제 성장이 금융 발전을 촉진하는 것일 수도 있음</strong> (반대로 금융 발전이 경제 성장을 유발하는 것이 아닐 가능성) <span class="math inline">\(\rightarrow\)</span> <strong><em>역인과관계(reverse causality) / 동시성(simultaneity)</em></strong></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="경제-이론과의-연결" class="slide level2">
+<h2>경제 이론과의 연결</h2>
+<div>
+<ul>
+<li class="fragment"><p><strong>경제 이론(Economic theory)</strong>에 따르면, 개인은 자신의 <strong>효용(utility)을 극대화(maximise)하기 위해 행동</strong>함.</p></li>
+<li class="fragment"><p>따라서 개인들은 <strong>무작위(random ways)</strong>로 행동하지 않음. <span class="math inline">\(\rightarrow\)</span> 즉, 개인의 행동은 <strong>내생적(endogenous)</strong>이라고 볼 수 있음.</p></li>
+<li class="fragment"><p><strong>데이터에서 발견된 상관관계를 무조건 믿어서는 안 됨.</strong> 언제나 <em>의심하는 태도(suspicious)</em>가 필요함.</p></li>
+<li class="fragment"><p>📌 그렇다면, 어떻게 <strong>인과적 주장(causal claims)</strong>을 할 수 있을까?</p></li>
+<li class="fragment"><p><strong>잠재 결과 프레임워크(Potential Outcomes Framework)</strong>가 유용한 길잡이</p></li>
+</ul>
+</div>
+</section>
+<section>
+<section id="causal-inference" class="title-slide slide level1 center">
+<h1>Causal Inference</h1>
+
+</section>
+<section id="잠재-결과-프레임워크-the-potential-outcomes-framework" class="slide level2">
+<h2>잠재 결과 프레임워크 (The Potential Outcomes Framework)</h2>
+<p>이 모델은 <strong>Rubin의 인과 모델(Rubin Causal Model)</strong>이라고도 불리며, 통계학자 <strong>Donald Rubin</strong>이 1970년대에 이를 일반화하고 체계화함.</p>
+<ul>
+<li><p>핵심 아이디어 (Key Idea)</p>
+<ul>
+<li><p>각 개인은 <strong>여러 개의 대체적 처치 상태(alternative treatment states)</strong>에 노출될 수 있음.</p>
+<ul>
+<li>담배를 피우거나, 시가를 피우거나, 아예 피우지 않거나.</li>
+<li>가난한 지역, 중산층 지역, 부유한 지역에서 성장하는 것.</li>
+<li>소규모 학급과 대규모 학급에서 배우는 것.</li>
+</ul></li>
+</ul></li>
+</ul>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>실용적인 정의</strong><br>
+처치 변수 <span class="math inline">\(D_i\)</span>를 <strong>이진 변수(binary variable)</strong>로 정의 <span class="math display">\[
+D_i = \begin{cases}
+                    1 \textrm{ if individual $i$ is treated} \\\\
+                    0 \textrm{ if individual $i$ is not treated}
+      \end{cases}
+\]</span></p>
+</div><div class="column" style="width:50%;">
+<p><strong><em>✅ Treatment group</em></strong><br>
+all the individuals such that <span class="math inline">\(D_i = 1\)</span>.</p>
+<p><strong><em>❌ Control group</em></strong><br>
+all the individuals such that <span class="math inline">\(D_i = 0\)</span>.</p>
+</div></div>
+</section>
+<section id="잠재-결과-프레임워크-the-potential-outcomes-framework-1" class="slide level2">
+<h2>잠재 결과 프레임워크 (The Potential Outcomes Framework)</h2>
+<ul>
+<li><p>이 프레임워크에서는 각 개인이 두 개의 <strong>잠재적 결과(potential outcomes)</strong>를 가짐. 하지만 실제로는 <strong>하나의 관측된 결과(observed outcome)</strong> <span class="math inline">\(Y_i\)</span>만 확인 가능함.</p>
+<ul>
+<li><span class="math inline">\(Y_i^1\)</span>: <em>개인</em> <span class="math inline">\(i\)</span>가 처치를 받았을 경우의 잠재적 결과 <span class="math inline">\((D_i = 1)\)</span><br>
+</li>
+<li><span class="math inline">\(Y_i^0\)</span>: <em>개인</em> <span class="math inline">\(i\)</span>가 처치를 받지 않았을 경우의 잠재적 결과 <span class="math inline">\((D_i = 0)\)</span></li>
+</ul></li>
+<li><p>현실에서는 단 하나의 결과 <span class="math inline">\(Y_i\)</span>만을 관측할 수 있으며, 이는 다음과 같이 표현됨:</p></li>
+</ul>
+<p><span class="math display">\[
+Y_i = D_i \times Y_i^1 + (1- D_i) \times Y_i^0
+\]</span></p>
+<ul>
+<li>🔥 <strong>인과 추론의 근본적인 문제 (Fundamental Problem of Causal Inference)</strong> 어떤 개인 <span class="math inline">\(i\)</span>에 대해, <strong>두 개의 잠재적 결과 중 오직 하나만 관측할 수 있음.</strong><br>
+<a href="http://people.umass.edu/~stanek/pdffiles/causal-holland.pdf">(Holland, 1986)</a></li>
+</ul>
+</section>
+<section id="잠재-결과-프레임워크-the-potential-outcomes-framework-2" class="slide level2">
+<h2>잠재 결과 프레임워크 (The Potential Outcomes Framework)</h2>
+<ul>
+<li>관측되지 않은 잠재적 결과도 이론적으로 존재하며, 이를 <strong>반사실적 결과(counterfactual outcome)</strong>라고 함.</li>
+</ul>
+<table class="caption-top">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 36%">
+<col style="width: 36%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Group</th>
+<th style="text-align: center;"><span class="math inline">\(Y_i^1\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(Y_i^0\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>처치 그룹</strong> <span class="math inline">\((D_i = 1)\)</span></td>
+<td style="text-align: center;">✅ <strong>관측 가능 (Observed as</strong> <span class="math inline">\(Y_i\)</span>)</td>
+<td style="text-align: center;">❌ <em>반사실적 결과 (Counterfactual)</em></td>
+</tr>
+<tr class="even">
+<td><strong>통제 그룹</strong> <span class="math inline">\((D_i = 0)\)</span></td>
+<td style="text-align: center;">❌ <em>반사실적 결과 (Counterfactual)</em></td>
+<td style="text-align: center;">✅ <strong>관측 가능 (Observed as</strong> <span class="math inline">\(Y_i\)</span>)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>위 개념을 바탕으로, <strong>개별 처치 효과(individual treatment effect)</strong> <span class="math inline">\(\delta_i\)</span>를 정의할 수 있음.</li>
+</ul>
+<p><span class="math display">\[
+\delta_i = Y_i^1 - Y_i^0
+\]</span></p>
+<ul>
+<li><p><span class="math inline">\(\delta_i\)</span>는 처치 <span class="math inline">\((D_i)\)</span>가 개인 <span class="math inline">\(i\)</span>의 결과 변수 <span class="math inline">\(Y\)</span>에 미치는 <strong>인과적 효과(causal effect)</strong>를 측정함.</p></li>
+<li><p>⚠️ <strong>핵심 문제</strong> 개별 처치 효과 <span class="math inline">\(\delta_i\)</span>는 <strong>개인 수준에서는 절대 관측할 수 없음!</strong> 따라서 <strong>집단 평균(population averages)</strong>을 이용해 추정해야 함.</p></li>
+</ul>
+</section>
+<section id="보충-설명-기대값-expectation" class="slide level2">
+<h2>보충 설명: 기대값 (Expectation)</h2>
+<ul>
+<li><p>🎲 주사위를 무한히 던지면 평균적으로 몇이 나올까?</p>
+<ul>
+<li><span class="math inline">\(X\)</span>가 나온 숫자를 나타내는 <strong>확률 변수(random variable)</strong>라 하면, 기대값(expectation)은:</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[
+\mathop{\mathbb{E}}(X) = \frac{1}{6} \times 1 + \frac{1}{6} \times 2 + \frac{1}{6} \times 3 + \frac{1}{6} \times 4 + \frac{1}{6} \times 5 + \frac{1}{6} \times 6 = 3.5
+\]</span></p>
+<ul>
+<li><p><span class="math inline">\(\mathop{\mathbb{E}}(.)\)</span> 연산자는 <strong>기대값(expectation)</strong> 또는 <strong>모집단 평균(population mean)</strong>을 의미함.</p></li>
+<li><p><span class="math inline">\(\mathop{\mathbb{E}}(.)\)</span> 연산자는 <strong>선형(linear) 연산자</strong>이므로,</p></li>
+</ul>
+<p><span class="math display">\[
+\mathop{\mathbb{E}}(X+Y) = \mathop{\mathbb{E}}(X) + \mathop{\mathbb{E}}(Y)
+\]</span> - 여기서 <span class="math inline">\(X\)</span>와 <span class="math inline">\(Y\)</span>는 두 개의 확률 변수임.</p>
+</section>
+<section id="보충-설명-조건부-기대값" class="slide level2">
+<h2>보충 설명: 조건부 기대값</h2>
+<ul>
+<li><p>🎲 두 개의 주사위를 던질 때, 한 주사위가 항상 5일 경우 합의 평균은?</p></li>
+<li><p><span class="math inline">\(X\)</span>가 첫 번째 주사위의 숫자를 나타내는 확률 변수, <span class="math inline">\(Y\)</span>가 두 번째 주사위의 숫자를 나타내는 확률 변수라 하면:</p></li>
+</ul>
+<p><span class="math display">\[
+\begin{align}
+\mathop{\mathbb{E}}(X+Y|Y = 5) &amp;= \mathop{\mathbb{E}}(X|Y = 5) + \mathop{\mathbb{E}}(Y|Y = 5) \\  
+&amp;= \mathop{\mathbb{E}}(X) + 5 \\  
+&amp;= 3.5 + 5 \\  
+&amp;= 8.5  
+\end{align}
+\]</span></p>
+<ul>
+<li><span class="math inline">\(\mathop{\mathbb{E}}(.|D = x)\)</span> 연산자는 <strong>조건부 기대값(conditional expectation)</strong>을 의미함. 이는 모집단 전체가 아니라, <strong>특정 조건(</strong><span class="math inline">\(D = x\)</span>)을 만족하는 하위 집단(subcategory)에 대한 기대값을 계산하는 것.</li>
+</ul>
+</section>
+<section id="ate" class="slide level2">
+<h2>평균 처치 효과 (Average Treatment Effect, ATE)</h2>
+<ul>
+<li>📌 가장 포괄적인 평균 효과</li>
+</ul>
+<p><span class="math display">\[
+\begin{align}
+ATE &amp;= \mathop{\mathbb{E}}(\delta_i) \\  
+    &amp;= \mathop{\mathbb{E}}(Y_i^1 - Y_i^0) \\  
+    &amp;= \mathop{\mathbb{E}}(Y_i^1) - \mathop{\mathbb{E}}(Y_i^0)  
+\end{align}
+\]</span></p>
+<ul>
+<li>ATE는 단순히 <strong>전체 모집단에서 개별 처치 효과(individual treatment effects)의 평균</strong>을 측정하는 것.</li>
+</ul>
+<p>🔗 <a href="#/attandatu"><strong>부록(Appendix):</strong></a> 처치군에 대한 평균 처치 효과(ATT)와 비처치군에 대한 평균 처치 효과(ATU)</p>
+</section>
+<section id="예제-소규모-vs.-대규모-학급" class="slide level2">
+<h2>예제: 소규모 vs.&nbsp;대규모 학급</h2>
+<ul>
+<li>학생이 <strong>소규모 학급(</strong><span class="math inline">\(Y^1\)</span>) 또는 대규모 학급(<span class="math inline">\(Y^0\)</span>)에서 수업을 들을 경우, 평균 평점(GPA, 0-10)의 잠재적 결과(potential outcomes).</li>
+</ul>
+<div class="columns">
+<div class="column" style="width:55%;">
+<h3 id="잠재적-결과-테이블">📊 잠재적 결과 테이블</h3>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>학생</th>
+<th style="text-align: center;"><span class="math inline">\(Y^1\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(Y^0\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(\delta\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">2</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">-3</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">2</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">-2</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">2</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">-7</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">6</td>
+</tr>
+<tr class="odd">
+<td><strong>평균</strong></td>
+<td style="text-align: center;"><strong>5.2</strong></td>
+<td style="text-align: center;"><strong>4.5</strong></td>
+<td style="text-align: center;"><strong>0.7</strong></td>
+</tr>
+</tbody>
+</table>
+</div><div class="column" style="width:45%;">
+<h3 id="평균-처치-효과-ate-계산">🔢 평균 처치 효과 (ATE) 계산</h3>
+<p><span class="math display">\[
+\begin{align}
+\color{#d90502}{\text{ATE}} &amp;= \mathbb{E}(\delta) \\  
+&amp;=\mathbb{E}(Y^1) - \mathbb{E}(Y^0) \\  
+&amp;= 5.2 - 4.5 \\  
+&amp;= 0.7
+\end{align}
+\]</span></p>
+<p><span class="math inline">\(\rightarrow\)</span> <strong>소규모 학급이 대규모 학급보다 평균적으로 GPA를 0.7점 높이는 효과</strong>가 있음.</p>
+<ul>
+<li>⚠️ 하지만 모든 학생이 <strong>동일한 처치 효과를 경험한 것은 아님!</strong></li>
+</ul>
+</div></div>
+</section>
+<section id="인과-추론의-문제-the-problem-of-causal-inference" class="slide level2">
+<h2>인과 추론의 문제 (The Problem of Causal Inference)</h2>
+<ul>
+<li>실제로 ATE를 계산할 때, <strong>결측 데이터 문제(missing data problem)</strong>가 발생함.<br>
+<span class="math inline">\(\delta_i\)</span>를 계산할 때와 마찬가지로, <strong>각 개인에 대해</strong> <span class="math inline">\(Y_i^1\)</span> 또는 <span class="math inline">\(Y_i^0\)</span> 중 하나가 항상 누락됨.</li>
+</ul>
+<p>-📊 데이터를 이용하면, 처치군과 통제군의 <strong>단순 평균 차(Simple Difference in mean Outcomes, SDO)</strong>를 계산할 수 있음.</p>
+<p><span class="math display">\[
+\begin{align}
+SDO &amp;= \mathop{\mathbb{E}}(Y_i^1|D_i=1) - \mathop{\mathbb{E}}(Y_i^0|D_i=0) \\  
+&amp;= \underbrace{\frac{1}{N_T}\sum_{i=1}^{N_T}(Y_i|D_i=1)}_{\text{처치군의 평균 결과}}  
+- \underbrace{\frac{1}{N_C}\sum_{i=1}^{N_C}(Y_i|D_i=0)}_{\text{통제군의 평균 결과}}
+\end{align}
+\]</span></p>
+</section>
+<section id="단순-평균-차이-simple-difference-in-mean-outcomes-예제" class="slide level2">
+<h2>단순 평균 차이 (Simple Difference in Mean Outcomes): 예제</h2>
+<ul>
+<li>🎓 <strong>모든 정보를 아는 학교장이 학생을 최적의 처치 그룹에 배정한다고 가정하자.</strong></li>
+</ul>
+<div class="columns">
+<div class="column" style="width:100%;">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>학생</th>
+<th style="text-align: center;"><span class="math inline">\(Y^1\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(Y^0\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(\delta\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(Y\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(D\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">-3</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">-2</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">-7</td>
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="odd">
+<td><strong>평균</strong></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"><strong>0.7</strong></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+</div></div>
+</section>
+<section id="단순-평균-차이-simple-difference-in-mean-outcomes-계산" class="slide level2">
+<h2>단순 평균 차이 (Simple Difference in Mean Outcomes): 계산</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>학생</th>
+<th style="text-align: center;"><span class="math inline">\(Y\)</span> (관측값)</th>
+<th style="text-align: center;"><span class="math inline">\(D\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(\delta\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">2</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">-3</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">2</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">-2</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">2</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">-7</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">6</td>
+</tr>
+<tr class="odd">
+<td><strong>평균</strong></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"><strong>0.7</strong></td>
+</tr>
+</tbody>
+</table>
+</div><div class="column" style="width:50%;">
+<p>🔢 <strong>단순 평균 차이 (SDO) 계산</strong></p>
+<p><span class="math display">\[
+\begin{align}
+SDO &amp;= \frac{5+6+5+10+5+6+8}{7} - \frac{6+4+9}{3} \\  
+&amp;\approx 6.43 - 6.33 \approx 0.1
+\end{align}
+\]</span></p>
+<p>📌 SDO 값이 ATE(0.7)보다 훨씬 작음!</p>
+<p>📌 이러한 차이는 처치 효과(causal treatment effect)를 제대로 반영하지 못할 가능성이 높음.</p>
+<p>📌 이런 “단순 비교” 방식은 종종 기자, 정치인, 그리고 훈련이 부족한 연구자들에 의해 사용됨. (But not you now! 😉)</p>
+</div></div>
+</section>
+<section id="naive_comp" class="slide level2">
+<h2>단순 비교의 문제점</h2>
+<p>📌 단순 평균 차이 (SDO)를 다시 작성하여 개별 처치 효과 <span class="math inline">\((\delta_i)\)</span>가 나타나도록 변형</p>
+<p><span class="math display">\[
+\begin{align}
+  SDO &amp;= \mathop{\mathbb{E}}(Y_i^1|D_i=1) - \mathop{\mathbb{E}}(Y_i^0|D_i=0) \\  
+  &amp;= \mathop{\mathbb{E}}(Y_i^0 + \delta_i | D_i = 1) - \mathop{\mathbb{E}}(Y_i^0 | D_i = 0)
+\end{align}
+\]</span></p>
+<p>✨ 가정: 모든 개인에 대해 처치 효과가 일정하다고 가정 (<span class="math inline">\(\delta_i = \delta\)</span>) 그러면,</p>
+<p><span class="math display">\[
+  SDO = \delta + \mathop{\mathbb{E}}(Y_i^0 | D_i = 1) - \mathop{\mathbb{E}}(Y_i^0 | D_i = 0)
+\]</span></p>
+<p>그리고,</p>
+<p><span class="math display">\[
+ATE = \mathop{\mathbb{E}}(\delta_i) = \mathop{\mathbb{E}}(\delta) = \delta
+\]</span></p>
+<p>(위 가정에 의해) 따라서:</p>
+<p><span class="math display">\[
+\begin{equation}
+  SDO = ATE + \underbrace{\mathop{\mathbb{E}}(Y_i^0 | D_i = 1) - \mathop{\mathbb{E}}(Y_i^0 | D_i = 0)}_\text{선택 편향 (Selection Bias)}
+\end{equation}
+\]</span></p>
+<p>🔗 <a href="#/naive_comp_extended"><strong>부록(Appendix)</strong></a>: 만약 처치 효과가 일정하다는 가정이 완화되면, <strong>추가적인 편향 항(bias term)</strong>이 나타남.</p>
+</section>
+<section id="task-1" class="slide level2 scrollable" data-background-color="#ffebf0">
+<h2>Task 1</h2>
+<div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
+<p></p><div class="countdown" id="timer_cd803137" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+</div>
+<p><strong>📊 직접 생성한 데이터를 이용하여 다양한 지표와 편향을 계산</strong></p>
+<p>📂 <strong>1. 데이터 불러오기 및 변수 생성</strong></p>
+<ul>
+<li><p><a href="https://www.dropbox.com/s/oqc3vq1m9eyp1d6/toy_data_2.csv?dl=1"><strong>데이터 다운로드</strong></a><br>
+<code>read.csv()</code>를 사용하여 데이터를 불러오기.</p></li>
+<li><p><strong>변수 설명</strong></p>
+<ul>
+<li><code>group</code>: 처치를 받았는지 여부 (<code>1 = 처치군</code>, <code>0 = 통제군</code>).<br>
+</li>
+<li><code>Y0</code>: 처치를 받지 않았을 경우의 잠재적 결과 <span class="math inline">\((Y_i^0)\)</span>.<br>
+</li>
+<li><code>Y1</code>: 처치를 받았을 경우의 잠재적 결과 <span class="math inline">\((Y_i^1)\)</span>.</li>
+</ul></li>
+<li><p><strong>새로운 변수 생성</strong></p>
+<ul>
+<li><strong>관측된 결과</strong> <span class="math inline">\(Y_i\)</span>: <span class="math display">\[
+Y_i = D_i \times Y_i^1 + (1 - D_i) \times Y_i^0
+\]</span></li>
+<li><strong>개별 처치 효과</strong> <span class="math inline">\(\delta_i\)</span>: <span class="math display">\[
+\delta_i = Y_i^1 - Y_i^0
+\]</span></li>
+</ul></li>
+</ul>
+<p>📊 <strong>2. ATE 및 SDO 계산</strong></p>
+<ul>
+<li><strong>ATE (Average Treatment Effect) 계산</strong><br>
+</li>
+<li><strong>SDO (Simple Difference in Mean Outcomes) 계산</strong><br>
+</li>
+<li><em>Bias가 존재하는가? 크기는 얼마나 큰가?</em></li>
+</ul>
+<p>🔀 <strong>3. 무작위 배정된 데이터에서 SDO 계산</strong></p>
+<ul>
+<li><p><a href="https://www.dropbox.com/s/0qfsonzz1t9gkxi/toy_data_random.csv?dl=1"><strong>새로운 데이터 다운로드</strong></a><br>
+이 데이터에서는 동일한 개인을 <strong>임의로 무작위 배정(random assignment)</strong>.</p></li>
+<li><p><span class="math inline">\(Y_i\)</span> 재계산 필요!</p>
+<ul>
+<li>새로운 처치 배정에 맞춰 다시 계산해야 함.</li>
+</ul></li>
+<li><p><strong>무작위 배정에서 SDO 계산</strong></p>
+<ul>
+<li>편향이 <strong>거의 0</strong>에 가까워야 함.<br>
+</li>
+<li>하지만 정확히 0이 되지 않는 이유는 무엇일까?</li>
+</ul></li>
+</ul>
+<p>📌 <strong>4. (Optional) 편향 요소 확인</strong></p>
+<ol type="1">
+<li><strong>선택 편향(Selection Bias) 계산</strong><br>
+</li>
+<li><strong>이질적 처치 효과 편향(Heterogeneous Treatment Effect Bias) 계산</strong><br>
+</li>
+<li>아래 식이 성립하는지 확인: <span class="math display">\[
+SDO = ATE + \text{Selection Bias} + \text{Heterogeneous Treatment Effect Bias}
+\]</span></li>
+</ol>
+</section>
+<section id="무작위-배정randomization은-인과-추론-문제를-해결한다" class="slide level2">
+<h2>무작위 배정(Randomization)은 인과 추론 문제를 해결한다!</h2>
+<p><strong>📌 무작위 실험(Randomized experiments)</strong>:<br>
+- 사람들을 <strong>무작위(randomly)</strong>로 처치군과 통제군에 배정함.<br>
+- 이 경우, 처치 배정은 <strong>잠재적 결과(potential outcomes)와 독립적(independent)</strong>.</p>
+<p>특히, <span class="math inline">\(\mathbb{E}(Y_i^0 | D_i = 1) = \mathbb{E}(Y_i^0 | D_i = 0)\)</span> 이 성립해야 할 이유가 없음.</p>
+<ul>
+<li>따라서, <strong>선택 편향(selection bias)이 0이 됨</strong>.</li>
+</ul>
+<p>✅ 무작위 배정이 이루어진다면:</p>
+<p><span class="math display">\[
+SDO = \mathop{\mathbb{E}}(Y_i^1|D_i=1) - \mathop{\mathbb{E}}(Y_i^0|D_i=0) = ATE
+\]</span></p>
+<p>👉 <strong>즉, 데이터를 이용해 직접 ATE를 추정할 수 있음!</strong></p>
+</section></section>
+<section>
+<section id="randomized-experiments" class="title-slide slide level1 center">
+<h1>Randomized Experiments</h1>
+
+</section>
+<section id="무작위-실험-randomized-experiments" class="slide level2">
+<h2>무작위 실험 (Randomized Experiments)</h2>
+<ul>
+<li><p>흔히 <strong>무작위 통제 실험(Randomized Controlled Trials, RCTs)</strong>이라고 불림.</p></li>
+<li><p>최초의 RCT는 <strong>18~19세기</strong>에 주로 <strong>의학</strong> 분야에서 수행됨.</p></li>
+<li><p><strong>20세기 초반</strong>, 유명한 통계학자 <strong>J. Neyman</strong>과 <strong>R.A. Fisher</strong>에 의해 널리 보급됨.</p></li>
+<li><p>이후 <strong>공공정책 평가(public policy evaluation)의 신뢰할 수 있는 도구</strong>로 점차 자리 잡음.<br>
+👉 <a href="https://www.povertyactionlab.org/fr">참고 자료</a></p></li>
+<li><p><strong>경제학(Economics)에서도 RCT의 영향력 증가</strong></p>
+<ul>
+<li><strong>2019년 노벨 경제학상(Nobel Prize in Economics)</strong>이 RCT 연구자들에게 수여됨.<br>
+</li>
+<li><a href="https://www.economist.com/finance-and-economics/2019/10/17/a-nobel-economics-prize-goes-to-pioneers-in-understanding-poverty">Abhijit Banerjee, Esther Duflo, Michael Kremer</a><br>
+</li>
+<li>📌 <em>“실험적 접근을 통해 글로벌 빈곤을 완화하는 연구”</em>에 기여.</li>
+</ul></li>
+</ul>
+</section>
+<section id="학급-규모와-학생-성취-예제" class="slide level2 scrollable">
+<h2>학급 규모와 학생 성취: 예제</h2>
+<p>지난 주, <strong>학생들의 평균 수학 또는 읽기 점수(math/reading score)를 학급 규모(class size)에 대해 회귀 분석</strong>하였음.</p>
+<p><span class="math display">\[
+\textrm{math score}_i = b_0 + b_1 \textrm{class size}_i + e_i
+\]</span></p>
+<p>그러나 <span class="math inline">\(b_1^{OLS}\)</span>는 인과관계(causal relationship)가 아니라 단순한 상관관계(association)만을 보여줌. 그 이유는?</p>
+<p>📌 왜 OLS 계수 <span class="math inline">\(b_1\)</span>이 인과관계를 추정할 수 없는가?</p>
+<ol type="1">
+<li><p><strong>학생의 자기 선택(Student sorting)</strong>: 학부모들이 <strong>작은 학급이 더 낫다</strong>는 선입견을 가지고 있다면, 자녀를 그런 학교에 보내려고 할 것.</p></li>
+<li><p><strong>교사의 자기 선택(Teacher sorting)</strong>: <strong>작은 학급이 가르치기 더 쉬움</strong> → 교사들은 작은 학급이 있는 학교로 이동하려 할 것. 만약 작은 학급이 있는 학교에 <strong>경쟁이 존재한다면</strong>, <strong>우수한 교사(high-quality teachers)</strong>가 더 유리할 가능성이 큼.</p></li>
+<li><p><strong>지역(Location effect)</strong>: <strong>대규모 학급</strong>은 <strong>부유한 대도시</strong>에서 더 흔할 수 있음. <strong>소규모 학급</strong>은 <strong>가난한 농촌 지역</strong>에서 더 흔할 가능성이 있음.</p></li>
+</ol>
+<p>✅ <strong>RCT를 수행하면 이러한 모든 편향(bias)을 제거할 수 있음!</strong></p>
+</section>
+<section id="프로젝트-star-실험-the-project-star-experiment" class="slide level2">
+<h2>프로젝트 STAR 실험 (The Project STAR Experiment)</h2>
+<p><strong>테네시 학생-교사 성취 비율 실험 (Tennessee Student/Teacher Achievement Ratio Experiment)</strong><br>
+📖 <a href="http://piketty.pse.ens.fr/files/Krueger1999.pdf">Krueger (1999)</a> 참고.</p>
+<ul>
+<li><strong>테네시 주의회(Tennessee legislature)에서 총 약 1,200만 달러($12 million) 예산 지원</strong>.<br>
+</li>
+<li><strong>1985-1986 학년도에 시작</strong>, 총 <strong>4년간 진행됨</strong>.</li>
+</ul>
+<p>🔬 <strong>실험 설계</strong></p>
+<ul>
+<li><p><strong>11,600명의 학생과 교사</strong>가 <strong>무작위로(randomly assigned)</strong> 아래 3개 그룹 중 하나에 배정됨.<br>
+</p></li>
+<li><p>실험은 <strong>유치원부터 3학년까지(Kindergarten ~ 3rd grade) 지속됨.</strong></p>
+<p>1️⃣ <strong>소규모 학급(Small clas</strong>*): <strong>학생 수: 13~17명 / 교사 1인</strong></p>
+<p>2️⃣ <strong>일반 학급(Regular class)</strong> :<strong>학생 수: 22~25명 / 교사 1인</strong></p>
+<p>3️⃣ **일반 학급 + 보조 교사(Regular/aide class)*: <strong>학생 수: 22~25명 / 교사 1인 + 풀타임 보조 교사(full-time aide)</strong></p></li>
+</ul>
+<p>📊 <strong>실험 과정</strong></p>
+<ul>
+<li><strong>각 학교 내에서 무작위 배정(randomization within schools)</strong> 진행.<br>
+</li>
+<li><strong>매년 3월경 학생들의 수학(Math) 및 읽기(Reading) 능력 평가 실시</strong>.</li>
+</ul>
+<p>⚠️ <strong>비랜덤 탈락 문제(Non-random Attrition)</strong></p>
+<ul>
+<li>일부 학생들이 <strong>무작위 배정 이후 실험에서 이탈</strong>하는 문제 발생.<br>
+</li>
+<li><strong>그러나 여기에서는 해당 문제를 무시함.</strong></li>
+</ul>
+</section>
+<section id="task-2" class="slide level2" data-background-color="#ffebf0">
+<h2>Task 2</h2>
+<div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
+<p></p><div class="countdown" id="timer_e8bee117" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+</div>
+<p>📂 1. 데이터 불러오기 - <a href="https://www.dropbox.com/s/bf1fog8yasw3wjj/star_data.csv?dl=1"><strong>STAR 데이터 다운로드</strong></a><br>
+- 데이터를 <code>star_df</code> 객체에 저장.<br>
+- 변수 설명을 이해하려면 <a href="https://rdrr.io/cran/AER/man/STAR.html"><strong>도움말 확인</strong></a>.<br>
+(📌<strong>데이터가 재구성(reshaped)되었으므로, 변수명 끝의 “k”, “1” 등의 숫자는 무시.</strong>)</p>
+<p>🔍 2. 데이터의 기본 정보 확인</p>
+<ul>
+<li><strong>관찰 단위(Unit of observation)</strong>는 무엇인가?</li>
+<li>다음 내용을 포함하는 변수는? (i) 랜덤 학급 배정(random class assignment), (ii) 학생의 학년(class grade), (iii) 관심 있는 결과 변수(outcomes of interest)</li>
+</ul>
+<p>📊 3. 데이터 크기 및 결측값(NA) 분석</p>
+<ul>
+<li>총 관측치 수는 몇 개인가? 11,598명의 학생이 실험에 참여했는데, 왜 관측치가 더 많은가? NA 값이 많은 이유는 무엇인가? 이들이 의미하는 것은?</li>
+</ul>
+<p>🚀 4. 결측값 처리 (NA 제거)</p>
+<ul>
+<li>다음 코드 실행하여 결측값이 없는 경우만 유지:</li>
+</ul>
+<p>📈 5. 무작위 배정 확인 (Balancing Checks)</p>
+<ul>
+<li>랜덤 배정이 잘 이루어졌는지 확인하기 위해, 그룹별 기초 통계량을 계산.</li>
+<li>다음 항목별 평균 비율(%)을 학년별(grade) 및 처치군별(treatment class)로 비교: 1️⃣ 여학생 비율 (percentage of girls), 2️⃣ 아프리카계 미국인 비율 (percentage of African Americans), 3️⃣ 무료 급식 대상 비율 (percentage of free lunch qualifiers)</li>
+</ul>
+<p>(📌 힌트: 다음 코드로 여학생 비율 계산 가능 (dplyr 활용 필요): <code>share_female = mean(gender == "female") * 100</code>.)</p>
+</section>
+<section id="프로젝트-star-실험" class="slide level2">
+<h2>프로젝트 STAR 실험</h2>
+<p>✅ RCT에서 평균 처치 효과(ATE) 추정 방법</p>
+<ul>
+<li><strong>무작위 통제 실험(Randomized Controlled Trial, RCT)</strong>에서는 <strong>처치군(treatment group)과 통제군(control group)의 결과 차이</strong>를 이용해 <strong>평균 처치 효과(Average Treatment Effect, ATE)</strong>를 추정할 수 있음.</li>
+</ul>
+<p>다음과 같은 설정하자:</p>
+<ul>
+<li><strong>처치군(Treatment Group)</strong>: <strong>소규모 학급(Small class)</strong><br>
+</li>
+<li><strong>통제군(Control Group)</strong>: <strong>일반 학급(Regular class)</strong><br>
+</li>
+<li><strong>대상 학년(Grade)</strong>: <strong>유치원(Kindergarten, k)</strong></li>
+</ul>
+<table class="caption-top">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>grade</th>
+<th>test</th>
+<th style="text-align: center;">mean regular</th>
+<th style="text-align: center;">mean small</th>
+<th style="text-align: center;">ATE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>k</td>
+<td>math</td>
+<td style="text-align: center;">484.45</td>
+<td style="text-align: center;">493.34</td>
+<td style="text-align: center;">8.9</td>
+</tr>
+<tr class="even">
+<td>k</td>
+<td>read</td>
+<td style="text-align: center;">435.76</td>
+<td style="text-align: center;">441.13</td>
+<td style="text-align: center;">5.37</td>
+</tr>
+</tbody>
+</table>
+<p>📌 이 ATE 값들의 해석은?</p>
+<p>📉 회귀분석(regression)으로 표현한다면?</p>
+</section>
+<section id="rct를-회귀-분석-형태로-표현하기" class="slide level2">
+<h2>RCT를 회귀 분석 형태로 표현하기</h2>
+<p>🎯 <strong>RCT에서 결과 변수의 기본 표현</strong></p>
+<p><span class="math display">\[
+Y_i = D_i Y_i^1 + (1 - D_i) Y_i^0
+\]</span></p>
+<p>✨ <span class="math inline">\(D_i\)</span>를 인수분해하고, <span class="math inline">\(Y_i^1 - Y_i^0\)</span>를 <span class="math inline">\(\delta_i\)</span>로 대체하면:</p>
+<p><span class="math display">\[
+\begin{align}
+Y_i &amp;= Y_i^0 + D_i (Y_i^1 - Y_i^0) \\  
+&amp;= Y_i^0 + D_i \delta_i  
+\end{align}
+\]</span></p>
+<p>📌 <span class="math inline">\(\delta_i = \delta\)</span> (모든 <span class="math inline">\(i\)</span>에 대해 동일한 처치 효과 가정)</p>
+<p><span class="math display">\[
+Y_i = Y_i^0 + D_i \delta
+\]</span></p>
+<p>🔄 <strong>우항에</strong> <span class="math inline">\(\mathbb{E}[Y_i^0] - \mathbb{E}[Y_i^0] = 0\)</span>을 추가하면:</p>
+<p><span class="math display">\[
+\begin{align}
+Y_i &amp;= \mathbb{E}[Y_i^0] + D_i \delta + Y_i^0 - \mathbb{E}[Y_i^0] \\  
+&amp;= b_0 + \delta D_i + e_i  
+\end{align}
+\]</span></p>
+<p>여기서,<br>
+- <span class="math inline">\(b_0 = \mathbb{E}[Y_i^0]\)</span> (통제군의 평균 결과)<br>
+- <span class="math inline">\(e_i = Y_i^0 - \mathbb{E}[Y_i^0]\)</span> (오차항, 개별적 변동)</p>
+<p>✅ <strong>즉, RCT를 단순한 회귀 분석 형태로 나타낼 수 있음!</strong><br>
+이제 실제 데이터에서 이를 어떻게 추정할지 살펴보자. 🚀</p>
+</section>
+<section id="프로젝트-star-실험-회귀-분석" class="slide level2">
+<h2>프로젝트 STAR 실험: 회귀 분석</h2>
+<p>🎯 <strong>지난 번 본 단순 회귀 모델과 동일한 형태!</strong> - 마지막 식은 우리가 지난주에 학습한 <strong>단순 회귀 모델(simple regression model)</strong>과 동일. - 여기서 <span class="math inline">\(\delta = b_1\)</span>로 해석 가능.</p>
+<p>✅ <strong>따라서, 소규모 학급(small class)에 배정된 것이 수학 성적(math score)에 미치는 ATE를 추정해보자.</strong></p>
+<p>📊 <strong>추정할 회귀 모델</strong> <span class="math display">\[
+\text{math score}_i = b_0 + \delta \text{small}_i + e_i
+\]</span></p>
+<p>여기서,<br>
+<span class="math display">\[
+\text{small}_i =
+\begin{cases}
+1 \quad \text{(소규모 학급 배정)}  \\\\
+0 \quad \text{(일반 학급 배정)}
+\end{cases}
+\]</span></p>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>star_df_k_small <span class="ot">&lt;-</span> star_df <span class="sc">%&gt;%</span></span>
+<span id="cb1-2"><a href=""></a>    <span class="fu">filter</span>(star <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"regular"</span>, <span class="st">"small"</span>) <span class="sc">&amp;</span></span>
+<span id="cb1-3"><a href=""></a>           grade <span class="sc">==</span> <span class="st">"k"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-4"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">small =</span> (star <span class="sc">==</span> <span class="st">"small"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:40%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  star    grade     n
+  &lt;chr&gt;   &lt;chr&gt; &lt;int&gt;
+1 regular k      1781
+2 small   k      1578</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  small     n
+  &lt;lgl&gt; &lt;int&gt;
+1 FALSE  1781
+2 TRUE   1578</code></pre>
+</div>
+</div>
+</div></div>
+</section>
+<section id="프로젝트-star-실험-회귀-분석-1" class="slide level2">
+<h2>프로젝트 STAR 실험: 회귀 분석</h2>
+<p>📌 추정할 회귀 모델 <span class="math display">\[
+\text{math score}_i = b_0 + \delta \text{small}_i + e_i
+\]</span></p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = math ~ small, data = star_df_k_small)
+
+Coefficients:
+(Intercept)    smallTRUE  
+    484.446        8.895  </code></pre>
+</div>
+</div>
+<p>📌 회귀 분석 계수 의미 정리</p>
+<p><span class="math inline">\(b_0 = \mathbb{E}[Y_i^0]\)</span> and <span class="math inline">\(\delta = \mathbb{E}[Y_i | D_i = 1] - \mathbb{E}[Y_i | D_i = 0]\)</span></p>
+<ul>
+<li><span class="math inline">\(b_0\)</span>: 통제군(일반 학급)의 평균 수학 점수</li>
+<li><span class="math inline">\(\delta\)</span>: 소규모 학급과 일반 학급의 평균 점수 차이</li>
+</ul>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>b_0 <span class="ot">=</span> <span class="fu">mean</span>(star_df_k_small<span class="sc">$</span>math[</span>
+<span id="cb5-2"><a href=""></a>    star_df_k_small<span class="sc">$</span>small <span class="sc">==</span> <span class="cn">FALSE</span>])</span>
+<span id="cb5-3"><a href=""></a>b_0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 484.4464</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>delta <span class="ot">=</span> <span class="fu">mean</span>(star_df_k_small<span class="sc">$</span>math[</span>
+<span id="cb7-2"><a href=""></a>    star_df_k_small<span class="sc">$</span>small <span class="sc">==</span> <span class="cn">TRUE</span>]) <span class="sc">-</span> </span>
+<span id="cb7-3"><a href=""></a>  <span class="fu">mean</span>(star_df_k_small<span class="sc">$</span>math[</span>
+<span id="cb7-4"><a href=""></a>    star_df_k_small<span class="sc">$</span>small <span class="sc">==</span> <span class="cn">FALSE</span>])</span>
+<span id="cb7-5"><a href=""></a>delta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 8.895193</code></pre>
+</div>
+</div>
+</div></div>
+</section>
+<section id="더미-변수를-사용한-회귀-분석-그래프" class="slide level2">
+<h2>더미 변수를 사용한 회귀 분석: 그래프</h2>
+<p><strong>📌 이번 회귀 분석의 독립 변수(regressor)는 더미 변수(dummy variable)</strong></p>
+
+<img data-src="chapter_causality_files/figure-revealjs/unnamed-chunk-16-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"></section>
+<section id="더미-변수를-사용한-회귀-분석-그래프-1" class="slide level2">
+<h2>더미 변수를 사용한 회귀 분석: 그래프</h2>
+<p><strong>📌 이번 회귀 분석의 독립 변수(regressor)는 더미 변수(dummy variable)</strong></p>
+
+<img data-src="chapter_causality_files/figure-revealjs/unnamed-chunk-17-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"></section>
+<section id="더미-변수를-사용한-회귀-분석-그래프-2" class="slide level2">
+<h2>더미 변수를 사용한 회귀 분석: 그래프</h2>
+<p><strong>📌 이번 회귀 분석의 독립 변수(regressor)는 더미 변수(dummy variable)</strong></p>
+
+<img data-src="chapter_causality_files/figure-revealjs/unnamed-chunk-18-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"></section>
+<section id="더미-변수를-사용한-회귀-분석-그래프-3" class="slide level2">
+<h2>더미 변수를 사용한 회귀 분석: 그래프</h2>
+<p><strong>📌 이번 회귀 분석의 독립 변수(regressor)는 더미 변수(dummy variable)</strong></p>
+
+<img data-src="chapter_causality_files/figure-revealjs/unnamed-chunk-19-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"></section>
+<section id="더미-변수를-사용한-회귀-분석-공식으로-표현" class="slide level2">
+<h2>더미 변수를 사용한 회귀 분석: 공식으로 표현</h2>
+<p>📌 회귀 모델: <span class="math inline">\(\text{math score}_i = b_0 + \delta \text{small}_i + e_i\)</span></p>
+<p>📌 일반 학급(통제군, <span class="math inline">\(small_i = 0\)</span>)에서의 기대값 <span class="math display">\[
+\begin{align}
+\mathbb{E}[\textrm{math score} | \text{small}_i = 0]
+&amp;= \mathbb{E}[b_0 + \delta \text{small}_i + e_i | \text{small}_i = 0] \\  
+&amp;= b_0 + \delta \mathbb{E}[\text{small}_i| \text{small}_i = 0] + \mathbb{E}[e_i|\text{small}_i = 0] \\  
+&amp;= b_0  
+\end{align}
+\]</span></p>
+<p>📌 소규모 학급(처리군, <span class="math inline">\(small_i = 1\)</span>)에서의 기대값 <span class="math display">\[
+\begin{align}
+\mathbb{E}[\textrm{math score} | \text{small}_i = 1]  
+&amp;= \mathbb{E}[b_0 + \delta \text{small}_i + e_i | \text{small}_i = 1] \\  
+&amp;= b_0 + \delta \mathbb{E}[\text{small}_i| \text{small}_i = 1] + \mathbb{E}[e_i|\text{small}_i = 1] \\  
+&amp;= b_0 + \delta  
+\end{align}
+\]</span></p>
+<p>📌 평균 처치 효과 (ATE) 계산 <span class="math display">\[
+\begin{align}
+ATE &amp;= \mathbb{E}[\textrm{math score} | \text{small}_i = 1] - \mathbb{E}[\textrm{math score} | \text{small}_i = 0] \\  
+&amp;= b_0 + \delta - b_0 \\  
+&amp;= \delta  
+\end{align}
+\]</span></p>
+<p>✅ <strong>이미 알고 있었지만, 이제 이 결과가 왜 성립하는지 공식적으로 이해할 수 있음!</strong> 🎉</p>
+</section>
+<section id="task-3" class="slide level2" data-background-color="#ffebf0">
+<h2>Task 3</h2>
+<div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
+<p></p><div class="countdown" id="timer_ad6ea542" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+</div>
+<p>📌 1. 아래 코드를 실행하여 <strong>1학년(grade == “1”)이며, 일반 학급(regular) 또는 소규모 학급(small)에 속한 학생들만 선택</strong>.</p>
+<p>📊 2. 두 그룹의 평균 수학 점수 및 차이 계산 (Base R 사용)</p>
+<p>🔄 3. 더미 변수 생성: 소규모 학급(small) = 1 (TRUE), 일반 학급(regular) = 0 (FALSE) <em>힌트:</em> <code>treatment = (star == "small")</code>.</p>
+<p>📈 4. 회귀 분석 실행</p>
+<p>❓ 5. 결과 해석: 회귀 분석 결과가 2번 질문에서 구한 평균 차이와 일치하는가?</p>
+</section>
+<section id="rct의-한계" class="slide level2">
+<h2>RCT의 한계</h2>
+<p>✅ <strong>RCTs는 강력한 내부 타당성(Internal Validity)을 가지며, 인과관계를 명확히 확인할 수 있음.</strong> 하지만 몇 가지 중요한 한계점이 존재함.</p>
+<ul>
+<li>⚠️ <strong>1. RCT 실행의 어려움</strong>
+<ul>
+<li><strong>RCT는 종종 실행이 불가능함.</strong>
+<ul>
+<li>🏦 <strong>비용 문제</strong>: RCT는 <strong>매우 비용이 많이 듦</strong><br>
+</li>
+<li>⚖️ <strong>윤리적 문제</strong>: 일부 처치(treatment)는 <strong>윤리적 문제</strong>로 인해 특정 그룹에 적용할 수 없음<br>
+</li>
+<li>⏳ <strong>시간 제약</strong>: RCT는 시간이 오래 걸리며, 급하게 결과가 필요한 경우에는 적절하지 않음</li>
+</ul></li>
+</ul></li>
+<li>🔍 <strong>2. 결과 해석의 어려움</strong>
+<ul>
+<li>🌍 <strong>외부 타당성(External Validity)</strong>:
+<ul>
+<li>특정 RCT의 결과가 다른 <strong>국가, 인구집단 등으로 일반화 가능할까?</strong><br>
+</li>
+<li>연구 대상이 제한적이면 <strong>다른 환경에서도 같은 결과가 나올까?</strong></li>
+</ul></li>
+<li>🔬 <strong>메커니즘 분석의 어려움</strong>:
+<ul>
+<li>어떤 <strong>메커니즘</strong>이 작동했는지 분석하는 것이 어려울 수 있음</li>
+</ul></li>
+<li>🎲 <strong>완벽하지 않은 무작위 배정</strong>
+<ul>
+<li><strong>실제 RCT에서는 완전한 랜덤화가 어렵고</strong>, <strong>이탈(Attrition) 문제가 발생할 수 있음</strong></li>
+</ul></li>
+</ul></li>
+</ul>
+<p>✅ <strong>RCT는 인과관계를 분석하는 강력한 도구지만, 한계를 이해하고 보완할 필요가 있음!</strong> 🎯</p>
+</section>
+<section id="앞으로-배울-내용" class="slide level2">
+<h2>🚀 앞으로 배울 내용</h2>
+<p>✅ <strong>RCT에 의존할 수 없다면?</strong><br>
+- 우리는 <strong><em>실험 데이터(Experimental Data)</em></strong> 가 아닌, <strong><em>관측 데이터(Observational Data)</em></strong> 를 이용하여 <strong>인과 추론(Causal Inference)</strong> 을 수행할 수 있음.</p>
+<p>📌 두 가지 주요한 경우</p>
+<ul>
+<li><strong>✅ 선택이 관측 가능한 특성(Observable Characteristics)에서 발생하는 경우</strong>
+<ul>
+<li><strong>다중 회귀(Multiple Regression)</strong> → <strong>다음 주에 학습!</strong></li>
+</ul></li>
+<li><strong>⚠️ 선택이 관측 불가능한 특성(Unobservable Characteristics)에서 발생하는 경우</strong>
+<ul>
+<li><strong>회귀 불연속 설계(Regression Discontinuity Design, RDD)</strong> → <strong>강의 10에서 다룸</strong><br>
+</li>
+<li><strong>이중 차분법(Difference-in-Differences, DID)</strong> → <strong>강의에서는 다루지 않지만, 슬라이드 제공!</strong></li>
+</ul></li>
+</ul>
+</section>
+<section id="인과-관계를-찾아가는-길" class="slide level2">
+<h2>🔍 인과 관계를 찾아가는 길</h2>
+<p>✅ <strong><em>데이터를 어떻게 다룰까?</em></strong> : 읽기(Read), 정리(Tidy), 시각화(Visualize)…</p>
+<p>🚧 <strong><em>변수간 관계를 어떻게 요약할까?</em></strong> …단순 선형 회귀(Simple Linear Regression) …계속 학습</p>
+<p>✅ 인과 관계(Causality)란 무엇인가?</p>
+<p>❌ 전체 모집단을 관측하지 못하면 어떻게 할까?</p>
+<p>❌ 우리의 연구 결과가 단순한 무작위(Randomness) 때문일 수도 있을까?</p>
+<p>❌ 실제로 외생성을 어떻게 찾아낼 수 있을까?</p>
+</section>
+<section class="slide level2">
+
+<p><link href="https://fonts.googleapis.com/css2?family=Pacifico&amp;display=swap" rel="stylesheet"></p>
+<div style="display: flex; justify-content: center; align-items: center; height: 70vh;">
+<h2 style="color: #ff6666; text-align: center; font-family: 'Pacifico', cursive; font-size: 50px;">
+<p>THE END!</p>
+</h2>
+</div>
+</section></section>
+<section>
+<section id="appendix" class="title-slide slide level1 center">
+<h1>Appendix</h1>
+
+</section>
+<section id="attandatu" class="slide level2">
+<h2><strong>처리 집단과 통제 집단에서의 평균 처치 효과</strong> (Average Treatment on the Treated and on the Untreated)</h2>
+<p><strong>다른 조건부(Conditional) 평균 처치 효과도 중요할 수 있음.</strong></p>
+<p><strong>📌 처리 집단에서의 평균 처치 효과 (ATT)</strong> (Average Treatment on the Treated, <strong>ATT</strong>)</p>
+<p><span class="math display">\[
+\begin{align}
+ATT &amp;= \mathop{\mathbb{E}}(\delta_i | D_i = 1) \\
+     &amp;= \mathop{\mathbb{E}}(Y_i^1 - Y_i^0 | D_i = 1) \\
+     &amp;= \mathop{\mathbb{E}}(Y_i^1 | D_i = 1) - \mathop{\mathbb{E}}(Y_i^0 | D_i = 1)
+\end{align}
+\]</span></p>
+<ul>
+<li><strong>ATT는 처치 그룹(Treatment Group)에 속한 개인들의 평균 처치 효과를 측정함.</strong><br>
+</li>
+<li><em>예제:</em> 직업 훈련 프로그램(<strong>처치</strong>)을 받은 사람들에게 미치는 효과 (<strong>처치 그룹</strong> 내에서 평가).</li>
+</ul>
+<p><strong>📌 통제 집단에서의 평균 처치 효과 (ATU)</strong> (Average Treatment on the Untreated, <strong>ATU</strong>)</p>
+<p><span class="math display">\[
+\begin{align}
+ATU &amp;= \mathop{\mathbb{E}}(\delta_i | D_i = 0) \\
+     &amp;= \mathop{\mathbb{E}}(Y_i^1 - Y_i^0 | D_i = 0) \\
+     &amp;= \mathop{\mathbb{E}}(Y_i^1 | D_i = 0) - \mathop{\mathbb{E}}(Y_i^0 | D_i = 0)
+\end{align}
+\]</span></p>
+<ul>
+<li><strong>ATU는 통제 그룹(Control Group)에 속한 개인들이 처치를 받았을 경우의 평균 처치 효과를 측정함.</strong></li>
+<li><em>예제:</em> 사립학교(<strong>처치</strong>)에 다니는 것이 공립학교 학생(<strong>통제 그룹</strong>)에게 미칠 효과를 추정.</li>
+</ul>
+<p>📌 <strong>중요:</strong> 대부분의 경우, <strong>ATE ≠ ATT ≠ ATU!</strong></p>
+<p>🔙 <a href="#/ate">이전으로 돌아가기</a></p>
+</section>
+<section id="naive_comp_extended" class="slide level2">
+<h2><strong>단순 비교(Naive Comparisons)의 문제점</strong> (Problems with Naive Comparisons)</h2>
+<p><strong>처치 효과가 모든 개인에게 동일하다는 가정을 완화해 보자.</strong><br>
+수식을 전개하면 다음과 같은 형태로 <strong>SDO</strong>(Simple Difference in Outcomes)를 분해할 수 있음:</p>
+<p><span class="math display">\[
+\begin{align}
+  SDO &amp;= ATE + \underbrace{\mathop{\mathbb{E}}(Y_i^0 | D_i = 1) - \mathop{\mathbb{E}}(Y_i^0 | D_i = 0)}_\text{Selection bias} \\
+  &amp; \quad \quad  \quad \quad + \underbrace{(1-\pi)(ATT - ATU)}_\text{Heterogeneous treatment effect bias}
+\end{align}
+\]</span></p>
+<p>여기서 <span class="math inline">\(1 - \pi\)</span>는 <strong>통제 그룹(Control Group)의 비율</strong>을 의미함.</p>
+<p>📌 새로운 편향 요소: <strong>개인별 처치 효과의 이질성 (Heterogeneity)</strong> 1️⃣ <strong>선택 편향(Selection Bias):</strong><br>
+- 대학에 진학하는 학생들은 <strong>기본적인 인지 능력이 더 높을 가능성</strong>이 높음 (대학 여부와 관계없이).<br>
+2️⃣ <strong>이질적 처치 효과 편향(Heterogeneous Treatment Effect Bias):</strong><br>
+- 대학에 가는 학생들이 <strong>대학에서 더 많은 학습 효과를 얻을 가능성</strong>이 높음 (더 동기 부여된 학생들일 수 있음).</p>
+<p>🔙 <a href="#/naive_comp">이전으로 돌아가기</a></p>
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="chapter_causality_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="chapter_causality_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="chapter_causality_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="chapter_causality_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="chapter_causality_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="chapter_causality_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="chapter_causality_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="chapter_causality_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="chapter_causality_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="chapter_causality_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="chapter_causality_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'fast',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+
+    <script>
+
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
+      // slide changes (different for each slide format).
+
+      (function () {
+
+        // dispatch for htmlwidgets
+
+        function fireSlideEnter() {
+
+          const event = window.document.createEvent("Event");
+
+          event.initEvent("slideenter", true, true);
+
+          window.document.dispatchEvent(event);
+
+        }
+
+    
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          fireSlideEnter();
+
+    
+
+          // dispatch for shiny
+
+          if (window.jQuery) {
+
+            if (previousSlide) {
+
+              window.jQuery(previousSlide).trigger("hidden");
+
+            }
+
+            if (currentSlide) {
+
+              window.jQuery(currentSlide).trigger("shown");
+
+            }
+
+          }
+
+        }
+
+    
+
+        // hookup for slidy
+
+        if (window.w3c_slidy) {
+
+          window.w3c_slidy.add_observer(function (slide_num) {
+
+            // slide_num starts at position 1
+
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
+          });
+
+        }
+
+    
+
+      })();
+
+    </script>
+
+    
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>

@@ -1,0 +1,912 @@
+---
+title: "FMB819: R을 이용한 데이터분석"
+subtitle: "<span style='font-size:1.5em; color:#a01616;'>Introduction</span>"
+# date: "`r Sys.Date()`"
+format:
+  revealjs:
+    slide-number: true
+    scrollable: true
+    chalkboard: true
+    transition: fade
+    transition-speed: fast
+    css: [default, "../css/kubs.css", "../css/kubs-fonts.css"]
+revealjs-plugins:
+  - revealjs-text-resizer
+---
+
+```{r setup, include = FALSE, warning = FALSE, message = FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  dev = "svg",
+  cache = TRUE,
+  fig.align = "center"
+  #fig.width = 11,
+  #fig.height = 5
+)
+
+# Load packages
+library(tidyverse)
+library(pander)
+library(ggthemes)
+library(gapminder)
+library(countdown)
+library(xaringanExtra)
+
+```
+
+## Welcome to FMB 819!
+
+-   수업의 목표
+
+    1.  통계 소프트웨어 R과 친숙해지고,
+    2.  데이터를 수집, 가공, 표현할 수 있으며
+    3.  기본적 통계 개념 이해하여
+    4.  데이터 분석의 결과를 해석할 수 있다.
+
+-   데이터 분석의 목표
+
+    1.  **기술 요약(Description)**: 현상을 설명
+    2.  **예측(Prediction)**: 관측되지 않는 값을 예측
+    3.  **인과 관계(Causality)**: 한 변수가 다른 변수에 미치는 영향 분석
+
+------------------------------------------------------------------------
+
+## 데이터 분석을 통해 답하고자 하는 질문
+
+1.  **기술요약(Description)**:
+    -   한국 성인 중 연 소득이 2천만원 미만인 사람은 몇 명인가? 평균 소득은 얼마인가? 대학 학위가 있는 사람과 없는 사람 간 평균 소득 차이는 얼마인가?
+2.  **예측(Prediction)**:
+    -   회사 웹사이트 방문자의 소득 (광고 목적)? 다음 분기 한국의 총소비 및 총소득은?
+3.  **인과 관계(Causality)**:
+    -   *한 개인*이 대학 학위를 가졌을 때와 가지지 않았을 때의 소득 차이는 얼마나 될까? (다른 모든 조건 – 부모의 배경, 키, 사회적 기술 등 – 이 동일하다고 가정할 때), 해당 개인이 남성이었을 경우 소득은 얼마나 달라질까?
+
+------------------------------------------------------------------------
+
+## ...continued
+
+-   많은 경우 의사 결정을 위해서 기술/예측/인과 관계를 조합적으로 파악할 필요
+
+    -   우수한 학생들을 돕기 위해 다른 학생들의 기회를 희생할 수 있는 특목고를 운영해야 할까?
+
+    -   특목고 운영 여부는 특목고가 다양한 학생들에게 미치는 **인과적 효과**뿐만 아니라, 현재 학생 **구성(기술)**과 미래 학생 **구성(예측)**을 고려해야.
+
+    -   물론 의사결정을 위해서는 가치판단이 필요: 이는 데이터 분석의 영역이 아님
+
+------------------------------------------------------------------------
+
+## `R`이란?
+
+-   `R`은 강력한 통계 및 그래픽 기능을 갖춘 **프로그래밍 언어**.
+
+-   `R`을 사용하는 이유
+
+    1.  **무료(free)**이며 **오픈소스(open source)**
+    2.  **유연하고 강력함** → 데이터 정리, 시각화, 기계학습 등 거의 모든 분석 가능.\
+    3.  [활발한 온라인 커뮤니티](https://stackoverflow.com/questions/tagged/r), 대부분의 문제에 대한 해결책 존재.
+
+------------------------------------------------------------------------
+
+## 데이터 처리 (Data Wrangling)
+
+-   데이터 분석 전에 데이터를 정리하는 데 많은 시간 소요됨.
+
+-   `gapminder` 데이터셋 사용: 1952\~2007년 각국의 기대수명, 1인당 GDP, 인구 데이터 포함.
+
+-   각 연도별/대륙별 평균 기대수명과 평균 1인당 GDP 계산 목표.
+
+-   우선 대륙 *and* 연도별로 자료를 그룹핑을 하고, 평균 기대수명과 평균 1인당 GDP 계산
+
+::::: columns
+::: {.column width="50%"}
+```{r, gapminder, echo = T, eval = F}
+# load gapminder package
+library(gapminder)
+# load the dataset from the gapminder package
+data(gapminder, package = "gapminder") 
+# show first 4 lines of this dataframe
+head(gapminder,n = 4)
+```
+:::
+
+::: {.column width="50%"}
+```{r, gapminder, echo = F, eval = T}
+```
+:::
+:::::
+
+------------------------------------------------------------------------
+
+## ...continued
+
+-   당연히, 여러 가지 방법으로 이 작업 가능.
+
+-   여기서는 `dplyr`패키지를 사용:
+
+```{r, echo = T}
+library(dplyr)
+# compute the required statistics
+gapminder_dplyr <- gapminder %>% 
+  group_by(continent, year) %>% 
+  summarise(count = n(),
+            mean_lifeexp = mean(lifeExp),
+            mean_gdppercap = mean(gdpPercap))
+# show first 5 lines of the new data
+head(gapminder_dplyr, n = 5)
+```
+
+------------------------------------------------------------------------
+
+## Visualisation
+
+-   그래프를 그리기 `gapminder_dplyr`:
+
+```{r, echo = TRUE}
+ggplot(data = gapminder_dplyr,  # 데이터셋을 지정
+       mapping = aes(x = mean_lifeexp,  # x축: 평균 기대수명
+                     y = mean_gdppercap,  # y축: 평균 1인당 GDP
+                     color = continent,  # 색상: 대륙별 구분
+                     size = count)) +  # 점 크기: 국가 수
+  geom_point(alpha = 1/2) +  # 반투명한 점 그래프 생성 (alpha=0.5)
+  labs(x = "Average life expectancy",  # x축 라벨 설정
+       y = "Average GDP per capita",  # y축 라벨 설정
+       color = "Continent",  # 색상 범례 제목 설정
+       size = "Nb of countries") +  # 크기 범례 제목 설정
+  theme_bw()  # 흰색 배경의 테마 적용 (black & white theme)
+```
+
+------------------------------------------------------------------------
+
+## Animated Plotting
+
+
+
+```{r, example: gganimate, include = F, cache = T}
+# The package for animating ggplot2
+library(gganimate)
+# As before
+# gg <- ggplot(
+#   data = gapminder %>% filter(continent != "Oceania"),
+#   aes(gdpPercap, lifeExp, size = pop, color = country)
+# ) +
+# geom_point(alpha = 0.7, show.legend = FALSE) +
+# scale_colour_manual(values = country_colors) +
+# scale_size(range = c(2, 12)) +
+# scale_x_log10("GDP per capita", label = scales::comma) +
+# facet_wrap(~continent) +
+# theme_pander(base_size = 16) +
+# theme(panel.border = element_rect(color = "grey90", fill = NA)) +
+# # Here comes the gganimate-specific bits
+# labs(title = "Year: {frame_time}") +
+# ylab("Life Expectancy") +
+# transition_time(year) +
+# ease_aes("linear")
+# # Save the animation
+# anim_save(
+#   animation = gg,
+#   filename = "ex_gganimate.gif",
+#   path = "chapter_in1les/figure-html",
+#   width = 9,
+#   height = 4,
+#   units = "in",
+#   res = 150,
+#   nframes = 56
+# )
+```
+
+![](chapter_intro_files/figure-html/ex_gganimate.gif)
+
+::: aside
+출처: [Ed Rubin](https://raw.githack.com/edrubin/EC421S19/master/LectureNotes/01Intro/01_intro.html#40)
+:::
+
+------------------------------------------------------------------------
+
+## `R` 설치 방법: Windows 환경 기준
+
+-   `winget`을 이용한 설치
+
+    -   PowerShell 또는 명령 프롬프트(cmd) 열고 아래 명령어 실행
+
+    ``` {.sh style="font-size:1.2em"}
+    winget install -e --id RProject.R
+    ```
+
+-   공식 웹사이트에서 다운로드하여 설치
+
+    1.  [CRAN 공식 웹사이트](https://cran.r-project.org/)에 접속
+    2.  "Download R for Windows" 클릭
+    3.  "base" 패키지를 선택하고 최신 버전을 다운로드
+    4.  다운로드한 설치 파일 실행 후 기본 설정으로 설치 진행
+
+------------------------------------------------------------------------
+
+## `RStudio` 설치 방법
+
+R 프로그래밍 언어를 위한 통합 개발 환경(IDE, Integrated Development Environment)
+
+-   `winget` 을 이용한 설치
+
+    -   PowerShell 또는 명령 프롬프트 열고 아래 명령어 실행
+
+    ``` {.sh style="font-size:1.2em"}
+    winget install -e --id Posit.RStudio
+    ```
+
+    -   RStudio 업그레이드가 필요할 경우 다음 명령어 실행
+
+    ``` {.sh style="font-size:1.2em"}
+    winget upgrade --id Posit.RStudio
+    ```
+
+-   공식 웹사이트에서 다운로드하여 설치
+
+    1.  [RStudio 공식 웹사이트](https://posit.co/download/rstudio-desktop/) 접속
+    2.  "RStudio Desktop"의 무료 버전을 선택하여 다운로드
+    3.  다운로드한 설치 파일 실행 후 기본 설정으로 설치
+    4.  설치 완료 후 RStudio 실행하여 정상 작동하는지 확인
+
+------------------------------------------------------------------------
+
+## 설치 확인
+
+설치가 정상적으로 완료되었는지 확인하기 위해 R과 RStudio 실행.
+
+1.  **RStudio 실행**
+
+    -   Windows 검색창에서 "RStudio" 검색 후 실행.
+    -   콘솔에서 `version` 입력하여 설치된 R 버전 확인.
+
+    ``` {.sh style="font-size:1.2em"}
+    version
+    ```
+
+2.  **R에서 간단한 코드 실행**
+
+    -   다음 코드를 console에서 실행하여 정상 동작하는지 확인.
+
+    ``` {.sh style="font-size:1.2em"}
+    print("R과 RStudio 설치 완료!")
+    ```
+
+------------------------------------------------------------------------
+
+## `RStudio` Layout
+
+```{r, echo = F, out.width = "300px"}
+knitr::include_graphics("chapter_intro_files/figure-html/rstudio.png")
+```
+
+------------------------------------------------------------------------
+
+## `RStudio` 환경
+
+RStudio를 실행하면 여러 창(윈도우)으로 구성되어 있음.
+
+-   **콘솔(Console)**: 명령어를 입력하고 실행하는 창. `>` 프롬프트에서 R 코드 입력 후 실행
+
+-   **스크립트 편집기 (Source Editor)**: `.R` 파일을 열거나 작성. 여러 줄의 코드를 작성/실행 가능
+
+-   **환경 창 (Environment)**: 현재 사용 중인 변수와 데이터 프레임을 확인. 데이터 구조를 파악
+
+-   **파일 및 플롯 창 (Files, Plots, Packages, Help)**
+
+    -   **Files**: 작업 디렉터리 내 파일 목록 확인
+    -   **Plots**: 생성된 그래프 확인
+    -   **Packages**: 설치된 패키지 목록 및 관리
+    -   **Help**: R 함수 및 패키지 도움말 검색 가능
+
+------------------------------------------------------------------------
+
+## 콘솔과 프롬프트
+
+-   기본적인 실행 방법
+
+    -   `>` 뒤에 명령어 입력 후 `Enter`를 누르면 실행.
+
+    ```{r, echo=T}
+    2 + 2 
+    ```
+
+-   R 콘솔 사용 팁
+
+    -   **이전 명령어 불러오기**: 위쪽 화살표(`↑`) 키를 사용하면 이전에 입력한 명령어를 불러옴
+
+    -   **명령어 자동 완성**: Tab 키를 사용하여 변수 및 함수 자동 완성 가능.
+
+    -   **여러 줄 입력**:
+
+        -   긴 명령어 입력 시 자동으로 다음 줄로 넘어감 (`+` 기호 표시됨).
+        -   `Shift + Enter`를 누르면 줄바꿈만 하고 실행되지 않음.
+
+        ```{r, echo=T}
+        x <- 10 +
+               20 +
+               30  # Shift + Enter 사용 가능
+        print(x)
+        ```
+
+------------------------------------------------------------------------
+
+## `R` 스크립트 (Script)
+
+-   **새로운 R 스크립트 생성**: `File > New File > R Script` 선택.
+-   **스크립트에서 코드 실행**:
+    -   `Ctrl + Enter`: 현재 줄 실행.
+    -   `Ctrl + Alt + R`: 전체 스크립트 실행.
+-   **주석 작성**: `#`을 사용하여 코드 설명 추가 가능.
+
+```{r, echo=T}
+# 변수 선언
+a <- 5
+b <- 10
+
+# 변수 더하기
+c <- a + b
+print(c)  # 결과: 15
+```
+
+------------------------------------------------------------------------
+
+## Task 1 {background-color="#ffebf0"}
+
+
+1.  새로운 R 스크립트를 생성하시오 (`File > New File > R Script`) 파일을 `lecture_intro.R`로 저장하시오.
+
+2.  다음 코드를 스크립트에 입력하고 실행하시오. 코드를 실행하려면 `Ctrl` + `Enter` (코드를 강조 표시하거나 커서를 코드 줄 끝에 놓으면 실행).
+
+    ``` r
+    4 * 8
+    ```
+
+3.  첫 번째 줄만 실행하면 무슨 일이 일어나는지 확인하시오. (객체 생성)
+
+    ``` r
+    x = 5 # 또는 x <- 5
+    x
+    ```
+
+4.  `x`의 세제곱을 할당하는 `x_3`이라는 새로운 객체를 만드시오. 할당할 때 `=` 또는 `<-`를 사용.
+
+------------------------------------------------------------------------
+
+## 도움말 찾는 방법
+
+`R` built-in `help`:
+
+``` r
+?lm  # 함수 앞에 ?를 붙이면 해당 함수의 도움말(설명서)을 확인할 수 있음
+help(lm)   # help() 함수도 동일한 역할을 하며, 특정 함수의 도움말을 출력함
+
+args(lm)  # lm 함수의 인자(argument) 목록을 출력함
+
+example(lm)  # lm 함수의 사용 예제(example)를 실행하여 출력함
+
+??lm  # "lm"과 관련된 모든 도움말 문서를 검색하여 표시함
+```
+
+In practice:
+
+![Learning R](chapter_intro_files/figure-html/learning_path.png){width="60%"}
+
+------------------------------------------------------------------------
+
+## 패키지 (Packages)
+
+-   `R 패키지는 특정 기능을 제공하는 코드와 데이터를 포함한 소프트웨어 패키지
+
+-   패키지 설치는 간단. `install.packages` 함수를 사용:
+
+    ``` r
+    install.packages("ggplot2")
+    ```
+
+-   패키지의 내용을 *사용*하려면, Library에서 불러와야 함. 이를 위해 `library` 함수를 사용:
+
+    ``` r
+    library(ggplot2)
+    ```
+    
+-   업데이트 하려면
+
+    ``` r
+    update.packages(ggplot2)
+    ```
+
+------------------------------------------------------------------------
+
+## 벡터 (Vectors)
+
+-   `c` 함수를 사용하여 벡터, 즉 *1차원 배열*을 생성.
+
+```{r, echo=T}
+c(1, 3, 5, 7, 8, 9)
+```
+
+-   여러 형태의 요소를 벡터로 만들 수 있음. 모두 문자로 변환
+
+```{r, echo=T}
+(v <- c(42, "Statistics", TRUE))
+```
+
+```         
+* 소괄호: 객체 값을 바로 출력    
+```
+
+- 변수 목록보기/삭제하기
+
+```{r, echo=T}
+ls()
+rm()
+```
+
+- 벡터의 결합
+
+```{r, echo=T}
+v1 <- c(1, 2, 3)
+v2 <- c(4, 5, 6)
+c(v1, v2)
+```
+
+
+-   수열 (*range*) 생성
+
+```{r, echo=T}
+1:10
+10:1
+seq(0:10)
+seq(0, 10, by=2.5)
+seq(0, 10, length=5)
+rep(1, 5)
+```
+
+---
+
+## 비교 논리 연산
+
+```{r, echo=T}
+x <- 1
+x < 2
+
+x/0
+
+-x/0
+
+0/0
+```
+
+**Scalar vs. Scalar 비교**
+
+```{r, echo=T}
+a <- 3
+a == pi
+
+a != pi
+
+a > pi
+
+a <= pi
+```
+
+
+**Vector vs. Vector 비교**
+
+```{r, echo=T}
+v <- c(0, pi, 4)
+w <- rep(pi, 3)
+v == w
+
+v != w
+
+v < w
+
+v >= w
+```
+
+
+**Scalar vs. Vector 비교**
+
+```{r, echo=T}
+v == pi
+
+v > pi
+
+any(v == pi)
+
+all(v == 0)
+
+```
+
+---
+
+## 비교 논리 연산
+
+**is.~ () 함수 : 개체의 속성을 묻는 함수**
+
+```{r, echo=T}
+u <- c(3, pi, Inf, NULL, NaN, NA)
+
+is.finite(u)
+
+is.infinite(u)
+
+is.na(u)
+
+is.nan(u)
+
+is.null(u)
+```
+
+- `na`는 not available, `nan`는 not a number (예, 0/0, sqrt(-1)).
+
+- `nan`은 숫자형 결측값, `na`는 모든 종류의 결측값이라 생각하면 됨. 
+
+
+---
+
+
+## 인덱스의 활용
+
+
+-   대괄호 연산자 `[index]`를 사용하여 벡터 요소 위치 지정. 제외하고 싶은 원소의 인덱스는 음수 `-`로.
+
+```{r, echo=T}
+fib <- c(0,1,1,2,3,5,8)
+fib[1]
+
+fib[1:3]
+
+fib[c(1,2,4)]
+
+fib[-1]
+
+fib[c(-1,-2)]
+
+fib < 5
+
+fib[fib < 5]
+```
+
+- `which()`: 조건에 해당하는 인덱스를 찾아줌
+
+```{r, echo=T}
+which(fib == 0)
+
+which(fib > 2)
+
+which.max(fib)
+
+which.min(fib)
+```
+
+---
+
+
+## R 연산자 정리
+
+**1. 기초 연산자 (Arithmetic Operators)**
+
+| 연산자 | 설명 | 예제 | 결과 |
+|--------|------|------|------|
+| `+` | 덧셈 | `5 + 3` | `8` |
+| `-` | 뺄셈 | `5 - 3` | `2` |
+| `*` | 곱셈 | `5 * 3` | `15` |
+| `/` | 나눗셈 | `5 / 3` | `1.6667` |
+| `^` 또는 `**` | 거듭제곱 | `5^3` | `125` |
+| `%%` | 나머지 | `5 %% 3` | `2` |
+| `%/%` | 정수 나눗셈 | `5 %/% 3` | `1` |
+
+**2. 관계 연산자 (Comparison Operators)**
+
+| 연산자 | 설명 | 예제 | 결과 |
+|--------|------|------|------|
+| `==` | 같음 | `5 == 3` | `FALSE` |
+| `!=` | 다름 | `5 != 3` | `TRUE` |
+| `>` | 초과 | `5 > 3` | `TRUE` |
+| `<` | 미만 | `5 < 3` | `FALSE` |
+| `>=` | 이상 | `5 >= 3` | `TRUE` |
+| `<=` | 이하 | `5 <= 3` | `FALSE` |
+
+**3. 논리 연산자 (Logical Operators)**
+
+| 연산자 | 설명 | 예제 | 결과 |
+|--------|------|------|------|
+| `&` | AND (벡터 연산) | `c(TRUE, FALSE) & c(TRUE, TRUE)` | `TRUE FALSE` |
+| `|` | OR (벡터 연산) | `c(TRUE, FALSE) | c(FALSE, FALSE)` | `TRUE FALSE` |
+| `!` | NOT | `!TRUE` | `FALSE` |
+| `&&` | AND (단일 값 연산) | `TRUE && FALSE` | `FALSE` |
+| `||` | OR (단일 값 연산) | `TRUE || FALSE` | `TRUE` |
+
+
+
+------------------------------------------------------------------------
+
+## `data.frame`
+
+`data.frame`은 **표 형식(tabular)의 데이터**를 나타냄. 엑셀 스프레드시트와 유사.
+
+```{r, echo=T}
+example_data = data.frame(x = c(1, 3, 5, 7),
+                          y = c(rep("Hello", 3), "Goodbye"),
+                          z = c("one", 2, "three", 4))
+example_data
+```
+
+-   `data.frame`은 *행(rows)* 과 *열(columns)* 의 두 가지 차원을 가짐. *행렬(matrix)* 과 유사하며, `[row_index,col_index]` 형식으로 요소를 선택 가능.
+
+-   실제로는 `data.frame`을 직접 생성하기보다는, 데이터를 포함하는 파일을 `R`로 불러오는 방식이 일반적.
+
+------------------------------------------------------------------------
+
+## `data.frame`
+
+Dataframe을 설명하는 데 유용한 함수
+
+```{r, echo=T}
+str(example_data) # `str` 함수는 R 객체의 구조를 설명
+```
+
+```{r, echo=T}
+names(example_data) # column names
+```
+
+```{r, echo=T}
+nrow(example_data) # number of rows
+```
+
+```{r, echo=T}
+ncol(example_data) # number of columns
+```
+
+------------------------------------------------------------------------
+
+## Task 2 {background-color="#ffebf0"}
+
+```{r, echo=F}
+murders <- read.csv("https://www.dropbox.com/s/zuk0qcfm3kyzs4e/gun_murders.csv?dl=1")
+```
+
+1.  `help(read.csv)` 또는 구글을 사용하여 `.csv` 파일을 가져오는 방법을 찾아보시오. 단, "Import Dataset" 버튼을 사용하거나 패키지를 설치하지 마시오.
+
+2.  [gun_murders.csv](https://www.dropbox.com/s/zuk0qcfm3kyzs4e/gun_murders.csv?dl=1) 파일을 새로운 객체 `murders`에 저장하시오. 이 파일은 2010년 미국 주별 총기 살인 사건 데이터를 포함. (힌트: 객체는 `=` 또는 `<-`를 사용하여 생성)
+
+3.  `murders`가 `data.frame` 형식인지 확인하시오 (`class(murders)`):
+
+4.  `murders`에 포함된 변수를 확인하시오:
+
+5.  작업 공간에서 `murders`를 클릭하여 내용을 확인하시오 `total` 변수는 무엇을 의미하는가?
+
+------------------------------------------------------------------------
+
+## 데이터프레임 열 (column) 접근하기
+
+-   한 개의 열을 **벡터 형태로 추출**하려면 `$` 연산자 (`murders$state`) 또는 대괄호 연산자 `[which_index]`를 이름이나 위치 인덱스와 함께 사용할 수 있음:
+
+```{r, echo=T}
+first5 <- murders[1:5, ]  # 처음 5개 주만 선택
+first5$state  # $ 연산자로 추출
+first5[ ,"state"]  # 열 이름으로 추출
+first5[ ,1] # 첫 번째 열 가져오기
+```
+
+-   객체의 `class` 확인 (데이터구조):
+
+```{r, echo=T}
+class(murders)
+```
+
+-   `typeof` 함수: 데이터 저장 방식
+
+```{r, echo=T}
+typeof(murders)
+```
+
+<!-- .footnote[ -->
+
+<!-- ```{r} -->
+
+<!-- x <- c(1, 2, 3)  # 숫자 벡터 -->
+
+<!-- class(x)   # 벡터의 추상적 유형 -->
+
+<!-- typeof(x)  # 내부 저장 방식 -->
+
+<!-- ``` -->
+
+<!-- ] -->
+
+------------------------------------------------------------------------
+
+## `data.frames`: subset
+
+-   데이터프레임에서 특정 부분을 선택하려면 `murders[행 조건, 열 번호]` 또는 `murders[행 조건, "열 이름"]`을 사용.
+
+```{r, echo=T}
+# 총기 살인 사건이 500건 이상인 주만 선택하고 "state"와 "total" 변수만 유지
+murders[murders$total > 500, c("state", "total")]
+    
+# 캘리포니아와 텍사스만 선택하고 "state"와 "total" 변수만 유지
+murders[murders$state %in% c("California", "Texas"), c("state", "total")]
+```
+
+```         
+* `subset` 명령어 사용 가능 (종종 더 직관적)
+```
+
+``` r
+subset(murders, total > 500, select = c(state, total))
+subset(murders, state %in% c("California", "Texas"), select = c(state, total))
+```
+
+------------------------------------------------------------------------
+
+## Task 3 {background-color="#ffebf0"}
+
+
+1.  `murders` 데이터프레임에는 몇 개의 관측값(observations)이 있는가?
+
+2.  몇 개의 변수? 각 변수의 데이터 유형(data type)은 무엇인가?
+
+3.  "`:`" 연산자는 `1:10`처럼 사용하면 *1부터 10까지의 연속된 숫자 생성*을 의미함. 이를 활용하여 `murders`의 10번부터 25번 행을 포함하는 새로운 객체 `murders_2`를 만드시오.
+
+4.  `state`와 `total` 열만 포함하는 `murders_3` 객체를 만드시오. (`c` 함수가 벡터를 생성함)
+
+5.  아래 코드를 실행하여 10,000명당 살인 사건 수를 나타내는 `total_percap` 변수를 생성하시오.
+
+``` r
+murders$total_percap = (murders$total / murders$population) * 10000
+```
+
+`murders` 객체를 클릭하여 새 변수를 확인해 보시오.
+
+
+
+
+# 강의 관련 정보
+
+------------------------------------------------------------------------
+
+## 성적 산출
+
+1.  거의 모든 수업에서 **in-class assignment (`task`)** 를 완성해서 제출 $\rightarrow$ 40%
+
+2.  **기말 프로젝트** $\rightarrow$ 60%
+
+3.  출석은 확인하지 않음.
+
+4.  시험은 없음.
+
+5.  보통 A는 30%이내 (A+는 아주 뛰어난 경우), C는 총점 50점 미만의 경우, D/F 는 아주 저조한 경우
+
+------------------------------------------------------------------------
+
+## 수업 정책
+
+<p style="text-align: center; font-weight: bold; font-size: 1.5em;">
+
+Be nice. Be honest. Don't cheat.
+
+</p>
+
+<br>
+
+**숙제는 늦게 제출하면 안됨**: 특별한 상황이 아닌 이상, 수업 끝나기 전에 모두 제출
+
+**부정행위 및 타인의 과제 무단 활용을 금지**: C나 F 중 불리한 등급 받게 됨
+
+**그룹으로 협력**: 협력 장려, 다만 숙제나 프로젝트는 개인이 작성하여 제출
+
+------------------------------------------------------------------------
+
+## 과제 제출 방법
+
+Quarto Document로 작성, RPubs에 Publish하여, 웹페이지 링크를 LMS에 제출.
+
+#### 1 새 Quarto 문서 생성
+
+```         
+- RStudio에서 **File → New File → Quarto Document...** 선택
+- title과 포맷(HTML) 선택 후 **Create** 버튼 클릭
+- 생성된 `.qmd` 파일에서 문서를 작성
+```
+
+#### 2 과제 템플릿 예시
+
+```         
+- 아래 YAML를 항상 포함할 것
+```
+
+```         
+---
+title: "과제 제목"
+author: "이름 (학번)"
+date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
+format: html_document
+execute:
+  echo: true
+  include: true
+---
+```
+
+#### 3. Quarto 문서 렌더링
+
+-   RStudio에서 **Render 버튼** 클릭
+
+-   HTML 문서가 생성됨 (예, `my_homework.html`)
+
+#### 4. RPubs에 게시하기
+
+-   RPubs 계정 생성
+    1.  [RPubs](https://rpubs.com/)에 접속
+    2.  회원가입 및 로그인
+-   RStudio에서 RPubs에 게시
+    1.  RStudio에서 렌더링된 HTML 파일 열기
+    2.  **Publish 버튼 클릭 → RPubs 선택**
+    3.  제목 및 설명 입력 후 **Publish**
+
+#### 5. 게시된 문서 링크 제출
+
+-   RPubs에서 제공하는 링크 복사
+-   과제 제출 페이지에 링크 제출 (LSM시스템에 업로드)
+
+------------------------------------------------------------------------
+
+## 강의 계획
+
+주제 1: ***Introduction***
+
+주제 2: ***Tidying, Visualising and Summarising Data***
+
+주제 3: ***Simple Linear Regression***
+
+주제 4: ***Introduction to Causality***
+
+주제 5: ***Multiple Linear Regression***
+
+주제 6: ***Linear Regression Extensions***
+
+주제 7: ***Sampling***
+
+주제 8: ***Confidence Intervals and Hypothesis Testing***
+
+주제 9: ***Statistical Inference***
+
+주제 10: ***Difference-in-Differences*** (Optional)
+
+주제 11: ***Regression Discontinuity Deisign*** (Optional)
+
+주제 12: ***Instrumental Variables*** (Optional)
+
+------------------------------------------------------------------------
+
+## 기타 유용한 자료
+
+#### 통계/ 계량경제
+
+-   [*Mastering Metrics* by Angrist and Pischke](https://uspc-spo.primo.exlibrisgroup.com/permalink/33USPC_SPO/1d4eftp/alma991003947949705808)
+-   [*Introductory Econometrics: A Modern Approach* by Wooldridge](https://uspc-spo.primo.exlibrisgroup.com/permalink/33USPC_SPO/mgsi7h/alma991003442469705808)
+-   [*Introductory Econometrics* by Kaplan](https://kaplandm.github.io/teach.html)
+
+#### `R`의 활용
+
+-   [ModernDive](https://moderndive.com/)
+-   [Introduction to Econometrics with R](https://www.econometrics-with-r.org/)
+-   [Modern Statistics with R](https://www.modernstatisticswithr.com/)
+-   [Practical Statistics for Data Scientists](https://github.com/gedeck/practical-statistics-for-data-scientists)
+-   [R for Data Science](https://r4ds.had.co.nz/)
+-   [Awesome R Learning Resources](https://github.com/iamericfletcher/awesome-r-learning-resources)
+
+------------------------------------------------------------------------
+
+
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+::: {style="display: flex; justify-content: center; align-items: center; height: 70vh;"}
+<h2 style="color: #ff6666; text-align: center; font-family: &#39;Pacifico&#39;, cursive; font-size: 50px;">
+
+THE END!
+
+</h2>
+:::
+
