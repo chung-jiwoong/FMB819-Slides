@@ -9,7 +9,8 @@
 <link href="chapter_intro_files/libs/quarto-html/quarto-syntax-highlighting-48ffa3e5b9d089919c6712c39e5b00f2.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.6.41">
 
-  <title>FMB819: R을 이용한 데이터분석</title>
+  <meta name="author" content="Prof.&nbsp;Ji-Woong Chung">
+  <title>Introduction</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -93,10 +94,7 @@
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="chapter_intro_files/libs/revealjs/dist/theme/quarto-2f366650f320edcfcf53d73c80250a32.css">
-  <link rel="stylesheet" href="default">
-  <link rel="stylesheet" href="../css/kubs.css">
-  <link rel="stylesheet" href="../css/kubs-fonts.css">
+  <link rel="stylesheet" href="chapter_intro_files/libs/revealjs/dist/theme/quarto-8f3eebe07241f08526c91a7e9cbef8fd.css">
   <link href="chapter_intro_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="chapter_intro_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="chapter_intro_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -197,10 +195,15 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">FMB819: R을 이용한 데이터분석</h1>
-  <p class="subtitle"><span style="font-size:1.5em; color:#a01616;">Introduction</span></p>
+  <h1 class="title">Introduction</h1>
+  <p class="subtitle">FMB819: R을 이용한 데이터분석</p>
 
 <div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Prof.&nbsp;Ji-Woong Chung 
+</div>
+</div>
 </div>
 
 </section>
@@ -235,7 +238,7 @@
 </ul></li>
 <li><strong>인과 관계(Causality)</strong>:
 <ul>
-<li><em>한 개인</em>이 대학 학위를 가졌을 때와 가지지 않았을 때의 소득 차이는 얼마나 될까? (다른 모든 조건 – 부모의 배경, 키, 사회적 기술 등 – 이 동일하다고 가정할 때), 해당 개인이 남성이었을 경우 소득은 얼마나 달라질까?</li>
+<li><strong><em>한 개인</em></strong>이 대학 학위를 가졌을 때와 가지지 않았을 때의 소득 차이는 얼마나 될까? (다른 모든 조건 – 부모의 배경, 키, 사회적 기술 등 – 이 동일하다고 가정할 때), 해당 개인이 남성이었을 경우 소득은 얼마나 달라질까?</li>
 </ul></li>
 </ol>
 </section>
@@ -261,15 +264,19 @@
 </li>
 <li><a href="https://stackoverflow.com/questions/tagged/r">활발한 온라인 커뮤니티</a>, 대부분의 문제에 대한 해결책 존재.</li>
 </ol></li>
+<li><p><code>R</code>의 많은 기능들 중 우리가 주로 사용할 것들은 …</p></li>
 </ul>
 </section>
 <section id="데이터-처리-data-wrangling" class="slide level2">
 <h2>데이터 처리 (Data Wrangling)</h2>
 <ul>
 <li><p>데이터 분석 전에 데이터를 정리하는 데 많은 시간 소요됨.</p></li>
-<li><p><code>gapminder</code> 데이터셋 사용: 1952~2007년 각국의 기대수명, 1인당 GDP, 인구 데이터 포함.</p></li>
+<li><p><code>gapminder</code> 데이터셋:</p>
+<ul>
+<li><p>1952~2007년 각국의 기대수명, 1인당 GDP, 인구 데이터 포함.</p></li>
 <li><p>각 연도별/대륙별 평균 기대수명과 평균 1인당 GDP 계산 목표.</p></li>
-<li><p>우선 대륙 <em>and</em> 연도별로 자료를 그룹핑을 하고, 평균 기대수명과 평균 1인당 GDP 계산</p></li>
+<li><p>우선 연도별/대륙별로 자료를 그룹핑을 하고, 평균 기대수명과 평균 1인당 GDP 계산</p></li>
+</ul></li>
 </ul>
 <div class="columns">
 <div class="column" style="width:50%;">
@@ -298,7 +305,7 @@
 <section id="continued-1" class="slide level2">
 <h2>…continued</h2>
 <ul>
-<li><p>당연히, 여러 가지 방법으로 이 작업 가능.</p></li>
+<li><p>여러 가지 방법으로 이 작업 가능.</p></li>
 <li><p>여기서는 <code>dplyr</code>패키지를 사용:</p></li>
 </ul>
 <div class="cell" data-layout-align="center">
@@ -346,11 +353,10 @@
 <img data-src="chapter_intro_files/figure-revealjs/unnamed-chunk-2-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
 <section id="animated-plotting" class="slide level2">
 <h2>Animated Plotting</h2>
-<p><img data-src="chapter_intro_files/figure-html/ex_gganimate.gif"></p>
-
-<aside><div>
-<p>출처: <a href="https://raw.githack.com/edrubin/EC421S19/master/LectureNotes/01Intro/01_intro.html#40">Ed Rubin</a></p>
-</div></aside></section>
+<div style="text-align: center;">
+<p><img data-src="chapter_intro_files/figure-html/ex_gganimate.gif"> <small>출처: <a href="https://raw.githack.com/edrubin/EC421S19/master/LectureNotes/01Intro/01_intro.html#40">Ed Rubin</a></small></p>
+</div>
+</section>
 <section id="r-설치-방법-windows-환경-기준" class="slide level2 scrollable">
 <h2><code>R</code> 설치 방법: Windows 환경 기준</h2>
 <ul>
@@ -450,9 +456,9 @@
 <li><code>Shift + Enter</code>를 누르면 줄바꿈만 하고 실행되지 않음.</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a>x <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="sc">+</span></span>
-<span id="cb13-2"><a href=""></a>       <span class="dv">20</span> <span class="sc">+</span></span>
-<span id="cb13-3"><a href=""></a>       <span class="dv">30</span>  <span class="co"># Shift + Enter 사용 가능</span></span>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a>x <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="sc">+</span>       <span class="co"># Shift + Enter </span></span>
+<span id="cb13-2"><a href=""></a>       <span class="dv">20</span> <span class="sc">+</span>     <span class="co"># Shift + Enter </span></span>
+<span id="cb13-3"><a href=""></a>       <span class="dv">30</span>       <span class="co"># Shift + Enter</span></span>
 <span id="cb13-4"><a href=""></a><span class="fu">print</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 60</code></pre>
@@ -501,23 +507,24 @@
 <h2>도움말 찾는 방법</h2>
 <p><code>R</code> built-in <code>help</code>:</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a>?lm  <span class="co"># 함수 앞에 ?를 붙이면 해당 함수의 도움말(설명서)을 확인할 수 있음</span></span>
-<span id="cb19-2"><a href=""></a><span class="fu">help</span>(lm)   <span class="co"># help() 함수도 동일한 역할을 하며, 특정 함수의 도움말을 출력함</span></span>
-<span id="cb19-3"><a href=""></a></span>
-<span id="cb19-4"><a href=""></a><span class="fu">args</span>(lm)  <span class="co"># lm 함수의 인자(argument) 목록을 출력함</span></span>
-<span id="cb19-5"><a href=""></a></span>
-<span id="cb19-6"><a href=""></a><span class="fu">example</span>(lm)  <span class="co"># lm 함수의 사용 예제(example)를 실행하여 출력함</span></span>
-<span id="cb19-7"><a href=""></a></span>
-<span id="cb19-8"><a href=""></a>??lm  <span class="co"># "lm"과 관련된 모든 도움말 문서를 검색하여 표시함</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-2"><a href=""></a></span>
+<span id="cb19-3"><a href=""></a><span class="fu">help</span>(lm)   <span class="co"># help() 함수도 동일한 역할을 하며, 특정 함수의 도움말을 출력함</span></span>
+<span id="cb19-4"><a href=""></a></span>
+<span id="cb19-5"><a href=""></a><span class="fu">args</span>(lm)  <span class="co"># lm 함수의 인자(argument) 목록을 출력함</span></span>
+<span id="cb19-6"><a href=""></a></span>
+<span id="cb19-7"><a href=""></a><span class="fu">example</span>(lm)  <span class="co"># lm 함수의 사용 예제(example)를 실행하여 출력함</span></span>
+<span id="cb19-8"><a href=""></a></span>
+<span id="cb19-9"><a href=""></a>??lm  <span class="co"># "lm"과 관련된 모든 도움말 문서를 검색하여 표시함</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>In practice:</p>
 
-<img data-src="chapter_intro_files/figure-html/learning_path.png" style="width:60.0%" class="r-stretch quarto-figure-center"><p class="caption">Learning R</p></section>
+<img data-src="chapter_intro_files/figure-html/learning_path.png" style="width:60.0%" class="r-stretch"></section>
 <section id="패키지-packages" class="slide level2">
 <h2>패키지 (Packages)</h2>
 <ul>
 <li><p>`R 패키지는 특정 기능을 제공하는 코드와 데이터를 포함한 소프트웨어 패키지</p></li>
 <li><p>패키지 설치는 간단. <code>install.packages</code> 함수를 사용:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a><span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><p>패키지의 내용을 <em>사용</em>하려면, Library에서 불러와야 함. 이를 위해 <code>library</code> 함수를 사용:</p>
+<li><p>패키지의 내용을 사용하려면, Library에서 불러와야 함. 이를 위해 <code>library</code> 함수를 사용:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 <li><p>업데이트 하려면</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a><span class="fu">update.packages</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
@@ -706,6 +713,7 @@
 </div>
 </div>
 <ul>
+<li><p><code>NULL</code>은 완전히 비어 있는 값으로, 벡터에 포함될 경우 자동으로 삭제됨.</p></li>
 <li><p><code>na</code>는 not available, <code>nan</code>는 not a number (예, 0/0, sqrt(-1)).</p></li>
 <li><p><code>nan</code>은 숫자형 결측값, <code>na</code>는 모든 종류의 결측값이라 생각하면 됨.</p></li>
 </ul>
@@ -713,7 +721,7 @@
 <section id="인덱스의-활용" class="slide level2">
 <h2>인덱스의 활용</h2>
 <ul>
-<li>대괄호 연산자 <code>[index]</code>를 사용하여 벡터 요소 위치 지정. 제외하고 싶은 원소의 인덱스는 음수 <code>-</code>로.</li>
+<li>대괄호 연산자 <code>[index]</code>를 사용하여 벡터 요소 위치 지정. 제외하고 싶은 원소의 인덱스는 음수 <span class="math inline">\(-\)</span>로.</li>
 </ul>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href=""></a>fib <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">8</span>)</span>
@@ -1108,7 +1116,7 @@
 <pre><code>---
 title: "과제 제목"
 author: "이름 (학번)"
-date: "2025-03-05 00:20:53"
+date: "2025-03-06 16:17:00"
 format: html_document
 execute:
   echo: true
@@ -1241,7 +1249,7 @@ execute:
         progress: true,
 
         // Display the page number of the current slide
-        slideNumber: 'c/t',
+        slideNumber: false,
 
         // 'all', 'print', or 'speaker'
         showSlideNumber: 'all',

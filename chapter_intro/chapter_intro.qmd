@@ -1,35 +1,19 @@
 ---
-title: "FMB819: R을 이용한 데이터분석"
-subtitle: "<span style='font-size:1.5em; color:#a01616;'>Introduction</span>"
-# date: "`r Sys.Date()`"
-format:
-  revealjs:
-    slide-number: true
-    scrollable: true
-    chalkboard: true
-    transition: fade
-    transition-speed: fast
-    css: [default, "../css/kubs.css", "../css/kubs-fonts.css"]
-revealjs-plugins:
-  - revealjs-text-resizer
----
-
-<!-- ---
 title: "Introduction"
 subtitle: "FMB819: R을 이용한 데이터분석"
-# date: "`r Sys.Date()`"
+author: "Prof. Ji-Woong Chung"
 format: 
   revealjs:
     theme: simple
     transition: fade
     transition-speed: fast
     scrollable: true
-    #toc: true
-    chalkboard: TRUE
+    chalkboard: true
 revealjs-plugins:
-  - revealjs-text-resizer
-# Thanks to https://github.com/gadenbuie/revealjs-text-resizer#readme
---- -->
+  - revealjs-text-resizer # Thanks to https://github.com/gadenbuie/revealjs-text-resizer#readme
+---
+
+
 
 ```{r setup, include = FALSE, warning = FALSE, message = FALSE}
 options(htmltools.dir.version = FALSE)
@@ -77,7 +61,7 @@ library(xaringanExtra)
 2.  **예측(Prediction)**:
     -   회사 웹사이트 방문자의 소득 (광고 목적)? 다음 분기 한국의 총소비 및 총소득은?
 3.  **인과 관계(Causality)**:
-    -   *한 개인*이 대학 학위를 가졌을 때와 가지지 않았을 때의 소득 차이는 얼마나 될까? (다른 모든 조건 – 부모의 배경, 키, 사회적 기술 등 – 이 동일하다고 가정할 때), 해당 개인이 남성이었을 경우 소득은 얼마나 달라질까?
+    -   ***한 개인***이 대학 학위를 가졌을 때와 가지지 않았을 때의 소득 차이는 얼마나 될까? (다른 모든 조건 – 부모의 배경, 키, 사회적 기술 등 – 이 동일하다고 가정할 때), 해당 개인이 남성이었을 경우 소득은 얼마나 달라질까?
 
 ------------------------------------------------------------------------
 
@@ -103,17 +87,22 @@ library(xaringanExtra)
     2.  **유연하고 강력함** → 데이터 정리, 시각화, 기계학습 등 거의 모든 분석 가능.\
     3.  [활발한 온라인 커뮤니티](https://stackoverflow.com/questions/tagged/r), 대부분의 문제에 대한 해결책 존재.
 
+-   `R`의 많은 기능들 중 우리가 주로 사용할 것들은 ...
+  
+
+
 ------------------------------------------------------------------------
 
 ## 데이터 처리 (Data Wrangling)
 
 -   데이터 분석 전에 데이터를 정리하는 데 많은 시간 소요됨.
 
--   `gapminder` 데이터셋 사용: 1952\~2007년 각국의 기대수명, 1인당 GDP, 인구 데이터 포함.
+-   `gapminder` 데이터셋:
+    -   1952\~2007년 각국의 기대수명, 1인당 GDP, 인구 데이터 포함.
 
--   각 연도별/대륙별 평균 기대수명과 평균 1인당 GDP 계산 목표.
+    -   각 연도별/대륙별 평균 기대수명과 평균 1인당 GDP 계산 목표.
 
--   우선 대륙 *and* 연도별로 자료를 그룹핑을 하고, 평균 기대수명과 평균 1인당 GDP 계산
+    -   우선 연도별/대륙별로 자료를 그룹핑을 하고, 평균 기대수명과 평균 1인당 GDP 계산
 
 ::::: columns
 ::: {.column width="50%"}
@@ -137,7 +126,7 @@ head(gapminder,n = 4)
 
 ## ...continued
 
--   당연히, 여러 가지 방법으로 이 작업 가능.
+-   여러 가지 방법으로 이 작업 가능.
 
 -   여기서는 `dplyr`패키지를 사용:
 
@@ -212,11 +201,11 @@ library(gganimate)
 # )
 ```
 
+::: {style="text-align: center;"}
 ![](chapter_intro_files/figure-html/ex_gganimate.gif)
-
-::: aside
-출처: [Ed Rubin](https://raw.githack.com/edrubin/EC421S19/master/LectureNotes/01Intro/01_intro.html#40)
+<small>출처: [Ed Rubin](https://raw.githack.com/edrubin/EC421S19/master/LectureNotes/01Intro/01_intro.html#40)</small>
 :::
+
 
 ------------------------------------------------------------------------
 
@@ -338,9 +327,9 @@ RStudio를 실행하면 여러 창(윈도우)으로 구성되어 있음.
         -   `Shift + Enter`를 누르면 줄바꿈만 하고 실행되지 않음.
 
         ```{r, echo=T}
-        x <- 10 +
-               20 +
-               30  # Shift + Enter 사용 가능
+        x <- 10 +       # Shift + Enter 
+               20 +     # Shift + Enter 
+               30       # Shift + Enter
         print(x)
         ```
 
@@ -394,6 +383,7 @@ print(c)  # 결과: 15
 
 ``` r
 ?lm  # 함수 앞에 ?를 붙이면 해당 함수의 도움말(설명서)을 확인할 수 있음
+
 help(lm)   # help() 함수도 동일한 역할을 하며, 특정 함수의 도움말을 출력함
 
 args(lm)  # lm 함수의 인자(argument) 목록을 출력함
@@ -405,7 +395,7 @@ example(lm)  # lm 함수의 사용 예제(example)를 실행하여 출력함
 
 In practice:
 
-![Learning R](chapter_intro_files/figure-html/learning_path.png){width="60%"}
+![](chapter_intro_files/figure-html/learning_path.png){width="60%"}
 
 ------------------------------------------------------------------------
 
@@ -419,7 +409,7 @@ In practice:
     install.packages("ggplot2")
     ```
 
--   패키지의 내용을 *사용*하려면, Library에서 불러와야 함. 이를 위해 `library` 함수를 사용:
+-   패키지의 내용을 사용하려면, Library에서 불러와야 함. 이를 위해 `library` 함수를 사용:
 
     ``` r
     library(ggplot2)
@@ -555,6 +545,8 @@ is.nan(u)
 is.null(u)
 ```
 
+- `NULL`은 완전히 비어 있는 값으로, 벡터에 포함될 경우 자동으로 삭제됨.
+
 - `na`는 not available, `nan`는 not a number (예, 0/0, sqrt(-1)).
 
 - `nan`은 숫자형 결측값, `na`는 모든 종류의 결측값이라 생각하면 됨. 
@@ -566,10 +558,11 @@ is.null(u)
 ## 인덱스의 활용
 
 
--   대괄호 연산자 `[index]`를 사용하여 벡터 요소 위치 지정. 제외하고 싶은 원소의 인덱스는 음수 `-`로.
+-   대괄호 연산자 `[index]`를 사용하여 벡터 요소 위치 지정. 제외하고 싶은 원소의 인덱스는 음수 $-$로.
 
 ```{r, echo=T}
 fib <- c(0,1,1,2,3,5,8)
+
 fib[1]
 
 fib[1:3]
@@ -636,6 +629,11 @@ which.min(fib)
 | `||` | OR (단일 값 연산) | `TRUE || FALSE` | `TRUE` |
 
 
+<!--
+& 둘 다 TRUE이면 TRUE
+| 하나라도 TRUE이면 TRUE
+--> 
+
 
 ------------------------------------------------------------------------
 
@@ -651,6 +649,10 @@ example_data
 ```
 
 -   `data.frame`은 *행(rows)* 과 *열(columns)* 의 두 가지 차원을 가짐. *행렬(matrix)* 과 유사하며, `[row_index,col_index]` 형식으로 요소를 선택 가능.
+   
+```{r, echo=T}
+example_data[2,2]
+```
 
 -   실제로는 `data.frame`을 직접 생성하기보다는, 데이터를 포함하는 파일을 `R`로 불러오는 방식이 일반적.
 
@@ -684,15 +686,15 @@ ncol(example_data) # number of columns
 murders <- read.csv("https://www.dropbox.com/s/zuk0qcfm3kyzs4e/gun_murders.csv?dl=1")
 ```
 
-1.  `help(read.csv)` 또는 구글을 사용하여 `.csv` 파일을 가져오는 방법을 찾아보시오. 단, "Import Dataset" 버튼을 사용하거나 패키지를 설치하지 마시오.
+1.  `help(read.csv)` 또는 웹서치를 통해 R에서 `.csv` 파일을 가져오는 방법을 찾아보시오. 단, "Import Dataset" 버튼을 사용하거나 패키지를 설치하지 마시오.
 
 2.  [gun_murders.csv](https://www.dropbox.com/s/zuk0qcfm3kyzs4e/gun_murders.csv?dl=1) 파일을 새로운 객체 `murders`에 저장하시오. 이 파일은 2010년 미국 주별 총기 살인 사건 데이터를 포함. (힌트: 객체는 `=` 또는 `<-`를 사용하여 생성)
 
-3.  `murders`가 `data.frame` 형식인지 확인하시오 (`class(murders)`):
+3.  `murders`가 `data.frame` 형식인지 확인하시오: `class(murders)`
 
 4.  `murders`에 포함된 변수를 확인하시오:
 
-5.  작업 공간에서 `murders`를 클릭하여 내용을 확인하시오 `total` 변수는 무엇을 의미하는가?
+5.  작업 공간에서 `murders`를 클릭하여 내용을 확인하시오 `total` 변수는 무엇을 의미하는 것일까?
 
 ------------------------------------------------------------------------
 
