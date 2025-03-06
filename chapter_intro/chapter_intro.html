@@ -725,7 +725,8 @@ Prof.&nbsp;Ji-Woong Chung
 </ul>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href=""></a>fib <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">8</span>)</span>
-<span id="cb87-2"><a href=""></a>fib[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb87-2"><a href=""></a></span>
+<span id="cb87-3"><a href=""></a>fib[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0</code></pre>
 </div>
@@ -931,6 +932,10 @@ Prof.&nbsp;Ji-Woong Chung
 </tr>
 </tbody>
 </table>
+<!--
+& 둘 다 TRUE이면 TRUE
+| 하나라도 TRUE이면 TRUE
+-->
 </section>
 <section id="data.frame" class="slide level2">
 <h2><code>data.frame</code></h2>
@@ -949,15 +954,23 @@ Prof.&nbsp;Ji-Woong Chung
 </div>
 </div>
 <ul>
-<li><p><code>data.frame</code>은 <em>행(rows)</em> 과 <em>열(columns)</em> 의 두 가지 차원을 가짐. <em>행렬(matrix)</em> 과 유사하며, <code>[row_index,col_index]</code> 형식으로 요소를 선택 가능.</p></li>
-<li><p>실제로는 <code>data.frame</code>을 직접 생성하기보다는, 데이터를 포함하는 파일을 <code>R</code>로 불러오는 방식이 일반적.</p></li>
+<li><code>data.frame</code>은 <em>행(rows)</em> 과 <em>열(columns)</em> 의 두 가지 차원을 가짐. <em>행렬(matrix)</em> 과 유사하며, <code>[row_index,col_index]</code> 형식으로 요소를 선택 가능.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href=""></a>example_data[<span class="dv">2</span>,<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Hello"</code></pre>
+</div>
+</div>
+<ul>
+<li>실제로는 <code>data.frame</code>을 직접 생성하기보다는, 데이터를 포함하는 파일을 <code>R</code>로 불러오는 방식이 일반적.</li>
 </ul>
 </section>
 <section id="data.frame-1" class="slide level2">
 <h2><code>data.frame</code></h2>
 <p>Dataframe을 설명하는 데 유용한 함수</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href=""></a><span class="fu">str</span>(example_data) <span class="co"># `str` 함수는 R 객체의 구조를 설명</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href=""></a><span class="fu">str</span>(example_data) <span class="co"># `str` 함수는 R 객체의 구조를 설명</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>'data.frame':   4 obs. of  3 variables:
  $ x: num  1 3 5 7
@@ -966,19 +979,19 @@ Prof.&nbsp;Ji-Woong Chung
 </div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href=""></a><span class="fu">names</span>(example_data) <span class="co"># column names</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href=""></a><span class="fu">names</span>(example_data) <span class="co"># column names</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "x" "y" "z"</code></pre>
 </div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href=""></a><span class="fu">nrow</span>(example_data) <span class="co"># number of rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href=""></a><span class="fu">nrow</span>(example_data) <span class="co"># number of rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 4</code></pre>
 </div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href=""></a><span class="fu">ncol</span>(example_data) <span class="co"># number of columns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb119"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href=""></a><span class="fu">ncol</span>(example_data) <span class="co"># number of columns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3</code></pre>
 </div>
@@ -987,11 +1000,11 @@ Prof.&nbsp;Ji-Woong Chung
 <section id="task-2" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 2</h2>
 <ol type="1">
-<li><p><code>help(read.csv)</code> 또는 구글을 사용하여 <code>.csv</code> 파일을 가져오는 방법을 찾아보시오. 단, “Import Dataset” 버튼을 사용하거나 패키지를 설치하지 마시오.</p></li>
-<li><p><a href="https://www.dropbox.com/s/zuk0qcfm3kyzs4e/gun_murders.csv?dl=1">gun_murders.csv</a> 파일을 새로운 객체 <code>murders</code>에 저장하시오. 이 파일은 2010년 미국 주별 총기 살인 사건 데이터를 포함. (힌트: 객체는 <code>=</code> 또는 <code>&lt;-</code>를 사용하여 생성)</p></li>
-<li><p><code>murders</code>가 <code>data.frame</code> 형식인지 확인하시오 (<code>class(murders)</code>):</p></li>
+<li><p><code>help(read.csv)</code> 또는 웹서치를 통해 R에서 <code>.csv</code> 파일을 가져오는 방법을 찾아보시오. 단, “Import Dataset” 버튼을 사용하거나 패키지를 설치하지 마시오.</p></li>
+<li><p><a href="https://raw.githubusercontent.com/chung-jiwoong/FMB819-Slides/main/data/gun_murders.csv">gun_murders.csv</a> 파일을 새로운 객체 <code>murders</code>에 저장하시오. 이 파일은 2010년 미국 주별 총기 살인 사건 데이터를 포함. (힌트: 객체는 <code>=</code> 또는 <code>&lt;-</code>를 사용하여 생성)</p></li>
+<li><p><code>murders</code>가 <code>data.frame</code> 형식인지 확인하시오: <code>class(murders)</code></p></li>
 <li><p><code>murders</code>에 포함된 변수를 확인하시오:</p></li>
-<li><p>작업 공간에서 <code>murders</code>를 클릭하여 내용을 확인하시오 <code>total</code> 변수는 무엇을 의미하는가?</p></li>
+<li><p>작업 공간에서 <code>murders</code>를 클릭하여 내용을 확인하시오 <code>total</code> 변수는 무엇을 의미하는 것일까?</p></li>
 </ol>
 </section>
 <section id="데이터프레임-열-column-접근하기" class="slide level2">
@@ -1000,16 +1013,16 @@ Prof.&nbsp;Ji-Woong Chung
 <li>한 개의 열을 <strong>벡터 형태로 추출</strong>하려면 <code>$</code> 연산자 (<code>murders$state</code>) 또는 대괄호 연산자 <code>[which_index]</code>를 이름이나 위치 인덱스와 함께 사용할 수 있음:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb119"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href=""></a>first5 <span class="ot">&lt;-</span> murders[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ]  <span class="co"># 처음 5개 주만 선택</span></span>
-<span id="cb119-2"><a href=""></a>first5<span class="sc">$</span>state  <span class="co"># $ 연산자로 추출</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb121"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a href=""></a>first5 <span class="ot">&lt;-</span> murders[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ]  <span class="co"># 처음 5개 주만 선택</span></span>
+<span id="cb121-2"><a href=""></a>first5<span class="sc">$</span>state  <span class="co"># $ 연산자로 추출</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Alabama"    "Alaska"     "Arizona"    "Arkansas"   "California"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb121"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a href=""></a>first5[ ,<span class="st">"state"</span>]  <span class="co"># 열 이름으로 추출</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb123"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb123-1"><a href=""></a>first5[ ,<span class="st">"state"</span>]  <span class="co"># 열 이름으로 추출</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Alabama"    "Alaska"     "Arizona"    "Arkansas"   "California"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb123"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb123-1"><a href=""></a>first5[ ,<span class="dv">1</span>] <span class="co"># 첫 번째 열 가져오기</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb125"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb125-1"><a href=""></a>first5[ ,<span class="dv">1</span>] <span class="co"># 첫 번째 열 가져오기</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Alabama"    "Alaska"     "Arizona"    "Arkansas"   "California"</code></pre>
 </div>
@@ -1018,7 +1031,7 @@ Prof.&nbsp;Ji-Woong Chung
 <li>객체의 <code>class</code> 확인 (데이터구조):</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb125"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb125-1"><a href=""></a><span class="fu">class</span>(murders)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb127"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb127-1"><a href=""></a><span class="fu">class</span>(murders)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "data.frame"</code></pre>
 </div>
@@ -1027,7 +1040,7 @@ Prof.&nbsp;Ji-Woong Chung
 <li><code>typeof</code> 함수: 데이터 저장 방식</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb127"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb127-1"><a href=""></a><span class="fu">typeof</span>(murders)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb129"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb129-1"><a href=""></a><span class="fu">typeof</span>(murders)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "list"</code></pre>
 </div>
@@ -1046,8 +1059,8 @@ Prof.&nbsp;Ji-Woong Chung
 <li>데이터프레임에서 특정 부분을 선택하려면 <code>murders[행 조건, 열 번호]</code> 또는 <code>murders[행 조건, "열 이름"]</code>을 사용.</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb129"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb129-1"><a href=""></a><span class="co"># 총기 살인 사건이 500건 이상인 주만 선택하고 "state"와 "total" 변수만 유지</span></span>
-<span id="cb129-2"><a href=""></a>murders[murders<span class="sc">$</span>total <span class="sc">&gt;</span> <span class="dv">500</span>, <span class="fu">c</span>(<span class="st">"state"</span>, <span class="st">"total"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb131"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb131-1"><a href=""></a><span class="co"># 총기 살인 사건이 500건 이상인 주만 선택하고 "state"와 "total" 변수만 유지</span></span>
+<span id="cb131-2"><a href=""></a>murders[murders<span class="sc">$</span>total <span class="sc">&gt;</span> <span class="dv">500</span>, <span class="fu">c</span>(<span class="st">"state"</span>, <span class="st">"total"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        state total
 5  California  1257
@@ -1055,17 +1068,19 @@ Prof.&nbsp;Ji-Woong Chung
 33   New York   517
 44      Texas   805</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb131"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb131-1"><a href=""></a><span class="co"># 캘리포니아와 텍사스만 선택하고 "state"와 "total" 변수만 유지</span></span>
-<span id="cb131-2"><a href=""></a>murders[murders<span class="sc">$</span>state <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"California"</span>, <span class="st">"Texas"</span>), <span class="fu">c</span>(<span class="st">"state"</span>, <span class="st">"total"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb133"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb133-1"><a href=""></a><span class="co"># 캘리포니아와 텍사스만 선택하고 "state"와 "total" 변수만 유지</span></span>
+<span id="cb133-2"><a href=""></a>murders[murders<span class="sc">$</span>state <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"California"</span>, <span class="st">"Texas"</span>), <span class="fu">c</span>(<span class="st">"state"</span>, <span class="st">"total"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        state total
 5  California  1257
 44      Texas   805</code></pre>
 </div>
 </div>
-<pre><code>* `subset` 명령어 사용 가능 (종종 더 직관적)</code></pre>
-<div class="sourceCode" id="cb134"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb134-1"><a href=""></a><span class="fu">subset</span>(murders, total <span class="sc">&gt;</span> <span class="dv">500</span>, <span class="at">select =</span> <span class="fu">c</span>(state, total))</span>
-<span id="cb134-2"><a href=""></a><span class="fu">subset</span>(murders, state <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"California"</span>, <span class="st">"Texas"</span>), <span class="at">select =</span> <span class="fu">c</span>(state, total))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li><code>subset</code> 명령어 사용 가능 (종종 더 직관적)</li>
+</ul>
+<div class="sourceCode" id="cb135"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb135-1"><a href=""></a><span class="fu">subset</span>(murders, total <span class="sc">&gt;</span> <span class="dv">500</span>, <span class="at">select =</span> <span class="fu">c</span>(state, total))</span>
+<span id="cb135-2"><a href=""></a><span class="fu">subset</span>(murders, state <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"California"</span>, <span class="st">"Texas"</span>), <span class="at">select =</span> <span class="fu">c</span>(state, total))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="task-3" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 3</h2>
@@ -1076,7 +1091,7 @@ Prof.&nbsp;Ji-Woong Chung
 <li><p><code>state</code>와 <code>total</code> 열만 포함하는 <code>murders_3</code> 객체를 만드시오. (<code>c</code> 함수가 벡터를 생성함)</p></li>
 <li><p>아래 코드를 실행하여 10,000명당 살인 사건 수를 나타내는 <code>total_percap</code> 변수를 생성하시오.</p></li>
 </ol>
-<div class="sourceCode" id="cb135"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb135-1"><a href=""></a>murders<span class="sc">$</span>total_percap <span class="ot">=</span> (murders<span class="sc">$</span>total <span class="sc">/</span> murders<span class="sc">$</span>population) <span class="sc">*</span> <span class="dv">10000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb136"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb136-1"><a href=""></a>murders<span class="sc">$</span>total_percap <span class="ot">=</span> (murders<span class="sc">$</span>total <span class="sc">/</span> murders<span class="sc">$</span>population) <span class="sc">*</span> <span class="dv">10000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><code>murders</code> 객체를 클릭하여 새 변수를 확인해 보시오.</p>
 </section>
 <section>
@@ -1087,7 +1102,7 @@ Prof.&nbsp;Ji-Woong Chung
 <section id="성적-산출" class="slide level2 scrollable">
 <h2>성적 산출</h2>
 <ol type="1">
-<li><p>거의 모든 수업에서 <strong>in-class assignment (<code>task</code>)</strong> 를 완성해서 제출 <span class="math inline">\(\rightarrow\)</span> 40%</p></li>
+<li><p>거의 모든 수업에서 <strong>in-class assignment (<code>task</code>)</strong> 를 완성해서 제출 <span class="math inline">\(\rightarrow\)</span> 40%: 과제당 점수: 40/과제 개수</p></li>
 <li><p><strong>기말 프로젝트</strong> <span class="math inline">\(\rightarrow\)</span> 60%</p></li>
 <li><p>출석은 확인하지 않음.</p></li>
 <li><p>시험은 없음.</p></li>
@@ -1097,53 +1112,66 @@ Prof.&nbsp;Ji-Woong Chung
 <section id="수업-정책" class="slide level2">
 <h2>수업 정책</h2>
 <p style="text-align: center; font-weight: bold; font-size: 1.5em;">
-</p><p>Be nice. Be honest. Don’t cheat.</p>
-<p></p>
+Be nice. Be honest. Don’t cheat.
+</p>
 <p><br></p>
-<p><strong>숙제는 늦게 제출하면 안됨</strong>: 특별한 상황이 아닌 이상, 수업 끝나기 전에 모두 제출</p>
-<p><strong>부정행위 및 타인의 과제 무단 활용을 금지</strong>: C나 F 중 불리한 등급 받게 됨</p>
-<p><strong>그룹으로 협력</strong>: 협력 장려, 다만 숙제나 프로젝트는 개인이 작성하여 제출</p>
+<ul>
+<li><p><strong>숙제는 늦게 제출하면 안됨</strong>: 특별한 상황이 아닌 이상, 수업 끝나기 전에 모두 제출</p></li>
+<li><p><strong>부정행위 및 타인의 과제 무단 활용 금지</strong>: C나 F 중 불리한 등급 받게 됨</p></li>
+<li><p><strong>그룹으로 협력</strong>: 협력 장려, 다만 개인이 작성하여 제출</p></li>
+</ul>
 </section>
 <section id="과제-제출-방법" class="slide level2 scrollable">
 <h2>과제 제출 방법</h2>
-<p>Quarto Document로 작성, RPubs에 Publish하여, 웹페이지 링크를 LMS에 제출.</p>
-<h4 id="새-quarto-문서-생성">1 새 Quarto 문서 생성</h4>
-<pre><code>- RStudio에서 **File → New File → Quarto Document...** 선택
-- title과 포맷(HTML) 선택 후 **Create** 버튼 클릭
-- 생성된 `.qmd` 파일에서 문서를 작성</code></pre>
-<h4 id="과제-템플릿-예시">2 과제 템플릿 예시</h4>
-<pre><code>- 아래 YAML를 항상 포함할 것</code></pre>
+<p>Quarto Document로 작성, Quarto Pub에 Publish하여, 웹페이지 링크를 LMS에 제출.</p>
+<h4 id="새-quarto-문서-생성">1. 새 Quarto 문서 생성</h4>
+<ul>
+<li>RStudio에서 <strong>File → New File → Quarto Document…</strong> 선택</li>
+<li>title과 포맷(HTML) 선택 후 <strong>Create</strong> 버튼 클릭</li>
+<li>생성된 <code>.qmd</code> 파일에서 문서를 작성.</li>
+</ul>
+<h4 id="과제-템플릿-예시">2. 과제 템플릿 예시</h4>
+<ul>
+<li><p>아래 YAML를 항상 포함할 것</p>
 <pre><code>---
-title: "과제 제목"
-author: "이름 (학번)"
-date: "2025-03-06 16:17:00"
+title: "1주차 수업 과제"
+author: "홍길동 (2025012345)"
+date: "2025-03-06 17:45:58"
 format: html_document
 execute:
-  echo: true
-  include: true
----</code></pre>
+echo: true  
+include: true 
+---</code></pre></li>
+<li><p>과제 작성 후 적당한 곳에 저장, 예: <code>C:\Users\user\Documents\assignment\assign1.qmd</code></p></li>
+<li><p>같은 폴더에 다음 내용을 메모장에 붙여 넣고 <code>_quarto.yml</code>로 저장</p>
+<pre><code>project:
+    type: website
+format:
+    html: default </code></pre></li>
+</ul>
 <h4 id="quarto-문서-렌더링">3. Quarto 문서 렌더링</h4>
 <ul>
 <li><p>RStudio에서 <strong>Render 버튼</strong> 클릭</p></li>
-<li><p>HTML 문서가 생성됨 (예, <code>my_homework.html</code>)</p></li>
+<li><p>HTML 문서가 생성됨 (<code>홍길동.html</code> 생성됨)</p></li>
 </ul>
-<h4 id="rpubs에-게시하기">4. RPubs에 게시하기</h4>
+<h4 id="quarto-pub에-게시하기">4. Quarto Pub에 게시하기</h4>
 <ul>
-<li>RPubs 계정 생성
+<li>Quarto Pub 계정 생성
 <ol type="1">
-<li><a href="https://rpubs.com/">RPubs</a>에 접속</li>
+<li><a href="https://quartopub.com/">https://quartopub.com/</a>에 접속</li>
 <li>회원가입 및 로그인</li>
 </ol></li>
-<li>RStudio에서 RPubs에 게시
+<li>RStudio에서 게시
 <ol type="1">
 <li>RStudio에서 렌더링된 HTML 파일 열기</li>
-<li><strong>Publish 버튼 클릭 → RPubs 선택</strong></li>
-<li>제목 및 설명 입력 후 <strong>Publish</strong></li>
+<li>terminal에서 파일을 저장한 폴더로 이동 <code>cd C:\Users\user\Documents\assignment</code></li>
+<li><code>quarto publish quarto-pub</code></li>
+<li>인증 절차 따라함</li>
 </ol></li>
 </ul>
 <h4 id="게시된-문서-링크-제출">5. 게시된 문서 링크 제출</h4>
 <ul>
-<li>RPubs에서 제공하는 링크 복사</li>
+<li>Quarto Pub에서 제공하는 링크 복사</li>
 <li>과제 제출 페이지에 링크 제출 (LSM시스템에 업로드)</li>
 </ul>
 </section>

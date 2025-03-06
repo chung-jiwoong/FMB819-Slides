@@ -683,12 +683,12 @@ ncol(example_data) # number of columns
 ## Task 2 {background-color="#ffebf0"}
 
 ```{r, echo=F}
-murders <- read.csv("https://www.dropbox.com/s/zuk0qcfm3kyzs4e/gun_murders.csv?dl=1")
+murders <- read.csv("https://raw.githubusercontent.com/chung-jiwoong/FMB819-Slides/main/data/gun_murders.csv")
 ```
 
 1.  `help(read.csv)` 또는 웹서치를 통해 R에서 `.csv` 파일을 가져오는 방법을 찾아보시오. 단, "Import Dataset" 버튼을 사용하거나 패키지를 설치하지 마시오.
 
-2.  [gun_murders.csv](https://www.dropbox.com/s/zuk0qcfm3kyzs4e/gun_murders.csv?dl=1) 파일을 새로운 객체 `murders`에 저장하시오. 이 파일은 2010년 미국 주별 총기 살인 사건 데이터를 포함. (힌트: 객체는 `=` 또는 `<-`를 사용하여 생성)
+2.  [gun_murders.csv](https://raw.githubusercontent.com/chung-jiwoong/FMB819-Slides/main/data/gun_murders.csv) 파일을 새로운 객체 `murders`에 저장하시오. 이 파일은 2010년 미국 주별 총기 살인 사건 데이터를 포함. (힌트: 객체는 `=` 또는 `<-`를 사용하여 생성)
 
 3.  `murders`가 `data.frame` 형식인지 확인하시오: `class(murders)`
 
@@ -749,9 +749,9 @@ murders[murders$total > 500, c("state", "total")]
 murders[murders$state %in% c("California", "Texas"), c("state", "total")]
 ```
 
-```         
+
 * `subset` 명령어 사용 가능 (종종 더 직관적)
-```
+
 
 ``` r
 subset(murders, total > 500, select = c(state, total))
@@ -788,7 +788,7 @@ murders$total_percap = (murders$total / murders$population) * 10000
 
 ## 성적 산출
 
-1.  거의 모든 수업에서 **in-class assignment (`task`)** 를 완성해서 제출 $\rightarrow$ 40%
+1.  거의 모든 수업에서 **in-class assignment (`task`)** 를 완성해서 제출 $\rightarrow$ 40%: 과제당 점수: 40/과제 개수
 
 2.  **기말 프로젝트** $\rightarrow$ 60%
 
@@ -802,71 +802,75 @@ murders$total_percap = (murders$total / murders$population) * 10000
 
 ## 수업 정책
 
-<p style="text-align: center; font-weight: bold; font-size: 1.5em;">
+<p style="text-align: center; font-weight: bold; font-size: 1.5em;">Be nice. Be honest. Don't cheat.</p><br>
 
-Be nice. Be honest. Don't cheat.
+- **숙제는 늦게 제출하면 안됨**: 특별한 상황이 아닌 이상, 수업 끝나기 전에 모두 제출
 
-</p>
+- **부정행위 및 타인의 과제 무단 활용 금지**: C나 F 중 불리한 등급 받게 됨
 
-<br>
-
-**숙제는 늦게 제출하면 안됨**: 특별한 상황이 아닌 이상, 수업 끝나기 전에 모두 제출
-
-**부정행위 및 타인의 과제 무단 활용을 금지**: C나 F 중 불리한 등급 받게 됨
-
-**그룹으로 협력**: 협력 장려, 다만 숙제나 프로젝트는 개인이 작성하여 제출
+- **그룹으로 협력**: 협력 장려, 다만 개인이 작성하여 제출
 
 ------------------------------------------------------------------------
 
 ## 과제 제출 방법
 
-Quarto Document로 작성, RPubs에 Publish하여, 웹페이지 링크를 LMS에 제출.
+Quarto Document로 작성, Quarto Pub에 Publish하여, 웹페이지 링크를 LMS에 제출.
 
-#### 1 새 Quarto 문서 생성
+#### 1. 새 Quarto 문서 생성
 
-```         
 - RStudio에서 **File → New File → Quarto Document...** 선택
 - title과 포맷(HTML) 선택 후 **Create** 버튼 클릭
-- 생성된 `.qmd` 파일에서 문서를 작성
-```
+- 생성된 `.qmd` 파일에서 문서를 작성.
 
-#### 2 과제 템플릿 예시
 
-```         
+#### 2. 과제 템플릿 예시
+
 - 아래 YAML를 항상 포함할 것
-```
 
-```         
----
-title: "과제 제목"
-author: "이름 (학번)"
-date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
-format: html_document
-execute:
-  echo: true
-  include: true
----
-```
+    ```
+    ---
+    title: "1주차 수업 과제"
+    author: "홍길동 (2025012345)"
+    date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
+    format: html_document
+    execute:
+    echo: true  
+    include: true 
+    ---
+    ```
+
+- 과제 작성 후 적당한 곳에 저장, 예: `C:\Users\user\Documents\assignment\assign1.qmd`
+
+- 같은 폴더에 다음 내용을 메모장에 붙여 넣고 `_quarto.yml`로 저장
+
+    ```
+    project:
+        type: website
+    format:
+        html: default 
+    ```
 
 #### 3. Quarto 문서 렌더링
 
--   RStudio에서 **Render 버튼** 클릭
+  -   RStudio에서 **Render 버튼** 클릭
 
--   HTML 문서가 생성됨 (예, `my_homework.html`)
+  -   HTML 문서가 생성됨 (`홍길동.html` 생성됨)
 
-#### 4. RPubs에 게시하기
+#### 4. Quarto Pub에 게시하기
 
--   RPubs 계정 생성
-    1.  [RPubs](https://rpubs.com/)에 접속
-    2.  회원가입 및 로그인
--   RStudio에서 RPubs에 게시
-    1.  RStudio에서 렌더링된 HTML 파일 열기
-    2.  **Publish 버튼 클릭 → RPubs 선택**
-    3.  제목 및 설명 입력 후 **Publish**
+  -   Quarto Pub 계정 생성
+      1.  [https://quartopub.com/](https://quartopub.com/)에 접속
+      2.  회원가입 및 로그인
+   
+  -   RStudio에서 게시
+      1.  RStudio에서 렌더링된 HTML 파일 열기
+      2.  terminal에서 파일을 저장한 폴더로 이동 `cd C:\Users\user\Documents\assignment`
+      3.  `quarto publish quarto-pub`
+      4.  인증 절차 따라함
 
 #### 5. 게시된 문서 링크 제출
 
--   RPubs에서 제공하는 링크 복사
+-   Quarto Pub에서 제공하는 링크 복사
 -   과제 제출 페이지에 링크 제출 (LSM시스템에 업로드)
 
 ------------------------------------------------------------------------
