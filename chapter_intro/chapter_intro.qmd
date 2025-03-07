@@ -829,7 +829,7 @@ Quarto Document로 작성, Quarto Pub에 Publish하여, 웹페이지 링크를 L
 
     ```
     ---
-    title: "1주차 수업 과제"
+    title: "수업 과제"
     author: "홍길동 (2025012345)"
     date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
     format: html_document
@@ -863,10 +863,9 @@ Quarto Document로 작성, Quarto Pub에 Publish하여, 웹페이지 링크를 L
       2.  회원가입 및 로그인
    
   -   RStudio에서 게시
-      1.  RStudio에서 렌더링된 HTML 파일 열기
-      2.  terminal에서 파일을 저장한 폴더로 이동 `cd C:\Users\user\Documents\assignment`
-      3.  `quarto publish quarto-pub`
-      4.  인증 절차 따라함
+      1.  terminal에서 파일을 저장한 폴더로 이동 `cd C:\Users\user\Documents\assignment`
+      2.  `quarto publish quarto-pub`
+      3.  인증 절차 따라함
 
 #### 5. 게시된 문서 링크 제출
 
