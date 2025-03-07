@@ -1,7 +1,7 @@
 ---
 title: "Introduction"
 subtitle: "FMB819: R을 이용한 데이터분석"
-author: "Prof. Ji-Woong Chung"
+author: "고려대학교 경영대학 정지웅"
 format: 
   revealjs:
     theme: simple
@@ -9,6 +9,7 @@ format:
     transition-speed: fast
     scrollable: true
     chalkboard: true
+    slide-number: true
 revealjs-plugins:
   - revealjs-text-resizer # Thanks to https://github.com/gadenbuie/revealjs-text-resizer#readme
 ---

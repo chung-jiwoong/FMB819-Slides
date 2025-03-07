@@ -9,7 +9,8 @@
 <link href="chapter_tidy_files/libs/quarto-html/quarto-syntax-highlighting-48ffa3e5b9d089919c6712c39e5b00f2.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.6.41">
 
-  <title>FMB819: R을 이용한 데이터분석</title>
+  <meta name="author" content="고려대학교 경영대학 정지웅">
+  <title>Tidying, Visualising and Summarising Data</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -93,10 +94,7 @@
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="chapter_tidy_files/libs/revealjs/dist/theme/quarto-2f366650f320edcfcf53d73c80250a32.css">
-  <link rel="stylesheet" href="default">
-  <link rel="stylesheet" href="../css/kubs.css">
-  <link rel="stylesheet" href="../css/kubs-fonts.css">
+  <link rel="stylesheet" href="chapter_tidy_files/libs/revealjs/dist/theme/quarto-8f3eebe07241f08526c91a7e9cbef8fd.css">
   <link href="chapter_tidy_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="chapter_tidy_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="chapter_tidy_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -197,10 +195,15 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">FMB819: R을 이용한 데이터분석</h1>
-  <p class="subtitle"><span style="font-size:1.5em; color:#a01616;">Tidying, Visualising and Summarising Data</span></p>
+  <h1 class="title">Tidying, Visualising and Summarising Data</h1>
+  <p class="subtitle">FMB819: R을 이용한 데이터분석</p>
 
 <div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+고려대학교 경영대학 정지웅 
+</div>
+</div>
 </div>
 
 </section>
@@ -213,7 +216,7 @@
 <!-- -- -->
 <ul>
 <li><p><a href="https://www.nytimes.com/2014/08/18/technology/for-big-data-scientists-hurdle-to-insights-is-janitor-work.html">2014년 뉴욕타임즈 기사</a>에 따르면, “데이터 과학자들은 데이터를 분석하기 전에 <strong>50%에서 80%의 시간</strong>을 데이터 수집 및 정리에 소비한다.”라고 함.</p></li>
-<li><p>다음 두 강의에서는 <strong>데이터 정리, 시각화, 요약</strong>의 기본을 배울 것임.</p></li>
+<li><p>다음 두 강의에서는 <strong>데이터 정리, 시각화, 요약</strong>의 기본을 배움.</p></li>
 </ul>
 </section>
 <section>
@@ -226,16 +229,16 @@
 <ul>
 <li><a href="https://dplyr.tidyverse.org"><code>dplyr</code></a>은 <a href="https://www.tidyverse.org"><code>tidyverse</code></a> 패키지군의 일부.</li>
 <li><a href="https://github.com/Rdatatable/data.table/wiki"><code>data.table</code></a>도 대안으로 사용 가능하며, 대용량 데이터에 최적화되어 있음.</li>
-<li>두 방법 모두 장점과 단점이 있으며, 여기서는 <code>dplyr</code>을 먼저 다룸.</li>
+<li>여기서는 <code>dplyr</code>을 다룸.</li>
 </ul>
 </section>
 <section id="dplyr-개요" class="slide level2">
 <h2><code>dplyr</code> 개요</h2>
 <ul>
-<li><a href="https://r4ds.had.co.nz/transform.html">Hadley Wickham의 데이터 변환 챕터</a>를 읽어보길바람.</li>
+<li>Hadley Wickham의 “R for Data Science” <a href="https://r4ds.had.co.nz/transform.html">영어</a> <a href="https://bookdown.org/sulgi/r4ds/">한국어</a></li>
 <li><a href="https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf">치트시트</a>도 매우 유용.</li>
 <li><code>dplyr</code>은 여러 <strong>verbs</strong> 중심으로 구성되어 있음.</li>
-<li><code>data.frame</code> 또는 <code>tibble</code>[^<code>data.frame</code>과 유사] 형식의 데이터를 다룰 것임.</li>
+<li><code>data.frame</code> 또는 <code>tibble</code> 형식의 데이터를 다룰 것임.</li>
 </ul>
 <p><span class="math display">\[\text{verb}(\underbrace{\text{data.frame}}_{\text{1st argument}}, \underbrace{\text{what to do}}_\text{2nd argument})\]</span></p>
 <ul>
@@ -284,6 +287,7 @@
 <li>이 데이터셋에 어떤 변수가 포함되어 있는지 확인</li>
 </ul>
 <div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">str</span>(polls_us_election_2016) <span class="co"># 데이터의 구조를 요약하여 출력</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>tibble [4,208 × 15] (S3: tbl_df/tbl/data.frame)
  $ state           : Factor w/ 57 levels "Alabama","Alaska",..: 50 50 50 50 50 50 50 50 37 50 ...
@@ -307,9 +311,9 @@
 <section id="dplyr-filter" class="slide level2">
 <h2><code>dplyr</code>: <code>filter()</code></h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="co"># 표본 크기(samplesize)가 2000보다 큰 행만 선택, 츨력</span></span>
-<span id="cb4-2"><a href=""></a>polls_us_election_2016 <span class="sc">%&gt;%</span></span>
-<span id="cb4-3"><a href=""></a>  <span class="fu">filter</span>(samplesize <span class="sc">&gt;</span> <span class="dv">2000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="co"># 표본 크기(samplesize)가 2000보다 큰 행만 선택, 츨력</span></span>
+<span id="cb5-2"><a href=""></a>polls_us_election_2016 <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href=""></a>  <span class="fu">filter</span>(samplesize <span class="sc">&gt;</span> <span class="dv">2000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 403 × 15
    state      startdate  enddate    pollster         grade samplesize population
@@ -357,18 +361,18 @@
 <li><p><code>!(x %in% y)</code>를 사용하면 반대의 논리 적용</p></li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a><span class="co"># 3이 1부터 3까지의 숫자 중 하나인지 확인 (TRUE)</span></span>
-<span id="cb6-2"><a href=""></a><span class="dv">3</span> <span class="sc">%in%</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="co"># 3이 1부터 3까지의 숫자 중 하나인지 확인 (TRUE)</span></span>
+<span id="cb7-2"><a href=""></a><span class="dv">3</span> <span class="sc">%in%</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] TRUE</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="co"># 벡터화된 연산: 2와 5가 2부터 10 사이의 숫자 중 하나인지 확인 (각각 TRUE와 TRUE)</span></span>
-<span id="cb8-2"><a href=""></a><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">5</span>) <span class="sc">%in%</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">10</span>  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="co"># 벡터화된 연산: 2와 5가 2부터 10 사이의 숫자 중 하나인지 확인 (각각 TRUE와 TRUE)</span></span>
+<span id="cb9-2"><a href=""></a><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">5</span>) <span class="sc">%in%</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">10</span>  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] TRUE TRUE</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="co"># 문자열 비교: "S" 또는 "Po"가 벡터 `c("Sciences","Po")`의 요소인지 확인</span></span>
-<span id="cb10-2"><a href=""></a><span class="fu">c</span>(<span class="st">"K"</span>,<span class="st">"Uni"</span>) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Korea"</span>,<span class="st">"University"</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="co"># 문자열 비교: "S" 또는 "Po"가 벡터 `c("Sciences","Po")`의 요소인지 확인</span></span>
+<span id="cb11-2"><a href=""></a><span class="fu">c</span>(<span class="st">"K"</span>,<span class="st">"Uni"</span>) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Korea"</span>,<span class="st">"University"</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] FALSE FALSE</code></pre>
 </div>
@@ -378,12 +382,12 @@
 <h2><code>dplyr</code>: <code>filter()</code></h2>
 <p>A 등급을 받은 여론조사 중 표본 크기가 2,000명 이상이고, 트럼프가 최소 45%의 지지를 받은 여론조사는?</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a><span class="co"># polls_us_election_2016 데이터에서 </span></span>
-<span id="cb12-2"><a href=""></a><span class="co"># 1. 등급(grade)이 "A"이고</span></span>
-<span id="cb12-3"><a href=""></a><span class="co"># 2. 표본 크기(samplesize)가 2000명보다 크며</span></span>
-<span id="cb12-4"><a href=""></a><span class="co"># 3. 트럼프의 여론조사 지지율(rawpoll_trump)이 45% 이상인 행을 필터링합니다.</span></span>
-<span id="cb12-5"><a href=""></a>polls_us_election_2016 <span class="sc">%&gt;%</span></span>
-<span id="cb12-6"><a href=""></a>  <span class="fu">filter</span>(grade <span class="sc">==</span> <span class="st">"A"</span> <span class="sc">&amp;</span> samplesize <span class="sc">&gt;</span> <span class="dv">2000</span> <span class="sc">&amp;</span> rawpoll_trump <span class="sc">&gt;</span> <span class="dv">45</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a><span class="co"># polls_us_election_2016 데이터에서 </span></span>
+<span id="cb13-2"><a href=""></a><span class="co"># 1. 등급(grade)이 "A"이고</span></span>
+<span id="cb13-3"><a href=""></a><span class="co"># 2. 표본 크기(samplesize)가 2000명보다 크며</span></span>
+<span id="cb13-4"><a href=""></a><span class="co"># 3. 트럼프의 여론조사 지지율(rawpoll_trump)이 45% 이상인 행을 필터링합니다.</span></span>
+<span id="cb13-5"><a href=""></a>polls_us_election_2016 <span class="sc">%&gt;%</span></span>
+<span id="cb13-6"><a href=""></a>  <span class="fu">filter</span>(grade <span class="sc">==</span> <span class="st">"A"</span> <span class="sc">&amp;</span> samplesize <span class="sc">&gt;</span> <span class="dv">2000</span> <span class="sc">&amp;</span> rawpoll_trump <span class="sc">&gt;</span> <span class="dv">45</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 15
   state   startdate  enddate    pollster       grade samplesize population
@@ -402,13 +406,13 @@
 <li>트럼프의 원래(raw) 지지율과 FiveThirtyEight의 조정(adjusted) 지지율 간의 차이</li>
 </ol>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb14" data-code-line-numbers="|5|6|7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a><span class="co"># 1. trump_clinton_tot: 트럼프와 클린턴의 지지율 합계</span></span>
-<span id="cb14-2"><a href=""></a><span class="co"># 2. trump_raw_adj_diff: 트럼프의 원래 지지율과 538 조정 지지율 간의 차이</span></span>
-<span id="cb14-3"><a href=""></a><span class="co"># 마지막으로 names() 함수를 사용하여 데이터의 변수명을 확인.</span></span>
-<span id="cb14-4"><a href=""></a>polls_us_election_2016 <span class="sc">%&gt;%</span></span>
-<span id="cb14-5"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">trump_clinton_tot =</span> rawpoll_trump <span class="sc">+</span> rawpoll_clinton, <span class="co"># 트럼프와 클린턴 지지율 합계</span></span>
-<span id="cb14-6"><a href=""></a>         <span class="at">trump_raw_adj_diff =</span> rawpoll_trump <span class="sc">-</span> adjpoll_trump) <span class="sc">%&gt;%</span> <span class="co"># 원래 지지율과 조정 지지율 차이</span></span>
-<span id="cb14-7"><a href=""></a>  <span class="fu">names</span>() <span class="co"># 변수명 출력</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15" data-code-line-numbers="|5|6|7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="co"># 1. trump_clinton_tot: 트럼프와 클린턴의 지지율 합계</span></span>
+<span id="cb15-2"><a href=""></a><span class="co"># 2. trump_raw_adj_diff: 트럼프의 원래 지지율과 538 조정 지지율 간의 차이</span></span>
+<span id="cb15-3"><a href=""></a><span class="co"># 마지막으로 names() 함수를 사용하여 데이터의 변수명을 확인.</span></span>
+<span id="cb15-4"><a href=""></a>polls_us_election_2016 <span class="sc">%&gt;%</span></span>
+<span id="cb15-5"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">trump_clinton_tot =</span> rawpoll_trump <span class="sc">+</span> rawpoll_clinton, <span class="co"># 트럼프와 클린턴 지지율 합계</span></span>
+<span id="cb15-6"><a href=""></a>         <span class="at">trump_raw_adj_diff =</span> rawpoll_trump <span class="sc">-</span> adjpoll_trump) <span class="sc">%&gt;%</span> <span class="co"># 원래 지지율과 조정 지지율 차이</span></span>
+<span id="cb15-7"><a href=""></a>  <span class="fu">names</span>() <span class="co"># 변수명 출력</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "state"              "startdate"          "enddate"           
  [4] "pollster"           "grade"              "samplesize"        
@@ -425,17 +429,17 @@
 <li>다음 변수만 선택: <code>state, startdate, enddate, pollster, rawpoll_clinton, rawpoll_trump</code></li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a><span class="co"># select() 함수를 사용하여 특정 열만 선택.</span></span>
-<span id="cb16-2"><a href=""></a><span class="co"># 1. state: 조사된 주(State)</span></span>
-<span id="cb16-3"><a href=""></a><span class="co"># 2. startdate: 여론조사가 시작된 날짜</span></span>
-<span id="cb16-4"><a href=""></a><span class="co"># 3. enddate: 여론조사가 종료된 날짜</span></span>
-<span id="cb16-5"><a href=""></a><span class="co"># 4. pollster: 여론조사 기관</span></span>
-<span id="cb16-6"><a href=""></a><span class="co"># 5. rawpoll_clinton: 힐러리 클린턴의 원래(raw) 지지율</span></span>
-<span id="cb16-7"><a href=""></a><span class="co"># 6. rawpoll_trump: 도널드 트럼프의 원래(raw) 지지율</span></span>
-<span id="cb16-8"><a href=""></a></span>
-<span id="cb16-9"><a href=""></a>polls_us_election_2016 <span class="sc">%&gt;%</span></span>
-<span id="cb16-10"><a href=""></a>  <span class="fu">select</span>(state, startdate, enddate, pollster, rawpoll_clinton, rawpoll_trump) <span class="sc">%&gt;%</span> </span>
-<span id="cb16-11"><a href=""></a>  <span class="fu">names</span>() <span class="co"># 데이터 프레임의 변수명을 출력하여 올바르게 선택되었는지 확인</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a><span class="co"># select() 함수를 사용하여 특정 열만 선택.</span></span>
+<span id="cb17-2"><a href=""></a><span class="co"># 1. state: 조사된 주(State)</span></span>
+<span id="cb17-3"><a href=""></a><span class="co"># 2. startdate: 여론조사가 시작된 날짜</span></span>
+<span id="cb17-4"><a href=""></a><span class="co"># 3. enddate: 여론조사가 종료된 날짜</span></span>
+<span id="cb17-5"><a href=""></a><span class="co"># 4. pollster: 여론조사 기관</span></span>
+<span id="cb17-6"><a href=""></a><span class="co"># 5. rawpoll_clinton: 힐러리 클린턴의 원래(raw) 지지율</span></span>
+<span id="cb17-7"><a href=""></a><span class="co"># 6. rawpoll_trump: 도널드 트럼프의 원래(raw) 지지율</span></span>
+<span id="cb17-8"><a href=""></a></span>
+<span id="cb17-9"><a href=""></a>polls_us_election_2016 <span class="sc">%&gt;%</span></span>
+<span id="cb17-10"><a href=""></a>  <span class="fu">select</span>(state, startdate, enddate, pollster, rawpoll_clinton, rawpoll_trump) <span class="sc">%&gt;%</span> </span>
+<span id="cb17-11"><a href=""></a>  <span class="fu">names</span>() <span class="co"># 데이터 프레임의 변수명을 출력하여 올바르게 선택되었는지 확인</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "state"           "startdate"       "enddate"         "pollster"       
 [5] "rawpoll_clinton" "rawpoll_trump"  </code></pre>
@@ -448,11 +452,11 @@
 <li>트럼프의 최대 지지율은 얼마인가?</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a><span class="co"># summarise() 함수를 사용하여 트럼프의 최대(raw) 지지율을 계산</span></span>
-<span id="cb18-2"><a href=""></a><span class="co"># max() 함수는 주어진 열에서 가장 큰 값을 반환</span></span>
-<span id="cb18-3"><a href=""></a></span>
-<span id="cb18-4"><a href=""></a>polls_us_election_2016 <span class="sc">%&gt;%</span></span>
-<span id="cb18-5"><a href=""></a>  <span class="fu">summarise</span>(<span class="at">max_trump =</span> <span class="fu">max</span>(rawpoll_trump)) <span class="co"># 트럼프의 최대 지지율 계산</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="co"># summarise() 함수를 사용하여 트럼프의 최대(raw) 지지율을 계산</span></span>
+<span id="cb19-2"><a href=""></a><span class="co"># max() 함수는 주어진 열에서 가장 큰 값을 반환</span></span>
+<span id="cb19-3"><a href=""></a></span>
+<span id="cb19-4"><a href=""></a>polls_us_election_2016 <span class="sc">%&gt;%</span></span>
+<span id="cb19-5"><a href=""></a>  <span class="fu">summarise</span>(<span class="at">max_trump =</span> <span class="fu">max</span>(rawpoll_trump)) <span class="co"># 트럼프의 최대 지지율 계산</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 1
   max_trump
@@ -467,12 +471,12 @@
 <li>여론조사 등급(grade)별 클린턴의 평균 지지율은 얼마인가?</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a><span class="co"># group_by()를 사용하여 여론조사 등급(grade)별로 그룹을 나눔.</span></span>
-<span id="cb20-2"><a href=""></a><span class="co"># summarise()를 사용하여 각 그룹에서 rawpoll_clinton(클린턴의 원래 지지율)의 평균 계산</span></span>
-<span id="cb20-3"><a href=""></a></span>
-<span id="cb20-4"><a href=""></a>polls_us_election_2016 <span class="sc">%&gt;%</span></span>
-<span id="cb20-5"><a href=""></a>  <span class="fu">group_by</span>(grade) <span class="sc">%&gt;%</span> <span class="co"># 여론조사 등급별 그룹화</span></span>
-<span id="cb20-6"><a href=""></a>  <span class="fu">summarise</span>(<span class="at">mean_vote_clinton =</span> <span class="fu">mean</span>(rawpoll_clinton, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="co"># 각 그룹에서 클린턴의 평균 지지율 계산</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a><span class="co"># group_by()를 사용하여 여론조사 등급(grade)별로 그룹을 나눔.</span></span>
+<span id="cb21-2"><a href=""></a><span class="co"># summarise()를 사용하여 각 그룹에서 rawpoll_clinton(클린턴의 원래 지지율)의 평균 계산</span></span>
+<span id="cb21-3"><a href=""></a></span>
+<span id="cb21-4"><a href=""></a>polls_us_election_2016 <span class="sc">%&gt;%</span></span>
+<span id="cb21-5"><a href=""></a>  <span class="fu">group_by</span>(grade) <span class="sc">%&gt;%</span> <span class="co"># 여론조사 등급별 그룹화</span></span>
+<span id="cb21-6"><a href=""></a>  <span class="fu">summarise</span>(<span class="at">mean_vote_clinton =</span> <span class="fu">mean</span>(rawpoll_clinton, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="co"># 각 그룹에서 클린턴의 평균 지지율 계산</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 11 × 2
    grade mean_vote_clinton
@@ -496,7 +500,7 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a>polls_us_election_2016</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a>polls_us_election_2016</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell" data-layout-align="center">
@@ -527,10 +531,10 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a>polls_us_election_2016 <span class="sc">%&gt;%</span></span>
-<span id="cb24-2"><a href=""></a>    <span class="fu">mutate</span>(<span class="at">trump_clinton_diff =</span> </span>
-<span id="cb24-3"><a href=""></a>             rawpoll_trump <span class="sc">-</span> </span>
-<span id="cb24-4"><a href=""></a>             rawpoll_clinton) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>polls_us_election_2016 <span class="sc">%&gt;%</span></span>
+<span id="cb25-2"><a href=""></a>    <span class="fu">mutate</span>(<span class="at">trump_clinton_diff =</span> </span>
+<span id="cb25-3"><a href=""></a>             rawpoll_trump <span class="sc">-</span> </span>
+<span id="cb25-4"><a href=""></a>             rawpoll_clinton) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell" data-layout-align="center">
@@ -562,13 +566,13 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a>polls_us_election_2016 <span class="sc">%&gt;%</span></span>
-<span id="cb26-2"><a href=""></a>    <span class="fu">mutate</span>(<span class="at">trump_clinton_diff =</span> </span>
-<span id="cb26-3"><a href=""></a>             rawpoll_trump <span class="sc">-</span> </span>
-<span id="cb26-4"><a href=""></a>             rawpoll_clinton) <span class="sc">%&gt;%</span></span>
-<span id="cb26-5"><a href=""></a>    <span class="fu">filter</span>(trump_clinton_diff<span class="sc">&gt;</span><span class="dv">5</span> <span class="sc">&amp;</span></span>
-<span id="cb26-6"><a href=""></a>           state <span class="sc">==</span> <span class="st">"Iowa"</span> <span class="sc">&amp;</span></span>
-<span id="cb26-7"><a href=""></a>           <span class="fu">is.na</span>(rawpoll_johnson))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>polls_us_election_2016 <span class="sc">%&gt;%</span></span>
+<span id="cb27-2"><a href=""></a>    <span class="fu">mutate</span>(<span class="at">trump_clinton_diff =</span> </span>
+<span id="cb27-3"><a href=""></a>             rawpoll_trump <span class="sc">-</span> </span>
+<span id="cb27-4"><a href=""></a>             rawpoll_clinton) <span class="sc">%&gt;%</span></span>
+<span id="cb27-5"><a href=""></a>    <span class="fu">filter</span>(trump_clinton_diff<span class="sc">&gt;</span><span class="dv">5</span> <span class="sc">&amp;</span></span>
+<span id="cb27-6"><a href=""></a>           state <span class="sc">==</span> <span class="st">"Iowa"</span> <span class="sc">&amp;</span></span>
+<span id="cb27-7"><a href=""></a>           <span class="fu">is.na</span>(rawpoll_johnson))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell" data-layout-align="center">
@@ -592,14 +596,14 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a>polls_us_election_2016 <span class="sc">%&gt;%</span></span>
-<span id="cb28-2"><a href=""></a>    <span class="fu">mutate</span>(<span class="at">trump_clinton_diff =</span> </span>
-<span id="cb28-3"><a href=""></a>             rawpoll_trump <span class="sc">-</span> </span>
-<span id="cb28-4"><a href=""></a>             rawpoll_clinton) <span class="sc">%&gt;%</span></span>
-<span id="cb28-5"><a href=""></a>    <span class="fu">filter</span>(trump_clinton_diff<span class="sc">&gt;</span><span class="dv">5</span> <span class="sc">&amp;</span></span>
-<span id="cb28-6"><a href=""></a>           state <span class="sc">==</span> <span class="st">"Iowa"</span> <span class="sc">&amp;</span></span>
-<span id="cb28-7"><a href=""></a>           <span class="fu">is.na</span>(rawpoll_johnson)) <span class="sc">%&gt;%</span></span>
-<span id="cb28-8"><a href=""></a>    <span class="fu">select</span>(pollster) <span class="co"># pollster(여론조사 기관) 열만 선택하여 데이터프레임으로 반환</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a>polls_us_election_2016 <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href=""></a>    <span class="fu">mutate</span>(<span class="at">trump_clinton_diff =</span> </span>
+<span id="cb29-3"><a href=""></a>             rawpoll_trump <span class="sc">-</span> </span>
+<span id="cb29-4"><a href=""></a>             rawpoll_clinton) <span class="sc">%&gt;%</span></span>
+<span id="cb29-5"><a href=""></a>    <span class="fu">filter</span>(trump_clinton_diff<span class="sc">&gt;</span><span class="dv">5</span> <span class="sc">&amp;</span></span>
+<span id="cb29-6"><a href=""></a>           state <span class="sc">==</span> <span class="st">"Iowa"</span> <span class="sc">&amp;</span></span>
+<span id="cb29-7"><a href=""></a>           <span class="fu">is.na</span>(rawpoll_johnson)) <span class="sc">%&gt;%</span></span>
+<span id="cb29-8"><a href=""></a>    <span class="fu">select</span>(pollster) <span class="co"># pollster(여론조사 기관) 열만 선택</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell" data-layout-align="center">
@@ -619,14 +623,14 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a>polls_us_election_2016 <span class="sc">%&gt;%</span></span>
-<span id="cb30-2"><a href=""></a>    <span class="fu">mutate</span>(<span class="at">trump_clinton_diff =</span> </span>
-<span id="cb30-3"><a href=""></a>             rawpoll_trump <span class="sc">-</span> </span>
-<span id="cb30-4"><a href=""></a>             rawpoll_clinton) <span class="sc">%&gt;%</span></span>
-<span id="cb30-5"><a href=""></a>    <span class="fu">filter</span>(trump_clinton_diff<span class="sc">&gt;</span><span class="dv">5</span> <span class="sc">&amp;</span></span>
-<span id="cb30-6"><a href=""></a>           state <span class="sc">==</span> <span class="st">"Iowa"</span> <span class="sc">&amp;</span></span>
-<span id="cb30-7"><a href=""></a>           <span class="fu">is.na</span>(rawpoll_johnson)) <span class="sc">%&gt;%</span></span>
-<span id="cb30-8"><a href=""></a>    <span class="fu">pull</span>(pollster) <span class="co"># pollster(여론조사 기관) 열의 값을 추출하여 벡터로 반환</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a>polls_us_election_2016 <span class="sc">%&gt;%</span></span>
+<span id="cb31-2"><a href=""></a>    <span class="fu">mutate</span>(<span class="at">trump_clinton_diff =</span> </span>
+<span id="cb31-3"><a href=""></a>             rawpoll_trump <span class="sc">-</span> </span>
+<span id="cb31-4"><a href=""></a>             rawpoll_clinton) <span class="sc">%&gt;%</span></span>
+<span id="cb31-5"><a href=""></a>    <span class="fu">filter</span>(trump_clinton_diff<span class="sc">&gt;</span><span class="dv">5</span> <span class="sc">&amp;</span></span>
+<span id="cb31-6"><a href=""></a>           state <span class="sc">==</span> <span class="st">"Iowa"</span> <span class="sc">&amp;</span></span>
+<span id="cb31-7"><a href=""></a>           <span class="fu">is.na</span>(rawpoll_johnson)) <span class="sc">%&gt;%</span></span>
+<span id="cb31-8"><a href=""></a>    <span class="fu">pull</span>(pollster) <span class="co"># pollster(여론조사 기관) 열의 값을 추출하여 벡터로 반환</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell" data-layout-align="center">
@@ -642,34 +646,34 @@
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a>polls_us_election_2016<span class="sc">$</span>samplesize <span class="sc">%&gt;%</span> <span class="fu">mean</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a>polls_us_election_2016<span class="sc">$</span>samplesize <span class="sc">%&gt;%</span> </span>
+<span id="cb33-2"><a href=""></a>    <span class="fu">mean</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="co">#samplesize 값들의 평균을 계산하되, NA(결측값)는 제거 </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1148.216</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a><span class="co">#samplesize 값들의 평균을 계산하되, NA(결측값)는 제거 </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a>polls_us_election_2016 <span class="sc">%&gt;%</span> <span class="fu">count</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a>polls_us_election_2016 <span class="sc">%&gt;%</span> </span>
+<span id="cb35-2"><a href=""></a>    <span class="fu">count</span>() <span class="co"># 총 행 개수를 계산 (즉, 수행된 여론조사의 총 개수) </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 1
       n
   &lt;int&gt;
 1  4208</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a><span class="co"># 총 행 개수를 계산 (즉, 수행된 여론조사의 총 개수) </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div></div>
 <ul>
-<li><code>%&gt;%</code> 연산자는 magrittr 패키지에서 제공. R v4.1.0부터 기본 제공(native) 파이프 연산자인 <code>|&gt;</code> 추가</li>
+<li><code>%&gt;%</code> 연산자는 magrittr 패키지에서 제공.</li>
+<li>R v4.1.0부터 기본 제공(native) 파이프 연산자인 <code>|&gt;</code> 추가</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href=""></a>polls_us_election_2016<span class="sc">$</span>samplesize <span class="sc">|&gt;</span> <span class="fu">mean</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a>polls_us_election_2016<span class="sc">$</span>samplesize <span class="sc">|&gt;</span> <span class="fu">mean</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1148.216</code></pre>
 </div>
 </div>
-<p><code>|&gt;</code> 연산자를 사용하면 <code>magrittr</code> 패키지를 설치하지 않아도 됨</p>
 </section>
 <section id="결측값na-처리" class="slide level2">
 <h2>결측값(<code>NA</code>) 처리</h2>
@@ -679,17 +683,17 @@
 <li>값이 <em>누락(missing)</em> 되었을 경우 <code>NA</code>로 표시됨.</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href=""></a>x <span class="ot">&lt;-</span> <span class="cn">NA</span>  <span class="co"># x에 결측값(NA) 할당</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href=""></a>x <span class="ot">&lt;-</span> <span class="cn">NA</span>  <span class="co"># x에 결측값(NA) 할당</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li><code>NA</code>가 포함된 연산을 수행하면, 결과도 <code>NA</code>가 됨.</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href=""></a><span class="cn">NA</span> <span class="sc">&gt;</span> <span class="dv">5</span>    <span class="co"># NA는 숫자가 아니므로 비교 불가능 -&gt; NA 반환</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href=""></a><span class="cn">NA</span> <span class="sc">&gt;</span> <span class="dv">5</span>    <span class="co"># NA는 숫자가 아니므로 비교 불가능 -&gt; NA 반환</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] NA</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href=""></a><span class="cn">NA</span> <span class="sc">+</span> <span class="dv">10</span>   <span class="co"># NA와 연산하면 결과도 NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href=""></a><span class="cn">NA</span> <span class="sc">+</span> <span class="dv">10</span>   <span class="co"># NA와 연산하면 결과도 NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] NA</code></pre>
 </div>
@@ -698,7 +702,7 @@
 <li><code>is.na(x)</code> 함수를 사용하면 값이 <code>NA</code>인지 확인 가능.</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href=""></a><span class="fu">is.na</span>(x)  <span class="co"># x가 NA인지 확인 -&gt; TRUE 반환</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href=""></a><span class="fu">is.na</span>(x)  <span class="co"># x가 NA인지 확인 -&gt; TRUE 반환</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] TRUE</code></pre>
 </div>
@@ -708,7 +712,7 @@
 <li>NA 값은 서로 비교할 수 없음.</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href=""></a><span class="cn">NA</span> <span class="sc">==</span> <span class="cn">NA</span>  <span class="co"># NA끼리 비교하면 결과도 NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href=""></a><span class="cn">NA</span> <span class="sc">==</span> <span class="cn">NA</span>  <span class="co"># NA끼리 비교하면 결과도 NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] NA</code></pre>
 </div>
@@ -717,14 +721,14 @@
 <li>예제</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href=""></a><span class="co"># x는 Mary의 나이, 정확한 나이를 모름.</span></span>
-<span id="cb49-2"><a href=""></a>x <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
-<span id="cb49-3"><a href=""></a></span>
-<span id="cb49-4"><a href=""></a><span class="co"># y는 John의 나이, 정확한 나이를 모름.</span></span>
-<span id="cb49-5"><a href=""></a>y <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
-<span id="cb49-6"><a href=""></a></span>
-<span id="cb49-7"><a href=""></a><span class="co"># John과 Mary의 나이가 같은가?</span></span>
-<span id="cb49-8"><a href=""></a>x <span class="sc">==</span> y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href=""></a><span class="co"># x는 Mary의 나이, 정확한 나이를 모름.</span></span>
+<span id="cb48-2"><a href=""></a>x <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb48-3"><a href=""></a></span>
+<span id="cb48-4"><a href=""></a><span class="co"># y는 John의 나이, 정확한 나이를 모름.</span></span>
+<span id="cb48-5"><a href=""></a>y <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb48-6"><a href=""></a></span>
+<span id="cb48-7"><a href=""></a><span class="co"># John과 Mary의 나이가 같은가?</span></span>
+<span id="cb48-8"><a href=""></a>x <span class="sc">==</span> y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] NA</code></pre>
 </div>
@@ -737,14 +741,14 @@
 <section id="task-1" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 1</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href=""></a><span class="fu">library</span>(dslabs)</span>
-<span id="cb51-2"><a href=""></a><span class="fu">data</span>(polls_us_election_2016)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href=""></a><span class="fu">library</span>(dslabs)</span>
+<span id="cb50-2"><a href=""></a><span class="fu">data</span>(polls_us_election_2016)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol type="1">
 <li><p>grade 값이 결측치(NA)인 여론조사는?</p></li>
-<li><p>다음 조건을 모두 만족하는 여론조사는? (i) American Strategies, GfK Group, Merrill Poll에서 조사한 경우, (ii) 표본 크기가 1,000명 이상인 경우, (iii) 2016년 10월 20일에 시작된 경우 (힌트: (i) 조건에서는 %in% 연산자가 유용, 벡터는 <code>c()</code>함수로 만들 수 있음. (iii)에서는 날짜 변수의 형식을 확인)</p></li>
-<li><p>다음 조건을 모두 만족하는 여론조사는? (i) Johnson 후보의 여론조사 데이터가 누락되지 않은 경우, (ii) 트럼프와 클린턴의 원본 여론조사 지지율 합이 95%를 초과하는 경우, (iii) 오하이오(OH) 주에서 실시된 경우 (힌트: 트럼프와 클린턴의 지지율 합계를 계산하는 새로운 변수를 생성한 후 <code>filter()</code> 를 적용)</p></li>
-<li><p>표본 크기가 2,000명 이상인 여론조사에서 트럼프의 평균 지지율이 가장 높은 주는? (힌트: <code>filter(), group_by(), summarise(), arrange()</code> 사용. 내림차순 정렬하려면 <code>arrange()</code> 함수의 도움말을 참고)</p></li>
+<li><p>다음 조건을 모두 만족하는 여론조사는? (i) American Strategies, GfK Group, Merrill Poll에서 조사한 경우, (ii) 표본 크기가 1,000명 이상인 경우, (iii) 2016년 10월 20일에 시작된 경우. <strong>힌트</strong>: (i) 조건에서는 %in% 연산자가 유용, 벡터는 <code>c()</code>함수로 만들 수 있음. (iii)에서는 날짜 변수의 형식을 확인 “yyyy-mm-dd”</p></li>
+<li><p>다음 조건을 모두 만족하는 여론조사는? (i) Johnson 후보의 여론조사 데이터가 누락되지 않은 경우, (ii) 트럼프와 클린턴의 원본 여론조사 지지율 합이 95%를 초과하는 경우, (iii) 오하이오(OH) 주에서 실시된 경우 <strong>힌트</strong>: 트럼프와 클린턴의 지지율 합계를 계산하는 새로운 변수를 생성한 후 <code>filter()</code> 를 적용</p></li>
+<li><p>표본 크기가 2,000명 이상인 여론조사에서 트럼프의 평균 지지율이 가장 높은 주는? <strong>힌트</strong>: <code>filter(), group_by(), summarise(), arrange()</code> 사용. 내림차순 정렬하려면 <code>arrange()</code> 함수 사용.</p></li>
 </ol>
 </section></section>
 <section>
@@ -765,14 +769,14 @@
 <li>먼저 <code>gapminder</code> 데이터를 로드:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href=""></a><span class="fu">library</span>(dslabs) <span class="co"># dslabs 패키지 로드</span></span>
-<span id="cb52-2"><a href=""></a><span class="fu">data</span>(gapminder, <span class="at">package =</span> <span class="st">"dslabs"</span>) <span class="co"># gapminder 데이터셋 불러오기</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href=""></a><span class="fu">library</span>(dslabs) <span class="co"># dslabs 패키지 로드</span></span>
+<span id="cb51-2"><a href=""></a><span class="fu">data</span>(gapminder, <span class="at">package =</span> <span class="st">"dslabs"</span>) <span class="co"># gapminder 데이터셋 불러오기</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>데이터의 처음 3개 행과 마지막 2개 행을 확인.</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href=""></a><span class="fu">head</span>(gapminder, <span class="at">n =</span> <span class="dv">3</span>) <span class="co"># 데이터의 처음 3행 출력</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href=""></a><span class="fu">head</span>(gapminder, <span class="at">n =</span> <span class="dv">3</span>) <span class="co"># 데이터의 처음 3행 출력</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  country year infant_mortality life_expectancy fertility population
 1 Albania 1960            115.4           62.87      6.19    1636054
@@ -783,7 +787,7 @@
 2 13828152297    Africa Northern Africa
 3          NA    Africa   Middle Africa</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href=""></a><span class="fu">tail</span>(gapminder, <span class="at">n =</span> <span class="dv">2</span>) <span class="co"># 데이터의 마지막 2행 출력</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href=""></a><span class="fu">tail</span>(gapminder, <span class="at">n =</span> <span class="dv">2</span>) <span class="co"># 데이터의 마지막 2행 출력</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       country year infant_mortality life_expectancy fertility population gdp
 10544   Zambia 2016               NA           57.10        NA         NA  NA
@@ -797,7 +801,7 @@
 <section id="task-2" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 2</h2>
 <ol type="1">
-<li>대륙별 연도별 평균 인구(mean_pop)를 계산하고, 결과를 새로운 객체 gapminder_mean에 저장하시오. (힌트: 각 연도별 대륙당 하나의 관측치(행)만 있어야 함. <code>group_by</code> 및 <code>summarise</code> 사용)</li>
+<li>대륙/연도별 평균 인구(변수명: mean_pop)를 계산하고, 결과를 새로운 객체 gapminder_mean에 저장하시오. <strong>힌트</strong>: 각 연도별 대륙당 하나의 관측치(행)만 있어야 함. <code>group_by</code> 및 <code>summarise</code> 사용</li>
 </ol>
 </section>
 <section id="gg-grammar-of-graphics" class="slide level2">
@@ -805,17 +809,16 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <p>Data</p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href=""></a>data <span class="sc">%&gt;%</span></span>
-<span id="cb57-2"><a href=""></a>  <span class="fu">ggplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href=""></a>data <span class="sc">%&gt;%</span></span>
+<span id="cb56-2"><a href=""></a>  <span class="fu">ggplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>or</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href=""></a><span class="fu">ggplot</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href=""></a><span class="fu">ggplot</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:60%;">
 <ul>
 <li><p>Tidy Data</p>
 <ul>
 <li><p>각 변수는 <strong><em>열(column)</em></strong>을 형성</p></li>
 <li><p>각 관측치는 <strong><em>행(row)</em></strong>을 형성</p></li>
-<li><p>각 관측 단위는 하나의 테이블을 구성</p></li>
 </ul></li>
 <li><p>시각화를 시작할 때 고려 사항</p>
 <ul>
@@ -831,7 +834,7 @@
 <div class="column" style="width:40%;">
 <p>Data</p>
 <p>Aesthetics</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href=""></a><span class="sc">+</span> <span class="fu">aes</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href=""></a><span class="sc">+</span> <span class="fu">aes</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:60%;">
 <p>데이터를 시각적 요소 또는 매개변수에 매핑</p>
 <ul>
@@ -847,7 +850,7 @@
 <div class="column" style="width:40%;">
 <p>Data</p>
 <p>Aesthetics</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href=""></a><span class="sc">+</span> <span class="fu">aes</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href=""></a><span class="sc">+</span> <span class="fu">aes</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:60%;">
 <p>데이터를 시각적 요소 또는 매개변수에 매핑</p>
 <ul>
@@ -863,13 +866,13 @@
 <div class="column" style="width:40%;">
 <p>Data</p>
 <p>Aesthetics</p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href=""></a><span class="sc">+</span> <span class="fu">aes</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href=""></a><span class="sc">+</span> <span class="fu">aes</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:60%;">
-<div class="sourceCode" id="cb62"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href=""></a><span class="fu">aes</span>(</span>
-<span id="cb62-2"><a href=""></a>  <span class="at">x =</span> year,</span>
-<span id="cb62-3"><a href=""></a>  <span class="at">y =</span> population,</span>
-<span id="cb62-4"><a href=""></a>  <span class="at">color =</span> country</span>
-<span id="cb62-5"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href=""></a><span class="fu">aes</span>(</span>
+<span id="cb61-2"><a href=""></a>  <span class="at">x =</span> year,</span>
+<span id="cb61-3"><a href=""></a>  <span class="at">y =</span> population,</span>
+<span id="cb61-4"><a href=""></a>  <span class="at">color =</span> country</span>
+<span id="cb61-5"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
 </section>
 <section id="gg-grammar-of-graphics-4" class="slide level2">
@@ -879,7 +882,7 @@
 <p>Data</p>
 <p>Aesthetics</p>
 <p>Geoms</p>
-<div class="sourceCode" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href=""></a><span class="sc">+</span> geom_<span class="sc">*</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href=""></a><span class="sc">+</span> geom_<span class="sc">*</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:60%;">
 <p>Geometric objects:</p>
 <div class="cell" data-layout-align="center">
@@ -900,10 +903,9 @@
 <p>Data</p>
 <p>Aesthetics</p>
 <p>Geoms</p>
-<div class="sourceCode" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href=""></a><span class="sc">+</span> geom_<span class="sc">*</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href=""></a><span class="sc">+</span> geom_<span class="sc">*</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:60%;">
 <p><a href="https://eric.netlify.com/2017/08/10/most-popular-ggplot2-geoms/">링크: 많이 사용되는 geoms</a></p>
-<div class="small">
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -954,8 +956,6 @@
 </tr>
 </tbody>
 </table>
-</div>
-<p><a href="https://eric.netlify.com/2017/08/10/most-popular-ggplot2-geoms/" class="uri">https://eric.netlify.com/2017/08/10/most-popular-ggplot2-geoms/</a></p>
 </div></div>
 </section>
 <section id="gg-grammar-of-graphics-6" class="slide level2">
@@ -965,7 +965,7 @@
 <p>Data</p>
 <p>Aesthetics</p>
 <p>Geoms</p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href=""></a><span class="sc">+</span> geom_<span class="sc">*</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href=""></a><span class="sc">+</span> geom_<span class="sc">*</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:60%;">
 <p><code>RStudio</code>에서 <code>geom_</code>을 입력하면 자동 완성 기능을 통해 사용할 수 있는 모든 옵션 확인 가능</p>
 <p><img src="chapter_tidy_files/figure-html/geom.gif" width="300px" style="float: center;"></p>
@@ -976,7 +976,7 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href=""></a>gapminder_mean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href=""></a>gapminder_mean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell" data-layout-align="center">
@@ -1005,8 +1005,8 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href=""></a>gapminder_mean <span class="sc">%&gt;%</span></span>
-<span id="cb68-2"><a href=""></a>  <span class="fu">ggplot</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href=""></a>gapminder_mean <span class="sc">%&gt;%</span></span>
+<span id="cb67-2"><a href=""></a>  <span class="fu">ggplot</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell" data-layout-align="center">
@@ -1025,10 +1025,10 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href=""></a>gapminder_mean <span class="sc">%&gt;%</span></span>
-<span id="cb69-2"><a href=""></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb69-3"><a href=""></a>  <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="co">#&lt;&lt;</span></span>
-<span id="cb69-4"><a href=""></a>      <span class="at">y =</span> mean_pop) <span class="co">#&lt;&lt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href=""></a>gapminder_mean <span class="sc">%&gt;%</span></span>
+<span id="cb68-2"><a href=""></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb68-3"><a href=""></a>  <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="co">#&lt;&lt;</span></span>
+<span id="cb68-4"><a href=""></a>      <span class="at">y =</span> mean_pop) <span class="co">#&lt;&lt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell" data-layout-align="center">
@@ -1047,11 +1047,11 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href=""></a>gapminder_mean <span class="sc">%&gt;%</span></span>
-<span id="cb70-2"><a href=""></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb70-3"><a href=""></a>  <span class="fu">aes</span>(<span class="at">x =</span> year,</span>
-<span id="cb70-4"><a href=""></a>      <span class="at">y =</span> mean_pop) <span class="sc">+</span></span>
-<span id="cb70-5"><a href=""></a>  <span class="fu">geom_point</span>() <span class="co">#&lt;&lt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href=""></a>gapminder_mean <span class="sc">%&gt;%</span></span>
+<span id="cb69-2"><a href=""></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb69-3"><a href=""></a>  <span class="fu">aes</span>(<span class="at">x =</span> year,</span>
+<span id="cb69-4"><a href=""></a>      <span class="at">y =</span> mean_pop) <span class="sc">+</span></span>
+<span id="cb69-5"><a href=""></a>  <span class="fu">geom_point</span>() <span class="co">#&lt;&lt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell" data-layout-align="center">
@@ -1070,12 +1070,12 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href=""></a>gapminder_mean <span class="sc">%&gt;%</span></span>
-<span id="cb71-2"><a href=""></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb71-3"><a href=""></a>  <span class="fu">aes</span>(<span class="at">x =</span> year,</span>
-<span id="cb71-4"><a href=""></a>      <span class="at">y =</span> mean_pop,</span>
-<span id="cb71-5"><a href=""></a>      <span class="at">color =</span> continent) <span class="sc">+</span> <span class="co">#&lt;&lt;</span></span>
-<span id="cb71-6"><a href=""></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href=""></a>gapminder_mean <span class="sc">%&gt;%</span></span>
+<span id="cb70-2"><a href=""></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb70-3"><a href=""></a>  <span class="fu">aes</span>(<span class="at">x =</span> year,</span>
+<span id="cb70-4"><a href=""></a>      <span class="at">y =</span> mean_pop,</span>
+<span id="cb70-5"><a href=""></a>      <span class="at">color =</span> continent) <span class="sc">+</span> <span class="co">#&lt;&lt;</span></span>
+<span id="cb70-6"><a href=""></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell" data-layout-align="center">
@@ -1094,13 +1094,13 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href=""></a>gapminder_mean <span class="sc">%&gt;%</span></span>
-<span id="cb72-2"><a href=""></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb72-3"><a href=""></a>  <span class="fu">aes</span>(<span class="at">x =</span> year,</span>
-<span id="cb72-4"><a href=""></a>      <span class="at">y =</span> mean_pop,</span>
-<span id="cb72-5"><a href=""></a>      <span class="at">color =</span> continent) <span class="sc">+</span></span>
-<span id="cb72-6"><a href=""></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb72-7"><a href=""></a>  <span class="fu">geom_line</span>() <span class="co">#&lt;&lt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href=""></a>gapminder_mean <span class="sc">%&gt;%</span></span>
+<span id="cb71-2"><a href=""></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb71-3"><a href=""></a>  <span class="fu">aes</span>(<span class="at">x =</span> year,</span>
+<span id="cb71-4"><a href=""></a>      <span class="at">y =</span> mean_pop,</span>
+<span id="cb71-5"><a href=""></a>      <span class="at">color =</span> continent) <span class="sc">+</span></span>
+<span id="cb71-6"><a href=""></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb71-7"><a href=""></a>  <span class="fu">geom_line</span>() <span class="co">#&lt;&lt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell" data-layout-align="center">
@@ -1119,13 +1119,13 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href=""></a>gapminder_mean <span class="sc">%&gt;%</span></span>
-<span id="cb73-2"><a href=""></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb73-3"><a href=""></a>  <span class="fu">aes</span>(<span class="at">x =</span> year,</span>
-<span id="cb73-4"><a href=""></a>      <span class="at">y =</span> mean_pop,</span>
-<span id="cb73-5"><a href=""></a>      <span class="at">color =</span> continent) <span class="sc">+</span></span>
-<span id="cb73-6"><a href=""></a>  <span class="co"># geom_point() + #&lt;&lt;</span></span>
-<span id="cb73-7"><a href=""></a>  <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href=""></a>gapminder_mean <span class="sc">%&gt;%</span></span>
+<span id="cb72-2"><a href=""></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb72-3"><a href=""></a>  <span class="fu">aes</span>(<span class="at">x =</span> year,</span>
+<span id="cb72-4"><a href=""></a>      <span class="at">y =</span> mean_pop,</span>
+<span id="cb72-5"><a href=""></a>      <span class="at">color =</span> continent) <span class="sc">+</span></span>
+<span id="cb72-6"><a href=""></a>  <span class="co"># geom_point() + #&lt;&lt;</span></span>
+<span id="cb72-7"><a href=""></a>  <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell" data-layout-align="center">
@@ -1144,16 +1144,16 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href=""></a>g <span class="ot">=</span> gapminder_mean <span class="sc">%&gt;%</span></span>
-<span id="cb74-2"><a href=""></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb74-3"><a href=""></a>  <span class="fu">aes</span>(<span class="at">x =</span> year,</span>
-<span id="cb74-4"><a href=""></a>      <span class="at">y =</span> mean_pop,</span>
-<span id="cb74-5"><a href=""></a>      <span class="at">color =</span> continent) <span class="sc">+</span></span>
-<span id="cb74-6"><a href=""></a>  <span class="co"># geom_point() + #&lt;&lt;</span></span>
-<span id="cb74-7"><a href=""></a>  <span class="fu">geom_line</span>()</span>
-<span id="cb74-8"><a href=""></a>g</span>
-<span id="cb74-9"><a href=""></a><span class="co"># graphs can be saved as</span></span>
-<span id="cb74-10"><a href=""></a><span class="co"># objects!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href=""></a>g <span class="ot">=</span> gapminder_mean <span class="sc">%&gt;%</span> <span class="co">#&lt;&lt;</span></span>
+<span id="cb73-2"><a href=""></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb73-3"><a href=""></a>  <span class="fu">aes</span>(<span class="at">x =</span> year,</span>
+<span id="cb73-4"><a href=""></a>      <span class="at">y =</span> mean_pop,</span>
+<span id="cb73-5"><a href=""></a>      <span class="at">color =</span> continent) <span class="sc">+</span></span>
+<span id="cb73-6"><a href=""></a>  <span class="co"># geom_point() + </span></span>
+<span id="cb73-7"><a href=""></a>  <span class="fu">geom_line</span>()</span>
+<span id="cb73-8"><a href=""></a>g   <span class="co">#&lt;&lt;</span></span>
+<span id="cb73-9"><a href=""></a><span class="co"># graphs can be saved as</span></span>
+<span id="cb73-10"><a href=""></a><span class="co"># objects!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell" data-layout-align="center">
@@ -1175,8 +1175,8 @@
 <p>Aesthetics</p>
 <p>Geoms</p>
 <p>Facet</p>
-<div class="sourceCode" id="cb75"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href=""></a><span class="sc">+</span> <span class="fu">facet_wrap</span>() </span>
-<span id="cb75-2"><a href=""></a><span class="sc">+</span> <span class="fu">facet_grid</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href=""></a><span class="sc">+</span> <span class="fu">facet_wrap</span>() </span>
+<span id="cb74-2"><a href=""></a><span class="sc">+</span> <span class="fu">facet_grid</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:60%;">
 
 </div></div>
@@ -1189,11 +1189,11 @@
 <p>Aesthetics</p>
 <p>Geoms</p>
 <p>Facet</p>
-<div class="sourceCode" id="cb76"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href=""></a><span class="sc">+</span> <span class="fu">facet_wrap</span>() </span>
-<span id="cb76-2"><a href=""></a><span class="sc">+</span> <span class="fu">facet_grid</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb75"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href=""></a><span class="sc">+</span> <span class="fu">facet_wrap</span>() </span>
+<span id="cb75-2"><a href=""></a><span class="sc">+</span> <span class="fu">facet_grid</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:60%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href=""></a>g <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="sc">~</span> continent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href=""></a>g <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="sc">~</span> continent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -1212,11 +1212,11 @@
 <p>Aesthetics</p>
 <p>Geoms</p>
 <p>Facet</p>
-<div class="sourceCode" id="cb78"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href=""></a><span class="sc">+</span> <span class="fu">facet_wrap</span>() </span>
-<span id="cb78-2"><a href=""></a><span class="sc">+</span> <span class="fu">facet_grid</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href=""></a><span class="sc">+</span> <span class="fu">facet_wrap</span>() </span>
+<span id="cb77-2"><a href=""></a><span class="sc">+</span> <span class="fu">facet_grid</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:60%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href=""></a>g <span class="sc">+</span> <span class="fu">facet_grid</span>(<span class="sc">~</span> continent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href=""></a>g <span class="sc">+</span> <span class="fu">facet_grid</span>(<span class="sc">~</span> continent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -1236,10 +1236,10 @@
 <p>Geoms</p>
 <p>Facet</p>
 <p>Labels</p>
-<div class="sourceCode" id="cb80"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href=""></a><span class="sc">+</span> <span class="fu">labs</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href=""></a><span class="sc">+</span> <span class="fu">labs</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:60%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href=""></a>g <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Year"</span>, <span class="at">y =</span> <span class="st">"Average Population"</span>, <span class="at">color =</span> <span class="st">"Continent"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href=""></a>g <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Year"</span>, <span class="at">y =</span> <span class="st">"Average Population"</span>, <span class="at">color =</span> <span class="st">"Continent"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -1260,15 +1260,17 @@
 <p>Facet</p>
 <p>Labels</p>
 <p>Scales</p>
-<div class="sourceCode" id="cb82"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href=""></a><span class="sc">+</span> scale_<span class="sc">*</span>_<span class="sc">*</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href=""></a><span class="sc">+</span> scale_<span class="sc">*</span>_<span class="sc">*</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:60%;">
 <p><code>scale</code> + <code>_</code> + <code>&lt;aes&gt;</code> + <code>_</code> + <code>&lt;type&gt;</code> + <code>()</code></p>
 <p>어떤 매개변수를 조정하고 싶은가? → <code>&lt;aes&gt;</code></p>
 <p>그 매개변수의 유형은 무엇인가? → <code>&lt;type&gt;</code></p>
-<pre><code>- 이산형(x축) 조정 &lt;br&gt; `scale_x_discrete()`
-- 연속형 변수에서 포인트 크기 조정 &lt;br&gt;`scale_size_continuous()`
-- y축을 로그 스케일로 변환 &lt;br&gt;`scale_y_log10()`
-- y축을 로그 스케일로 변환 &lt;br&gt;`scale_fill_discrete()`&lt;br&gt;`scale_color_manual()`</code></pre>
+<ul>
+<li>이산형(x축) 조정 <br> <code>scale_x_discrete()</code></li>
+<li>연속형 변수에서 포인트 크기 조정 <br><code>scale_size_continuous()</code></li>
+<li>y축을 로그 스케일로 변환 <br><code>scale_y_log10()</code></li>
+<li>색상 세팅 변환 <br><code>scale_fill_discrete()</code><br><code>scale_color_manual()</code></li>
+</ul>
 </div></div>
 </section>
 <section id="gg-grammar-of-graphics-12" class="slide level2">
@@ -1281,10 +1283,10 @@
 <p>Facet</p>
 <p>Labels</p>
 <p>Scales</p>
-<div class="sourceCode" id="cb84"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href=""></a><span class="sc">+</span> scale_<span class="sc">*</span>_<span class="sc">*</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb82"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href=""></a><span class="sc">+</span> scale_<span class="sc">*</span>_<span class="sc">*</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:60%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href=""></a>g <span class="sc">+</span> <span class="fu">scale_color_viridis_d</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href=""></a>g <span class="sc">+</span> <span class="fu">scale_color_viridis_d</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -1305,10 +1307,10 @@
 <p>Facet</p>
 <p>Labels</p>
 <p>Scales</p>
-<div class="sourceCode" id="cb86"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href=""></a><span class="sc">+</span> scale_<span class="sc">*</span>_<span class="sc">*</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb84"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href=""></a><span class="sc">+</span> scale_<span class="sc">*</span>_<span class="sc">*</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:60%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href=""></a>g <span class="sc">+</span> <span class="fu">scale_y_log10</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href=""></a>g <span class="sc">+</span> <span class="fu">scale_y_log10</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -1329,10 +1331,10 @@
 <p>Facet</p>
 <p>Labels</p>
 <p>Scales</p>
-<div class="sourceCode" id="cb88"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href=""></a><span class="sc">+</span> scale_<span class="sc">*</span>_<span class="sc">*</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb86"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href=""></a><span class="sc">+</span> scale_<span class="sc">*</span>_<span class="sc">*</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:60%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href=""></a>g <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">1950</span>, <span class="dv">2020</span>, <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href=""></a>g <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">1950</span>, <span class="dv">2020</span>, <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -1367,10 +1369,10 @@
 <h2>Task 3</h2>
 <p><code>gapminder</code> 데이터를 사용하여 다음의 그래프를 <code>ggplot2</code>로 생성하시오</p>
 <ol type="1">
-<li><p>2015년 기대수명(Life Expectancy)의 히스토그램을 작성하시오. (<em>힌트: 히스토그램을 만들 때 aes()에 y 값을 지정해야 할까?</em>) <code>geom_*</code> 내에서 다음 옵션을 설정하시오: <code>binwidth</code> = 5, <code>boundary</code> = 45, <code>colour</code> = “white”, <code>fill</code> = “#d90502”. 이러한 옵션이 무엇을 의미하는지 설명하시오.</p>
-<p><em>Optional:</em> 생성한 히스토그램을 대륙(Continent)별로 나누어 (<code>facet_grid()</code>) 각 대륙이 새로운 행(row)에 표시되도록 만드시오.</p></li>
-<li><p>연도별 대륙별 평균 기대수명(Boxplot)을 작성하시오. <code>geom_*</code> 옵션: <code>colour</code> = “black”, <code>fill</code> = “#d90502”. (<em>힌트: continent 및 year 두 개의 변수로 그룹화해야함</em>)</p></li>
-<li><p>2015년 출산율(Fertility Rate, y축)과 영아 사망률(Infant Mortality, x축) 간의 관계를 나타내는 산점도를 작성하시오. <code>geom_*</code> 옵션: <code>size</code> = 3, <code>alpha</code> = 0.5, <code>colour</code> = “#d90502”. <code>labs()</code>를 사용하여 레이블을 추가</p></li>
+<li><p>2015년 기대수명(Life Expectancy)의 히스토그램을 작성하시오. <strong>힌트</strong>: 히스토그램을 만들 때 aes()에 y 값을 지정해야 할까? <code>geom_*</code> 내에서 다음 옵션을 설정하시오: <code>binwidth</code> = 5, <code>boundary</code> = 45, <code>colour</code> = “white”, <code>fill</code> = “#d90502”. x축은 “기대 수명”, y축은 “빈도”로 레이블 하시오. 이러한 옵션이 무엇을 의미하는지 설명하시오.</p>
+<p><em>Optional:</em> 생성한 히스토그램을 대륙(Continent)별로 나누어 (<code>facet_grid()</code>) 각 대륙이 새로운 행(row)에 표시되도록 만드시오. <strong>힌트</strong>: <code>facet_grid(rows_vars(continent)</code></p></li>
+<li><p>연도/대륙별 평균 기대수명을 구하고 대륙별로 평균 기대수명에 대한 Boxplot 으로 그리시오. <code>geom_*</code> 옵션: <code>colour</code> = “black”, <code>fill</code> = “#d90502”. <strong>힌트</strong>: continent 및 year 두 개의 변수로 그룹화해야함.</p></li>
+<li><p>2015년 출산율(Fertility Rate, y축)과 영아 사망률(Infant Mortality, x축) 간의 관계를 나타내는 산점도 (Scatter Plot)를 작성하시오. <code>geom_*</code> 옵션: <code>size</code> = 3, <code>alpha</code> = 0.5, <code>colour</code> = “#d90502”. <code>labs()</code>를 사용하여 레이블을 추가 (x = “영아 사망률”, y = “출산율”)</p></li>
 </ol>
 </section></section>
 <section>
@@ -1381,7 +1383,7 @@
 <section id="summarising-data" class="slide level2">
 <h2>Summarising Data</h2>
 <ul>
-<li><p>일반적으로 데이터를 시각화하거나 요약 통계를 통해 데이터를 분석할 수 있음.</p></li>
+<li><p>일반적으로 데이터를 시각화하거나 요약 통계를 통해 데이터를 분석을 시작.</p></li>
 <li><p>이제 <strong>요약 통계(summary statistics)</strong>를 살펴보겠음.</p></li>
 <li><p>특히, <strong>중심 경향(central tendency)</strong>과 <strong>산포도(spread)</strong>를 중점적으로 다룰 것임.</p></li>
 </ul>
@@ -1395,9 +1397,12 @@
 </ul>
 <p><code>mean(x)</code>: <code>x</code>의 모든 값의 평균을 계산. <span class="math display">\[\bar{x} = \frac{1}{N}\sum_{i=1}^N x_i\]</span></p>
 <div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href=""></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">100</span>)  <span class="co"># 데이터 샘플</span></span>
+<span id="cb88-2"><a href=""></a><span class="fu">mean</span>(x)  <span class="co"># 평균 계산</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 18.16667</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href=""></a><span class="fu">mean</span>(x) <span class="sc">==</span> <span class="fu">sum</span>(x) <span class="sc">/</span> <span class="fu">length</span>(x)  <span class="co"># 평균 공식 확인</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] TRUE</code></pre>
 </div>
@@ -1475,7 +1480,7 @@
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb98"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href=""></a>gapminder_new <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span></span>
 <span id="cb98-2"><a href=""></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2015</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb98-3"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">fertility_above_2 =</span> (fertility <span class="sc">&gt;</span> <span class="fl">2.1</span>)) <span class="co"># dummy variable for fertility rate above replacement rate</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb98-3"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">fertility_above_2 =</span> (fertility <span class="sc">&gt;</span> <span class="dv">2</span>)) <span class="co"># dummy variable for fertility rate above replacement rate</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="columns">
 <div class="column" style="width:45%;">
@@ -1498,12 +1503,26 @@ FALSE  TRUE
 </div>
 </div>
 </div></div>
-<p><code>prop.table</code>을 사용하여 비율을 계산 가능:</p>
+<ul>
+<li><code>prop.table</code>을 사용하여 비율을 계산 가능:</li>
+</ul>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb103"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href=""></a><span class="co"># proportions by row</span></span>
-<span id="cb103-2"><a href=""></a><span class="fu">prop.table</span>(<span class="fu">table</span>(gapminder_new<span class="sc">$</span>fertility_above_2,gapminder_new<span class="sc">$</span>continent), <span class="at">margin =</span> <span class="dv">1</span>)</span>
-<span id="cb103-3"><a href=""></a><span class="co"># proportions by column</span></span>
-<span id="cb103-4"><a href=""></a><span class="fu">prop.table</span>(<span class="fu">table</span>(gapminder_new<span class="sc">$</span>fertility_above_2,gapminder_new<span class="sc">$</span>continent), <span class="at">margin =</span> <span class="dv">2</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb103-2"><a href=""></a><span class="fu">prop.table</span>(<span class="fu">table</span>(gapminder_new<span class="sc">$</span>fertility_above_2,gapminder_new<span class="sc">$</span>continent), <span class="at">margin =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       
+             Africa    Americas        Asia      Europe     Oceania
+  FALSE 0.027397260 0.178082192 0.260273973 0.520547945 0.013698630
+  TRUE  0.441441441 0.198198198 0.252252252 0.009009009 0.099099099</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href=""></a><span class="co"># proportions by column</span></span>
+<span id="cb105-2"><a href=""></a><span class="fu">prop.table</span>(<span class="fu">table</span>(gapminder_new<span class="sc">$</span>fertility_above_2,gapminder_new<span class="sc">$</span>continent), <span class="at">margin =</span> <span class="dv">2</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       
+            Africa   Americas       Asia     Europe    Oceania
+  FALSE 0.03921569 0.37142857 0.40425532 0.97435897 0.08333333
+  TRUE  0.96078431 0.62857143 0.59574468 0.02564103 0.91666667</code></pre>
+</div>
 </div>
 <ul>
 <li><code>NA</code> 값을 포함한 <code>table</code> 또는 <code>crosstable</code>을 얻으려면 <code>useNA = "always"</code> 또는 <code>useNA = "ifany"</code> 옵션을 사용</li>
@@ -1515,32 +1534,37 @@ FALSE  TRUE
 <li>count 함수를 사용한 데이터 요약</li>
 </ul>
 <div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href=""></a>gapminder_new <span class="sc">%&gt;%</span></span>
+<span id="cb107-2"><a href=""></a>  <span class="fu">count</span>(continent, fertility_above_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   continent fertility_above_2  n
 1     Africa             FALSE  2
 2     Africa              TRUE 49
-3   Americas             FALSE 15
-4   Americas              TRUE 20
+3   Americas             FALSE 13
+4   Americas              TRUE 22
 5   Americas                NA  1
-6       Asia             FALSE 20
-7       Asia              TRUE 27
-8     Europe             FALSE 39
-9    Oceania             FALSE  4
-10   Oceania              TRUE  8</code></pre>
+6       Asia             FALSE 19
+7       Asia              TRUE 28
+8     Europe             FALSE 38
+9     Europe              TRUE  1
+10   Oceania             FALSE  1
+11   Oceania              TRUE 11</code></pre>
 </div>
 </div>
-<pre><code>- `count` 함수는 `NA` 값이 포함된 경우에만 이를 표시.</code></pre>
+<ul>
+<li><code>count</code> 함수는 <code>NA</code> 값이 포함된 경우에만 이를 표시.</li>
+</ul>
 </section>
 <section id="공분산-covariance과-상관계수-correlation" class="slide level2">
 <h2>공분산 (Covariance)과 상관계수 (Correlation)</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href=""></a><span class="fu">ggplot</span>(gapminder_new, <span class="fu">aes</span>(<span class="at">x=</span>infant_mortality, <span class="at">y=</span>fertility)) <span class="sc">+</span></span>
-<span id="cb106-2"><a href=""></a>  <span class="fu">geom_point</span>(<span class="at">color=</span><span class="st">"#d90502"</span>) <span class="sc">+</span></span>
-<span id="cb106-3"><a href=""></a>  <span class="fu">labs</span>(</span>
-<span id="cb106-4"><a href=""></a>    <span class="at">title =</span> <span class="st">"Relationship between fertility and infant mortality in 2015"</span>,</span>
-<span id="cb106-5"><a href=""></a>    <span class="at">x =</span> <span class="st">"Infant mortality"</span>,</span>
-<span id="cb106-6"><a href=""></a>    <span class="at">y =</span> <span class="st">"Fertility rate"</span></span>
-<span id="cb106-7"><a href=""></a>  ) <span class="sc">+</span>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href=""></a><span class="fu">ggplot</span>(gapminder_new, <span class="fu">aes</span>(<span class="at">x=</span>infant_mortality, <span class="at">y=</span>fertility)) <span class="sc">+</span></span>
+<span id="cb109-2"><a href=""></a>  <span class="fu">geom_point</span>(<span class="at">color=</span><span class="st">"#d90502"</span>) <span class="sc">+</span></span>
+<span id="cb109-3"><a href=""></a>  <span class="fu">labs</span>(</span>
+<span id="cb109-4"><a href=""></a>    <span class="at">title =</span> <span class="st">"Relationship between fertility and infant mortality in 2015"</span>,</span>
+<span id="cb109-5"><a href=""></a>    <span class="at">x =</span> <span class="st">"Infant mortality"</span>,</span>
+<span id="cb109-6"><a href=""></a>    <span class="at">y =</span> <span class="st">"Fertility rate"</span></span>
+<span id="cb109-7"><a href=""></a>  ) <span class="sc">+</span>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="chapter_tidy_files/figure-revealjs/x-y-corr-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"></section>
@@ -1551,6 +1575,7 @@ FALSE  TRUE
 <p><span class="math display">\[Cov(x,y) = \frac{1}{N} \sum_{i=1}^N(x_i-\bar{x})(y_i-\bar{y})\]</span></p></li>
 </ul>
 <div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href=""></a><span class="fu">cov</span>(gapminder_new<span class="sc">$</span>fertility,gapminder_new<span class="sc">$</span>infant_mortality, <span class="at">use =</span> <span class="st">"complete.obs"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 24.21146</code></pre>
 </div>
@@ -1562,6 +1587,7 @@ FALSE  TRUE
 <li>상관관계는 두 변수 간의 선형 관계(linear association) 의 강도를 측정하는 지표 <span class="math display">\[Cor(x,y) = \frac{Cov(x,y)}{\sqrt{Var(x)}\sqrt{Var(y)}}\]</span></li>
 </ul>
 <div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb112"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a href=""></a><span class="fu">cor</span>(gapminder_new<span class="sc">$</span>fertility,gapminder_new<span class="sc">$</span>infant_mortality, <span class="at">use =</span> <span class="st">"complete.obs"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.8286402</code></pre>
 </div>
@@ -1586,18 +1612,13 @@ FALSE  TRUE
 <section id="task-4" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 4</h2>
 <ol type="1">
-<li><p>2011년 GDP의 평균을 계산하고 mean이라는 객체에 할당하시오. 결측값은 제외. (힌트: <code>mean</code> 함수의 도움말을 읽고 <code>NA</code>를 제거하는 방법을 확인)</p></li>
+<li><p>2011년 GDP의 평균을 계산하고 mean이라는 객체에 할당하시오. 결측값은 제외. <strong>힌트</strong>: <code>mean</code> 함수의 도움말을 읽고 <code>NA</code>를 제거하는 방법을 확인</p></li>
 <li><p>2011년 GDP의 중앙값을 계산하고 median이라는 객체에 할당하시오. 마찬가지로 결측값을 제외. 중앙값이 평균보다 큰가, 작은가?</p></li>
 <li><p><code>geom_density</code>를 사용하여 2011년 GDP의 밀도 그래프(density plot)를 생성하시오. 밀도 그래프는 숫자형 변수의 분포를 나타내는 방법임. 또한 다음 코드를 추가하여 평균과 중앙값을 수직선으로 표시하시오.</p>
-<div class="sourceCode" id="cb109"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href=""></a><span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">as.numeric</span>(mean), <span class="at">colour =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
-<span id="cb109-2"><a href=""></a><span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">as.numeric</span>(median), <span class="at">colour =</span> <span class="st">"orange"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><p>2015년 출산율(fertility)과 유아 사망률(infant mortality)의 상관관계를 계산하시오. NA 값을 제외하려면 <code>cor()</code> 함수의 <code>use</code> 인수를 “pairwise.complete.obs”로 설정. 이 상관관계 값이 Task 3에서 생성한 그래프와 일치하는가??</p></li>
+<div class="sourceCode" id="cb114"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb114-1"><a href=""></a><span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">as.numeric</span>(mean), <span class="at">colour =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb114-2"><a href=""></a><span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">as.numeric</span>(median), <span class="at">colour =</span> <span class="st">"orange"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>2015년 출산율(fertility)과 유아 사망률(infant mortality)의 상관관계를 계산하시오. NA 값을 제외하려면 <code>cor()</code> 함수의 <code>use</code> 인수를 “pairwise.complete.obs”로 설정. 이 상관관계 값이 Task 3에서 생성한 그래프와 일치하는가?</p></li>
 </ol>
-<p>여유 시간이 있을 때, 다음 튜토리얼을 실행해보시오:</p>
-<pre><code>```r
-library(ScPoApps) # 설치하는 데 시간이 걸릴 수 있음
-runTutorial('chapter2')
-```</code></pre>
 </section>
 <section id="인과-관계를-찾아가는-길" class="slide level2">
 <h2>🔍 인과 관계를 찾아가는 길</h2>

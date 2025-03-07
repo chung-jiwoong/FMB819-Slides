@@ -1,28 +1,17 @@
 ---
-title: "FMB819: R을 이용한 데이터분석"
-subtitle: "<span style='font-size:1.5em; color:#a01616;'>Tidying, Visualising and Summarising Data</span>"
-# date: "`r Sys.Date()`"
-format:
+title: "Tidying, Visualising and Summarising Data"
+subtitle: "FMB819: R을 이용한 데이터분석"
+author: "고려대학교 경영대학 정지웅"
+format: 
   revealjs:
-    slide-number: true
-    # smaller: true
-    scrollable: true
-    chalkboard: true
+    theme: simple
     transition: fade
     transition-speed: fast
-    #incremental: true
-    #lib_dir: libs
-    css: [default, "../css/kubs.css", "../css/kubs-fonts.css"]
-    #nature:
-      # beforeInit: ["../js/ru_xaringan.js"]
-      #highlightStyle: github
-      #highlightLines: true
-      #countIncrementalSlides: false
-    #  ratio: "16:9"
-    # includes:
-    #   in_header: "../libs/partials/header.html"
+    scrollable: true
+    chalkboard: true
+    slide-number: true
 revealjs-plugins:
-  - revealjs-text-resizer
+  - revealjs-text-resizer # Thanks to https://github.com/gadenbuie/revealjs-text-resizer#readme
 ---
 
 ```{r setup, include=FALSE,warning=FALSE,message=FALSE}
@@ -59,7 +48,7 @@ knitr::opts_chunk$set(
 
 -   [2014년 뉴욕타임즈 기사](https://www.nytimes.com/2014/08/18/technology/for-big-data-scientists-hurdle-to-insights-is-janitor-work.html)에 따르면, "데이터 과학자들은 데이터를 분석하기 전에 **50%에서 80%의 시간**을 데이터 수집 및 정리에 소비한다."라고 함.
 
--   다음 두 강의에서는 **데이터 정리, 시각화, 요약**의 기본을 배울 것임.
+-   다음 두 강의에서는 **데이터 정리, 시각화, 요약**의 기본을 배움.
 
 # Tidying Data
 
@@ -69,16 +58,16 @@ knitr::opts_chunk$set(
 
 -   [`dplyr`](https://dplyr.tidyverse.org)은 [`tidyverse`](https://www.tidyverse.org) 패키지군의 일부.
 -   [`data.table`](https://github.com/Rdatatable/data.table/wiki)도 대안으로 사용 가능하며, 대용량 데이터에 최적화되어 있음.
--   두 방법 모두 장점과 단점이 있으며, 여기서는 `dplyr`을 먼저 다룸.
+-   여기서는 `dplyr`을 다룸.
 
 ------------------------------------------------------------------------
 
 ## `dplyr` 개요
 
--   [Hadley Wickham의 데이터 변환 챕터](https://r4ds.had.co.nz/transform.html)를 읽어보길바람.
+-   Hadley Wickham의 "R for Data Science" [영어](https://r4ds.had.co.nz/transform.html) [한국어](https://bookdown.org/sulgi/r4ds/)
 -   [치트시트](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf)도 매우 유용.
 -   `dplyr`은 여러 **verbs** 중심으로 구성되어 있음.
--   `data.frame` 또는 `tibble`\[\^`data.frame`과 유사\] 형식의 데이터를 다룰 것임.
+-   `data.frame` 또는 `tibble` 형식의 데이터를 다룰 것임.
 
 $$\text{verb}(\underbrace{\text{data.frame}}_{\text{1st argument}}, \underbrace{\text{what to do}}_\text{2nd argument})$$
 
@@ -117,7 +106,7 @@ head(polls_us_election_2016[,1:6]) # 데이터의 첫 6개의 행과 첫 6개의
 
 -   이 데이터셋에 어떤 변수가 포함되어 있는지 확인
 
-```{r}
+```{r, echo=TRUE}
 str(polls_us_election_2016) # 데이터의 구조를 요약하여 출력
 ```
 
@@ -344,7 +333,7 @@ polls_us_election_2016 %>%
     filter(trump_clinton_diff>5 &
            state == "Iowa" &
            is.na(rawpoll_johnson)) %>%
-    select(pollster) # pollster(여론조사 기관) 열만 선택하여 데이터프레임으로 반환
+    select(pollster) # pollster(여론조사 기관) 열만 선택
 ```
 :::
 
@@ -361,6 +350,9 @@ polls_us_election_2016 %>%
 ```
 :::
 :::::
+
+---
+
 
 ## 명령어 연결하기
 
@@ -399,26 +391,27 @@ polls_us_election_2016 %>%
 ::::: columns
 ::: {.column width="50%"}
 ```{r, echo=TRUE}
-polls_us_election_2016$samplesize %>% mean(na.rm = TRUE) 
-#samplesize 값들의 평균을 계산하되, NA(결측값)는 제거 
+polls_us_election_2016$samplesize %>% 
+    mean(na.rm = TRUE) #samplesize 값들의 평균을 계산하되, NA(결측값)는 제거 
 ```
 :::
 
 ::: {.column width="50%"}
 ```{r, echo=TRUE}
-polls_us_election_2016 %>% count() 
-# 총 행 개수를 계산 (즉, 수행된 여론조사의 총 개수) 
+polls_us_election_2016 %>% 
+    count() # 총 행 개수를 계산 (즉, 수행된 여론조사의 총 개수) 
 ```
 :::
 :::::
 
--   `%>%` 연산자는 magrittr 패키지에서 제공. R v4.1.0부터 기본 제공(native) 파이프 연산자인 `|>` 추가
+-   `%>%` 연산자는 magrittr 패키지에서 제공. 
+-   R v4.1.0부터 기본 제공(native) 파이프 연산자인 `|>` 추가
 
 ```{r, echo=TRUE}
 polls_us_election_2016$samplesize |> mean(na.rm = TRUE)
 ```
 
-`|>` 연산자를 사용하면 `magrittr` 패키지를 설치하지 않아도 됨
+
 
 ------------------------------------------------------------------------
 
@@ -481,11 +474,14 @@ data(polls_us_election_2016)
 
 1.  grade 값이 결측치(NA)인 여론조사는?
 
-2.  다음 조건을 모두 만족하는 여론조사는? (i) American Strategies, GfK Group, Merrill Poll에서 조사한 경우, (ii) 표본 크기가 1,000명 이상인 경우, (iii) 2016년 10월 20일에 시작된 경우 (힌트: (i) 조건에서는 %in% 연산자가 유용, 벡터는 `c()`함수로 만들 수 있음. (iii)에서는 날짜 변수의 형식을 확인)
+2.  다음 조건을 모두 만족하는 여론조사는? (i) American Strategies, GfK Group, Merrill Poll에서 조사한 경우, (ii) 표본 크기가 1,000명 이상인 경우, (iii) 2016년 10월 20일에 시작된 경우. **힌트**: (i) 조건에서는 %in% 연산자가 유용, 벡터는 `c()`함수로 만들 수 있음. (iii)에서는 날짜 변수의 형식을 확인 "yyyy-mm-dd"
 
-3.  다음 조건을 모두 만족하는 여론조사는? (i) Johnson 후보의 여론조사 데이터가 누락되지 않은 경우, (ii) 트럼프와 클린턴의 원본 여론조사 지지율 합이 95%를 초과하는 경우, (iii) 오하이오(OH) 주에서 실시된 경우 (힌트: 트럼프와 클린턴의 지지율 합계를 계산하는 새로운 변수를 생성한 후 `filter()` 를 적용)
+3.  다음 조건을 모두 만족하는 여론조사는? (i) Johnson 후보의 여론조사 데이터가 누락되지 않은 경우, (ii) 트럼프와 클린턴의 원본 여론조사 지지율 합이 95%를 초과하는 경우, (iii) 오하이오(OH) 주에서 실시된 경우 **힌트**: 트럼프와 클린턴의 지지율 합계를 계산하는 새로운 변수를 생성한 후 `filter()` 를 적용
 
-4.  표본 크기가 2,000명 이상인 여론조사에서 트럼프의 평균 지지율이 가장 높은 주는? (힌트: `filter(), group_by(), summarise(), arrange()` 사용. 내림차순 정렬하려면 `arrange()` 함수의 도움말을 참고)
+4.  표본 크기가 2,000명 이상인 여론조사에서 트럼프의 평균 지지율이 가장 높은 주는? **힌트**: `filter(), group_by(), summarise(), arrange()` 사용. 내림차순 정렬하려면 `arrange()` 함수 사용.
+  
+
+
 
 # Visualising Data
 
@@ -517,16 +513,12 @@ tail(gapminder, n = 2) # 데이터의 마지막 2행 출력
 
 ## Task 2 {background-color="#ffebf0"}
 
+1.  대륙/연도별 평균 인구(변수명: mean_pop)를 계산하고, 결과를 새로운 객체 gapminder_mean에 저장하시오. **힌트**: 각 연도별 대륙당 하나의 관측치(행)만 있어야 함. `group_by` 및 `summarise` 사용
 
-1.  대륙별 연도별 평균 인구(mean_pop)를 계산하고, 결과를 새로운 객체 gapminder_mean에 저장하시오. (힌트: 각 연도별 대륙당 하나의 관측치(행)만 있어야 함. `group_by` 및 `summarise` 사용)
-
-```{r, echo = F}
+```{r, echo=F}
 gapminder_mean <- gapminder %>%
   group_by(continent, year) %>%
   summarise(mean_pop = mean(population))
-
-gapminder_2015 <- gapminder %>%
-  filter(year == "2015")
 ```
 
 ------------------------------------------------------------------------
@@ -556,7 +548,6 @@ ggplot(data)
 
     -   각 관측치는 ***행(row)***을 형성
 
-    -   각 관측 단위는 하나의 테이블을 구성
 
 -   시각화를 시작할 때 고려 사항
 
@@ -696,7 +687,7 @@ cowplot::plot_grid(plotlist = g_geom)
 
 ## gg = Grammar of Graphics
 
-:::::: columns
+::::: columns
 ::: {.column width="40%"}
 Data
 
@@ -709,10 +700,9 @@ Geoms
 ```
 :::
 
-:::: {.column width="60%"}
+::: {.column width="60%"}
 [링크: 많이 사용되는 geoms](https://eric.netlify.com/2017/08/10/most-popular-ggplot2-geoms/)
 
-::: small
 |    유형     |            함수            |
 |:-----------:|:--------------------------:|
 |   포인트    |       `geom_point()`       |
@@ -726,10 +716,8 @@ Geoms
 |  개수 세기  |       `geom_count()`       |
 | 밀도 그래프 |      `geom_density()`      |
 :::
+:::::
 
-<https://eric.netlify.com/2017/08/10/most-popular-ggplot2-geoms/>
-::::
-::::::
 
 ------------------------------------------------------------------------
 
@@ -906,14 +894,14 @@ gapminder_mean %>%
 ::::: columns
 ::: {.column width="40%"}
 ```{r save-plot, echo=TRUE, eval=FALSE}
-g = gapminder_mean %>%
+g = gapminder_mean %>% #<<
   ggplot() +
   aes(x = year,
       y = mean_pop,
       color = continent) +
-  # geom_point() + #<<
+  # geom_point() + 
   geom_line()
-g
+g   #<<
 # graphs can be saved as
 # objects!
 ```
@@ -1069,15 +1057,17 @@ Scales
 어떤 매개변수를 조정하고 싶은가? → `<aes>`
 
 그 매개변수의 유형은 무엇인가? → `<type>`
-
-```         
+      
 - 이산형(x축) 조정 <br> `scale_x_discrete()`
 - 연속형 변수에서 포인트 크기 조정 <br>`scale_size_continuous()`
 - y축을 로그 스케일로 변환 <br>`scale_y_log10()`
-- y축을 로그 스케일로 변환 <br>`scale_fill_discrete()`<br>`scale_color_manual()`
-```
+- 색상 세팅 변환 <br>`scale_fill_discrete()`<br>`scale_color_manual()`
+
 :::
 :::::
+
+---
+
 
 ## gg = Grammar of Graphics
 
@@ -1199,22 +1189,25 @@ knitr::include_graphics("chapter_tidy_files/figure-html/boxplot_explanation.png"
 
 ## Task 3 {background-color="#ffebf0"}
 
-
 `gapminder` 데이터를 사용하여 다음의 그래프를 `ggplot2`로 생성하시오
 
-1.  2015년 기대수명(Life Expectancy)의 히스토그램을 작성하시오. (*힌트: 히스토그램을 만들 때 aes()에 y 값을 지정해야 할까?*) `geom_*` 내에서 다음 옵션을 설정하시오: `binwidth` = 5, `boundary` = 45, `colour` = "white", `fill` = "#d90502". 이러한 옵션이 무엇을 의미하는지 설명하시오.
+1.  2015년 기대수명(Life Expectancy)의 히스토그램을 작성하시오. **힌트**: 히스토그램을 만들 때 aes()에 y 값을 지정해야 할까? `geom_*` 내에서 다음 옵션을 설정하시오: `binwidth` = 5, `boundary` = 45, `colour` = "white", `fill` = "#d90502". x축은 "기대 수명", y축은 "빈도"로 레이블 하시오. 이러한 옵션이 무엇을 의미하는지 설명하시오.
 
-    *Optional:* 생성한 히스토그램을 대륙(Continent)별로 나누어 (`facet_grid()`) 각 대륙이 새로운 행(row)에 표시되도록 만드시오.
+    *Optional:* 생성한 히스토그램을 대륙(Continent)별로 나누어 (`facet_grid()`) 각 대륙이 새로운 행(row)에 표시되도록 만드시오. **힌트**: `facet_grid(rows_vars(continent)`
 
-2.  연도별 대륙별 평균 기대수명(Boxplot)을 작성하시오. `geom_*` 옵션: `colour` = "black", `fill` = "#d90502". (*힌트: continent 및 year 두 개의 변수로 그룹화해야함*)
+2.  연도/대륙별 평균 기대수명을 구하고 대륙별로 평균 기대수명에 대한 Boxplot 으로 그리시오. `geom_*` 옵션: `colour` = "black", `fill` = "#d90502". **힌트**: continent 및 year 두 개의 변수로 그룹화해야함.
 
-3.  2015년 출산율(Fertility Rate, y축)과 영아 사망률(Infant Mortality, x축) 간의 관계를 나타내는 산점도를 작성하시오. `geom_*` 옵션: `size` = 3, `alpha` = 0.5, `colour` = "#d90502". `labs()`를 사용하여 레이블을 추가
+3.  2015년 출산율(Fertility Rate, y축)과 영아 사망률(Infant Mortality, x축) 간의 관계를 나타내는 산점도 (Scatter Plot)를 작성하시오. `geom_*` 옵션: `size` = 3, `alpha` = 0.5, `colour` = "#d90502". `labs()`를 사용하여 레이블을 추가 (x = "영아 사망률", y = "출산율")
+
+
 
 # Summarising
 
+
+
 ## Summarising Data
 
--   일반적으로 데이터를 시각화하거나 요약 통계를 통해 데이터를 분석할 수 있음.
+-   일반적으로 데이터를 시각화하거나 요약 통계를 통해 데이터를 분석을 시작.
 
 -   이제 **요약 통계(summary statistics)**를 살펴보겠음.
 
@@ -1230,7 +1223,7 @@ knitr::include_graphics("chapter_tidy_files/figure-html/boxplot_explanation.png"
 
 `mean(x)`: `x`의 모든 값의 평균을 계산. $$\bar{x} = \frac{1}{N}\sum_{i=1}^N x_i$$
 
-```{r}
+```{r, echo=T}
 x <- c(1,2,2,2,2,100)  # 데이터 샘플
 mean(x)  # 평균 계산
 mean(x) == sum(x) / length(x)  # 평균 공식 확인
@@ -1245,7 +1238,7 @@ mean(x) == sum(x) / length(x)  # 평균 공식 확인
 중앙값은 **이상치(outliers)**에 강건(robust).
 
 ```{r}
-median(x)  # 중앙값 계산
+median(x, echo=T)  # 중앙값 계산
 ```
 :::
 :::::
@@ -1314,7 +1307,7 @@ gapminder %>% count(continent)
 ```{r, echo=TRUE}
 gapminder_new <- gapminder %>%
   filter(year == 2015) %>%
-  mutate(fertility_above_2 = (fertility > 2.1)) # dummy variable for fertility rate above replacement rate
+  mutate(fertility_above_2 = (fertility > 2)) # dummy variable for fertility rate above replacement rate
 ```
 
 ::::: columns
@@ -1331,9 +1324,9 @@ table(gapminder_new$fertility_above_2,gapminder_new$continent)
 :::
 :::::
 
-`prop.table`을 사용하여 비율을 계산 가능:
+- `prop.table`을 사용하여 비율을 계산 가능:
 
-```{r,eval=FALSE, echo=TRUE}
+```{r, echo=TRUE}
 # proportions by row
 prop.table(table(gapminder_new$fertility_above_2,gapminder_new$continent), margin = 1)
 # proportions by column
@@ -1348,14 +1341,14 @@ prop.table(table(gapminder_new$fertility_above_2,gapminder_new$continent), margi
 
 -   count 함수를 사용한 데이터 요약
 
-```{r}
+```{r, echo=T}
 gapminder_new %>%
   count(continent, fertility_above_2)
 ```
 
-```         
+        
 - `count` 함수는 `NA` 값이 포함된 경우에만 이를 표시.
-```
+
 
 ------------------------------------------------------------------------
 
@@ -1379,7 +1372,7 @@ ggplot(gapminder_new, aes(x=infant_mortality, y=fertility)) +
 
     $$Cov(x,y) = \frac{1}{N} \sum_{i=1}^N(x_i-\bar{x})(y_i-\bar{y})$$
 
-```{r}
+```{r, echo=T}
 cov(gapminder_new$fertility,gapminder_new$infant_mortality, use = "complete.obs")
 ```
 
@@ -1389,7 +1382,7 @@ cov(gapminder_new$fertility,gapminder_new$infant_mortality, use = "complete.obs"
 
 -   상관관계는 두 변수 간의 선형 관계(linear association) 의 강도를 측정하는 지표 $$Cor(x,y) = \frac{Cov(x,y)}{\sqrt{Var(x)}\sqrt{Var(y)}}$$
 
-```{r}
+```{r, echo=T}
 cor(gapminder_new$fertility,gapminder_new$infant_mortality, use = "complete.obs")
 ```
 
@@ -1419,8 +1412,7 @@ knitr::include_url("https://gustavek.shinyapps.io/corr_continuous/")
 
 ## Task 4 {background-color="#ffebf0"}
 
-
-1.  2011년 GDP의 평균을 계산하고 mean이라는 객체에 할당하시오. 결측값은 제외. (힌트: `mean` 함수의 도움말을 읽고 `NA`를 제거하는 방법을 확인)
+1.  2011년 GDP의 평균을 계산하고 mean이라는 객체에 할당하시오. 결측값은 제외. **힌트**: `mean` 함수의 도움말을 읽고 `NA`를 제거하는 방법을 확인
 
 2.  2011년 GDP의 중앙값을 계산하고 median이라는 객체에 할당하시오. 마찬가지로 결측값을 제외. 중앙값이 평균보다 큰가, 작은가?
 
@@ -1431,16 +1423,10 @@ knitr::include_url("https://gustavek.shinyapps.io/corr_continuous/")
     geom_vline(xintercept = as.numeric(median), colour = "orange")
     ```
 
-4.  2015년 출산율(fertility)과 유아 사망률(infant mortality)의 상관관계를 계산하시오. NA 값을 제외하려면 `cor()` 함수의 `use` 인수를 "pairwise.complete.obs"로 설정. 이 상관관계 값이 Task 3에서 생성한 그래프와 일치하는가??
+4.  2015년 출산율(fertility)과 유아 사망률(infant mortality)의 상관관계를 계산하시오. NA 값을 제외하려면 `cor()` 함수의 `use` 인수를 "pairwise.complete.obs"로 설정. 이 상관관계 값이 Task 3에서 생성한 그래프와 일치하는가?
 
-여유 시간이 있을 때, 다음 튜토리얼을 실행해보시오:
 
-````         
-```r
-library(ScPoApps) # 설치하는 데 시간이 걸릴 수 있음
-runTutorial('chapter2')
-```
-````
+
 
 ------------------------------------------------------------------------
 
@@ -1459,7 +1445,6 @@ runTutorial('chapter2')
 ❌ 실제로 외생성을 어떻게 찾아낼 수 있을까?
 
 ------------------------------------------------------------------------
-
 
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 
