@@ -210,6 +210,14 @@ library(gganimate)
 
 ------------------------------------------------------------------------
 
+## 웹기반 앱 만들기
+
+
+<iframe src="https://9qhvt0-ji0woong-chung.shinyapps.io/buss254-stock-app/" width="100%" height="800px" style="border: none;"></iframe>
+
+
+------------------------------------------------------------------------
+
 ## `R` 설치 방법: Windows 환경 기준
 
 -   `winget`을 이용한 설치
