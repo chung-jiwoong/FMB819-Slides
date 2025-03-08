@@ -1,0 +1,9 @@
+---
+title: "수업 과제"
+author: "홍길동 (2025012345)"
+date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
+format: html_document
+execute: true
+echo: true  
+include: true 
+---
