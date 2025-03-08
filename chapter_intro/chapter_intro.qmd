@@ -834,18 +834,7 @@ Quarto Document로 작성, Quarto Pub에 Publish하여, 웹페이지 링크를 L
 
 #### 2. 과제 템플릿 예시
 
-- 아래 YAML를 항상 포함할 것
-
-    ```
-    ---
-    title: "수업 과제"
-    author: "홍길동 (2025012345)"
-    date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
-    format: html
-    echo: true  
-    include: true 
-    ---
-    ```
+- 다음 양식을 이용하여 과제 제출: [과제 양식 링크](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_intro/tasks/intro_tasks.qmd)
 
 - 과제 작성 후 적당한 곳에 저장, 예: `C:\Users\user\Documents\assignment\assign1.qmd`
 

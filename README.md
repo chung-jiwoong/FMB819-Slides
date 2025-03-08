@@ -15,6 +15,8 @@
   Introduction 
     [HTML](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_intro/chapter_intro.html)
     [.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_intro/chapter_intro.qmd)
+
+  - [과제 제출 양식](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_intro/tasks/intro_tasks.qmd)
     
     
 주제2: 
