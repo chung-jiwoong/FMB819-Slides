@@ -64,7 +64,7 @@ knitr::opts_chunk$set(
 
 ## `dplyr` 개요
 
--   Hadley Wickham의 "R for Data Science" [영어](https://r4ds.had.co.nz/transform.html) [한국어](https://bookdown.org/sulgi/r4ds/)
+-   Hadley Wickham의 "R for Data Science" [영문](https://r4ds.had.co.nz/transform.html) [국문](https://bookdown.org/sulgi/r4ds/)
 -   [치트시트](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf)도 매우 유용.
 -   `dplyr`은 여러 **verbs** 중심으로 구성되어 있음.
 -   `data.frame` 또는 `tibble` 형식의 데이터를 다룰 것임.
