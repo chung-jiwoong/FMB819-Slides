@@ -1,11 +1,19 @@
 ---
 title: "수업 과제"
-author: "홍길동 (2025012345)"
+author: "홍길동 (2025012345)"       #이름과 학번을 넣으세요
 date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
 format: html
 echo: true  
 include: true 
 ---
+
+<!-- 아래에 숙제를 작성하면 됩니다. 
+
+R 코드는 ```{r} 과 ``` 사이에 넣으면 됩니다.
+
+다 작성하고 위에 있는 render 버튼을 누르면 html 파일이 생성됩니다.
+
+ -->
 
 ## Task 1 
 
