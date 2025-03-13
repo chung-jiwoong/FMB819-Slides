@@ -25,6 +25,17 @@ knitr::opts_chunk$set(
   #fig.width = 11,
   #fig.height = 5
 )
+library(countdown)
+# countdown style
+countdown(
+  color_border              = "#d90502",
+  color_text                = "black",
+  color_running_background  = "#d90502",
+  color_running_text        = "white",
+  color_finished_background = "white",
+  color_finished_text       = "#d90502",
+  color_finished_border     = "#d90502"
+)
 ```
 
 ## Working With Data
@@ -460,6 +471,12 @@ x == y
 
 ## Task 1 {background-color="#ffebf0"}
 
+::: {style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;"}
+`r countdown(minutes = 10, top = 0)`
+:::
+
+다음 코드를 실행하여 데이터를 로드합니다.
+
 ```{r, echo = T, eval = F}
 library(dslabs)
 data(polls_us_election_2016)
@@ -505,6 +522,17 @@ tail(gapminder, n = 2) # 데이터의 마지막 2행 출력
 ------------------------------------------------------------------------
 
 ## Task 2 {background-color="#ffebf0"}
+
+::: {style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;"}
+`r countdown(minutes = 5, top = 0)`
+:::
+
+다음 코드를 실행하여 데이터를 로드합니다.
+
+```{r, eval = F}
+library(dslabs)
+data(gapminder, package = "dslabs")
+```
 
 1.  대륙/연도별 평균 인구(변수명: mean_pop)를 계산하고, 결과를 새로운 객체 gapminder_mean에 저장하시오. **힌트**: 각 연도별 대륙당 하나의 관측치(행)만 있어야 함. `group_by` 및 `summarise` 사용
 
@@ -1181,6 +1209,10 @@ knitr::include_graphics("chapter_tidy_files/figure-html/boxplot_explanation.png"
 ------------------------------------------------------------------------
 
 ## Task 3 {background-color="#ffebf0"}
+
+::: {style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;"}
+`r countdown(minutes = 10, top = 0)`
+:::
 
 `gapminder` 데이터를 사용하여 다음의 그래프를 `ggplot2`로 생성하시오
 

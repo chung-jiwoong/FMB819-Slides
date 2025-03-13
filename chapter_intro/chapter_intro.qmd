@@ -220,6 +220,13 @@ library(gganimate)
 
 ## `R` 설치 방법: Windows 환경 기준
 
+-   공식 웹사이트에서 다운로드하여 설치
+
+    1.  [CRAN 공식 웹사이트](https://posit.co/download/rstudio-desktop/)에 접속
+    2.  "Download R for Windows" 클릭
+    3.  "base" 패키지를 선택하고 최신 버전을 다운로드
+    4.  다운로드한 설치 파일 실행 후 기본 설정으로 설치 진행
+
 -   `winget`을 이용한 설치
 
     -   PowerShell 또는 명령 프롬프트(cmd) 열고 아래 명령어 실행
@@ -228,18 +235,20 @@ library(gganimate)
     winget install -e --id RProject.R
     ```
 
--   공식 웹사이트에서 다운로드하여 설치
-
-    1.  [CRAN 공식 웹사이트](https://cran.r-project.org/)에 접속
-    2.  "Download R for Windows" 클릭
-    3.  "base" 패키지를 선택하고 최신 버전을 다운로드
-    4.  다운로드한 설치 파일 실행 후 기본 설정으로 설치 진행
 
 ------------------------------------------------------------------------
 
 ## `RStudio` 설치 방법
 
 R 프로그래밍 언어를 위한 통합 개발 환경(IDE, Integrated Development Environment)
+
+-   공식 웹사이트에서 다운로드하여 설치
+
+    1.  [CRAN 공식 웹사이트](https://posit.co/download/rstudio-desktop/) 접속
+    2.  "RStudio Desktop"의 무료 버전을 선택하여 다운로드
+    3.  다운로드한 설치 파일 실행 후 기본 설정으로 설치
+    4.  설치 완료 후 RStudio 실행하여 정상 작동하는지 확인
+
 
 -   `winget` 을 이용한 설치
 
@@ -255,12 +264,6 @@ R 프로그래밍 언어를 위한 통합 개발 환경(IDE, Integrated Developm
     winget upgrade --id Posit.RStudio
     ```
 
--   공식 웹사이트에서 다운로드하여 설치
-
-    1.  [RStudio 공식 웹사이트](https://posit.co/download/rstudio-desktop/) 접속
-    2.  "RStudio Desktop"의 무료 버전을 선택하여 다운로드
-    3.  다운로드한 설치 파일 실행 후 기본 설정으로 설치
-    4.  설치 완료 후 RStudio 실행하여 정상 작동하는지 확인
 
 ------------------------------------------------------------------------
 
@@ -432,6 +435,7 @@ In practice:
 
 ------------------------------------------------------------------------
 
+
 ## 벡터 (Vectors)
 
 -   `c` 함수를 사용하여 벡터, 즉 *1차원 배열*을 생성.
@@ -598,6 +602,7 @@ which.max(fib)
 
 which.min(fib)
 ```
+
 
 ---
 

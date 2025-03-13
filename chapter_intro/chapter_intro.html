@@ -365,24 +365,31 @@
 <section id="r-설치-방법-windows-환경-기준" class="slide level2 scrollable">
 <h2><code>R</code> 설치 방법: Windows 환경 기준</h2>
 <ul>
+<li><p>공식 웹사이트에서 다운로드하여 설치</p>
+<ol type="1">
+<li><a href="https://posit.co/download/rstudio-desktop/">CRAN 공식 웹사이트</a>에 접속</li>
+<li>“Download R for Windows” 클릭</li>
+<li>“base” 패키지를 선택하고 최신 버전을 다운로드</li>
+<li>다운로드한 설치 파일 실행 후 기본 설정으로 설치 진행</li>
+</ol></li>
 <li><p><code>winget</code>을 이용한 설치</p>
 <ul>
 <li>PowerShell 또는 명령 프롬프트(cmd) 열고 아래 명령어 실행</li>
 </ul>
 <div class="sourceCode" id="cb6" style="font-size:1.2em"><pre class="sourceCode numberSource sh number-lines code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href=""></a><span class="ex">winget</span> install <span class="at">-e</span> <span class="at">--id</span> RProject.R</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><p>공식 웹사이트에서 다운로드하여 설치</p>
-<ol type="1">
-<li><a href="https://cran.r-project.org/">CRAN 공식 웹사이트</a>에 접속</li>
-<li>“Download R for Windows” 클릭</li>
-<li>“base” 패키지를 선택하고 최신 버전을 다운로드</li>
-<li>다운로드한 설치 파일 실행 후 기본 설정으로 설치 진행</li>
-</ol></li>
 </ul>
 </section>
 <section id="rstudio-설치-방법" class="slide level2 scrollable">
 <h2><code>RStudio</code> 설치 방법</h2>
 <p>R 프로그래밍 언어를 위한 통합 개발 환경(IDE, Integrated Development Environment)</p>
 <ul>
+<li><p>공식 웹사이트에서 다운로드하여 설치</p>
+<ol type="1">
+<li><a href="https://posit.co/download/rstudio-desktop/">CRAN 공식 웹사이트</a> 접속</li>
+<li>“RStudio Desktop”의 무료 버전을 선택하여 다운로드</li>
+<li>다운로드한 설치 파일 실행 후 기본 설정으로 설치</li>
+<li>설치 완료 후 RStudio 실행하여 정상 작동하는지 확인</li>
+</ol></li>
 <li><p><code>winget</code> 을 이용한 설치</p>
 <ul>
 <li>PowerShell 또는 명령 프롬프트 열고 아래 명령어 실행</li>
@@ -392,13 +399,6 @@
 <li>RStudio 업그레이드가 필요할 경우 다음 명령어 실행</li>
 </ul>
 <div class="sourceCode" id="cb8" style="font-size:1.2em"><pre class="sourceCode numberSource sh number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href=""></a><span class="ex">winget</span> upgrade <span class="at">--id</span> Posit.RStudio</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><p>공식 웹사이트에서 다운로드하여 설치</p>
-<ol type="1">
-<li><a href="https://posit.co/download/rstudio-desktop/">RStudio 공식 웹사이트</a> 접속</li>
-<li>“RStudio Desktop”의 무료 버전을 선택하여 다운로드</li>
-<li>다운로드한 설치 파일 실행 후 기본 설정으로 설치</li>
-<li>설치 완료 후 RStudio 실행하여 정상 작동하는지 확인</li>
-</ol></li>
 </ul>
 </section>
 <section id="설치-확인" class="slide level2 scrollable">
@@ -563,7 +563,8 @@
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a><span class="fu">ls</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "a"               "b"               "c"               "gapminder"      
-[5] "gapminder_dplyr" "v"               "x"              </code></pre>
+[5] "gapminder_dplyr" "pandoc_dir"      "quarto_bin_path" "v"              
+[9] "x"              </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a><span class="fu">rm</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
