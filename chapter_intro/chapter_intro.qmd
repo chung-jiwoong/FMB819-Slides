@@ -843,37 +843,15 @@ Quarto Document로 작성, Quarto Pub에 Publish하여, 웹페이지 링크를 L
 
 - 과제 작성 후 적당한 곳에 저장, 예: `C:\Users\user\Documents\assignment\assign1.qmd`
 
-- 같은 폴더에 다음 내용을 메모장에 붙여 넣고 `_quarto.yml`로 저장
-
-    ```
-    project:
-        type: website
-    format:
-        html: default 
-    ```
-
 #### 3. Quarto 문서 렌더링
 
   -   RStudio에서 **Render 버튼** 클릭
 
   -   HTML 문서가 생성됨 (`홍길동.html` 생성됨)
 
-#### 4. Quarto Pub에 게시하기
+#### 4. 과제 제출
 
-  -   Quarto Pub 계정 생성
-      1.  [https://quartopub.com/](https://quartopub.com/)에 접속
-      2.  회원가입 및 로그인
-   
-  -   RStudio에서 게시
-      1.  terminal에서 파일을 저장한 폴더로 이동 
-          - `cd C:\Users\user\Documents\assignment`
-      2.  `quarto publish quarto-pub`
-      3.  인증 절차 따라함
-
-#### 5. 게시된 문서 링크 제출
-
--   Quarto Pub에서 제공하는 링크 복사
--   과제 제출 페이지에 링크 제출 (LSM시스템에 업로드)
+-   Quarto 문서와 함께 출력된 HTML 문서를 LSM시스템에 업로드
 
 ------------------------------------------------------------------------
 

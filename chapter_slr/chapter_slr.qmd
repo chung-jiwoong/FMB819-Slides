@@ -1,28 +1,17 @@
 ---
-title: "FMB819: R을 이용한 데이터분석"
-subtitle: "<span style='font-size:1.5em; color:#a01616;'>Simple Linear Regression</span>"
-# date: "`r Sys.Date()`"
-format:
+title: "Simple Linear Regression"
+subtitle: "FMB819: R을 이용한 데이터분석"
+author: "고려대학교 경영대학 정지웅"
+format: 
   revealjs:
-    slide-number: true
-    # smaller: true
-    scrollable: true
-    chalkboard: true
+    theme: simple
     transition: fade
     transition-speed: fast
-    #incremental: true
-    #lib_dir: libs
-    css: [default, "../css/kubs.css", "../css/kubs-fonts.css"]
-    #nature:
-      # beforeInit: ["../js/ru_xaringan.js"]
-      #highlightStyle: github
-      #highlightLines: true
-      #countIncrementalSlides: false
-    #  ratio: "16:9"
-    # includes:
-    #   in_header: "../libs/partials/header.html"
+    scrollable: true
+    chalkboard: true
+    slide-number: true
 revealjs-plugins:
-  - revealjs-text-resizer
+  - revealjs-text-resizer # Thanks to https://github.com/gadenbuie/revealjs-text-resizer#readme
 ---
 
 ```{r setup, include=FALSE,warning=FALSE,message=FALSE}
@@ -32,7 +21,8 @@ knitr::opts_chunk$set(
   warning = FALSE,
   dev = "svg",
   cache = TRUE,
-  fig.align = "center"
+  fig.align = "center",
+  comment = "##"
   #fig.width = 11,
   #fig.height = 5
 )
@@ -61,7 +51,7 @@ countdown(
 
 -   ***단순 선형 회귀 모형(Simple Linear Regression Model)*** 및 ***최소제곱법(Ordinary Least Squares, OLS)*** *추정* 소개.
 
--   실증 분석: *학급 규모*와 *학생 성취도*의 관계
+-   실증 분석: 학급 규모와 학생 성취도의 관계
 
 -   **인과적(causal)** 관계를 어떻게 밝힐 수 있을까?
 
@@ -71,13 +61,13 @@ countdown(
 
 -   어떤 정책이 학생 학습 성취도 향상시키는가?
 
--   학급 규모 축소는 *수십 년간* 교육 정책 논쟁의 핵심 주제였음.
+-   학급 규모 축소는 **수십 년간** 교육 정책 논쟁의 핵심 주제였음.
 
--   [Joshua Angrist와 Victor Lavy (1999)](https://economics.mit.edu/files/8273)의 유명한 연구에서 사용된 데이터 분석. 해당 데이터는 [Raj Chetty와 Greg Bruich의 강의](https://opportunityinsights.org/course/)에서 제공됨.
+-   [Joshua Angrist와 Victor Lavy (1999)](https://economics.mit.edu/files/8273)의 연구에서 사용된 데이터 분석. 해당 데이터는 [Raj Chetty와 Greg Bruich의 강의](https://opportunityinsights.org/course/)에서 제공됨.
 
 -   1991년 이스라엘 유대인 공립 초등학교 5학년생(10-11세)의 시험 점수와 학급/학교 특성 포함.
 
--   국가 단위 시험을 통해 *수학* 및 (히브리어) *읽기* 능력 평가했으며, 원점수는 1-100 사이 척도로 변환됨.
+-   국가 단위 시험을 통해 **수학** 및 (히브리어) **읽기** 능력 평가했으며, 원점수는 1-100 사이 척도로 변환됨.
 
 ------------------------------------------------------------------------
 
@@ -87,17 +77,16 @@ countdown(
 `r countdown(minutes = 7, top = 0)`
 :::
 
-1.  데이터를 [여기](https://www.dropbox.com/s/wwp2cs9f0dubmhr/grade5.dta?dl=1)에서 불러와 `grades`로 저장.\
-    *힌트: `haven` 라이브러리의 `read_dta` 함수 사용해서 `.dta` 형식의 파일 불러오면 됨.*\
-    (참고: *.dta*는 [*Stata*](https://www.stata.com/)에서 사용하는 데이터 파일 확장자임.)
+1.  데이터를 [여기](https://github.com/chung-jiwoong/FMB819-Slides/tree/main/chapter_slr/grade5.dta)에서 다운로드해서 `grades`로 저장하시오.\
+    **힌트**: `haven` 라이브러리의 `read_dta` 함수 사용해서 `.dta` 형식의 파일 불러오면 됨. (참고: *.dta*는 [*Stata*](https://www.stata.com/)에서 사용하는 데이터 파일 확장자임.)
 
 2.  데이터셋 설명:
 
-    -   관측 단위는? 즉, 각 행이 무엇을 의미하는지?\
-    -   총 몇 개의 관측치가 있는지?\
-    -   데이터셋을 확인하고 어떤 변수가 있는지? `avgmath`와 `avgverb`는 뭘 의미하는지?\
+    -   관측 단위는? 즉, 각 행이 무엇을 의미하는가?\
+    -   총 몇 개의 관측치가 있는가?\
+    -   데이터셋을 확인하고 어떤 변수가 있는지 확인하시오. `avgmath`와 `avgverb`는 뭘 의미하는가?\
     -   `skimr` 패키지의 `skim` 함수 사용해서 `classize`, `avgmath`, `avgverb` 변수에 대한 기본적인 요약 통계 확인함.\
-        (*힌트: `dplyr`의 `select` 사용해서 변수 선택한 후 `%>%`로 `skim()` 적용하면 됨.*)
+        **힌트**: `dplyr`의 `select` 사용해서 변수 선택한 후 `%>%`로 `skim()` 적용하면 됨.
 
 3.  학급 규모와 학생 성취도 간 실제 (선형) 관계에 대해 어떤 관계가 있을 것이라 생각하는가?
 
@@ -331,11 +320,11 @@ plot_ex + geom_line(color = "#d90502")
 
 -   만약 모든 데이터가 직선 위에 있다면, $\widehat{y}_i = y_i$.
 
--   대부분의 경우 *종속변수* $(y)$는 우리가 선택한 *독립변수* $(x)$들에 의해서만 설명되지 않음, $\widehat{y}_i \neq y_i$, 즉 "오차(error)"가 항상 발생. 이 오차를 잔차(residual)라 부름.
+-   대부분의 경우 *종속변수* $(y)$는 우리가 선택한 *독립변수* $(x)$들에 의해서만 설명되지 않음, $\widehat{y}_i \neq y_i$. 실제 값과 예측 값의 차이를 잔차(residual)라 부름.
 
 -   $(x_i,y_i)$에서의 잔차를 $e_i$로 표시.
 
--   *실제 데이터* $(x_i, y_i)$는 따라서 *예측값 + 잔*차로 표현될 수 있음
+-   **실제 데이터** $(x_i, y_i)$는 따라서 **예측값 + 잔차**로 표현될 수 있음
 
     $$
     y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
@@ -433,7 +422,7 @@ g_math_cs +
 
 ## Ordinary Least Squares (OLS) 추정
 
--   오차(error)의 부호 $(+/-)$가 서로 상쇄. **제곱 잔차(squared residuals)**를 고려 $$\forall i \in [1,N], e_i^2 = (y_i - \widehat y_i)^2 = (y_i - b_0 - b_1 x_i)^2$$
+-   잔차는 +/- 값이 있어 서로 상쇄됨. 따라서 **제곱 잔차(squared residuals)**를 고려 $$\forall i \in [1,N], e_i^2 = (y_i - \widehat y_i)^2 = (y_i - b_0 - b_1 x_i)^2$$
 
 -   $\sum_{i = 1}^N e_1^2 + \dots + e_N^2$ 값이 **최소화하는** $(b_0, b_1)$ 값을 선택.
 
@@ -476,7 +465,7 @@ g_math_cs +
 ## Ordinary Least Squares (OLS) 추정
 
 ```{r, echo = F, out.extra = 'style="border: none;"'}
-knitr::include_url("https://gustavek.shinyapps.io/reg_simple/")
+knitr::include_url("https://gustavek.shinyapps.io/reg_simple/", height = "800px")
 ```
 
 ------------------------------------------------------------------------
@@ -484,7 +473,7 @@ knitr::include_url("https://gustavek.shinyapps.io/reg_simple/")
 ## Ordinary Least Squares (OLS) 추정
 
 ```{r, echo = F, out.extra = 'style="border: none;"'}
-knitr::include_url("https://gustavek.shinyapps.io/SSR_cone/")
+knitr::include_url("https://gustavek.shinyapps.io/SSR_cone/", height = "800px")
 ```
 
 ------------------------------------------------------------------------
@@ -493,29 +482,26 @@ knitr::include_url("https://gustavek.shinyapps.io/SSR_cone/")
 
 -   **OLS**: *잔차 제곱합(squared residuals)*을 최소화하는 추정 방법.
 
--   그렇다면, 절편 $b_0$와 기울기 $b_1$의 공식은?
-
--   하나의 독립변수만 있는 경우:
+-   절편 $b_0$와 기울기 $b_1$의 공식, 하나의 독립변수만 있는 경우:
 
 > 기울기 (Slope): $b_1^{OLS} = \frac{cov(x,y)}{var(x)}$
 
 > 절편 (Intercept):$b_0^{OLS} = \bar{y} - b_1\bar{x}$
 
 -   잔차 제곱합을 최소화하는 문제를 풀어 유도됨.\
-    자세한 수학적 과정은 [여기](https://www.youtube.com/watch?v=Hi5EJnBHFB4)에서 확인.
+    자세한 수학적 과정은 [[여기]](https://www.youtube.com/watch?v=Hi5EJnBHFB4)에서 확인.
 
 ------------------------------------------------------------------------
 
 ## Ordinary Least Squares (OLS) 해석
 
-종속 변수 $(y)$와 독립 변수 $(x)$가 **숫자형(numeric)**이라고 가정
 
 > 절편 $(b_0)$: $x = 0$일 때 예측된 $y$ 값 $(\widehat{y})$.
 
 > 기울기 $(b_1)$: $x$가 한 단위 증가할 때, $y$ 값이 *평균적으로* 변하는 정도
 
 -   두 변수 간 *"관련이 있음(associated)"*이라는 표현을 사용함.\
-    즉, $b_1$을 $x$의 $y$에 대한 인과적 영향(causal impact)으로 해석하면 안 됨.\
+    즉, $b_1$을 $x$의 $y$에 대한 인과적 영향으로 해석하면 안 됨.\
     이를 주장하려면 특정 조건이 충족되어야 함.
 
 -   또한 $x$의 단위(unit)에 따라 $b_1$의 해석과 크기(magnitude)가 달라질 수 있음.
@@ -561,7 +547,7 @@ lm(avgmath_cs ~ classize, grades_avg_cs)
 lm(formula = avgmath_cs~classize, data = grades_avg_cs)
 ```
 
-이 결과가 의미하는 것 ($_i$ 첨자 생략):
+이 결과가 의미하는 것 ($i$ 첨자 생략):
 
 $$
 \begin{aligned}
@@ -588,32 +574,33 @@ $$
 `r countdown(minutes = 5, top = 0)`
 :::
 
-다음 코드를 실행하여 데이터를 학급 규모(class size) 수준에서 집계:
+다음 코드를 실행하여 데이터를 학급 규모(class size) 수준에서 집계하시오:
 
-```{r, eval = F}
+```{r, echo=T, eval = F}
 grades_avg_cs <- grades %>%
   group_by(classize) %>%
   summarise(avgmath_cs = mean(avgmath),
             avgverb_cs = mean(avgverb))
 ```
 
-1.  R평균 언어 점수(종속 변수)를 학급 규모(독립 변수)에 대해 회귀분석(regress) 수행. 회귀 계수(coefficients)를 해석할 것
+1.  평균 언어 점수(`avgverb_cs`)를 학급 규모(`classize`)에 대해 회귀분석 수행. 회귀 계수(coefficients)를 해석하시오.
 
-2.  이전 회귀분석에서 OLS 계수 $b_0$ 및 $b_1$을 직접 계산 (공식 이용). (힌트: `cov`, `var`, `mean` 함수 사용.)
+2.  이 회귀분석에서 OLS 계수 $b_0$ 및 $b_1$을 직접 계산 (공식 이용). \
+    *힌트*: `cov`, `var`, `mean` 함수 사용.
 
-3.  학급 규모가 0일 때, 예측된 평균 언어 점수는 얼마인가? (이 값이 실제로 의미가 있는가?
+3.  학급 규모가 0일 때, 예측된 평균 언어 점수는 얼마인가? 이 값이 실제로 의미가 있는가?
 
 4.  학급 규모가 30명일 때, 예측된 평균 언어 점수는 얼마인가?
 
 ------------------------------------------------------------------------
 
-## 예측값과 잔차의 성질 (Predictions and Residuals: Properties)
+## 예측값과 잔차의 성질
 
 ::::: columns
 ::: {.column width="50%"}
 -   $\widehat{y}_i$의 평균은 $\bar{y}$와 같음 $$\begin{align} \frac{1}{N} \sum_{i=1}^N \widehat{y}_i &= \frac{1}{N} \sum_{i=1}^N b_0 + b_1 x_i \\ &= b_0 + b_1  \bar{x}  = \bar{y} \end{align}$$
 
--   잔차(residuals)의 평균(또는 합)은 0. $$\begin{align} \frac{1}{N} \sum_{i=1}^N e_i &= \frac{1}{N} \sum_{i=1}^N (y_i - \widehat y_i) \\ &= \bar{y} - \frac{1}{N} \sum_{i=1}^N \widehat{y}_i \\\ &= 0 \end{align}$$
+-   잔차의 평균(또는 합)은 0. $$\begin{align} \frac{1}{N} \sum_{i=1}^N e_i &= \frac{1}{N} \sum_{i=1}^N (y_i - \widehat y_i) \\ &= \bar{y} - \frac{1}{N} \sum_{i=1}^N \widehat{y}_i \\\ &= 0 \end{align}$$
 :::
 
 ::: {.column width="50%"}
@@ -644,8 +631,7 @@ grades_avg_cs <- grades %>%
 -   Francis Anscombe (1973)는 통계적으로 *완전히 동일한* 네 개의 데이터셋을 만들었음.\
     하지만 **시각적으로 보면 완전히 다름!**
 
-::::: columns
-::: {.column width="60%"}
+
 ```{r, echo=FALSE, fig.height=4}
 ##-- now some "magic" to do the 4 regressions in a loop:
 ff <- y ~ x
@@ -668,16 +654,13 @@ for(i in 1:4) {
 }
 par(op)
 ```
-:::
 
-::: {.column width="40%"}
 ```{r,echo = FALSE}
 ch = kable(round(covs,3))
 ch %>%
    kable_styling(bootstrap_options = "striped", font_size = 20)
 ```
-:::
-:::::
+
 
 ------------------------------------------------------------------------
 
@@ -687,7 +670,7 @@ ch %>%
 ::: {.column width="50%"}
 -   회귀 분석에서 비선형 관계를 반영할 수 있음.
 
--   방법: *고차항(higher order term)*을 추가하면 됨.\
+-   고차항(higher order term)*을 추가하면 됨.\
     $$
       y_i = b_0 + b_1 x_i + b_2 x_i^2 + e_i
       $$
@@ -696,7 +679,7 @@ ch %>%
 :::
 
 ::: {.column width="50%"}
--   예를 들어, 아래 데이터를 사용해 이전 회귀 모델을 적용한다고 가정함:
+-   예를 들어, 아래 데이터를 사용해 이전 회귀 모델을 적용할 수 있음:
 
 ```{r non-line-cars-ols2, echo=FALSE, fig.height=6}
 data(mtcars)
@@ -730,7 +713,7 @@ mtcars %>% ggplot(aes(x = hp, y = mpg)) +
     &= Var(\widehat{y}) + Var(e)
     \end{align}$$
 
--   이유는 다음과 같음:
+-   왜냐하면:
 
     -   $Var(x+y) = Var(x) + Var(y) + 2Cov(x,y)$
     -   $Cov(\hat{y},e) = 0$
@@ -747,16 +730,12 @@ $$
 R^2 = \frac{\text{variance explained}}{\text{total variance}} = \frac{SSE}{SST} = 1 - \frac{SSR}{SST}\in[0,1]
 $$
 
-```         
-* $R^2$ 값이 **1에 가까울수록**, 모델의 **설명력(explanatory power)**이 ***매우 높음***을 의미함.
+  - $R^2$ 값이 **1에 가까울수록**, 모델의 **설명력(explanatory power)**이 *** 높음***을 의미함.
+  - $R^2$ 값이 **0에 가까울수록**, 모델의 **설명력**이 ***낮음***을 의미함.
+  - 예를 들어, $R^2 = 0.5$이면, **$x$의 변화가 $y$의 변화 중 50%를 설명함**.
 
-* $R^2$ 값이 **0에 가까울수록**, 모델의 **설명력**이 ***매우 낮음***을 의미함.
 
-
-* 예를 들어, $R^2 = 0.5$이면, **$x$의 변화가 $y$의 변화 중 50%를 설명함**을 의미함.
-```
-
--   낮은 $R^2$ 값이 무조건 모델이 쓸모없다는 뜻은 아님! **예측(predictive power)**보다는 **인과적 메커니즘(causal mechanisms)**에 더 초점을 맞추는 경우가 많음.
+-   낮은 $R^2$ 값이 무조건 모델이 쓸모없다는 뜻은 아님! **예측(predictive power)**보다는 **인과적 메커니즘(causal mechanisms)**에 더 초점을 맞추는 경우.
 
 -   $R^2$ 값은 **인과 관계(causal relationship)를 나타내는 지표가 아님!** 회귀 모델에서 높은 $R^2$ 값이 있다고 해서, $x$가 $y$를 인과적으로 설명한다고 볼 수 없음!
 
@@ -772,13 +751,13 @@ $$
 
 2.  `summary(math_reg)`를 실행하여 **(다중)** $R^2$ 값을 확인함. 이 값의 의미를 해석할 것.
 
-3.  `classize`와 `avgmath_cs` 간 **상관계수(correlation)**를 제곱하여 계산. 이 값은 **단일 설명변수**(one regressor)를 가진 회귀에서 $R^2$와 상관계수 간의 관계를 보여줌.
+3.  `classize`와 `avgmath_cs` 간 **상관계수(correlation)**를 제곱하여 계산. 이 값은 **단일 설명변수**(one regressor)를 가진 회귀에서 $R^2$와 상관계수 간의 관계를 보여줌을 보이시오.
 
 4.  1번과 2번을 `avgverb_cs`에 대해 반복함.\
-    어떤 시험에서 학급 규모의 분산이 학생 점수의 분산을 더 많이 설명하는지 비교함.
+    어떤 시험에서 학급 규모의 분산이 학생 점수의 분산을 더 많이 설명하는지 비교하시오.
 
 5.  (Optional) `broom` 패키지를 설치 및 로드한 후, `math_reg`를 `augment()` 함수에 전달하여 새로운 객체에 저장함.\
-    `avgmath_cs`의 분산(SST)과 예측값 `.fitted`의 분산(SSE)을 사용하여 $R^2$ 값을 직접 계산함. (이전 슬라이드의 공식을 참고할 것.)
+    `avgmath_cs`의 분산(SST)과 예측값 `.fitted`의 분산(SSE)을 사용하여 $R^2$ 값을 직접 계산하시오. (이전 슬라이드의 공식을 참고할 것.)
 
 ------------------------------------------------------------------------
 

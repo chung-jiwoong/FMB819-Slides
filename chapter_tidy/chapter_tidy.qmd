@@ -14,6 +14,7 @@ revealjs-plugins:
   - revealjs-text-resizer # Thanks to https://github.com/gadenbuie/revealjs-text-resizer#readme
 ---
 
+
 ```{r setup, include=FALSE,warning=FALSE,message=FALSE}
 options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(
@@ -21,7 +22,8 @@ knitr::opts_chunk$set(
   warning = FALSE,
   dev = "svg",
   cache = TRUE,
-  fig.align = "center"
+  fig.align = "center",
+  comment = "##"
   #fig.width = 11,
   #fig.height = 5
 )
@@ -68,14 +70,14 @@ countdown(
 
 ## `dplyr` 개요
 
--   Hadley Wickham의 "R for Data Science" [영문](https://r4ds.had.co.nz/transform.html) [국문](https://bookdown.org/sulgi/r4ds/)
--   [치트시트](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf)도 매우 유용.
+-   Hadley Wickham의 "R for Data Science", 링크 [영문판](https://r4ds.had.co.nz/transform.html), [국문판](https://bookdown.org/sulgi/r4ds/)
+    -   [치트시트](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf)도 매우 유용.
 -   `dplyr`은 여러 **verbs** 중심으로 구성되어 있음.
 -   `data.frame` 또는 `tibble` 형식의 데이터를 다룰 것임.
 
 $$\text{verb}(\underbrace{\text{data.frame}}_{\text{1st argument}}, \underbrace{\text{what to do}}_\text{2nd argument})$$
 
--   또는 `pipe` 연산자 `%>%` 이용 (`magrittr` 패키지):
+-   또는 `pipe` 연산자 `%>%` 이용 (`magrittr` 패키지) 또는 `|>`도 가능:
 
 $$\underbrace{\text{data.frame}}_{\text{1st argument}} \underbrace{\text{ %>% }}_{\text{"pipe" operator}} \text{verb}(\underbrace{\text{what to do}}_\text{2nd argument})$$
 
@@ -355,8 +357,7 @@ polls_us_election_2016 %>%
 :::
 :::::
 
----
-
+------------------------------------------------------------------------
 
 ## 명령어 연결하기
 
@@ -408,14 +409,12 @@ polls_us_election_2016 %>%
 :::
 :::::
 
--   `%>%` 연산자는 magrittr 패키지에서 제공. 
--   R v4.1.0부터 기본 제공(native) 파이프 연산자인 `|>` 추가
+-   `%>%` 연산자는 magrittr 패키지에서 제공.
+-   R v4.1.0부터 기본 제공(base) 파이프 연산자인 `|>` 추가
 
 ```{r, echo=TRUE}
 polls_us_election_2016$samplesize |> mean(na.rm = TRUE)
 ```
-
-
 
 ------------------------------------------------------------------------
 
@@ -489,7 +488,30 @@ data(polls_us_election_2016)
 3.  다음 조건을 모두 만족하는 여론조사는? (i) Johnson 후보의 여론조사 데이터가 누락되지 않은 경우, (ii) 트럼프와 클린턴의 원본 여론조사 지지율 합이 95%를 초과하는 경우, (iii) 오하이오(OH) 주에서 실시된 경우 **힌트**: 트럼프와 클린턴의 지지율 합계를 계산하는 새로운 변수를 생성한 후 `filter()` 를 적용
 
 4.  표본 크기가 2,000명 이상인 여론조사에서 트럼프의 평균 지지율이 가장 높은 주는? **힌트**: `filter(), group_by(), summarise(), arrange()` 사용. 내림차순 정렬하려면 `arrange()` 함수 사용.
-  
+
+------------------------------------------------------------------------
+
+## 금융 자료 다루기
+
+```{r, echo=T, eval=F}
+if (!require("tidyquant")) install.packages("tidyquant")
+if (!require("DT")) install.packages("DT")
+if (!require("ggthems")) install.packages("ggthemes")
+if (!require("highcharter")) install.packages("highcharter")
+
+library(tidyquant)
+library(DT)
+
+apple_stock <- tq_get("AAPL", from="2010-01-01", to="2024-12-31")
+
+# 일별 수익률 계산
+apple_stock <- apple_stock %>% 
+  arrange(date) %>%
+  mutate(daily_return = adjusted / lag(adjusted) - 1)
+head(apple_stock)
+```
+
+
 
 
 
@@ -568,7 +590,6 @@ ggplot(data)
     -   각 변수는 ***열(column)***을 형성
 
     -   각 관측치는 ***행(row)***을 형성
-
 
 -   시각화를 시작할 때 고려 사항
 
@@ -738,7 +759,6 @@ Geoms
 | 밀도 그래프 |      `geom_density()`      |
 :::
 :::::
-
 
 ------------------------------------------------------------------------
 
@@ -1078,17 +1098,15 @@ Scales
 어떤 매개변수를 조정하고 싶은가? → `<aes>`
 
 그 매개변수의 유형은 무엇인가? → `<type>`
-      
-- 이산형(x축) 조정 <br> `scale_x_discrete()`
-- 연속형 변수에서 포인트 크기 조정 <br>`scale_size_continuous()`
-- y축을 로그 스케일로 변환 <br>`scale_y_log10()`
-- 색상 세팅 변환 <br>`scale_fill_discrete()`<br>`scale_color_manual()`
 
+-   이산형(x축) 조정 <br> `scale_x_discrete()`
+-   연속형 변수에서 포인트 크기 조정 <br>`scale_size_continuous()`
+-   y축을 로그 스케일로 변환 <br>`scale_y_log10()`
+-   색상 세팅 변환 <br>`scale_fill_discrete()`<br>`scale_color_manual()`
 :::
 :::::
 
----
-
+------------------------------------------------------------------------
 
 ## gg = Grammar of Graphics
 
@@ -1180,7 +1198,7 @@ g + scale_x_continuous(breaks = seq(1950, 2020, 10))
 
 -   `ggplot2`는 사용자가 정의할 수 있는 무수한 옵션을 제공.
 
--   [ggplot 웹사이트](https://ggplot2.tidyverse.org)에 있는 치트시트를 참고.
+-   ggplot 웹사이트 에 있는 치트시트를 참고: [링크](https://ggplot2.tidyverse.org)
 
 -   [Garrick Aden-Buie](https://www.garrickadenbuie.com/)의 [Gentle Guide to the Grammar of Graphics with `ggplot2`](https://pkg.garrickadenbuie.com/gentle-ggplot2/#1)
 
@@ -1224,11 +1242,33 @@ knitr::include_graphics("chapter_tidy_files/figure-html/boxplot_explanation.png"
 
 3.  2015년 출산율(Fertility Rate, y축)과 영아 사망률(Infant Mortality, x축) 간의 관계를 나타내는 산점도 (Scatter Plot)를 작성하시오. `geom_*` 옵션: `size` = 3, `alpha` = 0.5, `colour` = "#d90502". `labs()`를 사용하여 레이블을 추가 (x = "영아 사망률", y = "출산율")
 
+## 금융 자료 다루기
 
+```{r, echo=T, eval=F}
+library(ggplot2)
+library(ggthemes)
+
+apple_stock %>% ggplot() + aes(x=date, y=adjusted) +
+  geom_line(color="blue", linewidth=1) +
+  labs(title="Apple Stock Prices", x="Date", y="Adjusted Close") +
+  theme_economist()
+```
+
+```{r, echo=T, eval=F}
+library(highcharter)
+
+highchart(type = "stock") |> 
+  hc_add_series(apple_stock, type = "line", hcaes(x = date, y = adjusted), name = "Apple Price") |> 
+  hc_add_series(apple_stock, type = "column", hcaes(x = date, y = volume), name = "Trading Volume", yAxis = 1) |> 
+  hc_yAxis_multiples(
+    list(title = list(text = "Stock Price")),
+    list(title = list(text = "Trading Volume"), opposite = TRUE)
+  ) |> 
+  hc_title(text = "AAPL Stock Price and Trading Volume") |>
+  hc_add_theme(hc_theme_ft())
+```
 
 # Summarising
-
-
 
 ## Summarising Data
 
@@ -1349,7 +1389,7 @@ table(gapminder_new$fertility_above_2,gapminder_new$continent)
 :::
 :::::
 
-- `prop.table`을 사용하여 비율을 계산 가능:
+-   `prop.table`을 사용하여 비율을 계산 가능:
 
 ```{r, echo=TRUE}
 # proportions by row
@@ -1371,9 +1411,7 @@ gapminder_new %>%
   count(continent, fertility_above_2)
 ```
 
-        
-- `count` 함수는 `NA` 값이 포함된 경우에만 이를 표시.
-
+-   `count` 함수는 `NA` 값이 포함된 경우에만 이를 표시.
 
 ------------------------------------------------------------------------
 
@@ -1430,7 +1468,7 @@ knitr::include_graphics("chapter_tidy_files/figure-html/correlation.svg")
 <!-- * [App](https://gustavek.shinyapps.io/corr_continuous/) -->
 
 ```{r, echo = F}
-knitr::include_url("https://gustavek.shinyapps.io/corr_continuous/")
+knitr::include_url("https://gustavek.shinyapps.io/corr_continuous/", height = "800px")
 ```
 
 ------------------------------------------------------------------------
@@ -1449,9 +1487,6 @@ knitr::include_url("https://gustavek.shinyapps.io/corr_continuous/")
     ```
 
 4.  2015년 출산율(fertility)과 유아 사망률(infant mortality)의 상관관계를 계산하시오. NA 값을 제외하려면 `cor()` 함수의 `use` 인수를 "pairwise.complete.obs"로 설정. 이 상관관계 값이 Task 3에서 생성한 그래프와 일치하는가?
-
-
-
 
 ------------------------------------------------------------------------
 
