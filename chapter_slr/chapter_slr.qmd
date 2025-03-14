@@ -77,7 +77,7 @@ countdown(
 `r countdown(minutes = 7, top = 0)`
 :::
 
-1.  데이터를 [여기](https://github.com/chung-jiwoong/FMB819-Slides/tree/main/chapter_slr/grade5.dta)에서 다운로드해서 `grades`로 저장하시오.\
+1.  데이터를 [여기](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/grade5.dta)에서 다운로드해서 `grades`로 저장하시오.\
     **힌트**: `haven` 라이브러리의 `read_dta` 함수 사용해서 `.dta` 형식의 파일 불러오면 됨. (참고: *.dta*는 [*Stata*](https://www.stata.com/)에서 사용하는 데이터 파일 확장자임.)
 
 2.  데이터셋 설명:
@@ -94,7 +94,7 @@ countdown(
 
 ```{r, echo=FALSE}
 # 데이터 불러오기
-grades = read_dta(file = "https://www.dropbox.com/s/wwp2cs9f0dubmhr/grade5.dta?dl=1")
+grades = read_dta(file = "https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/grade5.dta")
 ```
 
 ------------------------------------------------------------------------
