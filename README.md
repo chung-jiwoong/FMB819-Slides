@@ -13,7 +13,7 @@
 
 주제1: 
   Introduction 
-    [HTML](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_intro/chapter_intro.html)
+    [HTML](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_intro/chapter_intro.html) | 
     [.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_intro/chapter_intro.qmd)
 
   - [과제 제출 양식](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_intro/tasks/intro_tasks.qmd)
@@ -21,16 +21,16 @@
     
 주제2: 
   Tidying, Visualising and Summarising Data 
-    [HTML](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_tidy/chapter_tidy.html)
-    [.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_tidy/chapter_tidy.qmd) 
+    [HTML](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_tidy/chapter_tidy.html) | 
+    [.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_tidy/chapter_tidy.qmd) |  
     [Tasks](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_tidy/tasks/tidy_tasks.qmd)
 
   - 참고자료: "R for Data Science" [영문](https://r4ds.had.co.nz/transform.html) [국문](https://bookdown.org/sulgi/r4ds/) | [dplyr 치트시트](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf)
     
 주제3:
   Simple Linear Regression 
-    [HTML](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/chapter_slr.html)
-    [.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_slr/chapter_slr.qmd)
+    [HTML](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/chapter_slr.html) | 
+    [.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_slr/chapter_slr.qmd) | 
     [Tasks](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/tasks/slr_tasks.qmd)
   
 주제4:
