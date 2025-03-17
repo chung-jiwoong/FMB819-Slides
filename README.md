@@ -26,8 +26,8 @@
 
 **주제3: Simple Linear Regression**
 
-[HTML](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/chapter_slr.html) | 
-[.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_slr/chapter_slr.qmd) | 
+[HTML](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/chapter_slr.html) / 
+[.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_slr/chapter_slr.qmd) / 
 [Tasks](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/tasks/slr_tasks.qmd)
   
 
