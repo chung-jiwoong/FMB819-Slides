@@ -23,7 +23,8 @@ knitr::opts_chunk$set(
   warning = FALSE,
   dev = "svg",
   cache = TRUE,
-  fig.align = "center"
+  fig.align = "center",
+  comment = "##"
   #fig.width = 11,
   #fig.height = 5
 )
@@ -212,8 +213,11 @@ library(gganimate)
 
 ## 웹기반 앱 만들기
 
+<!-- <iframe src="https://9qhvt0-ji0woong-chung.shinyapps.io/buss254-stock-app/" width="100%" height="800px" style="border: none;"></iframe> -->
 
-<iframe src="https://9qhvt0-ji0woong-chung.shinyapps.io/buss254-stock-app/" width="100%" height="800px" style="border: none;"></iframe>
+```{r, echo = F, out.extra = 'style="border: none;"'}
+knitr::include_url("https://9qhvt0-ji0woong-chung.shinyapps.io/buss254-stock-app/", height = "800px")
+```
 
 
 ------------------------------------------------------------------------

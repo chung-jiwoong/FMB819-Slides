@@ -1,26 +1,17 @@
 ---
-title: "FMB819: R을 이용한 데이터분석"
-subtitle: "<span style='font-size:1.5em; color:#a01616;'>Introduction to Causality</span>"
-# date: "`r Sys.Date()`"
-format:
+title: "Introduction to Causality"
+subtitle: "FMB819: R을 이용한 데이터분석"
+author: "고려대학교 경영대학 정지웅"
+format: 
   revealjs:
-    slide-number: true
-    # smaller: true
-    scrollable: true
-    chalkboard: true
+    theme: simple
     transition: fade
     transition-speed: fast
-    #incremental: true
-    #lib_dir: libs
-    css: [default, "../css/kubs.css", "../css/kubs-fonts.css"]
-    #nature:
-      # beforeInit: ["../js/ru_xaringan.js"]
-      #highlightStyle: github
-      #highlightLines: true
-      #countIncrementalSlides: false
-    #  ratio: "16:9"
-    # includes:
-    #   in_header: "../libs/partials/header.html"
+    scrollable: true
+    chalkboard: true
+    slide-number: true
+revealjs-plugins:
+  - revealjs-text-resizer # Thanks to https://github.com/gadenbuie/revealjs-text-resizer#readme
 ---
 
 ```{r setup, include=FALSE,warning=FALSE,message=FALSE}
@@ -30,7 +21,8 @@ knitr::opts_chunk$set(
   warning = FALSE,
   dev = "svg",
   cache = TRUE,
-  fig.align = "center"
+  fig.align = "center",
+  comment = "##"
   #fig.width = 11,
   #fig.height = 5
 )
@@ -79,16 +71,16 @@ countdown(
 
 ***인과관계(Causality)***란 무엇을 의미하는가?
 
--   `X`가 `Y`를 *유발한다(causes)*.. 의미?
+-   `X`가 `Y`를 *유발한다(causes)*... 의미?
 
--   만약 ***다른 모든 것은 그대로 둔 채(unchanged)*** 우리가 `X`의 값을 **변경(intervene and change)**한다면,
+-   만약 ***다른 모든 것은 그대로 둔 채*** 우리가 `X`의 값을 **변경(intervene and change)**한다면,
 
 -   그 결과로 `Y`도 ***변화***하게 된다는 의미.
 
--   여기서 핵심은 **"다른 모든 것은 변하지 않는다"**는 가정임.\
+-   여기서 핵심은 **"다른 모든 것은 그대로 둔다"**는 가정임.\
     이는 흔히 **"세테리스 파리부스(ceteris paribus, all else equal)"** 가정이라고 불림.
 
--   **주의할 점:** 이것은 `X`가 `Y`를 유발하는 **유일한 요인**이라는 뜻이 아님!
+-   **하지만,** 이것은 `X`가 `Y`를 유발하는 **유일한 요인**이라는 뜻이 아님!
 
 ------------------------------------------------------------------------
 
@@ -98,17 +90,18 @@ countdown(
     그런데 왜 이것이 사실인지 설명할 수 있는가?
 
 -   **일부 상관관계는 명백히 인과관계를 의미하지 않음.**\
-    ([예: 가짜 상관관계 모음](https://www.tylervigen.com/spurious-correlations))
+    (예: 가짜 상관관계 모음 [링크](https://www.tylervigen.com/spurious-correlations))
 
-```{r, echo = FALSE, out.width = "800px"}
-knitr::include_graphics("../img/photos/spurious.png")
-```
+::: {style="text-align: center;"}
+![](img/spurious.png){width=80%}
+:::
+
 
 ------------------------------------------------------------------------
 
 ## 상관관계 vs. 인과관계: 흡연과 폐암
 
--   그러나 모든 상관관계가 쉽게 기각될 수 있는 것은 아님.
+-   상관관계와 인과관계를 구분하기 어려운 경우가 잦음.
 
 -   **흡연이 폐암을 유발하는가?**
 
@@ -116,16 +109,18 @@ knitr::include_graphics("../img/photos/spurious.png")
 ::: {.column width="50%"}
 -   오늘날 우리는 답이 *"예(YES)"*라는 것을 알고 있음!
 
--   하지만 **1950년대**로 돌아가 보자.
+-   하지만 **1950년대**에는...
 
     -   당시 폐암 사망률이 급격히 증가하기 시작함...\
     -   … 그리고 그 이전에 **담배 소비가 빠르게 증가**했음.
 :::
 
 ::: {.column width="50%"}
-```{r, echo = FALSE, eval=TRUE, out.width = "400px"}
-knitr::include_graphics("../img/photos/Smoking_lung_cancer.png")
-```
+
+::: {style="text-align: center;"}
+![](img/Smoking_lung_cancer.png)
+:::
+
 :::
 :::::
 
@@ -135,7 +130,7 @@ knitr::include_graphics("../img/photos/Smoking_lung_cancer.png")
 
 ## 상관관계 vs. 인과관계: 흡연과 폐암
 
--   당시에는 여전히 회의적인 사람들이 많았으며, 유명한 통계학자들조차도 이를 의심했음.
+-   하지만 당시 회의적인 사람들이 많았으며, 유명한 통계학자들조차도 이 관계를 의심했음.
 
 ::::: columns
 ::: {.column width="50%"}
@@ -155,7 +150,7 @@ knitr::include_graphics("../img/photos/Smoking_lung_cancer.png")
 
     -   **관측 가능한 특징에 따른 선택(selection on observables):** 연령, 교육 수준, 소득 등.
 
-    -   **관측 불가능한 특징에 따른 선택(selection on unobservables):** 유전자 (Fisher가 제안한 [가설적 유전자 교란 이론](https://en.wikipedia.org/wiki/Ronald_Aylmer_Fisher)).\
+    -   **관측 불가능한 특징에 따른 선택(selection on unobservables):** 유전자? 
 :::
 :::::
 
@@ -164,16 +159,13 @@ knitr::include_graphics("../img/photos/Smoking_lung_cancer.png")
 ## 상관관계 vs. 인과관계: 다른 예시들
 
 ::: incremental
--   ***교육 연수(years of education)***와 ***소득(income)*** 간의 관측된 상관관계가 실제로 교육의 인과적 효과를 반영하지 않을 수도 있는 이유는?
-
+-   ***교육 연수(years of education)*** $\rightarrow$ ***소득***?
     -   개인이 교육 수준을 선택하는 방식이 다를 수 있음. 고등 교육을 받는 사람들은 원래부터 높은 선천적 능력을 가졌거나, 학교 생활을 즐기며 학업에 강한 성향을 가질 가능성이 높음. $\rightarrow$ ***자기 선택 편향(Self-selection)***
 
--   ***고용률(employment rate)***과 ***최저임금(minimum wage)*** 간의 관측된 상관관계가 실제로 최저임금의 인과적 효과를 반영하지 않을 수도 있는 이유는?
+-    ***최저임금*** $\rightarrow$ ***고용률(employment rate)***?
+    -   정책 결정자들은 고용률이 높은 시기에 최저임금을 인상할 가능성이 있음. $\rightarrow$ ***역인과관계(reverse causality) / 동시성(simultaneity)***
 
-    -   정책 결정자들은 고용률이 높은 시기에 최저임금을 인상할 가능성이 있음 $\rightarrow$ ***역인과관계(reverse causality) / 동시성(simultaneity)***
-
--   ***경제 성장(economic growth)***과 ***금융 발전(financial development)*** 간의 관측된 상관관계가 실제로 금융 부문의 인과적 효과를 반영하지 않을 수도 있는 이유는?
-
+-   ***금융 발전***  $\rightarrow$ ***경제 성장***?
     -   **경제 성장이 금융 발전을 촉진하는 것일 수도 있음** (반대로 금융 발전이 경제 성장을 유발하는 것이 아닐 가능성) $\rightarrow$ ***역인과관계(reverse causality) / 동시성(simultaneity)***
 :::
 
@@ -186,24 +178,24 @@ knitr::include_graphics("../img/photos/Smoking_lung_cancer.png")
 
 -   따라서 개인들은 **무작위(random ways)**로 행동하지 않음. $\rightarrow$ 즉, 개인의 행동은 **내생적(endogenous)**이라고 볼 수 있음.
 
--   **데이터에서 발견된 상관관계를 무조건 믿어서는 안 됨.** 언제나 *의심하는 태도(suspicious)*가 필요함.
+-   **데이터에서 발견된 상관관계를 무조건 믿어서는 안 됨.** 언제나 *의심하는 태도*가 필요함.
 
 -   📌 그렇다면, 어떻게 **인과적 주장(causal claims)**을 할 수 있을까?
 
--   **잠재 결과 프레임워크(Potential Outcomes Framework)**가 유용한 길잡이
+-   **잠재 결과 프레임워크(Potential Outcomes Framework)**가 유용한 길잡이.
 :::
 
 # Causal Inference
 
 ------------------------------------------------------------------------
 
-## 잠재 결과 프레임워크 (The Potential Outcomes Framework)
+## The Potential Outcomes Framework
 
 이 모델은 **Rubin의 인과 모델(Rubin Causal Model)**이라고도 불리며, 통계학자 **Donald Rubin**이 1970년대에 이를 일반화하고 체계화함.
 
 -   핵심 아이디어 (Key Idea)
 
-    -   각 개인은 **여러 개의 대체적 처치 상태(alternative treatment states)**에 노출될 수 있음.
+    -   각 개인은 **여러 개의 대체적 처리 상태(alternative treatment states)**에 노출될 수 있음.
 
         -   담배를 피우거나, 시가를 피우거나, 아예 피우지 않거나.
         -   가난한 지역, 중산층 지역, 부유한 지역에서 성장하는 것.
@@ -211,8 +203,7 @@ knitr::include_graphics("../img/photos/Smoking_lung_cancer.png")
 
 ::::: columns
 ::: {.column width="50%"}
-**실용적인 정의**\
-처치 변수 $D_i$를 **이진 변수(binary variable)**로 정의 $$
+처리 변수 $D_i$를 **이진 변수(binary variable)**로 정의 $$
 D_i = \begin{cases} 
                     1 \textrm{ if individual $i$ is treated} \\\\ 
                     0 \textrm{ if individual $i$ is not treated} 
@@ -231,7 +222,7 @@ all the individuals such that $D_i = 0$.
 
 ------------------------------------------------------------------------
 
-## 잠재 결과 프레임워크 (The Potential Outcomes Framework)
+## The Potential Outcomes Framework
 
 -   이 프레임워크에서는 각 개인이 두 개의 **잠재적 결과(potential outcomes)**를 가짐. 하지만 실제로는 **하나의 관측된 결과(observed outcome)** $Y_i$만 확인 가능함.
 
@@ -239,19 +230,18 @@ all the individuals such that $D_i = 0$.
     -   $Y_i^0$: *개인* $i$가 처치를 받지 않았을 경우의 잠재적 결과 $(D_i = 0)$
 
 -   현실에서는 단 하나의 결과 $Y_i$만을 관측할 수 있으며, 이는 다음과 같이 표현됨:
-
 $$
 Y_i = D_i \times Y_i^1 + (1- D_i) \times Y_i^0
 $$
 
--   🔥 **인과 추론의 근본적인 문제 (Fundamental Problem of Causal Inference)** 어떤 개인 $i$에 대해, **두 개의 잠재적 결과 중 오직 하나만 관측할 수 있음.**\
-    [(Holland, 1986)](http://people.umass.edu/~stanek/pdffiles/causal-holland.pdf)
+-   🔥 **인과 추론의 근본적인 문제 (Fundamental Problem of Causal Inference)** 어떤 개인 $i$에 대해, **두 개의 잠재적 결과 중 오직 하나만 관측할 수 있음**\
+    [(Holland, 1986)](http://people.umass.edu/~stanek/pdffiles/causal-holland.pdf).
 
 ------------------------------------------------------------------------
 
-## 잠재 결과 프레임워크 (The Potential Outcomes Framework)
+## The Potential Outcomes Framework
 
--   관측되지 않은 잠재적 결과도 이론적으로 존재하며, 이를 **반사실적 결과(counterfactual outcome)**라고 함.
+-   관측되지 않은 잠재적 결과도 이론적으로 존재한다고 보며, 이를 **반사실적 결과(counterfactual outcome)**라고 함.
 
 | Group | $Y_i^1$ | $Y_i^0$ |
 |--------------------|:------------------------:|:------------------------:|
@@ -292,7 +282,7 @@ $$ - 여기서 $X$와 $Y$는 두 개의 확률 변수임.
 
 ## 보충 설명: 조건부 기대값
 
--   🎲 두 개의 주사위를 던질 때, 한 주사위가 항상 5일 경우 합의 평균은?
+-   🎲 두 개의 주사위를 던질 때, 한 주사위가 항상 5일 경우, 합의 평균은?
 
 -   $X$가 첫 번째 주사위의 숫자를 나타내는 확률 변수, $Y$가 두 번째 주사위의 숫자를 나타내는 확률 변수라 하면:
 
@@ -440,11 +430,11 @@ SDO &= \frac{5+6+5+10+5+6+8}{7} - \frac{6+4+9}{3} \\
 \end{align}
 $$
 
-📌 SDO 값이 ATE(0.7)보다 훨씬 작음!
+📌 SDO 값이 ATE(0.7)보다 작음!
 
-📌 이러한 차이는 처치 효과(causal treatment effect)를 제대로 반영하지 못할 가능성이 높음.
+📌 이러한 차이는 인과관계를 제대로 반영하지 못할 가능성이 높음.
 
-📌 이런 "단순 비교" 방식은 종종 기자, 정치인, 그리고 훈련이 부족한 연구자들에 의해 사용됨. (But not you now! 😉)
+📌 이런 "단순 비교" 방식은 종종 기자, 정치인, 그리고 훈련이 부족한 연구자들에 의해 사용됨. 
 :::
 :::::
 
@@ -522,7 +512,7 @@ toy_data_random <- toy_data_random %>%
 
 📂 **1. 데이터 불러오기 및 변수 생성**
 
--   [**데이터 다운로드**](https://www.dropbox.com/s/oqc3vq1m9eyp1d6/toy_data_2.csv?dl=1)\
+-   데이터 다운로드 [링크](https://www.dropbox.com/s/oqc3vq1m9eyp1d6/toy_data_2.csv?dl=1)\
     `read.csv()`를 사용하여 데이터를 불러오기.
 
 -   **변수 설명**

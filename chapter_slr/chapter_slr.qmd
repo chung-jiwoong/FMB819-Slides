@@ -468,6 +468,7 @@ g_math_cs +
 knitr::include_url("https://gustavek.shinyapps.io/reg_simple/", height = "800px")
 ```
 
+
 ------------------------------------------------------------------------
 
 ## Ordinary Least Squares (OLS) 추정
@@ -767,7 +768,7 @@ $$
 
 ✅ ***데이터를 어떻게 다룰까?*** :  읽기(Read), 정리(Tidy), 시각화(Visualize)...
 
-✅ ***변수간 관계를 어떻게 요약할까? *** 단순 선형 회귀(Simple Linear Regression)
+🚧 ***변수간 관계를 어떻게 요약할까? *** 단순 선형 회귀(Simple Linear Regression)
 
 ❌ 인과 관계(Causality)란 무엇인가?
 

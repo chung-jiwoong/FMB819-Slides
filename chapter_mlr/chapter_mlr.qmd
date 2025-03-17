@@ -1,28 +1,17 @@
 ---
-title: "FMB819: R을 이용한 데이터분석"
-subtitle: "<span style='font-size:1.5em; color:#a01616;'>Multiple Regression Model</span>"
-# date: "`r Sys.Date()`"
-format:
+title: "Multiple Regression"
+subtitle: "FMB819: R을 이용한 데이터분석"
+author: "고려대학교 경영대학 정지웅"
+format: 
   revealjs:
-    slide-number: true
-    # smaller: true
-    scrollable: true
-    chalkboard: true
+    theme: simple
     transition: fade
     transition-speed: fast
-    #incremental: true
-    #lib_dir: libs
-    css: [default, "../css/kubs.css", "../css/kubs-fonts.css"]
-    #nature:
-      # beforeInit: ["../js/ru_xaringan.js"]
-      #highlightStyle: github
-      #highlightLines: true
-      #countIncrementalSlides: false
-    #  ratio: "16:9"
-    # includes:
-    #   in_header: "../libs/partials/header.html"
+    scrollable: true
+    chalkboard: true
+    slide-number: true
 revealjs-plugins:
-  - revealjs-text-resizer    
+  - revealjs-text-resizer # Thanks to https://github.com/gadenbuie/revealjs-text-resizer#readme
 ---
 
 ```{r setup, include=FALSE,warning=FALSE,message=FALSE}
@@ -32,7 +21,8 @@ knitr::opts_chunk$set(
   warning = FALSE,
   dev = "svg",
   cache = TRUE,
-  fig.align = "center"
+  fig.align = "center",
+  comment = "##"
   #fig.width = 11,
   #fig.height = 5
 )
@@ -65,11 +55,11 @@ countdown(
 
 ## Today's Agenda
 
--   **다중 독립 변수** (Multiple independent variables)\
--   **연속 변수와 더미 변수 해석** (Interpretation for continuous and dummy regressors)\
--   **더미 변수 함정** (Dummy Variable Trap)\
--   **누락 변수 편향** (Omitted Variable Bias)\
--   **조정된** $R^2$ (Adjusted $R^2$)\
+-   **다중 독립 변수** 
+-   **연속 변수와 더미 변수 해석** 
+-   **더미 변수 함정** (Dummy Variable Trap)
+-   **누락 변수 편향** (Omitted Variable Bias)
+-   **조정된** $R^2$ (Adjusted $R^2$)
 -   **실증 분석:**
     -   *학급 규모* (Class Size)와 *학생 성취* (Student Performance)
 
@@ -79,8 +69,8 @@ countdown(
 
 **Angrist & Lavy (1999)의 연구 분석**
 
--   이스라엘 학생들의 성취도에 대한 *학급 규모*의 영향을 분석\
--   **단순 선형 회귀**를 사용한 경우,\
+-   이스라엘 학생들의 성취도에 대한 *학급 규모*의 영향을 분석
+-   **단순 선형 회귀**를 사용한 경우,
     → 학급 규모가 커질수록 수학 및 읽기 점수가 증가하는 ***연관성***이 발견됨
 
 ------------------------------------------------------------------------
@@ -89,7 +79,7 @@ countdown(
 
 ```{r, echo = FALSE, fig.height=4.75, fig.width = 8}
 # 데이터 불러오기
-grades = read_dta(file = "https://www.dropbox.com/s/wwp2cs9f0dubmhr/grade5.dta?dl=1")
+grades = read_dta(file = "https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/grade5.dta")
 
 set.seed(123)
 
@@ -158,8 +148,6 @@ lm(avgmath ~ classize, grades)
 ------------------------------------------------------------------------
 
 ## 학급 규모와 학생 성취
-
--   **Angrist & Lavy (1999)**의 연구로 돌아가서, *이스라엘에서의 학급 규모가 학생 성취에 미치는 영향*을 분석해보자.
 
 -   **단순 선형 회귀** (Simple Linear Regression) 결과에 따르면, *학급 규모가 학생들의 수학 및 읽기 점수와 양의 상관관계를 가짐* (**positively associated**).
 

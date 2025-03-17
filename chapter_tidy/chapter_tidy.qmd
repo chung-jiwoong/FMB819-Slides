@@ -1202,27 +1202,6 @@ g + scale_x_continuous(breaks = seq(1950, 2020, 10))
 
 -   [Garrick Aden-Buie](https://www.garrickadenbuie.com/)의 [Gentle Guide to the Grammar of Graphics with `ggplot2`](https://pkg.garrickadenbuie.com/gentle-ggplot2/#1)
 
-------------------------------------------------------------------------
-
-## Plot의 종류
-
-***Histograms:*** 특정 구간(bin) 내의 관측값 개수를 나타냄
-
-***Boxplots:*** 변수의 분포를 나타냄
-
-```{r, echo = F, out.width = "850px"}
-knitr::include_graphics("chapter_tidy_files/figure-html/boxplot_explanation.png")
-```
-
-------------------------------------------------------------------------
-
-## Plot의 종류
-
-***Histograms:*** 특정 구간(bin) 내의 관측값 개수를 나타냄
-
-***Boxplots:*** 변수의 분포를 나타냄
-
-***Scatter plots:*** 두 변수 간의 관계를 보여줌
 
 ------------------------------------------------------------------------
 

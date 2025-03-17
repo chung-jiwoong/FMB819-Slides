@@ -291,13 +291,13 @@
 </div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4 × 6
-  country     continent  year lifeExp      pop gdpPercap
-  &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
-1 Afghanistan Asia       1952    28.8  8425333      779.
-2 Afghanistan Asia       1957    30.3  9240934      821.
-3 Afghanistan Asia       1962    32.0 10267083      853.
-4 Afghanistan Asia       1967    34.0 11537966      836.</code></pre>
+<pre><code>## # A tibble: 4 × 6
+##   country     continent  year lifeExp      pop gdpPercap
+##   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+## 1 Afghanistan Asia       1952    28.8  8425333      779.
+## 2 Afghanistan Asia       1957    30.3  9240934      821.
+## 3 Afghanistan Asia       1962    32.0 10267083      853.
+## 4 Afghanistan Asia       1967    34.0 11537966      836.</code></pre>
 </div>
 </div>
 </div></div>
@@ -319,15 +319,15 @@
 <span id="cb3-8"><a href=""></a><span class="co"># show first 5 lines of the new data</span></span>
 <span id="cb3-9"><a href=""></a><span class="fu">head</span>(gapminder_dplyr, <span class="at">n =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 5
-# Groups:   continent [1]
-  continent  year count mean_lifeexp mean_gdppercap
-  &lt;fct&gt;     &lt;int&gt; &lt;int&gt;        &lt;dbl&gt;          &lt;dbl&gt;
-1 Africa     1952    52         39.1          1253.
-2 Africa     1957    52         41.3          1385.
-3 Africa     1962    52         43.3          1598.
-4 Africa     1967    52         45.3          2050.
-5 Africa     1972    52         47.5          2340.</code></pre>
+<pre><code>## # A tibble: 5 × 5
+## # Groups:   continent [1]
+##   continent  year count mean_lifeexp mean_gdppercap
+##   &lt;fct&gt;     &lt;int&gt; &lt;int&gt;        &lt;dbl&gt;          &lt;dbl&gt;
+## 1 Africa     1952    52         39.1          1253.
+## 2 Africa     1957    52         41.3          1385.
+## 3 Africa     1962    52         43.3          1598.
+## 4 Africa     1967    52         45.3          2050.
+## 5 Africa     1972    52         47.5          2340.</code></pre>
 </div>
 </div>
 </section>
@@ -359,8 +359,11 @@
 </section>
 <section id="웹기반-앱-만들기" class="slide level2">
 <h2>웹기반 앱 만들기</h2>
-<iframe src="https://9qhvt0-ji0woong-chung.shinyapps.io/buss254-stock-app/" width="100%" height="800px" style="border: none;">
+<!-- <iframe src="https://9qhvt0-ji0woong-chung.shinyapps.io/buss254-stock-app/" width="100%" height="800px" style="border: none;"></iframe> -->
+<div class="cell" data-layout-align="center">
+<iframe src="https://9qhvt0-ji0woong-chung.shinyapps.io/buss254-stock-app/" width="960" height="800px" data-external="1" style="border: none;">
 </iframe>
+</div>
 </section>
 <section id="r-설치-방법-windows-환경-기준" class="slide level2 scrollable">
 <h2><code>R</code> 설치 방법: Windows 환경 기준</h2>
@@ -448,7 +451,7 @@
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 4</code></pre>
+<pre><code>## [1] 4</code></pre>
 </div>
 </div></li>
 <li><p>R 콘솔 사용 팁</p>
@@ -466,7 +469,7 @@
 <span id="cb13-3"><a href=""></a>       <span class="dv">30</span>       <span class="co"># Shift + Enter</span></span>
 <span id="cb13-4"><a href=""></a><span class="fu">print</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 60</code></pre>
+<pre><code>## [1] 60</code></pre>
 </div>
 </div></li>
 </ul></li>
@@ -492,7 +495,7 @@
 <span id="cb15-6"><a href=""></a>c <span class="ot">&lt;-</span> a <span class="sc">+</span> b</span>
 <span id="cb15-7"><a href=""></a><span class="fu">print</span>(c)  <span class="co"># 결과: 15</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 15</code></pre>
+<pre><code>## [1] 15</code></pre>
 </div>
 </div>
 </section>
@@ -543,7 +546,7 @@
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1 3 5 7 8 9</code></pre>
+<pre><code>## [1] 1 3 5 7 8 9</code></pre>
 </div>
 </div>
 <ul>
@@ -552,7 +555,7 @@
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>(v <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">42</span>, <span class="st">"Statistics"</span>, <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "42"         "Statistics" "TRUE"      </code></pre>
+<pre><code>## [1] "42"         "Statistics" "TRUE"</code></pre>
 </div>
 </div>
 <pre><code>* 소괄호: 객체 값을 바로 출력    </code></pre>
@@ -562,9 +565,9 @@
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a><span class="fu">ls</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "a"               "b"               "c"               "gapminder"      
-[5] "gapminder_dplyr" "pandoc_dir"      "quarto_bin_path" "v"              
-[9] "x"              </code></pre>
+<pre><code>## [1] "a"               "b"               "c"               "gapminder"      
+## [5] "gapminder_dplyr" "pandoc_dir"      "quarto_bin_path" "v"              
+## [9] "x"</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a><span class="fu">rm</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -576,7 +579,7 @@
 <span id="cb31-2"><a href=""></a>v2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>)</span>
 <span id="cb31-3"><a href=""></a><span class="fu">c</span>(v1, v2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1 2 3 4 5 6</code></pre>
+<pre><code>## [1] 1 2 3 4 5 6</code></pre>
 </div>
 </div>
 <ul>
@@ -585,27 +588,27 @@
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a><span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
+<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a><span class="dv">10</span><span class="sc">:</span><span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] 10  9  8  7  6  5  4  3  2  1</code></pre>
+<pre><code>##  [1] 10  9  8  7  6  5  4  3  2  1</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a><span class="fu">seq</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1]  1  2  3  4  5  6  7  8  9 10 11</code></pre>
+<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10 11</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href=""></a><span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="at">by=</span><span class="fl">2.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1]  0.0  2.5  5.0  7.5 10.0</code></pre>
+<pre><code>## [1]  0.0  2.5  5.0  7.5 10.0</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href=""></a><span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="at">length=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1]  0.0  2.5  5.0  7.5 10.0</code></pre>
+<pre><code>## [1]  0.0  2.5  5.0  7.5 10.0</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href=""></a><span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1 1 1 1 1</code></pre>
+<pre><code>## [1] 1 1 1 1 1</code></pre>
 </div>
 </div>
 </section>
@@ -615,19 +618,19 @@
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href=""></a>x <span class="ot">&lt;-</span> <span class="dv">1</span></span>
 <span id="cb45-2"><a href=""></a>x <span class="sc">&lt;</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] TRUE</code></pre>
+<pre><code>## [1] TRUE</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href=""></a>x<span class="sc">/</span><span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] Inf</code></pre>
+<pre><code>## [1] Inf</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href=""></a><span class="sc">-</span>x<span class="sc">/</span><span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] -Inf</code></pre>
+<pre><code>## [1] -Inf</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href=""></a><span class="dv">0</span><span class="sc">/</span><span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] NaN</code></pre>
+<pre><code>## [1] NaN</code></pre>
 </div>
 </div>
 <p><strong>Scalar vs.&nbsp;Scalar 비교</strong></p>
@@ -635,19 +638,19 @@
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href=""></a>a <span class="ot">&lt;-</span> <span class="dv">3</span></span>
 <span id="cb53-2"><a href=""></a>a <span class="sc">==</span> pi</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] FALSE</code></pre>
+<pre><code>## [1] FALSE</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href=""></a>a <span class="sc">!=</span> pi</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] TRUE</code></pre>
+<pre><code>## [1] TRUE</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href=""></a>a <span class="sc">&gt;</span> pi</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] FALSE</code></pre>
+<pre><code>## [1] FALSE</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href=""></a>a <span class="sc">&lt;=</span> pi</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] TRUE</code></pre>
+<pre><code>## [1] TRUE</code></pre>
 </div>
 </div>
 <p><strong>Vector vs.&nbsp;Vector 비교</strong></p>
@@ -656,38 +659,38 @@
 <span id="cb61-2"><a href=""></a>w <span class="ot">&lt;-</span> <span class="fu">rep</span>(pi, <span class="dv">3</span>)</span>
 <span id="cb61-3"><a href=""></a>v <span class="sc">==</span> w</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] FALSE  TRUE FALSE</code></pre>
+<pre><code>## [1] FALSE  TRUE FALSE</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href=""></a>v <span class="sc">!=</span> w</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1]  TRUE FALSE  TRUE</code></pre>
+<pre><code>## [1]  TRUE FALSE  TRUE</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href=""></a>v <span class="sc">&lt;</span> w</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1]  TRUE FALSE FALSE</code></pre>
+<pre><code>## [1]  TRUE FALSE FALSE</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href=""></a>v <span class="sc">&gt;=</span> w</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] FALSE  TRUE  TRUE</code></pre>
+<pre><code>## [1] FALSE  TRUE  TRUE</code></pre>
 </div>
 </div>
 <p><strong>Scalar vs.&nbsp;Vector 비교</strong></p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href=""></a>v <span class="sc">==</span> pi</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] FALSE  TRUE FALSE</code></pre>
+<pre><code>## [1] FALSE  TRUE FALSE</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href=""></a>v <span class="sc">&gt;</span> pi</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] FALSE FALSE  TRUE</code></pre>
+<pre><code>## [1] FALSE FALSE  TRUE</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href=""></a><span class="fu">any</span>(v <span class="sc">==</span> pi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] TRUE</code></pre>
+<pre><code>## [1] TRUE</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb75"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href=""></a><span class="fu">all</span>(v <span class="sc">==</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] FALSE</code></pre>
+<pre><code>## [1] FALSE</code></pre>
 </div>
 </div>
 </section>
@@ -699,23 +702,23 @@
 <span id="cb77-2"><a href=""></a></span>
 <span id="cb77-3"><a href=""></a><span class="fu">is.finite</span>(u)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1]  TRUE  TRUE FALSE FALSE FALSE</code></pre>
+<pre><code>## [1]  TRUE  TRUE FALSE FALSE FALSE</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href=""></a><span class="fu">is.infinite</span>(u)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] FALSE FALSE  TRUE FALSE FALSE</code></pre>
+<pre><code>## [1] FALSE FALSE  TRUE FALSE FALSE</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb81"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href=""></a><span class="fu">is.na</span>(u)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] FALSE FALSE FALSE  TRUE  TRUE</code></pre>
+<pre><code>## [1] FALSE FALSE FALSE  TRUE  TRUE</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb83"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href=""></a><span class="fu">is.nan</span>(u)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] FALSE FALSE FALSE  TRUE FALSE</code></pre>
+<pre><code>## [1] FALSE FALSE FALSE  TRUE FALSE</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href=""></a><span class="fu">is.null</span>(u)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] FALSE</code></pre>
+<pre><code>## [1] FALSE</code></pre>
 </div>
 </div>
 <ul>
@@ -734,31 +737,31 @@
 <span id="cb87-2"><a href=""></a></span>
 <span id="cb87-3"><a href=""></a>fib[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0</code></pre>
+<pre><code>## [1] 0</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb89"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href=""></a>fib[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0 1 1</code></pre>
+<pre><code>## [1] 0 1 1</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb91"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href=""></a>fib[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0 1 2</code></pre>
+<pre><code>## [1] 0 1 2</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb93"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href=""></a>fib[<span class="sc">-</span><span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1 1 2 3 5 8</code></pre>
+<pre><code>## [1] 1 1 2 3 5 8</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb95"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href=""></a>fib[<span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="sc">-</span><span class="dv">2</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1 2 3 5 8</code></pre>
+<pre><code>## [1] 1 2 3 5 8</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb97"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href=""></a>fib <span class="sc">&lt;</span> <span class="dv">5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1]  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE</code></pre>
+<pre><code>## [1]  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb99"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href=""></a>fib[fib <span class="sc">&lt;</span> <span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0 1 1 2 3</code></pre>
+<pre><code>## [1] 0 1 1 2 3</code></pre>
 </div>
 </div>
 <ul>
@@ -767,19 +770,19 @@
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb101"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href=""></a><span class="fu">which</span>(fib <span class="sc">==</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1</code></pre>
+<pre><code>## [1] 1</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb103"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href=""></a><span class="fu">which</span>(fib <span class="sc">&gt;</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 5 6 7</code></pre>
+<pre><code>## [1] 5 6 7</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb105"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href=""></a><span class="fu">which.max</span>(fib)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 7</code></pre>
+<pre><code>## [1] 7</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb107"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href=""></a><span class="fu">which.min</span>(fib)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1</code></pre>
+<pre><code>## [1] 1</code></pre>
 </div>
 </div>
 </section>
@@ -952,11 +955,11 @@
 <span id="cb109-3"><a href=""></a>                          <span class="at">z =</span> <span class="fu">c</span>(<span class="st">"one"</span>, <span class="dv">2</span>, <span class="st">"three"</span>, <span class="dv">4</span>))</span>
 <span id="cb109-4"><a href=""></a>example_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  x       y     z
-1 1   Hello   one
-2 3   Hello     2
-3 5   Hello three
-4 7 Goodbye     4</code></pre>
+<pre><code>##   x       y     z
+## 1 1   Hello   one
+## 2 3   Hello     2
+## 3 5   Hello three
+## 4 7 Goodbye     4</code></pre>
 </div>
 </div>
 <ul>
@@ -965,7 +968,7 @@
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb111"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href=""></a>example_data[<span class="dv">2</span>,<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "Hello"</code></pre>
+<pre><code>## [1] "Hello"</code></pre>
 </div>
 </div>
 <ul>
@@ -978,28 +981,28 @@
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb113"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href=""></a><span class="fu">str</span>(example_data) <span class="co"># `str` 함수는 R 객체의 구조를 설명</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>'data.frame':   4 obs. of  3 variables:
- $ x: num  1 3 5 7
- $ y: chr  "Hello" "Hello" "Hello" "Goodbye"
- $ z: chr  "one" "2" "three" "4"</code></pre>
+<pre><code>## 'data.frame':    4 obs. of  3 variables:
+##  $ x: num  1 3 5 7
+##  $ y: chr  "Hello" "Hello" "Hello" "Goodbye"
+##  $ z: chr  "one" "2" "three" "4"</code></pre>
 </div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb115"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href=""></a><span class="fu">names</span>(example_data) <span class="co"># column names</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "x" "y" "z"</code></pre>
+<pre><code>## [1] "x" "y" "z"</code></pre>
 </div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb117"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href=""></a><span class="fu">nrow</span>(example_data) <span class="co"># number of rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 4</code></pre>
+<pre><code>## [1] 4</code></pre>
 </div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb119"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href=""></a><span class="fu">ncol</span>(example_data) <span class="co"># number of columns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 3</code></pre>
+<pre><code>## [1] 3</code></pre>
 </div>
 </div>
 </section>
@@ -1022,15 +1025,15 @@
 <div class="sourceCode cell-code" id="cb121"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a href=""></a>first5 <span class="ot">&lt;-</span> murders[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ]  <span class="co"># 처음 5개 주만 선택</span></span>
 <span id="cb121-2"><a href=""></a>first5<span class="sc">$</span>state  <span class="co"># $ 연산자로 추출</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "Alabama"    "Alaska"     "Arizona"    "Arkansas"   "California"</code></pre>
+<pre><code>## [1] "Alabama"    "Alaska"     "Arizona"    "Arkansas"   "California"</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb123"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb123-1"><a href=""></a>first5[ ,<span class="st">"state"</span>]  <span class="co"># 열 이름으로 추출</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "Alabama"    "Alaska"     "Arizona"    "Arkansas"   "California"</code></pre>
+<pre><code>## [1] "Alabama"    "Alaska"     "Arizona"    "Arkansas"   "California"</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb125"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb125-1"><a href=""></a>first5[ ,<span class="dv">1</span>] <span class="co"># 첫 번째 열 가져오기</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "Alabama"    "Alaska"     "Arizona"    "Arkansas"   "California"</code></pre>
+<pre><code>## [1] "Alabama"    "Alaska"     "Arizona"    "Arkansas"   "California"</code></pre>
 </div>
 </div>
 <ul>
@@ -1039,7 +1042,7 @@
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb127"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb127-1"><a href=""></a><span class="fu">class</span>(murders)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "data.frame"</code></pre>
+<pre><code>## [1] "data.frame"</code></pre>
 </div>
 </div>
 <ul>
@@ -1048,7 +1051,7 @@
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb129"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb129-1"><a href=""></a><span class="fu">typeof</span>(murders)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "list"</code></pre>
+<pre><code>## [1] "list"</code></pre>
 </div>
 </div>
 <!-- .footnote[ -->
@@ -1068,18 +1071,18 @@
 <div class="sourceCode cell-code" id="cb131"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb131-1"><a href=""></a><span class="co"># 총기 살인 사건이 500건 이상인 주만 선택하고 "state"와 "total" 변수만 유지</span></span>
 <span id="cb131-2"><a href=""></a>murders[murders<span class="sc">$</span>total <span class="sc">&gt;</span> <span class="dv">500</span>, <span class="fu">c</span>(<span class="st">"state"</span>, <span class="st">"total"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>        state total
-5  California  1257
-10    Florida   669
-33   New York   517
-44      Texas   805</code></pre>
+<pre><code>##         state total
+## 5  California  1257
+## 10    Florida   669
+## 33   New York   517
+## 44      Texas   805</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb133"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb133-1"><a href=""></a><span class="co"># 캘리포니아와 텍사스만 선택하고 "state"와 "total" 변수만 유지</span></span>
 <span id="cb133-2"><a href=""></a>murders[murders<span class="sc">$</span>state <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"California"</span>, <span class="st">"Texas"</span>), <span class="fu">c</span>(<span class="st">"state"</span>, <span class="st">"total"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>        state total
-5  California  1257
-44      Texas   805</code></pre>
+<pre><code>##         state total
+## 5  California  1257
+## 44      Texas   805</code></pre>
 </div>
 </div>
 <ul>
