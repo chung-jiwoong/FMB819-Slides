@@ -313,12 +313,12 @@
 </ul>
 </div>
 </section>
-<section id="경제-이론과의-연결" class="slide level2">
-<h2>경제 이론과의 연결</h2>
+<section id="내생성-endogeneity" class="slide level2">
+<h2>내생성 (Endogeneity)</h2>
 <div>
 <ul>
-<li class="fragment"><p><strong>경제 이론(Economic theory)</strong>에 따르면, 개인은 자신의 <strong>효용(utility)을 극대화(maximise)하기 위해 행동</strong>함.</p></li>
-<li class="fragment"><p>따라서 개인들은 <strong>무작위(random ways)</strong>로 행동하지 않음. <span class="math inline">\(\rightarrow\)</span> 즉, 개인의 행동은 <strong>내생적(endogenous)</strong>이라고 볼 수 있음.</p></li>
+<li class="fragment"><p>개인은 자신의 <strong>효용(utility)을 극대화(maximise)하기 위해 행동</strong>한다면…</p></li>
+<li class="fragment"><p>개인들은 <strong>무작위(random ways)</strong>로 행동하지 않음. <span class="math inline">\(\rightarrow\)</span> 즉, 개인의 행동은 <strong>내생적(endogenous)</strong>이라고 볼 수 있음.</p></li>
 <li class="fragment"><p><strong>데이터에서 발견된 상관관계를 무조건 믿어서는 안 됨.</strong> 언제나 <em>의심하는 태도</em>가 필요함.</p></li>
 <li class="fragment"><p>📌 그렇다면, 어떻게 <strong>인과적 주장(causal claims)</strong>을 할 수 있을까?</p></li>
 <li class="fragment"><p><strong>잠재 결과 프레임워크(Potential Outcomes Framework)</strong>가 유용한 길잡이.</p></li>
@@ -336,17 +336,17 @@
 <ul>
 <li><p>핵심 아이디어 (Key Idea)</p>
 <ul>
-<li><p>각 개인은 <strong>여러 개의 대체적 처리 상태(alternative treatment states)</strong>에 노출될 수 있음.</p>
+<li><p>각 개인은 <strong>여러 개의 대체적 처치 상태(alternative treatment states)</strong>에 노출될 수 있음.</p>
 <ul>
 <li>담배를 피우거나, 시가를 피우거나, 아예 피우지 않거나.</li>
-<li>가난한 지역, 중산층 지역, 부유한 지역에서 성장하는 것.</li>
 <li>소규모 학급과 대규모 학급에서 배우는 것.</li>
 </ul></li>
 </ul></li>
+<li><p>처치 변수 <span class="math inline">\(D_i\)</span>를 <strong>이진 변수(binary variable)</strong>로 정의 $$</p></li>
 </ul>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p>처리 변수 <span class="math inline">\(D_i\)</span>를 <strong>이진 변수(binary variable)</strong>로 정의 <span class="math display">\[
+<p><span class="math display">\[
 D_i = \begin{cases}
                     1 \textrm{ if individual $i$ is treated} \\\\
                     0 \textrm{ if individual $i$ is not treated}
@@ -371,14 +371,14 @@ all the individuals such that <span class="math inline">\(D_i = 0\)</span>.</p>
 <li><p>현실에서는 단 하나의 결과 <span class="math inline">\(Y_i\)</span>만을 관측할 수 있으며, 이는 다음과 같이 표현됨: <span class="math display">\[
 Y_i = D_i \times Y_i^1 + (1- D_i) \times Y_i^0
 \]</span></p></li>
-<li><p>🔥 <strong>인과 추론의 근본적인 문제 (Fundamental Problem of Causal Inference)</strong> 어떤 개인 <span class="math inline">\(i\)</span>에 대해, <strong>두 개의 잠재적 결과 중 오직 하나만 관측할 수 있음.</strong><br>
-<a href="http://people.umass.edu/~stanek/pdffiles/causal-holland.pdf">(Holland, 1986)</a></p></li>
+<li><p>🔥 <strong>인과 추론의 근본적인 문제 (Fundamental Problem of Causal Inference)</strong> 어떤 개인 <span class="math inline">\(i\)</span>에 대해, <strong>두 개의 잠재적 결과 중 오직 하나만 관측할 수 있음</strong><br>
+<a href="http://people.umass.edu/~stanek/pdffiles/causal-holland.pdf">(Holland, 1986)</a>.</p></li>
 </ul>
 </section>
-<section id="잠재-결과-프레임워크-the-potential-outcomes-framework" class="slide level2">
-<h2>잠재 결과 프레임워크 (The Potential Outcomes Framework)</h2>
+<section id="the-potential-outcomes-framework-2" class="slide level2">
+<h2>The Potential Outcomes Framework</h2>
 <ul>
-<li>관측되지 않은 잠재적 결과도 이론적으로 존재하며, 이를 <strong>반사실적 결과(counterfactual outcome)</strong>라고 함.</li>
+<li>관측되지 않은 잠재적 결과도 이론적으로 존재한다고 보며, 이를 <strong>반사실적 결과(counterfactual outcome)</strong>라고 함.</li>
 </ul>
 <table class="caption-top">
 <colgroup>
@@ -439,7 +439,7 @@ Y_i = D_i \times Y_i^1 + (1- D_i) \times Y_i^0
 <section id="보충-설명-조건부-기대값" class="slide level2">
 <h2>보충 설명: 조건부 기대값</h2>
 <ul>
-<li><p>🎲 두 개의 주사위를 던질 때, 한 주사위가 항상 5일 경우 합의 평균은?</p></li>
+<li><p>🎲 두 개의 주사위를 던질 때, 한 주사위가 항상 5일 경우, 합의 평균은?</p></li>
 <li><p><span class="math inline">\(X\)</span>가 첫 번째 주사위의 숫자를 나타내는 확률 변수, <span class="math inline">\(Y\)</span>가 두 번째 주사위의 숫자를 나타내는 확률 변수라 하면:</p></li>
 </ul>
 <p><span class="math display">\[
@@ -789,9 +789,9 @@ SDO &amp;= \frac{5+6+5+10+5+6+8}{7} - \frac{6+4+9}{3} \\
 &amp;\approx 6.43 - 6.33 \approx 0.1
 \end{align}
 \]</span></p>
-<p>📌 SDO 값이 ATE(0.7)보다 훨씬 작음!</p>
-<p>📌 이러한 차이는 처치 효과(causal treatment effect)를 제대로 반영하지 못할 가능성이 높음.</p>
-<p>📌 이런 “단순 비교” 방식은 종종 기자, 정치인, 그리고 훈련이 부족한 연구자들에 의해 사용됨. (But not you now! 😉)</p>
+<p>📌 SDO 값이 ATE(0.7)보다 작음!</p>
+<p>📌 이러한 차이는 인과관계를 제대로 반영하지 못할 가능성이 높음.</p>
+<p>📌 이런 “단순 비교” 방식은 종종 기자, 정치인, 그리고 훈련이 부족한 연구자들에 의해 사용됨.</p>
 </div></div>
 </section>
 <section id="naive_comp" class="slide level2">
@@ -822,12 +822,12 @@ ATE = \mathop{\mathbb{E}}(\delta_i) = \mathop{\mathbb{E}}(\delta) = \delta
 <section id="task-1" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 1</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_48597396" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_0c36e368" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
 <p><strong>📊 직접 생성한 데이터를 이용하여 다양한 지표와 편향을 계산</strong></p>
 <p>📂 <strong>1. 데이터 불러오기 및 변수 생성</strong></p>
 <ul>
-<li><p><a href="https://www.dropbox.com/s/oqc3vq1m9eyp1d6/toy_data_2.csv?dl=1"><strong>데이터 다운로드</strong></a><br>
+<li><p>데이터 다운로드 <a href="https://www.dropbox.com/s/oqc3vq1m9eyp1d6/toy_data_2.csv?dl=1">링크</a><br>
 <code>read.csv()</code>를 사용하여 데이터를 불러오기.</p></li>
 <li><p><strong>변수 설명</strong></p>
 <ul>
@@ -968,7 +968,7 @@ SDO = \mathop{\mathbb{E}}(Y_i^1|D_i=1) - \mathop{\mathbb{E}}(Y_i^0|D_i=0) = ATE
 <section id="task-2" class="slide level2" data-background-color="#ffebf0">
 <h2>Task 2</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_038f1d91" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_62652190" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
 <p>📂 1. 데이터 불러오기 - <a href="https://www.dropbox.com/s/bf1fog8yasw3wjj/star_data.csv?dl=1"><strong>STAR 데이터 다운로드</strong></a><br>
 - 데이터를 <code>star_df</code> 객체에 저장.<br>
@@ -1213,7 +1213,7 @@ ATE &amp;= \mathbb{E}[\textrm{math score} | \text{small}_i = 1] - \mathbb{E}[\te
 <section id="task-3" class="slide level2" data-background-color="#ffebf0">
 <h2>Task 3</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_156afd34" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_f49a4ac2" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
 <p>📌 1. 아래 코드를 실행하여 <strong>1학년(grade == “1”)이며, 일반 학급(regular) 또는 소규모 학급(small)에 속한 학생들만 선택</strong>.</p>
 <p>📊 2. 두 그룹의 평균 수학 점수 및 차이 계산 (Base R 사용)</p>

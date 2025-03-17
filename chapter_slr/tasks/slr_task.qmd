@@ -1,6 +1,10 @@
 ---
-title: "Simple Linear Regression"
+title: "수업 과제"
+author: "홍길동 (2025012345)"       #이름과 학번을 넣으세요
+date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
 format: html
+echo: true  
+include: true 
 ---
 
 

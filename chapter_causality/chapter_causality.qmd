@@ -171,12 +171,12 @@ countdown(
 
 ------------------------------------------------------------------------
 
-## 경제 이론과의 연결
+## 내생성 (Endogeneity)
 
 ::: incremental
--   **경제 이론(Economic theory)**에 따르면, 개인은 자신의 **효용(utility)을 극대화(maximise)하기 위해 행동**함.
+-   개인은 자신의 **효용(utility)을 극대화(maximise)하기 위해 행동**한다면...
 
--   따라서 개인들은 **무작위(random ways)**로 행동하지 않음. $\rightarrow$ 즉, 개인의 행동은 **내생적(endogenous)**이라고 볼 수 있음.
+-   개인들은 **무작위(random ways)**로 행동하지 않음. $\rightarrow$ 즉, 개인의 행동은 **내생적(endogenous)**이라고 볼 수 있음.
 
 -   **데이터에서 발견된 상관관계를 무조건 믿어서는 안 됨.** 언제나 *의심하는 태도*가 필요함.
 
@@ -195,15 +195,16 @@ countdown(
 
 -   핵심 아이디어 (Key Idea)
 
-    -   각 개인은 **여러 개의 대체적 처리 상태(alternative treatment states)**에 노출될 수 있음.
+    -   각 개인은 **여러 개의 대체적 처치 상태(alternative treatment states)**에 노출될 수 있음.
 
         -   담배를 피우거나, 시가를 피우거나, 아예 피우지 않거나.
-        -   가난한 지역, 중산층 지역, 부유한 지역에서 성장하는 것.
         -   소규모 학급과 대규모 학급에서 배우는 것.
+
+-   처치 변수 $D_i$를 **이진 변수(binary variable)**로 정의 $$
 
 ::::: columns
 ::: {.column width="50%"}
-처리 변수 $D_i$를 **이진 변수(binary variable)**로 정의 $$
+$$
 D_i = \begin{cases} 
                     1 \textrm{ if individual $i$ is treated} \\\\ 
                     0 \textrm{ if individual $i$ is not treated} 
