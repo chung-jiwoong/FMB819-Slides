@@ -250,14 +250,13 @@ $$
 | **통제 그룹** $(D_i = 0)$ | ❌ *반사실적 결과 (Counterfactual)* | ✅ **관측 가능 (Observed as** $Y_i$) |
 
 -   위 개념을 바탕으로, **개별 처치 효과(individual treatment effect)** $\delta_i$를 정의할 수 있음.
-
 $$
 \delta_i = Y_i^1 - Y_i^0
 $$
 
 -   $\delta_i$는 처치 $(D_i)$가 개인 $i$의 결과 변수 $Y$에 미치는 **인과적 효과(causal effect)**를 측정함.
 
--   ⚠️ **핵심 문제** 개별 처치 효과 $\delta_i$는 **개인 수준에서는 절대 관측할 수 없음!** 따라서 **집단 평균(population averages)**을 이용해 추정해야 함.
+-   ⚠️ **핵심 문제**: 개별 처치 효과 $\delta_i$는 **개인 수준에서는 절대 관측할 수 없음!** 대안: **집단 평균(population averages)**을 이용해 추정할 수 있음.
 
 ------------------------------------------------------------------------
 
@@ -271,19 +270,20 @@ $$
 \mathop{\mathbb{E}}(X) = \frac{1}{6} \times 1 + \frac{1}{6} \times 2 + \frac{1}{6} \times 3 + \frac{1}{6} \times 4 + \frac{1}{6} \times 5 + \frac{1}{6} \times 6 = 3.5
 $$
 
--   $\mathop{\mathbb{E}}(.)$ 연산자는 **기대값(expectation)** 또는 **모집단 평균(population mean)**을 의미함.
+-   $\mathop{\mathbb{E}}(\cdot)$ 연산자는 **기대값(expectation)** 또는 **모집단 평균(population mean)**을 의미함.
 
--   $\mathop{\mathbb{E}}(.)$ 연산자는 **선형(linear) 연산자**이므로,
+-   $\mathop{\mathbb{E}}(\cdot)$ 연산자는 **선형(linear) 연산자**이므로,
 
 $$
 \mathop{\mathbb{E}}(X+Y) = \mathop{\mathbb{E}}(X) + \mathop{\mathbb{E}}(Y)
-$$ - 여기서 $X$와 $Y$는 두 개의 확률 변수임.
+$$ 
+    - 여기서 $X$와 $Y$는 두 개의 확률 변수임.
 
 ------------------------------------------------------------------------
 
 ## 보충 설명: 조건부 기대값
 
--   🎲 두 개의 주사위를 던질 때, 한 주사위가 항상 5일 경우, 합의 평균은?
+-   🎲 두 개의 주사위를 던질 때, 한 주사위가 5일 경우, 합의 평균은?
 
 -   $X$가 첫 번째 주사위의 숫자를 나타내는 확률 변수, $Y$가 두 번째 주사위의 숫자를 나타내는 확률 변수라 하면:
 
@@ -296,13 +296,13 @@ $$
 \end{align}
 $$
 
--   $\mathop{\mathbb{E}}(.|D = x)$ 연산자는 **조건부 기대값(conditional expectation)**을 의미함. 이는 모집단 전체가 아니라, **특정 조건(**$D = x$)을 만족하는 하위 집단(subcategory)에 대한 기대값을 계산하는 것.
+-   $\mathop{\mathbb{E}}(\cdot|D = x)$ 연산자는 **조건부 기대값(conditional expectation)**을 의미함. 이는 모집단 전체가 아니라, **특정 조건(**$D = x$)을 만족하는 하위 집단(subcategory)에 대한 기대값을 계산하는 것.
 
 ------------------------------------------------------------------------
 
 ## 평균 처치 효과 (Average Treatment Effect, ATE) {#ate}
 
--   📌 가장 포괄적인 평균 효과
+-   가장 포괄적인 평균 효과
 
 $$
 \begin{align}
@@ -342,7 +342,7 @@ $$
 :::
 
 ::: {.column width="45%"}
-### 🔢 평균 처치 효과 (ATE) 계산
+### 평균 처치 효과 (ATE) 계산
 
 $$
 \begin{align}
@@ -366,7 +366,7 @@ $\rightarrow$ **소규모 학급이 대규모 학급보다 평균적으로 GPA�
 -   실제로 ATE를 계산할 때, **결측 데이터 문제(missing data problem)**가 발생함.\
     $\delta_i$를 계산할 때와 마찬가지로, **각 개인에 대해** $Y_i^1$ 또는 $Y_i^0$ 중 하나가 항상 누락됨.
 
--📊 데이터를 이용하면, 처치군과 통제군의 **단순 평균 차(Simple Difference in mean Outcomes, SDO)**를 계산할 수 있음.
+-📊 데이터를 이용하면, 처치군과 통제군의 **단순 평균 차(Simple Difference in mean Outcomes, SDO)**가 계산됨.
 
 $$
 \begin{align}
@@ -378,12 +378,32 @@ $$
 
 ------------------------------------------------------------------------
 
-## 단순 평균 차이 (Simple Difference in Mean Outcomes): 예제
+## 단순 평균 차이 (SDO): 예제
 
--   🎓 **모든 정보를 아는 학교장이 학생을 최적의 처치 그룹에 배정한다고 가정하자.**
+-   🎓 **학교장이 학생을 최적의 처치 그룹에 배정한다고 가정하자.**
 
-:::: columns
-::: {.column width="100%"}
+| 학생     | $Y^1$ | $Y^0$ | $\delta$ | $Y$ | $D$ |
+|----------|:-----:|:-----:|:--------:|:---:|:---:|
+| 1        |   5   |   2   |    3     |    |    |
+| 2        |   6   |   4   |    2     |    |    |
+| 3        |   3   |   6   |    -3    |    |    |
+| 4        |   5   |   4   |    1     |    |    |
+| 5        |  10   |   8   |    2     |    |    |
+| 6        |   2   |   4   |    -2    |    |    |
+| 7        |   5   |   2   |    3     |    |    |
+| 8        |   6   |   4   |    2     |    |    |
+| 9        |   2   |   9   |    -7    |    |    |
+| 10       |   8   |   2   |    6     |    |    |
+| **평균** |       |       | **0.7**  |     |     |
+
+
+
+------------------------------------------------------------------------
+
+## 단순 평균 차이 (SDO): 예제
+
+-   🎓 **학교장이 학생을 최적의 처치 그룹에 배정한다고 가정하자.**
+
 | 학생     | $Y^1$ | $Y^0$ | $\delta$ | $Y$ | $D$ |
 |----------|:-----:|:-----:|:--------:|:---:|:---:|
 | 1        |   5   |   2   |    3     |  5  |  1  |
@@ -397,12 +417,11 @@ $$
 | 9        |   2   |   9   |    -7    |  9  |  0  |
 | 10       |   8   |   2   |    6     |  8  |  1  |
 | **평균** |       |       | **0.7**  |     |     |
-:::
-::::
+
 
 ------------------------------------------------------------------------
 
-## 단순 평균 차이 (Simple Difference in Mean Outcomes): 계산
+## 단순 평균 차이 (SDO): 계산
 
 ::::: columns
 ::: {.column width="50%"}
@@ -435,7 +454,7 @@ $$
 
 📌 이러한 차이는 인과관계를 제대로 반영하지 못할 가능성이 높음.
 
-📌 이런 "단순 비교" 방식은 종종 기자, 정치인, 그리고 훈련이 부족한 연구자들에 의해 사용됨. 
+📌 이런 "단순 비교"를 하면 안됨.
 :::
 :::::
 
@@ -444,7 +463,6 @@ $$
 ## 단순 비교의 문제점 {#naive_comp}
 
 📌 단순 평균 차이 (SDO)를 다시 작성하여 개별 처치 효과 $(\delta_i)$가 나타나도록 변형
-
 $$
 \begin{align}
   SDO &= \mathop{\mathbb{E}}(Y_i^1|D_i=1) - \mathop{\mathbb{E}}(Y_i^0|D_i=0) \\  
@@ -453,19 +471,16 @@ $$
 $$
 
 ✨ 가정: 모든 개인에 대해 처치 효과가 일정하다고 가정 ($\delta_i = \delta$) 그러면,
-
 $$
   SDO = \delta + \mathop{\mathbb{E}}(Y_i^0 | D_i = 1) - \mathop{\mathbb{E}}(Y_i^0 | D_i = 0)
 $$
 
 그리고,
-
 $$
 ATE = \mathop{\mathbb{E}}(\delta_i) = \mathop{\mathbb{E}}(\delta) = \delta
 $$
 
 (위 가정에 의해) 따라서:
-
 $$
 \begin{equation}
   SDO = ATE + \underbrace{\mathop{\mathbb{E}}(Y_i^0 | D_i = 1) - \mathop{\mathbb{E}}(Y_i^0 | D_i = 0)}_\text{선택 편향 (Selection Bias)}
@@ -481,8 +496,6 @@ $$
 ::: {style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;"}
 `r countdown(minutes = 10, top = 0)`
 :::
-
-**📊 직접 생성한 데이터를 이용하여 다양한 지표와 편향을 계산**
 
 ```{r, echo = FALSE, eval = FALSE}
 set.seed(1)
@@ -513,8 +526,7 @@ toy_data_random <- toy_data_random %>%
 
 📂 **1. 데이터 불러오기 및 변수 생성**
 
--   데이터 다운로드 [링크](https://www.dropbox.com/s/oqc3vq1m9eyp1d6/toy_data_2.csv?dl=1)\
-    `read.csv()`를 사용하여 데이터를 불러오기.
+-   데이터 다운로드 [링크](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/toy_data_2.csv). `read.csv()`를 사용하여 데이터를 불러오기.
 
 -   **변수 설명**
 
@@ -522,53 +534,45 @@ toy_data_random <- toy_data_random %>%
     -   `Y0`: 처치를 받지 않았을 경우의 잠재적 결과 $(Y_i^0)$.\
     -   `Y1`: 처치를 받았을 경우의 잠재적 결과 $(Y_i^1)$.
 
--   **새로운 변수 생성**
+-   **다음 변수들을 생성하시오.**
 
-    -   **관측된 결과** $Y_i$: $$
-        Y_i = D_i \times Y_i^1 + (1 - D_i) \times Y_i^0
-        $$
-    -   **개별 처치 효과** $\delta_i$: $$
-        \delta_i = Y_i^1 - Y_i^0
-        $$
+    -   **관측된 결과** $Y_i = D_i \times Y_i^1 + (1 - D_i) \times Y_i^0$
+    -   **개별 처치 효과** $\delta_i = Y_i^1 - Y_i^0$
 
 📊 **2. ATE 및 SDO 계산**
 
--   **ATE (Average Treatment Effect) 계산**\
--   **SDO (Simple Difference in Mean Outcomes) 계산**\
+-   **ATE (Average Treatment Effect) 계산하시오.**
+-   **SDO (Simple Difference in Mean Outcomes) 계산하시오.**
 -   *Bias가 존재하는가? 크기는 얼마나 큰가?*
 
 🔀 **3. 무작위 배정된 데이터에서 SDO 계산**
 
--   [**새로운 데이터 다운로드**](https://www.dropbox.com/s/0qfsonzz1t9gkxi/toy_data_random.csv?dl=1)\
-    이 데이터에서는 동일한 개인을 **임의로 무작위 배정(random assignment)**.
+-   새로운 데이터 다운로드 [링크](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/toy_data_random.csv).  이 데이터에서는 동일한 개인을 **임의로 무작위 배정(random assignment)**하였음.
 
--   $Y_i$ 재계산 필요!
-
-    -   새로운 처치 배정에 맞춰 다시 계산해야 함.
+-   $Y_i$ 재계산 하시오. 새로운 처치 배정에 맞춰 다시 계산해야 함.
 
 -   **무작위 배정에서 SDO 계산**
 
-    -   편향이 **거의 0**에 가까워야 함.\
+    -   편향이 **0**에 가까운가?
     -   하지만 정확히 0이 되지 않는 이유는 무엇일까?
 
 📌 **4. (Optional) 편향 요소 확인**
 
-1.  **선택 편향(Selection Bias) 계산**\
-2.  **이질적 처치 효과 편향(Heterogeneous Treatment Effect Bias) 계산**\
-3.  아래 식이 성립하는지 확인: $$
+1.  **선택 편향(Selection Bias) 계산하시오.**\
+2.  **이질적 처치 효과 편향(Heterogeneous Treatment Effect Bias) 계산하시오.**\
+3.  아래 식이 성립하는지 확인: 
+    $$
     SDO = ATE + \text{Selection Bias} + \text{Heterogeneous Treatment Effect Bias}
     $$
 
 ------------------------------------------------------------------------
 
-## 무작위 배정(Randomization)은 인과 추론 문제를 해결한다!
+## 무작위 배정(Randomization)을 통한 인과 추론 문제 해결
 
 **📌 무작위 실험(Randomized experiments)**:\
 - 사람들을 **무작위(randomly)**로 처치군과 통제군에 배정함.\
 - 이 경우, 처치 배정은 **잠재적 결과(potential outcomes)와 독립적(independent)**.
-
-특히, $\mathbb{E}(Y_i^0 | D_i = 1) = \mathbb{E}(Y_i^0 | D_i = 0)$ 이 성립해야 할 이유가 없음.
-
+- 즉 $\mathbb{E}(Y_i^0 | D_i = 1)$과 $\mathbb{E}(Y_i^0 | D_i = 0)$이 서로 다를 이유가 없음.
 -   따라서, **선택 편향(selection bias)이 0이 됨**.
 
 ✅ 무작위 배정이 이루어진다면:
@@ -578,6 +582,8 @@ SDO = \mathop{\mathbb{E}}(Y_i^1|D_i=1) - \mathop{\mathbb{E}}(Y_i^0|D_i=0) = ATE
 $$
 
 👉 **즉, 데이터를 이용해 직접 ATE를 추정할 수 있음!**
+
+
 
 # Randomized Experiments
 
@@ -589,15 +595,13 @@ $$
 
 -   최초의 RCT는 **18\~19세기**에 주로 **의학** 분야에서 수행됨.
 
--   **20세기 초반**, 유명한 통계학자 **J. Neyman**과 **R.A. Fisher**에 의해 널리 보급됨.
+-   **20세기 초반**, 통계학자 **J. Neyman**과 **R.A. Fisher**에 의해 널리 보급됨.
 
--   이후 **공공정책 평가(public policy evaluation)의 신뢰할 수 있는 도구**로 점차 자리 잡음.\
-    👉 [참고 자료](https://www.povertyactionlab.org/fr)
+-   이후 **공공정책 평가(public policy evaluation)의 신뢰할 수 있는 도구**로 점차 자리 잡음. 👉 [참고 자료](https://www.povertyactionlab.org/fr)
 
 -   **경제학(Economics)에서도 RCT의 영향력 증가**
 
-    -   **2019년 노벨 경제학상(Nobel Prize in Economics)**이 RCT 연구자들에게 수여됨.\
-    -   [Abhijit Banerjee, Esther Duflo, Michael Kremer](https://www.economist.com/finance-and-economics/2019/10/17/a-nobel-economics-prize-goes-to-pioneers-in-understanding-poverty)\
+    -   **2019년 노벨 경제학상(Nobel Prize in Economics)**이 RCT 연구자들에게 수여됨. [Abhijit Banerjee, Esther Duflo, Michael Kremer](https://www.economist.com/finance-and-economics/2019/10/17/a-nobel-economics-prize-goes-to-pioneers-in-understanding-poverty)\
     -   📌 *"실험적 접근을 통해 글로벌 빈곤을 완화하는 연구"*에 기여.
 
 ------------------------------------------------------------------------
@@ -614,35 +618,33 @@ $$
 
 📌 왜 OLS 계수 $b_1$이 인과관계를 추정할 수 없는가?
 
+::: {.incremental}
 1.  **학생의 자기 선택(Student sorting)**: 학부모들이 **작은 학급이 더 낫다**는 선입견을 가지고 있다면, 자녀를 그런 학교에 보내려고 할 것.
 
 2.  **교사의 자기 선택(Teacher sorting)**: **작은 학급이 가르치기 더 쉬움** → 교사들은 작은 학급이 있는 학교로 이동하려 할 것. 만약 작은 학급이 있는 학교에 **경쟁이 존재한다면**, **우수한 교사(high-quality teachers)**가 더 유리할 가능성이 큼.
 
 3.  **지역(Location effect)**: **대규모 학급**은 **부유한 대도시**에서 더 흔할 수 있음. **소규모 학급**은 **가난한 농촌 지역**에서 더 흔할 가능성이 있음.
 
-✅ **RCT를 수행하면 이러한 모든 편향(bias)을 제거할 수 있음!**
+✅ **RCT를 수행하면 이러한 모든 편향(bias)을 제거할 가눙성이 높아짐**
+:::
 
 ------------------------------------------------------------------------
 
 ## 프로젝트 STAR 실험 (The Project STAR Experiment)
 
-**테네시 학생-교사 성취 비율 실험 (Tennessee Student/Teacher Achievement Ratio Experiment)**\
-📖 [Krueger (1999)](http://piketty.pse.ens.fr/files/Krueger1999.pdf) 참고.
+**테네시 학생-교사 성취 비율 실험 (Tennessee Student/Teacher Achievement Ratio Experiment)** 📖 [Krueger (1999)](http://piketty.pse.ens.fr/files/Krueger1999.pdf) 참고.
 
--   **테네시 주의회(Tennessee legislature)에서 총 약 1,200만 달러(\$12 million) 예산 지원**.\
--   **1985-1986 학년도에 시작**, 총 **4년간 진행됨**.
+-   **테네시 주의회(Tennessee legislature)에서 총 약 1,200만 달러(\$12 million) 예산 지원**.  **1985-1986 학년도에 시작**, 총 **4년간 진행됨**.
 
 🔬 **실험 설계**
 
--   **11,600명의 학생과 교사**가 **무작위로(randomly assigned)** 아래 3개 그룹 중 하나에 배정됨.\
+-   **11,600명의 학생과 교사**가 **무작위로(randomly assigned)** 아래 3개 그룹 중 하나에 배정됨.  실험은 **유치원부터 3학년까지(Kindergarten \~ 3rd grade) 지속됨.**
 
--   실험은 **유치원부터 3학년까지(Kindergarten \~ 3rd grade) 지속됨.**
+    1️⃣ **소규모 학급**: **학생 수: 13\~17명 / 교사 1인**
 
-    1️⃣ **소규모 학급(Small clas**\*): **학생 수: 13\~17명 / 교사 1인**
+    2️⃣ **일반 학급** :**학생 수: 22\~25명 / 교사 1인**
 
-    2️⃣ **일반 학급(Regular class)** :**학생 수: 22\~25명 / 교사 1인**
-
-    3️⃣ \*\*일반 학급 + 보조 교사(Regular/aide class)\*: **학생 수: 22\~25명 / 교사 1인 + 풀타임 보조 교사(full-time aide)**
+    3️⃣ **일반 학급 + 보조 교사**: **학생 수: 22\~25명 / 교사 1인 + 풀타임 보조 교사**
 
 📊 **실험 과정**
 
@@ -662,66 +664,40 @@ $$
 `r countdown(minutes = 10, top = 0)`
 :::
 
-📂 1. 데이터 불러오기 - [**STAR 데이터 다운로드**](https://www.dropbox.com/s/bf1fog8yasw3wjj/star_data.csv?dl=1)\
-- 데이터를 `star_df` 객체에 저장.\
-- 변수 설명을 이해하려면 [**도움말 확인**](https://rdrr.io/cran/AER/man/STAR.html).\
-(📌**데이터가 재구성(reshaped)되었으므로, 변수명 끝의 "k", "1" 등의 숫자는 무시.**)
+📂 1. **데이터 불러오기**: 데이터 다운로드 [링크](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/star_data.csv)\
+- 데이터를 `star_df` 객체에 저장. 변수 설명 [**도움말 확인**](https://rdrr.io/cran/AER/man/STAR.html).\
+(📌**데이터가 재구성(reshaped)되어, 변수명 끝의 "k", "1" 등의 숫자는 무시.**)
 
-```{r}
-star_df = readr::read_csv(file = "https://www.dropbox.com/s/bf1fog8yasw3wjj/star_data.csv?dl=1")
-```
 
-🔍 2. 데이터의 기본 정보 확인
+🔍 2. **데이터의 기본 정보 확인**
 
 -   **관찰 단위(Unit of observation)**는 무엇인가?
--   다음 내용을 포함하는 변수는? (i) 랜덤 학급 배정(random class assignment), (ii) 학생의 학년(class grade), (iii) 관심 있는 결과 변수(outcomes of interest)
+-   다음 내용을 포함하는 변수는? (i) 랜덤 학급 배정(random class assignment), (ii) 학생의 학년(class grade), (iii) 결과 변수(outcomes of interest)
 
-```{r, eval=FALSE}
-# 데이터 구조 확인
-str(star_df)
-```
 
-📊 3. 데이터 크기 및 결측값(NA) 분석
+
+📊 3. **데이터 크기 및 결측값(NA) 분석**
 
 -   총 관측치 수는 몇 개인가? 11,598명의 학생이 실험에 참여했는데, 왜 관측치가 더 많은가? NA 값이 많은 이유는 무엇인가? 이들이 의미하는 것은?
 
-```{r, eval=FALSE}
-# 총 관측치 수 확인
-nrow(star_df)
 
-# 결측값 개수 확인
-sum(is.na(star_df))
 
-# 결측값이 포함된 변수 확인
-colSums(is.na(star_df))
-```
-
-🚀 4. 결측값 처리 (NA 제거)
+🚀 4. **결측값 처리 (NA 제거)**
 
 -   다음 코드 실행하여 결측값이 없는 경우만 유지:
 
-```{r, eval=FALSE}
-star_df <- star_df[complete.cases(star_df)
+```{r, echo=TRUE, eval=FALSE}
+star_df <- star_df[complete.cases(star_df),]
 ```
 
-📈 5. 무작위 배정 확인 (Balancing Checks)
+📈 5. **무작위 배정 확인 (Balancing Checks)**
 
 -   랜덤 배정이 잘 이루어졌는지 확인하기 위해, 그룹별 기초 통계량을 계산.
--   다음 항목별 평균 비율(%)을 학년별(grade) 및 처치군별(treatment class)로 비교: 1️⃣ 여학생 비율 (percentage of girls), 2️⃣ 아프리카계 미국인 비율 (percentage of African Americans), 3️⃣ 무료 급식 대상 비율 (percentage of free lunch qualifiers)
+-   다음 항목별 평균 비율(%)을 학년별(grade) 및 처치군별(treatment class)로 비교: 1️⃣ 여학생 비율 (percentage of girls), 2️⃣ 아프리카계 미국인 비율 (percentage of African Americans), 3️⃣ 무료 급식 대상 비율 (percentage of free lunch qualifiers)을 살펴보자.
 
 (📌 힌트: 다음 코드로 여학생 비율 계산 가능 (dplyr 활용 필요): `share_female = mean(gender == "female") * 100`.)
 
-```{r, echo = FALSE}
-# data("STAR", package = "AER")
-# star <- STAR %>%
-#     pivot_longer(
-#         cols = -c(gender, ethnicity, birth),
-#         names_to = c(".value", "grade"),
-#         names_pattern = "(.+)(k|1|2|3)$")
-# write.csv2(star, file = "star_data.csv", row.names = F)
-star_df = readr::read_csv(file = "https://www.dropbox.com/s/bf1fog8yasw3wjj/star_data.csv?dl=1")
-star_df <- star_df[complete.cases(star_df),]
-```
+
 
 ------------------------------------------------------------------------
 
@@ -729,7 +705,7 @@ star_df <- star_df[complete.cases(star_df),]
 
 ✅ RCT에서 평균 처치 효과(ATE) 추정 방법
 
--   **무작위 통제 실험(Randomized Controlled Trial, RCT)**에서는 **처치군(treatment group)과 통제군(control group)의 결과 차이**를 이용해 **평균 처치 효과(Average Treatment Effect, ATE)**를 추정할 수 있음.
+-   **무작위 통제 실험(RCT)**에서는 **처치군(treatment group)과 통제군(control group)의 결과 차이**를 이용해 **평균 처치 효과(ATE)**를 추정할 수 있음.
 
 다음과 같은 설정하자:
 
@@ -787,7 +763,7 @@ $$
 Y_i = D_i Y_i^1 + (1 - D_i) Y_i^0
 $$
 
-✨ $D_i$를 인수분해하고, $Y_i^1 - Y_i^0$를 $\delta_i$로 대체하면:
+✨ $D_i$로 묶어주고, $Y_i^1 - Y_i^0$를 $\delta_i$로 대체하면:
 
 $$
 \begin{align} 
@@ -822,13 +798,10 @@ $$
 
 ## 프로젝트 STAR 실험: 회귀 분석
 
-🎯 **지난 번 본 단순 회귀 모델과 동일한 형태!** - 마지막 식은 우리가 지난주에 학습한 **단순 회귀 모델(simple regression model)**과 동일. - 여기서 $\delta = b_1$로 해석 가능.
+✅ **소규모 학급(small class)에 배정된 것이 수학 성적(math score)에 미치는 ATE를 추정해보자.**
 
-✅ **따라서, 소규모 학급(small class)에 배정된 것이 수학 성적(math score)에 미치는 ATE를 추정해보자.**
-
-📊 **추정할 회귀 모델** $$
-\text{math score}_i = b_0 + \delta \text{small}_i + e_i
-$$
+📊 **추정할 회귀 모델**: $\text{math score}_i = b_0 + \delta \text{small}_i + e_i
+$
 
 여기서,\
 $$
@@ -848,7 +821,7 @@ star_df_k_small <- star_df %>%
   mutate(small = (star == "small"))
 ```
 
-```{r, eval = F}
+```{r, echo=TRUE, eval = F}
 star_df_k_small %>% count(star, grade)
 
 star_df_k_small %>% count(small)
@@ -870,18 +843,14 @@ star_df_k_small %>%
 
 ## 프로젝트 STAR 실험: 회귀 분석
 
-📌 추정할 회귀 모델 $$
-\text{math score}_i = b_0 + \delta \text{small}_i + e_i
-$$
+📌 추정할 회귀 모델 $\text{math score}_i = b_0 + \delta \text{small}_i + e_i$
 
 ```{r}
 # 회귀 분석 실행
 lm(math ~ small, data = star_df_k_small)
 ```
 
-📌 회귀 분석 계수 의미 정리
-
-$b_0 = \mathbb{E}[Y_i^0]$ and $\delta = \mathbb{E}[Y_i | D_i = 1] - \mathbb{E}[Y_i | D_i = 0]$
+📌 회귀 분석 계수 의미 정리: $b_0 = \mathbb{E}[Y_i^0]$ and $\delta = \mathbb{E}[Y_i | D_i = 1] - \mathbb{E}[Y_i | D_i = 0]$
 
 -   $b_0$: 통제군(일반 학급)의 평균 수학 점수
 -   $\delta$: 소규모 학급과 일반 학급의 평균 점수 차이
@@ -910,7 +879,7 @@ delta
 
 ## 더미 변수를 사용한 회귀 분석: 그래프
 
-**📌 이번 회귀 분석의 독립 변수(regressor)는 더미 변수(dummy variable)**
+**📌 회귀 분석의 독립 변수(regressor)는 더미 변수(dummy variable)**
 
 ```{r, echo = F, fig.height=4.75, fig.width = 8}
 # 더미 변수를 숫자로 변환하여 시각화
@@ -945,7 +914,7 @@ baseline_graph
 
 ## 더미 변수를 사용한 회귀 분석: 그래프
 
-**📌 이번 회귀 분석의 독립 변수(regressor)는 더미 변수(dummy variable)**
+**📌 회귀 분석의 독립 변수(regressor)는 더미 변수(dummy variable)**
 
 ```{r, echo = F, fig.height=4.75, fig.width = 8}
 # 기존 baseline 그래프에 평균값 표시 추가
@@ -964,7 +933,7 @@ baseline_graph_mean
 
 ## 더미 변수를 사용한 회귀 분석: 그래프
 
-**📌 이번 회귀 분석의 독립 변수(regressor)는 더미 변수(dummy variable)**
+**📌 회귀 분석의 독립 변수(regressor)는 더미 변수(dummy variable)**
 
 ```{r, echo = F, fig.height=4.75, fig.width = 8}
 # 회귀선(Regression Line) 추가
@@ -978,7 +947,7 @@ baseline_graph_mean +
 
 ## 더미 변수를 사용한 회귀 분석: 그래프
 
-**📌 이번 회귀 분석의 독립 변수(regressor)는 더미 변수(dummy variable)**
+**📌 회귀 분석의 독립 변수(regressor)는 더미 변수(dummy variable)**
 
 ```{r, echo = FALSE, fig.height=4.75, fig.width = 8}
 #더미 변수(small = 1 또는 small = 0)에 따른 수학 점수(Math Score) 분포 확인
@@ -1064,7 +1033,7 @@ $$
 
 📌 1. 아래 코드를 실행하여 **1학년(grade == "1")이며, 일반 학급(regular) 또는 소규모 학급(small)에 속한 학생들만 선택**.
 
-```{r, echo=FALSE}
+```{r, echo=TRUE}
 star_df_clean <- star_df %>%
     filter(grade == "1" & star %in% c("small", "regular"))
 ```
@@ -1085,7 +1054,7 @@ mean_math_small
 diff_math
 ```
 
-🔄 3. 더미 변수 생성: 소규모 학급(small) = 1 (TRUE), 일반 학급(regular) = 0 (FALSE) *힌트:* `treatment = (star == "small")`.
+🔄 3. 더미 변수 생성: 소규모 학급(small) = 1 (TRUE), 일반 학급(regular) = 0 (FALSE) **힌트**: `treatment = (star == "small")`.
 
 ```{r, echo=FALSE, eval = FALSE}
 star_df_clean <- star_df_clean %>%
@@ -1109,9 +1078,7 @@ summary(lm_result)
 
 -   ⚠️ **1. RCT 실행의 어려움**
     -   **RCT는 종종 실행이 불가능함.**
-        -   🏦 **비용 문제**: RCT는 **매우 비용이 많이 듦**\
-        -   ⚖️ **윤리적 문제**: 일부 처치(treatment)는 **윤리적 문제**로 인해 특정 그룹에 적용할 수 없음\
-        -   ⏳ **시간 제약**: RCT는 시간이 오래 걸리며, 급하게 결과가 필요한 경우에는 적절하지 않음
+        -   🏦 **비용 문제**, **윤리적 문제**, **시간 제약**
 -   🔍 **2. 결과 해석의 어려움**
     -   🌍 **외부 타당성(External Validity)**:
         -   특정 RCT의 결과가 다른 **국가, 인구집단 등으로 일반화 가능할까?**\
@@ -1135,8 +1102,8 @@ summary(lm_result)
 -   **✅ 선택이 관측 가능한 특성(Observable Characteristics)에서 발생하는 경우**
     -   **다중 회귀(Multiple Regression)** → **다음 주에 학습!**
 -   **⚠️ 선택이 관측 불가능한 특성(Unobservable Characteristics)에서 발생하는 경우**
-    -   **회귀 불연속 설계(Regression Discontinuity Design, RDD)** → **강의 10에서 다룸**\
-    -   **이중 차분법(Difference-in-Differences, DID)** → **강의에서는 다루지 않지만, 슬라이드 제공!**
+    -   **회귀 불연속 설계(Regression Discontinuity Design, RDD)** → Optional
+    -   **이중 차분법(Difference-in-Differences, DID)** → Optional
 
 ------------------------------------------------------------------------
 
