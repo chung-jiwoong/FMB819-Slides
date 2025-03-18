@@ -11,7 +11,7 @@ format:
     chalkboard: true
     slide-number: true
 revealjs-plugins:
-  - revealjs-text-resizer # Thanks to https://github.com/gadenbuie/revealjs-text-resizer#readme
+  - revealjs-text-resizer 
 ---
 
 ```{r setup, include=FALSE,warning=FALSE,message=FALSE}
@@ -526,7 +526,7 @@ toy_data_random <- toy_data_random %>%
 
 📂 **1. 데이터 불러오기 및 변수 생성**
 
--   데이터 다운로드 [링크](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/toy_data_2.csv). `read.csv()`를 사용하여 데이터를 불러오기.
+-   데이터 다운로드 [링크](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_causality/data/toy_data_2.csv). `read.csv()`를 사용하여 데이터를 불러오기.
 
 -   **변수 설명**
 
@@ -547,7 +547,7 @@ toy_data_random <- toy_data_random %>%
 
 🔀 **3. 무작위 배정된 데이터에서 SDO 계산**
 
--   새로운 데이터 다운로드 [링크](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/toy_data_random.csv).  이 데이터에서는 동일한 개인을 **임의로 무작위 배정(random assignment)**하였음.
+-   새로운 데이터 다운로드 [링크](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_causality/data/toy_data_random.csv).  이 데이터에서는 동일한 개인을 **임의로 무작위 배정(random assignment)**하였음.
 
 -   $Y_i$ 재계산 하시오. 새로운 처치 배정에 맞춰 다시 계산해야 함.
 
@@ -664,10 +664,15 @@ $$
 `r countdown(minutes = 10, top = 0)`
 :::
 
-📂 1. **데이터 불러오기**: 데이터 다운로드 [링크](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/star_data.csv)\
+📂 1. **데이터 불러오기**: 데이터 다운로드 [링크](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_causality/data/star_data.csv)\
 - 데이터를 `star_df` 객체에 저장. 변수 설명 [**도움말 확인**](https://rdrr.io/cran/AER/man/STAR.html).\
 (📌**데이터가 재구성(reshaped)되어, 변수명 끝의 "k", "1" 등의 숫자는 무시.**)
 
+
+
+```{r, echo=FALSE}
+star_df = read_csv("https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_causality/data/star_data.csv")
+```
 
 🔍 2. **데이터의 기본 정보 확인**
 
@@ -686,7 +691,7 @@ $$
 
 -   다음 코드 실행하여 결측값이 없는 경우만 유지:
 
-```{r, echo=TRUE, eval=FALSE}
+```{r, echo=TRUE, eval=TRUE}
 star_df <- star_df[complete.cases(star_df),]
 ```
 
@@ -858,22 +863,19 @@ lm(math ~ small, data = star_df_k_small)
 ::::: columns
 ::: {.column width="50%"}
 ```{r, echo=TRUE}
-b_0 = mean(star_df_k_small$math[
-    star_df_k_small$small == FALSE])
+b_0 = mean(star_df_k_small$math[star_df_k_small$small == FALSE])
 b_0
 ```
 :::
 
 ::: {.column width="50%"}
 ```{r, echo=TRUE}
-delta = mean(star_df_k_small$math[
-    star_df_k_small$small == TRUE]) - 
-  mean(star_df_k_small$math[
-    star_df_k_small$small == FALSE])
+delta = mean(star_df_k_small$math[star_df_k_small$small == TRUE]) - mean(star_df_k_small$math[star_df_k_small$small == FALSE])
 delta
 ```
 :::
 :::::
+
 
 ------------------------------------------------------------------------
 
@@ -935,12 +937,17 @@ baseline_graph_mean
 
 **📌 회귀 분석의 독립 변수(regressor)는 더미 변수(dummy variable)**
 
+
 ```{r, echo = F, fig.height=4.75, fig.width = 8}
+b_0 <- 484.4464  # Replace with actual value
+delta <- 8.895193  # Replace with actual value
 # 회귀선(Regression Line) 추가
 baseline_graph_mean + 
-    geom_abline(slope = delta, intercept = b_0) +
-    geom_curve(aes(x = -0.3, xend = -0.2, y = 425 , yend = b_0 - .5*delta - 5), size = .5, linetype = 1, colour = "black", arrow = arrow(length = unit(0.3, "cm"))) +
-    annotate("text", x = -0.5, y = 415, hjust = 0, label = "Regression line", size = 5)
+  geom_abline(slope = delta, intercept = b_0, linewidth = .5) +
+  geom_curve(x = -0.3, xend = -0.2, y = 425, yend = b_0 - .5 * delta - 5, 
+             linewidth = .5, linetype = 1, colour = "black", 
+             arrow = arrow(length = unit(0.3, "cm"))) +
+  annotate("text", x = -0.5, y = 415, hjust = 0, label = "Regression line", size = 5)
 ```
 
 ------------------------------------------------------------------------
@@ -950,6 +957,8 @@ baseline_graph_mean +
 **📌 회귀 분석의 독립 변수(regressor)는 더미 변수(dummy variable)**
 
 ```{r, echo = FALSE, fig.height=4.75, fig.width = 8}
+b_0 <- 484.4464  # Replace with actual value
+delta <- 8.895193  # Replace with actual value
 #더미 변수(small = 1 또는 small = 0)에 따른 수학 점수(Math Score) 분포 확인
 star_df_k_small %>%
     mutate(small = ifelse(small == "TRUE",1,0)) %>%
@@ -1180,7 +1189,7 @@ $$
 ---
 
 
-## **단순 비교(Naive Comparisons)의 문제점** (Problems with Naive Comparisons) {#naive_comp_extended}
+## **단순 비교의 문제점** {#naive_comp_extended}
 
 **처치 효과가 모든 개인에게 동일하다는 가정을 완화해 보자.**  
 수식을 전개하면 다음과 같은 형태로 **SDO**(Simple Difference in Outcomes)를 분해할 수 있음:
@@ -1194,7 +1203,8 @@ $$
 
 여기서 $1 - \pi$는 **통제 그룹(Control Group)의 비율**을 의미함.  
 
-📌 새로운 편향 요소: **개인별 처치 효과의 이질성 (Heterogeneity)**
+📌 새로운 편향 요소: **개인별 처치 효과의 이질성 (Heterogeneity)** 
+
   1️⃣ **선택 편향(Selection Bias):**  
     - 대학에 진학하는 학생들은 **기본적인 인지 능력이 더 높을 가능성**이 높음 (대학 여부와 관계없이).  
   2️⃣ **이질적 처치 효과 편향(Heterogeneous Treatment Effect Bias):**  

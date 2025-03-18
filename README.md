@@ -33,8 +33,9 @@
 
 **주제4: Introduction to Causality**
 
-[HTML](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_causality/chapter_causality.html)
-[.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_causality/chapter_causality.qmd)
+[HTML](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_causality/chapter_causality.html) / 
+[.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_causality/chapter_causality.qmd) / 
+[Tasks](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_causality/tasks/causality_tasks.qmd)
 
 
 **주제5: Multiple Linear Regression**
