@@ -236,7 +236,7 @@
 <section id="task-1" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 1</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_f44ce1c6" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">07</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_2b38e313" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">07</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
 <ol type="1">
 <li><p>데이터를 <a href="https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/grade5.dta">여기</a>에서 다운로드해서 <code>grades</code>로 저장하시오.<br>
@@ -347,17 +347,14 @@
 <li><p>결과변수 (종속변수, dependent variable): <em>average mathematics score</em> <span class="math inline">\((y)\)</span></p></li>
 <li><p>설명변수 (독립변수, independent variable): <em>class size</em> <span class="math inline">\((x)\)</span></p></li>
 </ul></li>
-<li><p>각 학급 <span class="math inline">\(i\)</span>에 대해 <span class="math inline">\(x_i\)</span>와 <span class="math inline">\(y_i\)</span>를 관측할 수 있음.<br>
-따라서 학급 규모와 평균 수학 점수의 <em>결합 분포(joint distribution)</em>를 시각화할 수 있음.</p></li>
-<li><p>현재 이 관계를 <strong>선(line)</strong> 하나로 요약하고 있음.<br>
-절편 <span class="math inline">\(b_0\)</span>와 기울기 <span class="math inline">\(b_1\)</span>을 갖는 선의 방정식은 다음과 같음:</p></li>
+<li><p>각 학급 <span class="math inline">\(i\)</span>에 대해 <span class="math inline">\(x_i\)</span>와 <span class="math inline">\(y_i\)</span>를 관측할 수 있음. 예, 학급 규모와 평균 수학 점수의 <em>결합 분포(joint distribution)</em>를 시각화할 수 있음.</p></li>
+<li><p>회귀선은 이 관계를 <strong>선(line)</strong> 하나로 요약하고 있음. 절편 <span class="math inline">\(b_0\)</span>와 기울기 <span class="math inline">\(b_1\)</span>을 갖는 선의 방정식은 다음과 같음:</p></li>
 </ul>
 <p><span class="math display">\[
 \widehat{y}_i = b_0 + b_1 x_i
 \]</span></p>
 <ul>
-<li><span class="math inline">\(\widehat{y}_i\)</span>는 <em>관측값</em> <span class="math inline">\(i\)</span>에서의 예측값(prediction)을 의미함.<br>
-즉, 주어진 회귀 직선에 따라 우리가 <span class="math inline">\(y_i\)</span>를 어떻게 예측하는지 보여줌.</li>
+<li><span class="math inline">\(\widehat{y}_i\)</span>는 <em>관측값</em> <span class="math inline">\(i\)</span>에서의 예측값(prediction)을 의미함. 즉, 주어진 회귀 직선에 따라 우리가 <span class="math inline">\(y_i\)</span>를 어떻게 예측하는지 보여줌.</li>
 </ul>
 </section>
 <section id="직선의-방정식" class="slide level2">
@@ -391,8 +388,7 @@
 <ul>
 <li><p>만약 모든 데이터가 직선 위에 있다면, <span class="math inline">\(\widehat{y}_i = y_i\)</span>.</p></li>
 <li><p>대부분의 경우 <em>종속변수</em> <span class="math inline">\((y)\)</span>는 우리가 선택한 <em>독립변수</em> <span class="math inline">\((x)\)</span>들에 의해서만 설명되지 않음, <span class="math inline">\(\widehat{y}_i \neq y_i\)</span>. 실제 값과 예측 값의 차이를 잔차(residual)라 부름.</p></li>
-<li><p><span class="math inline">\((x_i,y_i)\)</span>에서의 잔차를 <span class="math inline">\(e_i\)</span>로 표시.</p></li>
-<li><p><strong>실제 데이터</strong> <span class="math inline">\((x_i, y_i)\)</span>는 따라서 <strong>예측값 + 잔차</strong>로 표현될 수 있음</p>
+<li><p><strong>실제 데이터</strong> <span class="math inline">\((x_i, y_i)\)</span>는 따라서 <strong>예측값 + 잔차</strong>로 표현될 수 있음. <span class="math inline">\(e_i\)</span>로 표시.</p>
 <p><span class="math display">\[
 y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 \]</span></p></li>
@@ -421,8 +417,7 @@ y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 <section id="simple-linear-regression-graphically-5" class="slide level2">
 <h2>Simple Linear Regression: Graphically</h2>
 
-<img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-18-1.svg" class="quarto-figure quarto-figure-center r-stretch" style="width:100.0%"><p style="text-align: center; font-weight: bold; font-size: 35px; color: #d90502;">
-</p><p>무엇을 “최소화”하는 직선을 구해야할까?</p>
+<img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-18-1.svg" class="quarto-figure quarto-figure-center r-stretch" style="width:100.0%"><p>무엇을 “최소화”하는 직선을 구해야할까?</p>
 </section>
 <section id="ordinary-least-squares-ols-추정" class="slide level2">
 <h2>Ordinary Least Squares (OLS) 추정</h2>
@@ -482,7 +477,7 @@ y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 <ul>
 <li><p>두 변수 간 <em>“관련이 있음(associated)”</em>이라는 표현을 사용함.<br>
 즉, <span class="math inline">\(b_1\)</span>을 <span class="math inline">\(x\)</span>의 <span class="math inline">\(y\)</span>에 대한 인과적 영향으로 해석하면 안 됨.<br>
-이를 주장하려면 특정 조건이 충족되어야 함.</p></li>
+이를 주장하려면 <strong>특정 조건</strong>이 충족되어야 함.</p></li>
 <li><p>또한 <span class="math inline">\(x\)</span>의 단위(unit)에 따라 <span class="math inline">\(b_1\)</span>의 해석과 크기(magnitude)가 달라질 수 있음.</p></li>
 <li><p><span class="math inline">\(x\)</span>의 단위가 무엇인지 명확히 해야 함</p></li>
 </ul>
@@ -551,7 +546,7 @@ y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 <section id="task-2" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 2</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_60cdbad0" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_7ae8770d" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
 <p>다음 코드를 실행하여 데이터를 학급 규모(class size) 수준에서 집계하시오:</p>
 <div class="cell" data-layout-align="center">
@@ -596,8 +591,7 @@ y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 <section id="선형성-가정-anscombe의-예제" class="slide level2">
 <h2>선형성 가정: Anscombe의 예제</h2>
 <ul>
-<li>Francis Anscombe (1973)는 통계적으로 <em>완전히 동일한</em> 네 개의 데이터셋을 만들었음.<br>
-하지만 <strong>시각적으로 보면 완전히 다름!</strong></li>
+<li>Francis Anscombe (1973)는 통계적으로 <em>완전히 동일한</em> 네 개의 데이터셋을 만들었음. 하지만 <strong>시각적으로 보면 완전히 다름!</strong></li>
 </ul>
 
 <img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-28-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"><div class="cell" data-layout-align="center">
@@ -709,7 +703,7 @@ R^2 = \frac{\text{variance explained}}{\text{total variance}} = \frac{SSE}{SST} 
 <section id="task-3" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 3</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_919486f5" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_b1da052d" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
 <ol type="1">
 <li><p><code>avgmath_cs</code>를 <code>classize</code>에 대해 회귀(regress)하고 결과를 <code>math_reg</code> 객체에 저장.</p></li>

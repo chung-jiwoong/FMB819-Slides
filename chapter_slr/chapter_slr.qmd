@@ -106,7 +106,7 @@ grades = read_dta(file = "https://raw.githack.com/chung-jiwoong/FMB819-Slides/re
 ```{r, echo=FALSE, fig.height=6}
 g_math = ggplot(grades, aes(x = classize, y = avgmath)) + 
     geom_point(size = 2, alpha = 0.5) +
-    xlim(0,45) +
+    xlim(0, 45) +
     ylim(0, 100) +
     labs(
       x = "Class size",
@@ -216,18 +216,15 @@ g_math_cs +
 
     -   설명변수 (독립변수, independent variable): *class size* $(x)$
 
--   각 학급 $i$에 대해 $x_i$와 $y_i$를 관측할 수 있음.\
-    따라서 학급 규모와 평균 수학 점수의 *결합 분포(joint distribution)*를 시각화할 수 있음.
+-   각 학급 $i$에 대해 $x_i$와 $y_i$를 관측할 수 있음. 예, 학급 규모와 평균 수학 점수의 *결합 분포(joint distribution)*를 시각화할 수 있음.
 
--   현재 이 관계를 **선(line)** 하나로 요약하고 있음.\
-    절편 $b_0$와 기울기 $b_1$을 갖는 선의 방정식은 다음과 같음:
+-   회귀선은 이 관계를 **선(line)** 하나로 요약하고 있음. 절편 $b_0$와 기울기 $b_1$을 갖는 선의 방정식은 다음과 같음:
 
 $$
 \widehat{y}_i = b_0 + b_1 x_i
 $$
 
--   $\widehat{y}_i$는 *관측값* $i$에서의 예측값(prediction)을 의미함.\
-    즉, 주어진 회귀 직선에 따라 우리가 $y_i$를 어떻게 예측하는지 보여줌.
+-   $\widehat{y}_i$는 *관측값* $i$에서의 예측값(prediction)을 의미함. 즉, 주어진 회귀 직선에 따라 우리가 $y_i$를 어떻게 예측하는지 보여줌.
 
 ------------------------------------------------------------------------
 
@@ -322,9 +319,7 @@ plot_ex + geom_line(color = "#d90502")
 
 -   대부분의 경우 *종속변수* $(y)$는 우리가 선택한 *독립변수* $(x)$들에 의해서만 설명되지 않음, $\widehat{y}_i \neq y_i$. 실제 값과 예측 값의 차이를 잔차(residual)라 부름.
 
--   $(x_i,y_i)$에서의 잔차를 $e_i$로 표시.
-
--   **실제 데이터** $(x_i, y_i)$는 따라서 **예측값 + 잔차**로 표현될 수 있음
+-   **실제 데이터** $(x_i, y_i)$는 따라서 **예측값 + 잔차**로 표현될 수 있음. $e_i$로 표시.
 
     $$
     y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
@@ -404,7 +399,7 @@ g_math_cs +
 
 ## Simple Linear Regression: Graphically
 
-```{r, echo = F, out.width = "100%", fig.height = 4.5}
+```{r, echo = F, out.width = "100%", fig.height = 5}
 g_math_cs +
     ylim(50, 80) +
     theme_bw(base_size = 14) +
@@ -414,9 +409,7 @@ g_math_cs +
                aes(xend = classize, yend = .fitted), color = "#d90502", size = 0.5)
 ```
 
-<p style="text-align: center; font-weight: bold; font-size: 35px; color: #d90502;">
-
-무엇을 "최소화"하는 직선을 구해야할까?</strong>
+무엇을 "최소화"하는 직선을 구해야할까?
 
 ------------------------------------------------------------------------
 
@@ -426,7 +419,7 @@ g_math_cs +
 
 -   $\sum_{i = 1}^N e_1^2 + \dots + e_N^2$ 값이 **최소화하는** $(b_0, b_1)$ 값을 선택.
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE,fig.width=7,fig.height = 3.5}
+```{r, echo=FALSE, message=FALSE, warning=FALSE,fig.width=7,fig.height = 4}
 g_math_cs +
     ylim(50, 80) +
     xlim(0, 50) +
@@ -503,7 +496,7 @@ knitr::include_url("https://gustavek.shinyapps.io/SSR_cone/", height = "800px")
 
 -   두 변수 간 *"관련이 있음(associated)"*이라는 표현을 사용함.\
     즉, $b_1$을 $x$의 $y$에 대한 인과적 영향으로 해석하면 안 됨.\
-    이를 주장하려면 특정 조건이 충족되어야 함.
+    이를 주장하려면 **특정 조건**이 충족되어야 함.
 
 -   또한 $x$의 단위(unit)에 따라 $b_1$의 해석과 크기(magnitude)가 달라질 수 있음.
 
@@ -629,8 +622,7 @@ grades_avg_cs <- grades %>%
 
 ## 선형성 가정: Anscombe의 예제
 
--   Francis Anscombe (1973)는 통계적으로 *완전히 동일한* 네 개의 데이터셋을 만들었음.\
-    하지만 **시각적으로 보면 완전히 다름!**
+-   Francis Anscombe (1973)는 통계적으로 *완전히 동일한* 네 개의 데이터셋을 만들었음. 하지만 **시각적으로 보면 완전히 다름!**
 
 
 ```{r, echo=FALSE, fig.height=4}
@@ -665,13 +657,13 @@ ch %>%
 
 ------------------------------------------------------------------------
 
-## 데이터에서 비선형 관계? (Nonlinear Relationships in Data?)
+## 데이터에서 비선형 관계? 
 
 ::::: columns
 ::: {.column width="50%"}
 -   회귀 분석에서 비선형 관계를 반영할 수 있음.
 
--   고차항(higher order term)*을 추가하면 됨.\
+-   *고차항(higher order term)*을 추가하면 됨.\
     $$
       y_i = b_0 + b_1 x_i + b_2 x_i^2 + e_i
       $$
@@ -731,8 +723,8 @@ $$
 R^2 = \frac{\text{variance explained}}{\text{total variance}} = \frac{SSE}{SST} = 1 - \frac{SSR}{SST}\in[0,1]
 $$
 
-  - $R^2$ 값이 **1에 가까울수록**, 모델의 **설명력(explanatory power)**이 *** 높음***을 의미함.
-  - $R^2$ 값이 **0에 가까울수록**, 모델의 **설명력**이 ***낮음***을 의미함.
+  - $R^2$ 값이 **1에 가까울수록**, 모델의 **설명력(explanatory power)**이 ***높음.***
+  - $R^2$ 값이 **0에 가까울수록**, 모델의 **설명력**이 ***낮음***.
   - 예를 들어, $R^2 = 0.5$이면, **$x$의 변화가 $y$의 변화 중 50%를 설명함**.
 
 
