@@ -1,0 +1,97 @@
+---
+title: "Tidying, Visualising and Summarising Data - Tasks (Part 1)"
+output: html
+---
+
+
+```{r}
+knitr::opts_chunk$set(
+    echo = TRUE,
+    message = FALSE,
+    warning = FALSE)
+```
+
+
+## Task 1 
+
+다음 코드를 실행하여 데이터를 로드합니다.
+
+```{r}
+library(dslabs)
+data(polls_us_election_2016)
+
+library(tidyverse)
+```
+
+1.  grade 값이 결측치(NA)인 여론조사는?
+
+문서가 너무 길어지는 것을 방지하기 위해 `head`를 사용하여 처음 6개 행만 표시합니다.
+
+```{r}
+polls_us_election_2016 %>%
+    filter(is.na(grade)) %>%
+    head
+```
+
+2.  다음 조건을 모두 만족하는 여론조사는? (i) American Strategies, GfK Group, Merrill Poll에서 조사한 경우, (ii) 표본 크기가 1,000명 이상인 경우, (iii) 2016년 10월 20일에 시작된 경우. **힌트**: (i) 조건에서는 %in% 연산자가 유용, 벡터는 `c()`함수로 만들 수 있음. (iii)에서는 날짜 변수의 형식을 확인
+
+```{r}
+polls_us_election_2016 %>%
+    filter(pollster %in% c("American Strategies","GfK Group","Merrill Poll") &
+               samplesize > 1000 &
+               startdate == "2016-10-20")
+```
+
+3.  다음 조건을 모두 만족하는 여론조사는? (i) Johnson 후보의 여론조사 데이터가 누락되지 않은 경우, (ii) 트럼프와 클린턴의 원본 여론조사 지지율 합이 95%를 초과하는 경우, (iii) 오하이오(OH) 주에서 실시된 경우 **힌트**: 트럼프와 클린턴의 지지율 합계를 계산하는 새로운 변수를 생성한 후 `filter()` 를 적용
+
+```{r}
+polls_us_election_2016 %>%
+    mutate(rawpoll_clintontrump = rawpoll_clinton + rawpoll_trump) %>%
+    filter(!is.na(rawpoll_johnson) & rawpoll_clintontrump > 95 & state == "Ohio")
+```
+
+4.  표본 크기가 2,000명 이상인 여론조사에서 트럼프의 평균 지지율이 가장 높은 주는? **힌트**: `filter(), group_by(), summarise(), arrange()` 사용. 내림차순 정렬하려면 `arrange()` 함수 사용.
+
+```{r}
+polls_us_election_2016 %>%
+    filter(samplesize >= 2000) %>%
+    group_by(state) %>%
+    summarise(mean_trump = mean(rawpoll_trump)) %>%
+    arrange(desc(mean_trump))
+```
+
+
+
+## Task 2
+
+다음 코드를 실행하여 데이터를 로드합니다.
+
+```{r, eval = F}
+library(dslabs)
+data(gapminder, package = "dslabs")
+```
+
+1.  대륙/연도별 평균 인구(변수명: mean_pop)를 계산하고, 결과를 새로운 객체 gapminder_mean에 저장하시오. **힌트**: 각 연도별 대륙당 하나의 관측치(행)만 있어야 함. `group_by` 및 `summarise` 사용
+
+```{r}
+gapminder_mean <- gapminder %>%
+  group_by(continent, year) %>%
+  summarise(mean_pop = mean(population)) %>%
+  ungroup()
+```
+
+- 만약 `ungroup()`을 하지 않으면 이후에 수행하는 mutate(), summarise(), filter() 등의 연산이 여전히 그룹 단위로 적용됩니다. 예를 들면 아래와 같습니다. `ungroup()` 대신 `summarise` 함수에서 `.groups="drop"` 옵션을 써도 됩니다.
+
+
+```{r}
+df <- tibble(group = c("A", "A", "B", "B"), value = c(1, 2, 3, 4))
+
+# 그룹별 평균 계산
+df_summary <- df %>%
+  group_by(group) %>%
+  summarise(mean_value = mean(value))
+
+# mutate를 추가하지만 ungroup 안 함
+df_summary %>%
+  mutate(overall_mean = mean(mean_value))
+```

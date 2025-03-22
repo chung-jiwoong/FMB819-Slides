@@ -21,7 +21,7 @@
 
 [HTML](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_tidy/chapter_tidy.html) / 
 [.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_tidy/chapter_tidy.qmd) / 
-[Tasks](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_tidy/tasks/tidy_tasks.qmd) / 참고자료: "R for Data Science" [영문판](https://r4ds.had.co.nz/transform.html) [국문판](https://bookdown.org/sulgi/r4ds/) / [dplyr 치트시트](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf)
+[Tasks](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_tidy/tasks/tidy_tasks.qmd) / [Solution: Part1](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_tidy/tasks/tidy_solution_part1.html) / 참고자료: "R for Data Science" [영문판](https://r4ds.had.co.nz/transform.html) [국문판](https://bookdown.org/sulgi/r4ds/) / [dplyr 치트시트](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf) 
     
 
 **주제3: Simple Linear Regression**
