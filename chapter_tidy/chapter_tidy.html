@@ -747,7 +747,7 @@
 <section id="task-1" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 1</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_22ce52e6" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_4c710e53" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
 <p>다음 코드를 실행하여 데이터를 로드합니다.</p>
 <div class="cell" data-layout-align="center">
@@ -761,7 +761,7 @@
 <li><p>표본 크기가 2,000명 이상인 여론조사에서 트럼프의 평균 지지율이 가장 높은 주는? <strong>힌트</strong>: <code>filter(), group_by(), summarise(), arrange()</code> 사용. 내림차순 정렬하려면 <code>arrange()</code> 함수 사용.</p></li>
 </ol>
 </section>
-<section id="금융-자료-다루기" class="slide level2">
+<section id="금융-자료-다루기" class="slide level2" data-background-color="#E2E2E2">
 <h2>금융 자료 다루기</h2>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href=""></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"tidyquant"</span>)) <span class="fu">install.packages</span>(<span class="st">"tidyquant"</span>)</span>
@@ -831,7 +831,7 @@
 <section id="task-2" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 2</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_4a715359" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_fd4fc6f6" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
 <p>다음 코드를 실행하여 데이터를 로드합니다.</p>
 <ol type="1">
@@ -1390,17 +1390,19 @@
 <section id="task-3" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 3</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_eddd29e0" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_88a17eec" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
 <p><code>gapminder</code> 데이터를 사용하여 다음의 그래프를 <code>ggplot2</code>로 생성하시오</p>
 <ol type="1">
-<li><p>2015년 기대수명(Life Expectancy)의 히스토그램을 작성하시오. <strong>힌트</strong>: 히스토그램을 만들 때 aes()에 y 값을 지정해야 할까? <code>geom_*</code> 내에서 다음 옵션을 설정하시오: <code>binwidth</code> = 5, <code>boundary</code> = 45, <code>colour</code> = “white”, <code>fill</code> = “#d90502”. x축은 “기대 수명”, y축은 “빈도”로 레이블 하시오. 이러한 옵션이 무엇을 의미하는지 설명하시오.</p>
-<p><em>Optional:</em> 생성한 히스토그램을 대륙(Continent)별로 나누어 (<code>facet_grid()</code>) 각 대륙이 새로운 행(row)에 표시되도록 만드시오. <strong>힌트</strong>: <code>facet_grid(rows_vars(continent)</code></p></li>
-<li><p>연도/대륙별 평균 기대수명을 구하고 대륙별로 평균 기대수명에 대한 Boxplot 으로 그리시오. <code>geom_*</code> 옵션: <code>colour</code> = “black”, <code>fill</code> = “#d90502”. <strong>힌트</strong>: continent 및 year 두 개의 변수로 그룹화해야함.</p></li>
+<li><p>2015년 기대수명(Life Expectancy)의 히스토그램을 작성하시오.<br>
+<strong>힌트</strong>: 히스토그램을 만들 때 aes()에 y 값을 지정해야 할까? <code>geom_*</code> 내에서 다음 옵션을 설정하시오: <code>binwidth</code> = 5, <code>boundary</code> = 45, <code>colour</code> = “white”, <code>fill</code> = “#d90502”. x축은 “기대 수명”, y축은 “빈도”로 레이블 하시오.</p>
+<p><em>Optional:</em> 생성한 히스토그램을 대륙(Continent)별로 나누어 (<code>facet_grid()</code>) 각 대륙이 새로운 행(row)에 표시되도록 만드시오. <strong>힌트</strong>: <code>facet_grid(rows = vars(continent))</code></p></li>
+<li><p>연도/대륙별 평균 기대수명을 구하고 대륙별로 평균 기대수명에 대한 Boxplot 으로 그리시오. <code>geom_*</code> 옵션: <code>colour</code> = “black”, <code>fill</code> = “#d90502”.<br>
+<strong>힌트</strong>: continent 및 year 두 개의 변수로 그룹화해야함.</p></li>
 <li><p>2015년 출산율(Fertility Rate, y축)과 영아 사망률(Infant Mortality, x축) 간의 관계를 나타내는 산점도 (Scatter Plot)를 작성하시오. <code>geom_*</code> 옵션: <code>size</code> = 3, <code>alpha</code> = 0.5, <code>colour</code> = “#d90502”. <code>labs()</code>를 사용하여 레이블을 추가 (x = “영아 사망률”, y = “출산율”)</p></li>
 </ol>
 </section>
-<section id="금융-자료-다루기-1" class="slide level2">
+<section id="금융-자료-다루기-1" class="slide level2" data-background-color="#E2E2E2">
 <h2>금융 자료 다루기</h2>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb89"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href=""></a><span class="fu">library</span>(ggplot2)</span>
@@ -1464,6 +1466,7 @@
 <p><code>median(x)</code>: <code>x</code>의 값들 중 <strong>50%가 해당 값보다 작거나 같고, 50%가 크거나 같은 값</strong>을 찾음. <span class="math inline">\(m\)</span>이 중앙값이라면: <span class="math display">\[\Pr(X \leq m) \geq 0.5 \text{ 그리고 } \Pr(X \geq m) \geq 0.5\]</span></p>
 <p>중앙값은 <strong>이상치(outliers)</strong>에 강건(robust).</p>
 <div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href=""></a><span class="fu">median</span>(x, <span class="at">echo=</span>T)  <span class="co"># 중앙값 계산</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## [1] 2</code></pre>
 </div>
@@ -1490,7 +1493,7 @@
 </div>
 <p>분산 계산:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href=""></a><span class="fu">var</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href=""></a><span class="fu">var</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div></div>
 </section>
@@ -1500,7 +1503,7 @@
 <li><code>table(x)</code> 함수는 <code>x</code> 내 각 고유 값의 발생 횟수를 계산하는 데 유용.</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href=""></a><span class="fu">table</span>(gapminder<span class="sc">$</span>continent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href=""></a><span class="fu">table</span>(gapminder<span class="sc">$</span>continent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## 
 ##   Africa Americas     Asia   Europe  Oceania 
@@ -1511,7 +1514,7 @@
 <li>동일한 작업을 dplyr의 count 함수를 사용하여 수행할 수도 있음.</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href=""></a>gapminder <span class="sc">%&gt;%</span> <span class="fu">count</span>(continent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href=""></a>gapminder <span class="sc">%&gt;%</span> <span class="fu">count</span>(continent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>##   continent    n
 ## 1    Africa 2907
@@ -1528,14 +1531,14 @@
 <li>Contingency Table 생성</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href=""></a>gapminder_new <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span></span>
-<span id="cb101-2"><a href=""></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2015</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb101-3"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">fertility_above_2 =</span> (fertility <span class="sc">&gt;</span> <span class="dv">2</span>)) <span class="co"># dummy variable for fertility rate above replacement rate</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href=""></a>gapminder_new <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb102-2"><a href=""></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2015</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb102-3"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">fertility_above_2 =</span> (fertility <span class="sc">&gt;</span> <span class="dv">2</span>)) <span class="co"># dummy variable for fertility rate above replacement rate</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="columns">
 <div class="column" style="width:45%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href=""></a><span class="fu">table</span>(gapminder_new<span class="sc">$</span>fertility_above_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href=""></a><span class="fu">table</span>(gapminder_new<span class="sc">$</span>fertility_above_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## 
 ## FALSE  TRUE 
@@ -1544,7 +1547,7 @@
 </div>
 </div><div class="column" style="width:55%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href=""></a><span class="fu">table</span>(gapminder_new<span class="sc">$</span>fertility_above_2,gapminder_new<span class="sc">$</span>continent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href=""></a><span class="fu">table</span>(gapminder_new<span class="sc">$</span>fertility_above_2,gapminder_new<span class="sc">$</span>continent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>##        
 ##         Africa Americas Asia Europe Oceania
@@ -1557,16 +1560,16 @@
 <li><code>prop.table</code>을 사용하여 비율을 계산 가능:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href=""></a><span class="co"># proportions by row</span></span>
-<span id="cb106-2"><a href=""></a><span class="fu">prop.table</span>(<span class="fu">table</span>(gapminder_new<span class="sc">$</span>fertility_above_2,gapminder_new<span class="sc">$</span>continent), <span class="at">margin =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href=""></a><span class="co"># proportions by row</span></span>
+<span id="cb107-2"><a href=""></a><span class="fu">prop.table</span>(<span class="fu">table</span>(gapminder_new<span class="sc">$</span>fertility_above_2,gapminder_new<span class="sc">$</span>continent), <span class="at">margin =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>##        
 ##              Africa    Americas        Asia      Europe     Oceania
 ##   FALSE 0.027397260 0.178082192 0.260273973 0.520547945 0.013698630
 ##   TRUE  0.441441441 0.198198198 0.252252252 0.009009009 0.099099099</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href=""></a><span class="co"># proportions by column</span></span>
-<span id="cb108-2"><a href=""></a><span class="fu">prop.table</span>(<span class="fu">table</span>(gapminder_new<span class="sc">$</span>fertility_above_2,gapminder_new<span class="sc">$</span>continent), <span class="at">margin =</span> <span class="dv">2</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href=""></a><span class="co"># proportions by column</span></span>
+<span id="cb109-2"><a href=""></a><span class="fu">prop.table</span>(<span class="fu">table</span>(gapminder_new<span class="sc">$</span>fertility_above_2,gapminder_new<span class="sc">$</span>continent), <span class="at">margin =</span> <span class="dv">2</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>##        
 ##             Africa   Americas       Asia     Europe    Oceania
@@ -1584,8 +1587,8 @@
 <li>count 함수를 사용한 데이터 요약</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href=""></a>gapminder_new <span class="sc">%&gt;%</span></span>
-<span id="cb110-2"><a href=""></a>  <span class="fu">count</span>(continent, fertility_above_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href=""></a>gapminder_new <span class="sc">%&gt;%</span></span>
+<span id="cb111-2"><a href=""></a>  <span class="fu">count</span>(continent, fertility_above_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>##    continent fertility_above_2  n
 ## 1     Africa             FALSE  2
@@ -1608,13 +1611,13 @@
 <section id="공분산-covariance과-상관계수-correlation" class="slide level2">
 <h2>공분산 (Covariance)과 상관계수 (Correlation)</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb112"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a href=""></a><span class="fu">ggplot</span>(gapminder_new, <span class="fu">aes</span>(<span class="at">x=</span>infant_mortality, <span class="at">y=</span>fertility)) <span class="sc">+</span></span>
-<span id="cb112-2"><a href=""></a>  <span class="fu">geom_point</span>(<span class="at">color=</span><span class="st">"#d90502"</span>) <span class="sc">+</span></span>
-<span id="cb112-3"><a href=""></a>  <span class="fu">labs</span>(</span>
-<span id="cb112-4"><a href=""></a>    <span class="at">title =</span> <span class="st">"Relationship between fertility and infant mortality in 2015"</span>,</span>
-<span id="cb112-5"><a href=""></a>    <span class="at">x =</span> <span class="st">"Infant mortality"</span>,</span>
-<span id="cb112-6"><a href=""></a>    <span class="at">y =</span> <span class="st">"Fertility rate"</span></span>
-<span id="cb112-7"><a href=""></a>  ) <span class="sc">+</span>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href=""></a><span class="fu">ggplot</span>(gapminder_new, <span class="fu">aes</span>(<span class="at">x=</span>infant_mortality, <span class="at">y=</span>fertility)) <span class="sc">+</span></span>
+<span id="cb113-2"><a href=""></a>  <span class="fu">geom_point</span>(<span class="at">color=</span><span class="st">"#d90502"</span>) <span class="sc">+</span></span>
+<span id="cb113-3"><a href=""></a>  <span class="fu">labs</span>(</span>
+<span id="cb113-4"><a href=""></a>    <span class="at">title =</span> <span class="st">"Relationship between fertility and infant mortality in 2015"</span>,</span>
+<span id="cb113-5"><a href=""></a>    <span class="at">x =</span> <span class="st">"Infant mortality"</span>,</span>
+<span id="cb113-6"><a href=""></a>    <span class="at">y =</span> <span class="st">"Fertility rate"</span></span>
+<span id="cb113-7"><a href=""></a>  ) <span class="sc">+</span>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="chapter_tidy_files/figure-revealjs/x-y-corr-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"></section>
@@ -1625,7 +1628,7 @@
 <p><span class="math display">\[Cov(x,y) = \frac{1}{N} \sum_{i=1}^N(x_i-\bar{x})(y_i-\bar{y})\]</span></p></li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href=""></a><span class="fu">cov</span>(gapminder_new<span class="sc">$</span>fertility,gapminder_new<span class="sc">$</span>infant_mortality, <span class="at">use =</span> <span class="st">"complete.obs"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb114"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb114-1"><a href=""></a><span class="fu">cov</span>(gapminder_new<span class="sc">$</span>fertility,gapminder_new<span class="sc">$</span>infant_mortality, <span class="at">use =</span> <span class="st">"complete.obs"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## [1] 24.21146</code></pre>
 </div>
@@ -1637,7 +1640,7 @@
 <li>상관관계는 두 변수 간의 선형 관계(linear association) 의 강도를 측정하는 지표 <span class="math display">\[Cor(x,y) = \frac{Cov(x,y)}{\sqrt{Var(x)}\sqrt{Var(y)}}\]</span></li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href=""></a><span class="fu">cor</span>(gapminder_new<span class="sc">$</span>fertility,gapminder_new<span class="sc">$</span>infant_mortality, <span class="at">use =</span> <span class="st">"complete.obs"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a href=""></a><span class="fu">cor</span>(gapminder_new<span class="sc">$</span>fertility,gapminder_new<span class="sc">$</span>infant_mortality, <span class="at">use =</span> <span class="st">"complete.obs"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## [1] 0.8286402</code></pre>
 </div>
@@ -1661,12 +1664,15 @@
 </section>
 <section id="task-4" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 4</h2>
+<div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
+<p></p><div class="countdown" id="timer_813529e8" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+</div>
 <ol type="1">
 <li><p>2011년 GDP의 평균을 계산하고 mean이라는 객체에 할당하시오. 결측값은 제외. <strong>힌트</strong>: <code>mean</code> 함수의 도움말을 읽고 <code>NA</code>를 제거하는 방법을 확인</p></li>
 <li><p>2011년 GDP의 중앙값을 계산하고 median이라는 객체에 할당하시오. 마찬가지로 결측값을 제외. 중앙값이 평균보다 큰가, 작은가?</p></li>
 <li><p><code>geom_density</code>를 사용하여 2011년 GDP의 밀도 그래프(density plot)를 생성하시오. 밀도 그래프는 숫자형 변수의 분포를 나타내는 방법임. 또한 다음 코드를 추가하여 평균과 중앙값을 수직선으로 표시하시오.</p>
-<div class="sourceCode" id="cb117"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href=""></a><span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">as.numeric</span>(mean), <span class="at">colour =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
-<span id="cb117-2"><a href=""></a><span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">as.numeric</span>(median), <span class="at">colour =</span> <span class="st">"orange"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb118"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a href=""></a><span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">as.numeric</span>(mean), <span class="at">colour =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb118-2"><a href=""></a><span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">as.numeric</span>(median), <span class="at">colour =</span> <span class="st">"orange"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 <li><p>2015년 출산율(fertility)과 유아 사망률(infant mortality)의 상관관계를 계산하시오. NA 값을 제외하려면 <code>cor()</code> 함수의 <code>use</code> 인수를 “pairwise.complete.obs”로 설정. 이 상관관계 값이 Task 3에서 생성한 그래프와 일치하는가?</p></li>
 </ol>
 </section>
