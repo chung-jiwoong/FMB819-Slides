@@ -221,7 +221,7 @@ ggplot(grades, aes(x = disadvantaged, y = avgmath)) +
 **추정하려는 회귀 모델**
 
 $$
- \textrm{average math score}_i = b_0 + b_1 \textrm{class size}_i + b_2 \textrm{% disadvantaged}_i + e_i
+ \textrm{average math score}_i = b_0 + b_1 \textrm{class size}_i + b_2 \textrm{\% disadvantaged}_i + e_i
 $$
 
 -   이는 **다중 회귀 분석(Multiple Regression)**!\
@@ -306,7 +306,7 @@ lm(formula = dependent variable ~  independent variable 1 + independent variable
    data = data.frame containing the data)
 ```
 
--   학급 규모와 학생 성취: 다중 회귀 분석: $\textrm{average math score}_i = b_0 + b_1 \textrm{class size}_i + b_2 \textrm{% disadvantaged}_i + e_i$
+-   학급 규모와 학생 성취: 다중 회귀 분석: $\textrm{average math score}_i = b_0 + b_1 \textrm{class size}_i + b_2 \textrm{\% disadvantaged}_i + e_i$
 
 ```{r}
 lm(avgmath ~ classize + disadvantaged, grades)
@@ -844,14 +844,14 @@ reg1 <- lm(avgmath ~ classize, grades)
 reg1$coefficients
 ```
 
-***Multiple linear model:*** $\text{average math score} = c_0 + c_1\text{class size} + \color{#d90502}{c_2}\text{% disadvantaged} + e$
+***Multiple linear model:*** $\text{average math score} = c_0 + c_1\text{class size} + \color{#d90502}{c_2}\text{\% disadvantaged} + e$
 
 ```{r, echo = FALSE}
 reg2 <- lm(avgmath ~ classize + disadvantaged, grades)
 reg2$coefficients
 ```
 
-***Omitted variable on regressor***: $\text{% disadvantaged} = d_0 + \color{#d96502}{d_1}\text{class size} + e$
+***Omitted variable on regressor***: $\text{\% disadvantaged} = d_0 + \color{#d96502}{d_1}\text{class size} + e$
 
 ```{r, echo = FALSE}
 reg3 <- lm(disadvantaged ~ classize, grades)
