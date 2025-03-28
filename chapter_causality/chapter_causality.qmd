@@ -14,6 +14,7 @@ revealjs-plugins:
   - revealjs-text-resizer 
 ---
 
+
 ```{r setup, include=FALSE,warning=FALSE,message=FALSE}
 options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(
@@ -59,28 +60,11 @@ countdown(
 
 -   인과관계(Causality) vs. 상관관계(Correlation)
 
--   잠재 결과 프레임워크(Potential Outcomes Framework) (a.k.a. Rubin의 인과 모델)
+-   잠재 결과 프레임워크(Potential Outcomes Framework)
 
 -   무작위 통제 실험(Randomized Controlled Trials, RCTs)
 
 -   학급 규모(class size)와 학생 성취(student performance)에 대한 실증 분석 심화
-
-------------------------------------------------------------------------
-
-## 인과관계의 개념
-
-***인과관계(Causality)***란 무엇을 의미하는가?
-
--   `X`가 `Y`를 *유발한다(causes)*... 의미?
-
--   만약 ***다른 모든 것은 그대로 둔 채*** 우리가 `X`의 값을 **변경(intervene and change)**한다면,
-
--   그 결과로 `Y`도 ***변화***하게 된다는 의미.
-
--   여기서 핵심은 **"다른 모든 것은 그대로 둔다"**는 가정임.\
-    이는 흔히 **"세테리스 파리부스(ceteris paribus, all else equal)"** 가정이라고 불림.
-
--   **하지만,** 이것은 `X`가 `Y`를 유발하는 **유일한 요인**이라는 뜻이 아님!
 
 ------------------------------------------------------------------------
 
@@ -185,6 +169,25 @@ countdown(
 -   **잠재 결과 프레임워크(Potential Outcomes Framework)**가 유용한 길잡이.
 :::
 
+
+------------------------------------------------------------------------
+
+## 인과관계의 개념
+
+***인과관계(Causality)***란 무엇을 의미하는가?
+
+-   `X`가 `Y`를 *유발한다(causes)*... 의미?
+
+-   만약 ***다른 모든 것은 그대로 둔 채*** 우리가 `X`의 값을 **변경(intervene and change)**한다면,
+
+-   그 결과로 `Y`도 ***변화***하게 된다는 의미.
+
+-   여기서 핵심은 **"다른 모든 것은 그대로 둔다"**는 가정임.\
+    이는 흔히 **"세테리스 파리부스(ceteris paribus, all else equal)"** 가정이라고 불림.
+
+-   **하지만,** 이것은 `X`가 `Y`를 유발하는 **유일한 요인**이라는 뜻이 아님!
+
+
 # Causal Inference
 
 ------------------------------------------------------------------------
@@ -235,8 +238,7 @@ $$
 Y_i = D_i \times Y_i^1 + (1- D_i) \times Y_i^0
 $$
 
--   🔥 **인과 추론의 근본적인 문제 (Fundamental Problem of Causal Inference)** 어떤 개인 $i$에 대해, **두 개의 잠재적 결과 중 오직 하나만 관측할 수 있음**\
-    [(Holland, 1986)](http://people.umass.edu/~stanek/pdffiles/causal-holland.pdf).
+-   🔥 **인과 추론의 근본적인 문제 (Fundamental Problem of Causal Inference)** 어떤 개인 $i$에 대해, **두 개의 잠재적 결과 중 오직 하나만 관측할 수 있음**. [(Holland, 1986)](http://people.umass.edu/~stanek/pdffiles/causal-holland.pdf).
 
 ------------------------------------------------------------------------
 
@@ -256,7 +258,7 @@ $$
 
 -   $\delta_i$는 처치 $(D_i)$가 개인 $i$의 결과 변수 $Y$에 미치는 **인과적 효과(causal effect)**를 측정함.
 
--   ⚠️ **핵심 문제**: 개별 처치 효과 $\delta_i$는 **개인 수준에서는 절대 관측할 수 없음!** 대안: **집단 평균(population averages)**을 이용해 추정할 수 있음.
+-   ⚠️ **핵심 문제**: 개별 처치 효과 $\delta_i$는 **개인 수준에서는 절대 관측할 수 없음!** 대안: **집단 평균(population averages)**을 이용.
 
 ------------------------------------------------------------------------
 
@@ -320,12 +322,13 @@ $$
 
 ## 예제: 소규모 vs. 대규모 학급
 
--   학생이 **소규모 학급(**$Y^1$) 또는 대규모 학급($Y^0$)에서 수업을 들을 경우, 평균 평점(GPA, 0-10)의 잠재적 결과(potential outcomes).
+-   학생이 **소규모 학급($Y^1$)** 또는 **대규모 학급($Y^0$)**에서 수업을 들을 경우, 평균 평점(GPA, 0-10)의 잠재적 결과(potential outcomes).
 
 ::::: columns
-::: {.column width="55%"}
+::: {.column width="40%"}
 ### 📊 잠재적 결과 테이블
 
+::: {.center}
 | 학생     |  $Y^1$  |  $Y^0$  | $\delta$ |
 |----------|:-------:|:-------:|:--------:|
 | 1        |    5    |    2    |    3     |
@@ -340,8 +343,9 @@ $$
 | 10       |    8    |    2    |    6     |
 | **평균** | **5.2** | **4.5** | **0.7**  |
 :::
+:::
 
-::: {.column width="45%"}
+::: {.column width="60%"}
 ### 평균 처치 효과 (ATE) 계산
 
 $$
@@ -382,6 +386,7 @@ $$
 
 -   🎓 **학교장이 학생을 최적의 처치 그룹에 배정한다고 가정하자.**
 
+::: {.center}
 | 학생     | $Y^1$ | $Y^0$ | $\delta$ | $Y$ | $D$ |
 |----------|:-----:|:-----:|:--------:|:---:|:---:|
 | 1        |   5   |   2   |    3     |    |    |
@@ -395,7 +400,7 @@ $$
 | 9        |   2   |   9   |    -7    |    |    |
 | 10       |   8   |   2   |    6     |    |    |
 | **평균** |       |       | **0.7**  |     |     |
-
+:::
 
 
 ------------------------------------------------------------------------
@@ -404,6 +409,7 @@ $$
 
 -   🎓 **학교장이 학생을 최적의 처치 그룹에 배정한다고 가정하자.**
 
+::: {.center}
 | 학생     | $Y^1$ | $Y^0$ | $\delta$ | $Y$ | $D$ |
 |----------|:-----:|:-----:|:--------:|:---:|:---:|
 | 1        |   5   |   2   |    3     |  5  |  1  |
@@ -417,14 +423,14 @@ $$
 | 9        |   2   |   9   |    -7    |  9  |  0  |
 | 10       |   8   |   2   |    6     |  8  |  1  |
 | **평균** |       |       | **0.7**  |     |     |
-
+:::
 
 ------------------------------------------------------------------------
 
 ## 단순 평균 차이 (SDO): 계산
 
 ::::: columns
-::: {.column width="50%"}
+::: {.column width="40%"}
 | 학생     | $Y$ (관측값) | $D$ | $\delta$ |
 |----------|:------------:|:---:|:--------:|
 | 1        |      5       |  1  |    3     |
@@ -440,7 +446,7 @@ $$
 | **평균** |              |     | **0.7**  |
 :::
 
-::: {.column width="50%"}
+::: {.column width="60%"}
 🔢 **단순 평균 차이 (SDO) 계산**
 
 $$
@@ -470,7 +476,7 @@ $$
 \end{align}
 $$
 
-✨ 가정: 모든 개인에 대해 처치 효과가 일정하다고 가정 ($\delta_i = \delta$) 그러면,
+✨ 가정: 모든 개인에 대해 처치 효과가 일정하다고 가정 하자. (즉, $\delta_i = \delta$) 
 $$
   SDO = \delta + \mathop{\mathbb{E}}(Y_i^0 | D_i = 1) - \mathop{\mathbb{E}}(Y_i^0 | D_i = 0)
 $$
@@ -526,11 +532,12 @@ toy_data_random <- toy_data_random %>%
 
 📂 **1. 데이터 불러오기 및 변수 생성**
 
--   데이터 다운로드 [링크](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_causality/data/toy_data_2.csv). `read.csv()`를 사용하여 데이터를 불러오기.
+-   데이터 다운로드 [링크](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/toy_data_2.csv). `read.csv()`를 사용하여 데이터를 불러오기.
+
 
 -   **변수 설명**
 
-    -   `group`: 처치를 받았는지 여부 (`1 = 처치군`, `0 = 통제군`).\
+    -   `group_dummy`: 처치를 받았는지 여부 (`1 = 처치군`, `0 = 통제군`).\
     -   `Y0`: 처치를 받지 않았을 경우의 잠재적 결과 $(Y_i^0)$.\
     -   `Y1`: 처치를 받았을 경우의 잠재적 결과 $(Y_i^1)$.
 
@@ -547,7 +554,7 @@ toy_data_random <- toy_data_random %>%
 
 🔀 **3. 무작위 배정된 데이터에서 SDO 계산**
 
--   새로운 데이터 다운로드 [링크](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_causality/data/toy_data_random.csv).  이 데이터에서는 동일한 개인을 **임의로 무작위 배정(random assignment)**하였음.
+-   새로운 데이터 다운로드 [링크](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/toy_data_random.csv).  이 데이터에서는 동일한 개인을 **임의로 무작위 배정(random assignment)**하였음.
 
 -   $Y_i$ 재계산 하시오. 새로운 처치 배정에 맞춰 다시 계산해야 함.
 
@@ -572,8 +579,8 @@ toy_data_random <- toy_data_random %>%
 **📌 무작위 실험(Randomized experiments)**:\
 - 사람들을 **무작위(randomly)**로 처치군과 통제군에 배정함.\
 - 이 경우, 처치 배정은 **잠재적 결과(potential outcomes)와 독립적(independent)**.
-- 즉 $\mathbb{E}(Y_i^0 | D_i = 1)$과 $\mathbb{E}(Y_i^0 | D_i = 0)$이 서로 다를 이유가 없음.
--   따라서, **선택 편향(selection bias)이 0이 됨**.
+- 즉 $\mathbb{E}(Y_i^0 | D_i = 1)$과 $\mathbb{E}(Y_i^0 | D_i = 0)$이 서로 다를 이유가 없음. \
+- 따라서, **선택 편향(selection bias)이 0이 됨**.
 
 ✅ 무작위 배정이 이루어진다면:
 
@@ -597,7 +604,7 @@ $$
 
 -   **20세기 초반**, 통계학자 **J. Neyman**과 **R.A. Fisher**에 의해 널리 보급됨.
 
--   이후 **공공정책 평가(public policy evaluation)의 신뢰할 수 있는 도구**로 점차 자리 잡음. 👉 [참고 자료](https://www.povertyactionlab.org/fr)
+-   이후 **공공정책 평가(public policy evaluation)의 신뢰할 수 있는 도구**로 점차 자리 잡음. 
 
 -   **경제학(Economics)에서도 RCT의 영향력 증가**
 
@@ -614,7 +621,7 @@ $$
 \textrm{math score}_i = b_0 + b_1 \textrm{class size}_i + e_i
 $$
 
-그러나 $b_1^{OLS}$는 인과관계(causal relationship)가 아니라 단순한 상관관계(association)만을 보여줌. 그 이유는?
+그러나 $b_1^{OLS}$는 인과관계(causal relationship)가 아니라 단순한 상관관계(association)만을 보여줌. 
 
 📌 왜 OLS 계수 $b_1$이 인과관계를 추정할 수 없는가?
 
@@ -671,28 +678,28 @@ $$
 
 
 ```{r, echo=FALSE}
-star_df = read_csv("https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_causality/data/star_data.csv")
+star_df = read_csv("https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/star_data.csv")
 ```
 
 🔍 2. **데이터의 기본 정보 확인**
 
 -   **관찰 단위(Unit of observation)**는 무엇인가?
--   다음 내용을 포함하는 변수는? (i) 랜덤 학급 배정(random class assignment), (ii) 학생의 학년(class grade), (iii) 결과 변수(outcomes of interest)
+-   (i) 랜덤 학급 배정(random class assignment): `star`, (ii) 학생의 학년(class grade): `grade`, (iii) 결과 변수(outcomes of interest): `read` & `math`
 
 
 
 📊 3. **데이터 크기 및 결측값(NA) 분석**
 
--   총 관측치 수는 몇 개인가? 11,598명의 학생이 실험에 참여했는데, 왜 관측치가 더 많은가? NA 값이 많은 이유는 무엇인가? 이들이 의미하는 것은?
-
+-   총 관측치 수는 몇 개인가? 원래에는 학생별로 관측단위였는데, 학년-학생 단위로 데이터를 재구조화하였기 때문에 NA 값이 많음. 또한 `NA`는 여러 가지 이유로 실험을 떠나게 된 학생들임.
 
 
 🚀 4. **결측값 처리 (NA 제거)**
 
 -   다음 코드 실행하여 결측값이 없는 경우만 유지:
 
-```{r, echo=TRUE, eval=TRUE}
-star_df <- star_df[complete.cases(star_df),]
+```{r, echo=TRUE, eval=FALSE}
+star_df <- star_df[complete.cases(star_df)] # 또는
+star_df <- na.omit(star_df)
 ```
 
 📈 5. **무작위 배정 확인 (Balancing Checks)**
@@ -712,11 +719,12 @@ star_df <- star_df[complete.cases(star_df),]
 
 -   **무작위 통제 실험(RCT)**에서는 **처치군(treatment group)과 통제군(control group)의 결과 차이**를 이용해 **평균 처치 효과(ATE)**를 추정할 수 있음.
 
-다음과 같은 설정하자:
+다음과 같은 설정:
 
 -   **처치군(Treatment Group)**: **소규모 학급(Small class)**\
 -   **통제군(Control Group)**: **일반 학급(Regular class)**\
 -   **대상 학년(Grade)**: **유치원(Kindergarten, k)**
+
 
 ```{r, echo = FALSE}
 diff_table = data.frame(
@@ -749,14 +757,15 @@ diff_table = data.frame(
     arrange(factor(grade, levels = c("k","1","2","3")))
 ```
 
+
 | grade | test | mean regular | mean small | ATE |
 |---------------|---------------|:-------------:|:-------------:|:-------------:|
-| k | math | `r round(diff_table[1,3], 2)` | `r round(diff_table[1,4], 2)` | `r round(diff_table[1,4] - diff_table[1,3], 2)` |
-| k | read | `r round(diff_table[2,3], 2)` | `r round(diff_table[2,4], 2)` | `r round(diff_table[2,4] - diff_table[2,3], 2)` |
+| k | math | 484.45 | 493.34 | 8.9 |
+| k | read | 435.76 | 441.13 | 5.37 |
 
 📌 이 ATE 값들의 해석은?
 
-📉 회귀분석(regression)으로 표현한다면?
+📉 회귀분석(regression)으로 표현할 수 있을까?
 
 ------------------------------------------------------------------------
 
@@ -803,7 +812,7 @@ $$
 
 ## 프로젝트 STAR 실험: 회귀 분석
 
-✅ **소규모 학급(small class)에 배정된 것이 수학 성적(math score)에 미치는 ATE를 추정해보자.**
+✅ **소규모 학급에 배정된 것이 수학 성적에 미치는 ATE를 추정해보자.**
 
 📊 **추정할 회귀 모델**: $\text{math score}_i = b_0 + \delta \text{small}_i + e_i
 $
@@ -818,12 +827,12 @@ $$
 $$
 
 ::::: columns
-::: {.column width="60%"}
+::: {.column width="55%"}
 ```{r, echo = TRUE}
 star_df_k_small <- star_df %>%
     filter(star %in% c("regular", "small") &
            grade == "k") %>% 
-  mutate(small = (star == "small"))
+    mutate(small = (star == "small"))
 ```
 
 ```{r, echo=TRUE, eval = F}
@@ -833,7 +842,7 @@ star_df_k_small %>% count(small)
 ```
 :::
 
-::: {.column width="40%"}
+::: {.column width="45%"}
 ```{r, echo = FALSE}
 star_df_k_small %>%
   count(star, grade)

@@ -10,11 +10,11 @@ format: html
 
 📂 **1. 데이터 불러오기 및 변수 생성**
 
--   데이터 다운로드 [링크](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/toydata2.csv). `read.csv()`를 사용하여 데이터를 불러오기.
+-   데이터 다운로드 [링크](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/toy_data_2.csv). `read.csv()`를 사용하여 데이터를 불러오기.
 
 -   **변수 설명**
 
-    -   `group`: 처치를 받았는지 여부 (`1 = 처치군`, `0 = 통제군`).\
+    -   `group_dummy`: 처치를 받았는지 여부 (`1 = 처치군`, `0 = 통제군`).\
     -   `Y0`: 처치를 받지 않았을 경우의 잠재적 결과 $(Y_i^0)$.\
     -   `Y1`: 처치를 받았을 경우의 잠재적 결과 $(Y_i^1)$.
 
@@ -37,7 +37,7 @@ format: html
 
 🔀 **3. 무작위 배정된 데이터에서 SDO 계산**
 
--   새로운 데이터 다운로드 [링크](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/toy_data_random.csv).  이 데이터에서는 동일한 개인을 **임의로 무작위 배정(random assignment)**하였음.
+-   새로운 데이터 다운로드 [링크](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/toy_data_random.csv).  이 데이터에서는 동일한 개인을 **임의로 무작위 배정(random assignment)**하였음.
 
 -   $Y_i$ 재계산 하시오. 새로운 처치 배정에 맞춰 다시 계산해야 함.
 
@@ -67,7 +67,7 @@ format: html
 ## Task 2: STAR data
 
 
-📂 1. **데이터 불러오기**: 데이터 다운로드 [링크](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/star_data.csv)\
+📂 1. **데이터 불러오기**: 데이터 다운로드 [링크](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/star_data.csv)\
 - 데이터를 `star_df` 객체에 저장. 변수 설명 [**도움말 확인**](https://rdrr.io/cran/AER/man/STAR.html).\
 (📌**데이터가 재구성(reshaped)되어, 변수명 끝의 "k", "1" 등의 숫자는 무시.**)
 
@@ -78,13 +78,13 @@ format: html
 
 
 
--   다음 내용을 포함하는 변수는? (i) 랜덤 학급 배정(random class assignment), (ii) 학생의 학년(class grade), (iii) 결과 변수(outcomes of interest)
+-   (i) 랜덤 학급 배정(random class assignment): `star`, (ii) 학생의 학년(class grade): `grade`, (iii) 결과 변수(outcomes of interest): `read` & `math`
 
 
 
 📊 3. **데이터 크기 및 결측값(NA) 분석**
 
--   총 관측치 수는 몇 개인가? 11,598명의 학생이 실험에 참여했는데, 왜 관측치가 더 많은가? NA 값이 많은 이유는 무엇인가? 이들이 의미하는 것은?
+-   총 관측치 수는 몇 개인가? 원래에는 학생별로 관측단위였는데, 학년-학생 단위로 데이터를 재구조화하였기 때문에 NA 값이 많음. 또한 `NA`는 여러 가지 이유로 실험을 떠나게 된 학생들임.
 
 
 🚀 4. **결측값 처리 (NA 제거)**
@@ -92,7 +92,8 @@ format: html
 -   다음 코드 실행하여 결측값이 없는 경우만 유지:
 
 ```{r, echo=TRUE, eval=FALSE}
-star_df <- star_df[complete.cases(star_df)]
+star_df <- star_df[complete.cases(star_df),] # 또는
+star_df <- na.omit(star_df)
 ```
 
 
