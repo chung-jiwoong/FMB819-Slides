@@ -44,49 +44,50 @@
 
 **주제5: Multiple Linear Regression**
 
-[HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_mlr/chapter_mlr.html)
-[.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_mlr/chapter_mlr.qmd)
+[HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_mlr/chapter_mlr.html) / 
+[.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_mlr/chapter_mlr.qmd) / 
+[Tasks](https://chung-jiwoong.github.io/FMB819-Slides/chapter_mlr/tasks/mlr_tasks.qmd)
     
 
 **주제6: Linear Regression Extensions**
 
-[HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_regext/chapter_regext.html)
+[HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_regext/chapter_regext.html) / 
 [.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_regext/chapter_regext.qmd)
 
 
 **주제7: Sampling**
 
-[HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_sampling/chapter_sampling.html)
+[HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_sampling/chapter_sampling.html) / 
 [.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_sampling/chapter_sampling.qmd)
 
 
 **주제8: Confidence Intervals and Hypothesis Testing**
 
-[HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_ci_hyptest/chapter_ci_hyptest.html)
+[HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_ci_hyptest/chapter_ci_hyptest.html) / 
 [.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_ci_hyptest/chapter_ci_hyptest.qmd)
 
 
 **주제9: Regression Inference**
 
-[HTML](https://chung-jiwoong.github.io/FMB819-Slides/reg_inference/reg_inference.html)
+[HTML](https://chung-jiwoong.github.io/FMB819-Slides/reg_inference/reg_inference.html) / 
 [.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/reg_inference/reg_inference.qmd)
 
 
 **주제10: Differences-in-differences (Optional)**
 
-[HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_did/chapter_did.html)
+[HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_did/chapter_did.html) / 
 [.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_did/chapter_did.qmd)
 
 
 **주제11: Regression Discontinuity Design (Optional)**
 
-[HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_rdd/chapter_rdd.html)
+[HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_rdd/chapter_rdd.html) / 
 [.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_rdd/chapter_rdd.qmd)
 
 
 **주제12: Instrumental Variables (Optional)**
 
-[HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_iv/chapter_iv.html)
+[HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_iv/chapter_iv.html) / 
 [.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_iv/chapter_iv.qmd)
   
 

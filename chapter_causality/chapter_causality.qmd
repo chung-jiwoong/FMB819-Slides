@@ -671,7 +671,7 @@ $$
 `r countdown(minutes = 10, top = 0)`
 :::
 
-📂 1. **데이터 불러오기**: 데이터 다운로드 [링크](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_causality/data/star_data.csv)\
+📂 1. **데이터 불러오기**: 데이터 다운로드 [링크](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/star_data.csv)\
 - 데이터를 `star_df` 객체에 저장. 변수 설명 [**도움말 확인**](https://rdrr.io/cran/AER/man/STAR.html).\
 (📌**데이터가 재구성(reshaped)되어, 변수명 끝의 "k", "1" 등의 숫자는 무시.**)
 

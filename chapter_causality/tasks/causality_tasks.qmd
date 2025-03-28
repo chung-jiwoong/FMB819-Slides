@@ -2,7 +2,13 @@
 title: "Simple Linear Regression"
 format: html
 ---
-
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+    echo = TRUE,
+    message = FALSE,
+    warning = FALSE,
+    comment = "##")
+```
 
 
 ## Task 1: SDO, ATE and Randomization

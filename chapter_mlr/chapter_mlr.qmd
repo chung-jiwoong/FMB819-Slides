@@ -70,8 +70,7 @@ countdown(
 **Angrist & Lavy (1999)의 연구 분석**
 
 -   이스라엘 학생들의 성취도에 대한 *학급 규모*의 영향을 분석
--   **단순 선형 회귀**를 사용한 경우,
-    → 학급 규모가 커질수록 수학 및 읽기 점수가 증가하는 ***연관성***이 발견됨
+-   **단순 선형 회귀**를 사용한 경우 → 학급 규모가 커질수록 수학 및 읽기 점수가 증가하는 ***연관성***이 발견됨
 
 ------------------------------------------------------------------------
 
@@ -183,7 +182,7 @@ ggplot(grades, aes(x = disadvantaged, y = classize)) +
   geom_smooth(se = FALSE, method = "lm", colour = "#d90502")
 ```
 
-➡ 평균적으로, 불리한 배경을 가진 학생 비율이 높은 학급일수록 학급 규모가 작음. :
+➡ 평균적으로, 불리한 배경을 가진 학생 비율이 높은 학급일수록 학급 규모가 작음.
 :::
 
 ::: {.column width="50%"}
@@ -208,7 +207,7 @@ ggplot(grades, aes(x = disadvantaged, y = avgmath)) +
 
 ------------------------------------------------------------------------
 
-## 학급 규모와 학생 성취: 다중 회귀 분석 (Multiple regression)
+## 학급 규모와 학생 성취: 다중 회귀 분석
 
 -   우리는 **학급 규모가 평균 수학 점수에 미치는 효과**를 알고 싶음.
 
@@ -218,15 +217,12 @@ ggplot(grades, aes(x = disadvantaged, y = avgmath)) +
 
 -   이렇게 하면 **학급 규모가 평균 수학 점수에 미치는 효과를, 불리한 배경 변수의 영향을 제거한(purged) 형태로 추정 가능**.
 
-**추정하려는 회귀 모델**
+**추정하려는 회귀 모델** 다중 회귀 분석(Multiple Regression)
 
 $$
- \textrm{average math score}_i = b_0 + b_1 \textrm{class size}_i + b_2 \textrm{\% disadvantaged}_i + e_i
+ \textrm{average math score}_i = b_0 + b_1 \textrm{class size}_i + b_2 \textrm{% disadvantaged}_i + e_i
 $$
 
--   이는 **다중 회귀 분석(Multiple Regression)**!\
--   이 모델을 곧 추정해볼 예정.\
--   먼저, 지금까지 배운 내용을 정리해 보자.
 
 ------------------------------------------------------------------------
 
@@ -245,7 +241,7 @@ $$
 -   ⚠️ 만약 $y_i$에 영향을 주는 다른 모든 요인이 $x_i$와 상관관계가 있다면,\
     → $b_1$은 인과적 효과(Causal Effect)로 해석될 수 없음.
 
--   이를 해결하기 위해, **모델을 확장하고(y_i를 동시에 설명하는 다른 요인을 포함)**\
+-   이를 해결하기 위해, **모델을 확장하고($y_i$를 동시에 설명하는 다른 요인을 포함)**\
     → $y_i$와 $x_i$ 모두와 관련된 변수들을 고려해야 함.
 
 ------------------------------------------------------------------------
@@ -292,7 +288,7 @@ $$
 -   **인과 추론(Causal Inference)과의 연결**
 
     -   다중 회귀 분석에서는 **모델에 포함된 변수들만 일정하게 유지**됨.\
-    -   **모델에 포함되지 않은 변수들은 여전히 변할 수 있어, 추정값에 편향을 일으킬 가능성이 있음.**
+    -   하지만, **모델에 포함되지 않은 변수들은 여전히 변할 수 있어, 추정값에 편향을 일으킬 가능성이 있음.**
 
 ------------------------------------------------------------------------
 
@@ -306,7 +302,7 @@ lm(formula = dependent variable ~  independent variable 1 + independent variable
    data = data.frame containing the data)
 ```
 
--   학급 규모와 학생 성취: 다중 회귀 분석: $\textrm{average math score}_i = b_0 + b_1 \textrm{class size}_i + b_2 \textrm{\% disadvantaged}_i + e_i$
+-   학급 규모와 학생 성취: 다중 회귀 분석: $\textrm{average math score}_i = b_0 + b_1 \textrm{class size}_i + b_2 \textrm{% disadvantaged}_i + e_i$
 
 ```{r}
 lm(avgmath ~ classize + disadvantaged, grades)
@@ -337,11 +333,11 @@ lm(avgmath ~ classize + disadvantaged, grades)
 
 1.  각 회귀 계수의 해석
 
--   $b_0 = 69.94$: 학급 규모 (classize) 와 불리한 배경을 가진 학생 비율 (disadvantaged) 이 모두 0일 때, → 평균 수학 점수(average math score)의 예측값은 69.94
+-   $b_0 = 69.94$: 학급 규모 (classize) 와 불리한 배경을 가진 학생 비율 이 모두 0일 때 → 평균 수학 점수(average math score)의 예측값은 69.94
 
--   $b_1 = 0.07$: 불리한 배경을 가진 학생 비율을 일정하게 유지할 경우, 학급 규모(class size)가 1명 증가하면, → 평균 수학 점수가 평균적으로 0.07점 증가하는 것과 연관됨(associated).
+-   $b_1 = 0.07$: 불리한 배경을 가진 학생 비율을 일정하게 유지할 경우, 학급 규모가 1명 증가하면 → 평균 수학 점수가 평균적으로 0.07점 증가하는 것과 연관됨(associated).
 
--   $b_2 = -0.34$: 학급 규모(class size)를 일정하게 유지할 경우, 불리한 배경을 가진 학생 비율이 1% 증가하면, → 평균 수학 점수가 평균적으로 0.34점 감소하는 것과 연관됨(associated).
+-   $b_2 = -0.34$: 학급 규모를 일정하게 유지할 경우, 불리한 배경을 가진 학생 비율이 1% 증가하면 → 평균 수학 점수가 평균적으로 0.34점 감소하는 것과 연관됨(associated).
 
 ------------------------------------------------------------------------
 
@@ -355,7 +351,7 @@ lm(avgmath ~ classize + disadvantaged, grades)
 
 2.  단순 선형 회귀(SLM)와 비교했을 때 classize 계수의 변화는 어떻게 설명할 수 있는가?
 
--   $b_1$ 값이 감소: disadvantaged 변수를 추가하자 학급 규모(class size)의 계수($b_1$)가 감소함. 이는 예상된 결과로, → 큰 학급일수록 불리한 배경을 가진 학생 비율이 작아지는 경향이 있었기 때문. 즉, 단순 선형 회귀에서는 학급 규모가 학생 성취에 미치는 "순수한 효과"뿐만 아니라, 불리한 배경을 가진 학생 비율이 적은 영향도 포함하고 있었음.
+-   $b_1$ 값이 감소: disadvantaged 변수를 추가하자 학급 규모(class size)의 계수($b_1$)가 감소함. 이는 예상된 결과 → 큰 학급일수록 불리한 배경을 가진 학생 비율이 작아지는 경향이 있었기 때문. 즉, 단순 선형 회귀에서는 학급 규모가 학생 성취에 미치는 "순수한 효과"뿐만 아니라, 불리한 배경을 가진 학생 비율이 적은 영향도 포함하고 있었음.
 
 ------------------------------------------------------------------------
 
@@ -371,7 +367,7 @@ lm(avgmath ~ classize + disadvantaged, grades)
 
 ```{r, echo=FALSE, eval=FALSE}
 library(haven)
-grades <- read_dta("https://www.dropbox.com/s/wwp2cs9f0dubmhr/grade5.dta?dl=1")
+grades <- read_dta("https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/grade5.dta")
 ```
 
 2.  avgverb (읽기 점수)를 종속 변수로, classize와 disadvantaged를 독립 변수로 사용하여 회귀분석. 결과를 reg 객체에 저장. 각 계수(coefficient)의 의미는 무엇인가? 단순 선형 회귀(Simple Linear Regression)와 비교했을 때 계수는 어떻게 달라졌는가? 수학 점수 회귀 분석(Math Score Regression)과 비교했을 때 계수의 차이점은 무엇인가?
@@ -381,9 +377,9 @@ reg <- lm(avgverb ~ classize + disadvantaged, data = grades)
 summary(reg)
 ```
 
-(Optional) 데이터셋에서 추가 가능한 변수를 확인하고 회귀 분석을 확장. 모든 변수를 포함한 회귀 분석을 수행하고 reg_full 객체에 저장.
+(Optional) 데이터셋에서 추가 가능한 변수를 확인하고 회귀 분석을 확장하시오. 모든 변수를 포함한 회귀 분석을 수행하고 reg_full 객체에 저장.
 
--   추가된 변수들의 계수(sign & magnitude)를 해석하라.
+-   추가된 변수들의 계수(sign & magnitude)를 해석하시오.
 -   추가된 변수가 포함됨으로 인해 classize 및 disadvantaged의 계수는 어떻게 변했는가?
 -   전체 모델의 설명력이 증가했는가? (R\^2 값 확인)
 
@@ -400,7 +396,7 @@ summary(reg_full)
 
 -   그렇다면, 독립 변수 중 하나가 ***더미 변수(dummy variable)*** 라면?
 
-*예제 (Example)*: 아래 회귀 모델에서 각 계수의 의미는?
+*예)*: 아래 회귀 모델에서 각 계수의 의미는?
 
 $$
 \text{average math score}_i = b_0 + b_1\text{class size}_i + b_2\text{religious}_i +e_i
@@ -414,7 +410,7 @@ lm(avgmath ~ classize + religious, grades)
 
 ------------------------------------------------------------------------
 
-## 연속형 변수와 더미 변수를 포함한 회귀 분석 (Formal Interpretation)
+## 연속형 변수와 더미 변수를 포함한 회귀 분석
 
 ::: callout
 $$
@@ -429,7 +425,7 @@ $$
 &= \color{#d96502}{b_0}
 \end{align}
 
-**절편 (Intercept,** $b_0$): `religious = 0` (일반 학교)이고, `class size = 0`인 경우의 **예측된 평균 수학 점수**
+**절편 ($b_0$)**: `religious = 0` (일반 학교)이고, `class size = 0`인 경우의 **예측된 평균 수학 점수**
 
 -   $\color{#d96502}{b_0}$ 는 학급 규모가 0이고, 학교가 일반 학교일 때의 평균 수학 점수를 의미.
 
@@ -443,7 +439,7 @@ $$
 $$
 :::
 
--   다음이 성립
+-   또한 다음이 성립
 
 \begin{equation}
 \mathbb{E}(\text{average math score} | \text{religious} \in \{0,1\} \text{ & } \color{#d90502}{\text{class size} = n_1}) = \color{#d96502}{b_0} + \color{#d90502}{b_1} \times n_1 + \color{#027D83}{b_2} \times \text{religious}
@@ -468,7 +464,7 @@ $$
 $$
 :::
 
--   다음이 성립
+-   그리고 다음이 성립
 
 \begin{align}
 \mathbb{E}(\text{average math score} | \color{#027D83}{\text{religious} = 1} \text{ & } \text{class size} \in \mathbb{N}) &= \color{#d96502}{b_0} + \color{#d90502}{b_1} \times \text{class size} + \color{#027D83}{b_2} \times 1 \\
@@ -483,7 +479,7 @@ $$
 = \color{#d96502}{b_0} + \color{#d90502}{b_1} \times \text{class size} + \color{#027D83}{b_2}- (\color{#d96502}{b_0} + \color{#d90502}{b_1} \times \text{class size}) = \color{#027D83}{b_2}
 \end{multline}
 
-$\rightarrow$ $\color{#027D83}{b_2}$ corresponds to the expected difference in average math score between religious and non-religious schools, keeping class size constant.
+$\rightarrow$ $\color{#027D83}{b_2}$는 학급 규모를 일정하게 유지한 상태에서 **종교계 학교와 비종교계 학교 간 평균 수학 점수의 기대 차이**를 의미
 
 ------------------------------------------------------------------------
 
@@ -623,11 +619,9 @@ graph_b0_b1 +
 
 ## 완전 다중공선성(Perfect Collinearity)
 
--   추가하는 변수는 반드시 *새로운 정보*를 제공해야 함.
+-   추가하는 변수는 반드시 **새로운 정보**를 제공해야 함.
+  - 회귀 모형에 추가하는 변수들은 **완전히 선형결합(linear combination)**이 될 수 없음.
 
-::: callout
-회귀 모형에 추가하는 변수들은 **완전히 선형결합(linear combination)**이 될 수 없음.
-:::
 
 $$
 x_2 \neq ax_1 + b
@@ -653,7 +647,7 @@ $$
 lm(avgmath ~ classize + religious, grades)
 ```
 
-⚠ 더미 변수 함정 (Dummy Variable Trap) 만약 religious 변수를 두 개의 더미 변수(is_religious, is_notreligious)로 변환하여 사용한다면?
+⚠ 더미 변수 함정: 만약 religious 변수를 두 개의 더미 변수(is_religious, is_notreligious)로 변환하여 사용한다면?
 
 ```{r, echo=TRUE}
 grades <- grades %>%
@@ -687,7 +681,7 @@ grades %>% count(is_religious == 1 - is_notreligious)
 
 **⚠ 기준(reference) 그룹과 계수 해석**
 
--   ✅ \*제거된 변수(omitted category)는 기준 그룹(reference group)이 됨!\*\*\
+-   ✅ 제거된 변수(omitted category)는 기준 그룹(reference group)이 됨! \
 -   💡 모든 계수는 이 **기준 그룹 대비 변화량**을 의미함.
 
 \begin{multline}
@@ -717,11 +711,11 @@ lm(avgmath ~ classize + religious, grades) # 자동으로 한 변수 제외
 `r countdown(minutes = 10, top = 0)`
 :::
 
-1.  **STAR 데이터**를 다운로드 [here](https://www.dropbox.com/s/bf1fog8yasw3wjj/star_data.csv?dl=1). `read.csv()`를 사용하여 `star_df` 객체에 저장. `NA` 값이 있는 행을 제거: `star_df <- star_df[complete.cases(star_df),]`
+1.  **STAR 데이터**를 다운로드 [링크](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/star_data.csv). `read.csv()`를 사용하여 `star_df` 객체에 저장. `NA` 값이 있는 행을 제거: `star_df <- star_df[complete.cases(star_df),]`
 
 ```{r, echo=FALSE}
 # 데이터 불러오기
-star_df <- read.csv("https://www.dropbox.com/s/bf1fog8yasw3wjj/star_data.csv?dl=1")
+star_df <- read.csv("https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/star_data.csv")
 
 # NA 값이 있는 행 제거
 star_df <- star_df[complete.cases(star_df),]
@@ -779,6 +773,11 @@ $$
 
 -   이 모델에서는 $x$뿐만 아니라 누락된 변수 $z$도 $y$에 영향을 미침. 즉, $z$를 포함하면, $c_1$이 더 정확한 값을 가질 수 있음.
 
+
+------------------------------------------------------------------------
+
+## 누락변수 편의 (Omitted Variable Bias, OVB)
+
 **3️⃣ 누락된 변수와** $x$의 관계 (Omitted Variable on Regressor)
 
 $$
@@ -803,6 +802,8 @@ $$
 💡 **결론:**\
 만약 $z$를 생략하면, $b_1$은 $c_1$에 OVB가 더해진 값이 되어, 실제 값과 차이가 날 수 있음.
 
+
+
 ------------------------------------------------------------------------
 
 ## 누락변수 편의 (Omitted Variable Bias, OVB)
@@ -820,7 +821,7 @@ $$
     -   OVB가 **양수(+)인지 음수(-)인지**를 판단하면, $x$의 계수가 과대(+) 또는 과소(-) 추정되는지 예측할 수 있음.
 
 ::: callout
-\*\*소득(income)과 교육연수(years of education) 사이의 관계를 분석할 때,
+소득(income)과 교육연수(years of education) 사이의 관계를 분석할 때,
 
 1.  단순 회귀 분석에서 소득을 교육연수에 회귀(regression) 시키면 신뢰할 수 없는 추정치가 나올 가능성이 있다. 왜 그럴까?
 2.  어떤 변수가 누락된 변수(omitted variable)일 수 있을까?\
@@ -837,21 +838,21 @@ $$
 \text{average math score} = b_0 + b_1\text{class size} + e
 $$
 
-***Simple linear model:*** $\text{average math score} = b_0 + b_1\text{class size} + e$
+***단순회귀모형:*** $\text{average math score} = b_0 + b_1\text{class size} + e$
 
 ```{r, echo = FALSE}
 reg1 <- lm(avgmath ~ classize, grades)
 reg1$coefficients
 ```
 
-***Multiple linear model:*** $\text{average math score} = c_0 + c_1\text{class size} + \color{#d90502}{c_2}\text{\% disadvantaged} + e$
+***다중회귀모형:*** $\text{average math score} = c_0 + c_1\text{class size} + \color{#d90502}{c_2}\text{% disadvantaged} + e$
 
 ```{r, echo = FALSE}
 reg2 <- lm(avgmath ~ classize + disadvantaged, grades)
 reg2$coefficients
 ```
 
-***Omitted variable on regressor***: $\text{\% disadvantaged} = d_0 + \color{#d96502}{d_1}\text{class size} + e$
+***누락변수와 독립변수***: $\text{% disadvantaged} = d_0 + \color{#d96502}{d_1}\text{class size} + e$
 
 ```{r, echo = FALSE}
 reg3 <- lm(disadvantaged ~ classize, grades)
@@ -866,7 +867,7 @@ reg3$coefficients
 
 -   $R^2$ (결정 계수) 는 회귀 모델이 **종속 변수(**$y$)의 변동을 얼마나 설명하는지 나타내는 지표.
 
--   하지만, **새로운 변수를 추가할 때마다** $R^2$ 값은 항상 증가합니다.
+-   하지만, **새로운 변수를 추가할 때마다** $R^2$ 값은 항상 증가.
 
     -   심지어 **의미 없는 변수라도 추가하면** $R^2$이 증가할 수 있음!
 
@@ -883,8 +884,6 @@ reg3$coefficients
 `r countdown(minutes = 10, top = 0)`
 :::
 
-*STAR* 데이터 사용
-
 1.  Task 2에서 필터링한 *STAR* 데이터를 사용하여 `math`를 `school` 변수에 대해 회귀 분석하시오. `school` 변수가 포함하는 값들을 먼저 확인. 회귀 계수를 해석하시오. 누락된 범주 (category)는? 결과가 예상과 일치하는가? 만약 다르다면 왜 그런가? 누락된 변수가 존재할 가능성이 있는가?
 
 2.  `lunch` 변수가 `"free"`인 학생들의 비율을 **학교 위치(school) 별로 계산**하시오. 결과를 보고, **무료 점심 자격 여부(`free`) 변수를 추가하여 이전 회귀 분석을 다시 수행**하시오. `free` 변수를 추가했을 때 회귀 계수는 어떻게 변화하는가?
@@ -892,9 +891,9 @@ reg3$coefficients
 3.  `math`를 `star` 변수에 대해 회귀 분석하시오. 다음의 모든 변수를 포함하여 다중 회귀 분석을 수행하시오:\
     `math ~ star + gender + ethnicity + lunch + degree + experience + school`. 무작위 실험이 **잘 수행되었다고 판단할 수 있는가?**
 
-4.  **다중 회귀 분석**에서 얻은 **수정된** $R^2$ 값을 확인하시오. 수정된 $R^2$ 값이 의미하는 바는 무엇인가? 관측 가능한 개별 학생, 교사, 학교 특성이 학업 성취도에 미치는 중요성\*\*에 대해 어떤 결론을 내릴 수 있는가?
+4.  **다중 회귀 분석**에서 얻은 **수정된** $R^2$ 값을 확인하시오. 수정된 $R^2$ 값이 의미하는 바는 무엇인가? 관측 가능한 개별 학생, 교사, 학교 특성이 학업 성취도에 미치는 중요성에 대해 어떤 결론을 내릴 수 있는가?
 
-5.  (Optional) `math`를 `gender`와 `experience` 변수에 대해 회귀 분석하시오. 회귀 계수를 어떻게 해석할 수 있는가? 이러한 회귀 분석 결과를 \*\*시각적으로 표현한다면 어떻게 보일 것인가?
+5.  (Optional) `math`를 `gender`와 `experience` 변수에 대해 회귀 분석하시오. 회귀 계수를 어떻게 해석할 수 있는가? 이러한 회귀 분석 결과를 시각적으로 표현한다면 어떻게 보일 것인가?
 
 ------------------------------------------------------------------------
 
