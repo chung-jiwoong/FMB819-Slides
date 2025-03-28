@@ -236,7 +236,7 @@
 <section id="task-1" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 1</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_2b38e313" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">07</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_ec436a43" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">07</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
 <ol type="1">
 <li><p>데이터를 <a href="https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/grade5.dta">여기</a>에서 다운로드해서 <code>grades</code>로 저장하시오.<br>
@@ -546,7 +546,7 @@ y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 <section id="task-2" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 2</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_7ae8770d" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_e090c157" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
 <p>다음 코드를 실행하여 데이터를 학급 규모(class size) 수준에서 집계하시오:</p>
 <div class="cell" data-layout-align="center">
@@ -637,13 +637,13 @@ y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 </div>
 </div>
 </section>
-<section id="데이터에서-비선형-관계-nonlinear-relationships-in-data" class="slide level2">
-<h2>데이터에서 비선형 관계? (Nonlinear Relationships in Data?)</h2>
+<section id="데이터에서-비선형-관계" class="slide level2">
+<h2>데이터에서 비선형 관계?</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <ul>
 <li><p>회귀 분석에서 비선형 관계를 반영할 수 있음.</p></li>
-<li><p>고차항(higher order term)*을 추가하면 됨.<br>
+<li><p><em>고차항(higher order term)</em>을 추가하면 됨.<br>
 <span class="math display">\[
   y_i = b_0 + b_1 x_i + b_2 x_i^2 + e_i
   \]</span></p></li>
@@ -693,8 +693,8 @@ Var(y) &amp;= Var(\widehat{y} + e)\\
 R^2 = \frac{\text{variance explained}}{\text{total variance}} = \frac{SSE}{SST} = 1 - \frac{SSR}{SST}\in[0,1]
 \]</span></p>
 <ul>
-<li><p><span class="math inline">\(R^2\)</span> 값이 <strong>1에 가까울수록</strong>, 모델의 <strong>설명력(explanatory power)</strong>이 *** 높음***을 의미함.</p></li>
-<li><p><span class="math inline">\(R^2\)</span> 값이 <strong>0에 가까울수록</strong>, 모델의 <strong>설명력</strong>이 <strong><em>낮음</em></strong>을 의미함.</p></li>
+<li><p><span class="math inline">\(R^2\)</span> 값이 <strong>1에 가까울수록</strong>, 모델의 <strong>설명력(explanatory power)</strong>이 <strong><em>높음.</em></strong></p></li>
+<li><p><span class="math inline">\(R^2\)</span> 값이 <strong>0에 가까울수록</strong>, 모델의 <strong>설명력</strong>이 <strong><em>낮음</em></strong>.</p></li>
 <li><p>예를 들어, <span class="math inline">\(R^2 = 0.5\)</span>이면, <strong><span class="math inline">\(x\)</span>의 변화가 <span class="math inline">\(y\)</span>의 변화 중 50%를 설명함</strong>.</p></li>
 <li><p>낮은 <span class="math inline">\(R^2\)</span> 값이 무조건 모델이 쓸모없다는 뜻은 아님! <strong>예측(predictive power)</strong>보다는 <strong>인과적 메커니즘(causal mechanisms)</strong>에 더 초점을 맞추는 경우.</p></li>
 <li><p><span class="math inline">\(R^2\)</span> 값은 <strong>인과 관계(causal relationship)를 나타내는 지표가 아님!</strong> 회귀 모델에서 높은 <span class="math inline">\(R^2\)</span> 값이 있다고 해서, <span class="math inline">\(x\)</span>가 <span class="math inline">\(y\)</span>를 인과적으로 설명한다고 볼 수 없음!</p></li>
@@ -703,7 +703,7 @@ R^2 = \frac{\text{variance explained}}{\text{total variance}} = \frac{SSE}{SST} 
 <section id="task-3" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 3</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_b1da052d" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_ba061af9" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
 <ol type="1">
 <li><p><code>avgmath_cs</code>를 <code>classize</code>에 대해 회귀(regress)하고 결과를 <code>math_reg</code> 객체에 저장.</p></li>

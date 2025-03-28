@@ -21,14 +21,18 @@
 
 [HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_tidy/chapter_tidy.html) / 
 [.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_tidy/chapter_tidy.qmd) / 
-[Tasks](https://chung-jiwoong.github.io/FMB819-Slides/chapter_tidy/tasks/tidy_tasks.qmd) / [Solution: Part1](https://chung-jiwoong.github.io/FMB819-Slides/chapter_tidy/tasks/tidy_solution_part1.html) / 참고자료: "R for Data Science" [영문판](https://r4ds.had.co.nz/transform.html) [국문판](https://bookdown.org/sulgi/r4ds/) / [dplyr 치트시트](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf) 
+[Tasks](https://chung-jiwoong.github.io/FMB819-Slides/chapter_tidy/tasks/tidy_tasks.qmd) / 
+[Solution: 전체](https://chung-jiwoong.github.io/FMB819-Slides/chapter_tidy/tasks/tidy_solution.html) / 
+참고자료: "R for Data Science" [영문판](https://r4ds.had.co.nz/transform.html) [국문판](https://bookdown.org/sulgi/r4ds/) / 
+[dplyr 치트시트](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf) 
     
 
 **주제3: Simple Linear Regression**
 
 [HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_slr/chapter_slr.html) / 
 [.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_slr/chapter_slr.qmd) / 
-[Tasks](https://chung-jiwoong.github.io/FMB819-Slides/chapter_slr/tasks/slr_tasks.qmd)
+[Tasks](https://chung-jiwoong.github.io/FMB819-Slides/chapter_slr/tasks/slr_tasks.qmd) / 
+[Solution: Part 1](https://chung-jiwoong.github.io/FMB819-Slides/chapter_slr/tasks/slr_solution_part1.html)
   
 
 **주제4: Introduction to Causality**
