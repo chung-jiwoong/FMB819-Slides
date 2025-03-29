@@ -33,7 +33,10 @@
 [.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_slr/chapter_slr.qmd) / 
 [Tasks](https://chung-jiwoong.github.io/FMB819-Slides/chapter_slr/tasks/slr_tasks.qmd) / 
 [Solution: Part 1](https://chung-jiwoong.github.io/FMB819-Slides/chapter_slr/tasks/slr_solution_part1.html)
-  
+
+
+**기말 프로젝트 가이드라인 [링크](https://chung-jiwoong.github.io/FMB819-Slides/final_project.html)**
+
 
 **주제4: Introduction to Causality**
 
