@@ -36,7 +36,8 @@
 
 
 **기말 프로젝트 가이드라인 [링크](https://chung-jiwoong.github.io/FMB819-Slides/final_project.html)**
-
+[Final Project](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/final_project.html)
+[Final Project](https://chung-jiwoong.github.io/FMB819-Slides/final_project.html)
 
 **주제4: Introduction to Causality**
 
