@@ -35,7 +35,7 @@
 [Solution: Part 1](https://chung-jiwoong.github.io/FMB819-Slides/chapter_slr/tasks/slr_solution_part1.html)
 
 
-**기말 프로젝트 가이드라인 [링크](https://chung-jiwoong.github.io/FMB819-Slides/final_project.html) [링크](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/final_project.html)**
+<span style="color:red">**-- 기말 프로젝트 가이드라인 [링크](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/final_project.html) --**</span>
 
 
 **주제4: Introduction to Causality**
