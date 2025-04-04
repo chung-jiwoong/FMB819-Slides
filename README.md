@@ -32,17 +32,19 @@
 [HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_slr/chapter_slr.html) / 
 [.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_slr/chapter_slr.qmd) / 
 [Tasks](https://chung-jiwoong.github.io/FMB819-Slides/chapter_slr/tasks/slr_tasks.qmd) / 
-[Solution: Part 1](https://chung-jiwoong.github.io/FMB819-Slides/chapter_slr/tasks/slr_solution_part1.html)
+[Solution: 전체](https://chung-jiwoong.github.io/FMB819-Slides/chapter_slr/tasks/slr_solution.html)
 
 
-<span style="color:red">**-- 기말 프로젝트 가이드라인 [링크](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/final_project.html) --**</span>
+**-- 기말 프로젝트 가이드라인 [링크](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/final_project.html) --**
 
 
 **주제4: Introduction to Causality**
 
 [HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/chapter_causality.html) / 
 [.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_causality/chapter_causality.qmd) / 
-[Tasks](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/tasks/causality_tasks.qmd)
+[Tasks](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/tasks/causality_tasks.qmd) / 
+[Solution: Part 1](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/tasks/causality_solution_part1.html)
+
 
 
 **주제5: Multiple Linear Regression**

@@ -57,16 +57,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="slr_solution_part1_files/libs/clipboard/clipboard.min.js"></script>
-<script src="slr_solution_part1_files/libs/quarto-html/quarto.js"></script>
-<script src="slr_solution_part1_files/libs/quarto-html/popper.min.js"></script>
-<script src="slr_solution_part1_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="slr_solution_part1_files/libs/quarto-html/anchor.min.js"></script>
-<link href="slr_solution_part1_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="slr_solution_part1_files/libs/quarto-html/quarto-syntax-highlighting-48ffa3e5b9d089919c6712c39e5b00f2.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="slr_solution_part1_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="slr_solution_part1_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="slr_solution_part1_files/libs/bootstrap/bootstrap-1bc8a17f135ab3d594c857e9f48e611b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="slr_solution_files/libs/clipboard/clipboard.min.js"></script>
+<script src="slr_solution_files/libs/quarto-html/quarto.js"></script>
+<script src="slr_solution_files/libs/quarto-html/popper.min.js"></script>
+<script src="slr_solution_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="slr_solution_files/libs/quarto-html/anchor.min.js"></script>
+<link href="slr_solution_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="slr_solution_files/libs/quarto-html/quarto-syntax-highlighting-48ffa3e5b9d089919c6712c39e5b00f2.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="slr_solution_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="slr_solution_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="slr_solution_files/libs/bootstrap/bootstrap-1bc8a17f135ab3d594c857e9f48e611b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -321,7 +321,7 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="slr_solution_part1_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="slr_solution_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -368,8 +368,8 @@ window.Quarto = {
 ##     69.1861       0.1332</code></pre>
 </div>
 </div>
-<p><strong><span class="math inline">\(b_0\)</span> (절편)의 해석:</strong> 반 크기가 0명일 때 예측된 평균 언어 점수는 69.19입니다. 하지만 이는 현실적으로 의미가 없습니다. 왜냐하면 반에 학생이 한 명도 없다면 점수도 존재할 수 없기 때문입니다. 따라서 <em>표본 외 예측</em> (out-of-sample predictions), 즉 데이터 범위를 벗어난 값에 대한 예측에는 주의해야 합니다.</p>
-<p><strong><span class="math inline">\(b_1\)</span> (기울기)의 해석:</strong> 평균적으로, 반 크기가 학생 1명 증가할 때 평균 언어 점수가 0.13만큼 증가하는 것으로 나타났습니다.</p>
+<p><strong>( b_0 ) (절편)의 해석:</strong> 반 크기가 0명일 때 예측된 평균 언어 점수는 69.19입니다. 하지만 이는 현실적으로 의미가 없습니다. 왜냐하면 반에 학생이 한 명도 없다면 점수도 존재할 수 없기 때문입니다. 따라서 <em>표본 외 예측</em> (out-of-sample predictions), 즉 데이터 범위를 벗어난 값에 대한 예측에는 주의해야 합니다.</p>
+<p><strong>( b_1 ) (기울기)의 해석:</strong> 평균적으로, 반 크기가 학생 1명 증가할 때 평균 언어 점수가 0.13만큼 증가하는 것으로 나타났습니다.</p>
 <ol start="2" type="1">
 <li>이 회귀분석에서 OLS 계수 <span class="math inline">\(b_0\)</span> 및 <span class="math inline">\(b_1\)</span>을 직접 계산 (공식 이용).<br>
 <em>힌트</em>: <code>cov</code>, <code>var</code>, <code>mean</code> 함수 사용.</li>
@@ -391,6 +391,109 @@ window.Quarto = {
 <div class="cell-output cell-output-stdout">
 <pre><code>##   cov(classize, avgmath_cs)
 ## 1                  61.10917</code></pre>
+</div>
+</div>
+<ol start="3" type="1">
+<li>학급 규모가 0일 때, 예측된 평균 언어 점수는 얼마인가? 이 값이 실제로 의미가 있는가?</li>
+</ol>
+<p>기울기 계수 <span class="math inline">\(b_1\)</span> 는 평균 수학 점수에서 얻은 계수와 매우 유사합니다. 이는 예상된 결과인데, 두 점수에 대한 산점도가 서로 비슷한 패턴을 보였기 때문입니다.</p>
+<ol start="4" type="1">
+<li>학급 규모가 30명일 때, 예측된 평균 언어 점수는 얼마인가?</li>
+</ol>
+<p>반 크기가 30명일 때의 예측된 평균 언어 점수는 다음과 같습니다: <span class="math inline">\(69.19 + 0.13 \times 30 = 73.09\)</span></p>
+</section>
+<section id="task-3-r2-and-goodness-of-fit" class="level2">
+<h2 class="anchored" data-anchor-id="task-3-r2-and-goodness-of-fit">Task 3: <span class="math inline">\(R^2\)</span> and goodness of fit</h2>
+<ol type="1">
+<li><code>avgmath_cs</code>를 <code>classize</code>에 대해 회귀(regress)하고 결과를 <code>math_reg</code> 객체에 저장.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>math_reg <span class="ot">&lt;-</span> <span class="fu">lm</span>(avgmath_cs <span class="sc">~</span> classize, grades_avg_cs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="2" type="1">
+<li><code>summary(math_reg)</code>를 실행하여 <strong>(다중)</strong> <span class="math inline">\(R^2\)</span> 값을 확인함. 이 값의 의미를 해석할 것.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(math_reg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## 
+## Call:
+## lm(formula = avgmath_cs ~ classize, data = grades_avg_cs)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -9.7543 -1.7985  0.3109  1.4768 11.9345 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 61.10917    1.43598  42.556  &lt; 2e-16 ***
+## classize     0.19127    0.05175   3.696 0.000725 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 3.528 on 36 degrees of freedom
+## Multiple R-squared:  0.2751, Adjusted R-squared:  0.2549 
+## F-statistic: 13.66 on 1 and 36 DF,  p-value: 0.0007249</code></pre>
+</div>
+</div>
+<p><span class="math inline">\(R^2\)</span> 값은 약 <strong>0.28</strong>로, 이는 평균 수학 점수의 변동성 중 약 <strong>28%</strong>가 반 크기에 의해 설명된다는 것을 의미합니다.</p>
+<ol start="3" type="1">
+<li><code>classize</code>와 <code>avgmath_cs</code> 간 <strong>상관계수(correlation)</strong>를 제곱하여 계산. 이 값은 <strong>단일 설명변수</strong>(one regressor)를 가진 회귀에서 <span class="math inline">\(R^2\)</span>와 상관계수 간의 관계를 보여줌을 보이시오.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>grades_avg_cs <span class="sc">%&gt;%</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">cor_sq =</span> <span class="fu">cor</span>(classize, avgmath_cs)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## # A tibble: 1 × 1
+##   cor_sq
+##    &lt;dbl&gt;
+## 1  0.275</code></pre>
+</div>
+</div>
+<p>단 하나의 독립 변수를 가진 회귀 분석에서는 ( R^2 ) 값이 <strong>종속 변수와 독립 변수 간의 상관계수의 제곱</strong>과 동일합니다.</p>
+<ol start="4" type="1">
+<li>1번과 2번을 <code>avgverb_cs</code>에 대해 반복. 어떤 시험에서 학급 규모의 분산이 학생 점수의 분산을 더 많이 설명하는지 비교하시오.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>verb_reg <span class="ot">&lt;-</span> <span class="fu">lm</span>(avgverb_cs <span class="sc">~</span> classize, grades_avg_cs)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(verb_reg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## 
+## Call:
+## lm(formula = avgverb_cs ~ classize, data = grades_avg_cs)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -17.0152  -0.2451   0.8818   1.8443   8.8323 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 69.18610    1.69180  40.895   &lt;2e-16 ***
+## classize     0.13316    0.06097   2.184   0.0356 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 4.157 on 36 degrees of freedom
+## Multiple R-squared:  0.117,  Adjusted R-squared:  0.09246 
+## F-statistic:  4.77 on 1 and 36 DF,  p-value: 0.03557</code></pre>
+</div>
+</div>
+<p>( R^2 ) 값이 수학 점수에서 더 크므로, 반 크기가 읽기 점수보다 수학 점수의 변동성을 더 많이 설명한다는 것을 의미합니다.</p>
+<ol start="5" type="1">
+<li>(Optional) <code>broom</code> 패키지를 설치 및 로드한 후, <code>math_reg</code>를 <code>augment()</code> 함수에 전달하여 새로운 객체에 저장함.<br>
+<code>avgmath_cs</code>의 분산(SST)과 예측값 <code>.fitted</code>의 분산(SSE)을 사용하여 <span class="math inline">\(R^2\)</span> 값을 직접 계산하시오. (이전 슬라이드의 공식을 참고할 것.)</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"bloom"</span>)) <span class="fu">install.packages</span>(<span class="st">"bloom"</span>, <span class="at">dependencies=</span><span class="cn">TRUE</span>, <span class="at">repos =</span> <span class="st">"https://cloud.r-project.org/"</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>math_reg_aug <span class="ot">&lt;-</span> <span class="fu">augment</span>(math_reg)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>SST <span class="ot">=</span> <span class="fu">var</span>(grades_avg_cs<span class="sc">$</span>avgmath_cs)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>SSE <span class="ot">=</span> <span class="fu">var</span>(math_reg_aug<span class="sc">$</span>.fitted)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>SSE<span class="sc">/</span>SST</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 0.275055</code></pre>
 </div>
 </div>
 </section>

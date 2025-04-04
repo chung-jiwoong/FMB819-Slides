@@ -122,9 +122,9 @@ grades_avg_cs <- grades %>%
 lm(avgverb_cs ~ classize, grades_avg_cs)
 ```
 
-**$b_0$ (절편)의 해석:**  반 크기가 0명일 때 예측된 평균 언어 점수는 69.19입니다. 하지만 이는 현실적으로 의미가 없습니다. 왜냐하면 반에 학생이 한 명도 없다면 점수도 존재할 수 없기 때문입니다. 따라서 *표본 외 예측* (out-of-sample predictions), 즉 데이터 범위를 벗어난 값에 대한 예측에는 주의해야 합니다.
+**\( b_0 \) (절편)의 해석:**  반 크기가 0명일 때 예측된 평균 언어 점수는 69.19입니다. 하지만 이는 현실적으로 의미가 없습니다. 왜냐하면 반에 학생이 한 명도 없다면 점수도 존재할 수 없기 때문입니다. 따라서 *표본 외 예측* (out-of-sample predictions), 즉 데이터 범위를 벗어난 값에 대한 예측에는 주의해야 합니다.
 
-**$b_1$ (기울기)의 해석:**  평균적으로, 반 크기가 학생 1명 증가할 때 평균 언어 점수가 0.13만큼 증가하는 것으로 나타났습니다.
+**\( b_1 \) (기울기)의 해석:**  평균적으로, 반 크기가 학생 1명 증가할 때 평균 언어 점수가 0.13만큼 증가하는 것으로 나타났습니다.
 
 
 2. 이 회귀분석에서 OLS 계수 $b_0$ 및 $b_1$을 직접 계산 (공식 이용). \
@@ -143,4 +143,71 @@ b_0 = y_bar - b_1 * x_bar
 b_0
 ```
 
+
+3.  학급 규모가 0일 때, 예측된 평균 언어 점수는 얼마인가? 이 값이 실제로 의미가 있는가?
+
+기울기 계수 $b_1$ 는 평균 수학 점수에서 얻은 계수와 매우 유사합니다. 이는 예상된 결과인데, 두 점수에 대한 산점도가 서로 비슷한 패턴을 보였기 때문입니다.
+
+
+
+4.  학급 규모가 30명일 때, 예측된 평균 언어 점수는 얼마인가?
+
+
+반 크기가 30명일 때의 예측된 평균 언어 점수는 다음과 같습니다:  $69.19 + 0.13 \times 30 = `r 69.19 + 0.13 * 30`$
+
+
+
+
+
+
+## Task 3: $R^2$ and goodness of fit
+
+1.  `avgmath_cs`를 `classize`에 대해 회귀(regress)하고 결과를 `math_reg` 객체에 저장.
+
+```{r}
+math_reg <- lm(avgmath_cs ~ classize, grades_avg_cs)
+```
+
+2.  `summary(math_reg)`를 실행하여 **(다중)** $R^2$ 값을 확인함. 이 값의 의미를 해석할 것.
+
+```{r}
+summary(math_reg)
+```
+
+$R^2$ 값은 약 **0.28**로, 이는 평균 수학 점수의 변동성 중 약 **28%**가 반 크기에 의해 설명된다는 것을 의미합니다.
+
+3.  `classize`와 `avgmath_cs` 간 **상관계수(correlation)**를 제곱하여 계산. 이 값은 **단일 설명변수**(one regressor)를 가진 회귀에서 $R^2$와 상관계수 간의 관계를 보여줌을 보이시오.
+
+```{r}
+grades_avg_cs %>%
+  summarise(cor_sq = cor(classize, avgmath_cs)^2)
+```
+
+단 하나의 독립 변수를 가진 회귀 분석에서는 \( R^2 \) 값이 **종속 변수와 독립 변수 간의 상관계수의 제곱**과 동일합니다.
+
+
+4.  1번과 2번을 `avgverb_cs`에 대해 반복. 어떤 시험에서 학급 규모의 분산이 학생 점수의 분산을 더 많이 설명하는지 비교하시오.
+
+```{r}
+verb_reg <- lm(avgverb_cs ~ classize, grades_avg_cs)
+summary(verb_reg)
+```
+
+\( R^2 \) 값이 수학 점수에서 더 크므로, 반 크기가 읽기 점수보다 수학 점수의 변동성을 더 많이 설명한다는 것을 의미합니다.
+
+
+
+5.  (Optional) `broom` 패키지를 설치 및 로드한 후, `math_reg`를 `augment()` 함수에 전달하여 새로운 객체에 저장함.\
+    `avgmath_cs`의 분산(SST)과 예측값 `.fitted`의 분산(SSE)을 사용하여 $R^2$ 값을 직접 계산하시오. (이전 슬라이드의 공식을 참고할 것.)
+
+```{r}
+if (!require("bloom")) install.packages("bloom", dependencies=TRUE, repos = "https://cloud.r-project.org/")
+
+library(broom)
+
+math_reg_aug <- augment(math_reg)
+SST = var(grades_avg_cs$avgmath_cs)
+SSE = var(math_reg_aug$.fitted)
+SSE/SST
+```
 
