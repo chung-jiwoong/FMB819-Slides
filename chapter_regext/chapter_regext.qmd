@@ -1,28 +1,17 @@
 ---
-title: "FMB819: R을 이용한 데이터분석"
-subtitle: "<span style='font-size:1.5em; color:#a01616;'>Linear Regression Extensions</span>"
-# date: "`r Sys.Date()`"
-format:
+title: "Linear Regression Extensions"
+subtitle: "FMB819: R을 이용한 데이터분석"
+author: "고려대학교 경영대학 정지웅"
+format: 
   revealjs:
-    slide-number: true
-    # smaller: true
-    scrollable: true
-    chalkboard: true
+    theme: simple
     transition: fade
     transition-speed: fast
-    #incremental: true
-    #lib_dir: libs
-    css: [default, "../css/kubs.css", "../css/kubs-fonts.css"]
-    #nature:
-      # beforeInit: ["../js/ru_xaringan.js"]
-      #highlightStyle: github
-      #highlightLines: true
-      #countIncrementalSlides: false
-    #  ratio: "16:9"
-    # includes:
-    #   in_header: "../libs/partials/header.html"
+    scrollable: true
+    chalkboard: true
+    slide-number: true
 revealjs-plugins:
-  - revealjs-text-resizer
+  - revealjs-text-resizer 
 ---
 
 ```{r setup, include=FALSE,warning=FALSE,message=FALSE}
@@ -67,9 +56,9 @@ countdown(
 
 -   데이터의 특성과 변수 간 관계에 따라, **기본 모델에서 벗어나야 하는 경우**가 있음.
 
--   3가지 중요한 변형을 살펴볼 것임:
+-   3가지 중요한 변형:
 
-    1.  ***비선형 관계 (Non-linear relationships)***: 로그 및 다항식 모델
+    1.  ***비선형 관계 (Non-linear relationships)***
     2.  ***변수 간 교차 (Interaction terms)***
     3.  ***표준화 회귀 (Standardized regression)***
 
@@ -81,7 +70,7 @@ countdown(
 
 ------------------------------------------------------------------------
 
-## Accounting for Non-Linear Relationships
+## 비선형 관계
 
 2 가지 모형:
 
@@ -97,8 +86,8 @@ countdown(
 
     -   화폐단위(원), 연도, 학생 수, 퍼센트(%) 등
 
--   종속 변수 및/또는 독립 변수에 **자연로그(Natural Logarithm)** 를 취하면 3가지 유형의 회귀 모델을 정의할 수 있음\
-    (표기 남용: $\ln(x) = \log_{e}(x) = \log(x)$)
+-   종속 변수 또는 독립 변수에 **자연로그(Natural Logarithm)** 를 취하면 3가지 유형의 회귀 모델을 정의할 수 있음\
+    (표기 : $\ln(x) = \log_{e}(x) = \log(x)$)
 
     -   ***로그 - 수준(Log - Level)***: $\quad \log(y_i) = b_0 + b_1 x_{1,i} + ... + e_i$
 
@@ -125,7 +114,7 @@ data %>%
 
 -   [자연로그 함수](https://en.wikipedia.org/wiki/Natural_logarithm)는 지수 함수의 역함수로 정의됨, 즉 $\log(\exp(x))=x$
 
-$\rightarrow$ 모든 $x$에 대해 $\exp(x)>0$ 이므로, **자연로그 함수는 0보다 큰 값에서만 정의됨**! (즉, 0에서는 정의되지 않음)
+$\rightarrow$ 모든 $x$에 대해 $\exp(x)>0$ 이므로, **자연로그 함수는 0보다 큰 값에서만 정의됨** (즉, 0에서는 정의되지 않음)
 
 -   변수에 로그를 취하려면 값이 0 또는 음수가 아닌지 확인해야 함! 종속 변수 또는 독립 변수에 로그를 적용할 때 항상 유의해야 함.
 
@@ -346,13 +335,14 @@ data %>%
 
 ::::: columns
 ::: {.column width="50%"}
-```{r, eval = F}
+```{r}
 lm(y ~ x + I(x^2) + I(x^3), data)
+#I() : "as-is" 연산자, 즉 R이 x^2나 x^3을 수식이 아닌 새로운 변수로 인식하게 함
 ```
 :::
 
 ::: {.column width="50%"}
-```{r, eval = F}
+```{r}
 lm(y ~ poly(x, 3, raw = TRUE), data)
 ```
 :::
@@ -375,10 +365,10 @@ gapminder %>%
     geom_point() +
     geom_smooth(method = "lm", se = FALSE, formula = y ~ poly(x, 2, raw = TRUE)) +
     scale_x_continuous(lim = c(0,8)) +
-    labs(x = "출산율",
+    labs(x = "Fertility rate",
          y = "GDP",
-         title = "2011년 GDP와 출산율의 관계",
-         caption = "출처: dslabs 패키지의 gapminder 데이터") +
+         title = "GDP and Fertility rate in 2011",
+         caption = "Source: dslabs gapminder") +
     theme_bw(base_size = 20) +
     theme(plot.title = element_text(size = 15))
 ```
@@ -395,10 +385,10 @@ gapminder %>%
     geom_point() +
     geom_smooth(method = "lm", se = FALSE, formula = y ~ poly(x, 3, raw = T)) +
     scale_y_continuous(lim = c(40,100)) +
-    labs(x = "로그 GDP",
-         y = "기대 수명",
-         title = "2011년 기대 수명과 로그 GDP의 관계",
-         caption = "출처: dslabs 패키지의 gapminder 데이터") +
+    labs(x = "log GDP",
+         y = "Life expentancy",
+         title = "Life expentancy and log GDP in 2011",
+         caption = "Source: dslabs gapminder") +
     theme_bw(base_size = 20) +
     theme(plot.title = element_text(size = 15))
 ```
@@ -421,13 +411,13 @@ knitr::include_graphics("chapter_regext_files/figure-html/curve_fitting.png")
 `r countdown(minutes = 10, top = 0)`
 :::
 
-1.  데이터를 [여기](https://www.dropbox.com/s/2v5mb04nzw2u7bd/college_tuition_income.csv?dl=1)에서 다운로드하여 불러오시오. 이 데이터셋은 미국 대학의 등록금과 졸업생의 예상 소득 정보를 포함하고 있다. 데이터에 대한 자세한 설명은 [여기](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-03-10/readme.md)에서 확인할 수 있음.
+1.  데이터를 [여기](https://www.dropbox.com/s/2v5mb04nzw2u7bd/college_tuition_income.csv?dl=1)에서 다운로드. 이 데이터셋은 미국 대학의 등록금과 졸업생의 예상 소득 정보를 포함. 데이터에 대한 자세한 설명은 [여기](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-03-10/readme.md).
 
-2.  예상 중간 경력 소득(`mid_career_pay`)을 종속 변수(𝑦축)로 하고, 주 외 등록금(`out_of_state_tuition`)을 독립 변수(𝑥축)로 하는 산점도를 생성하시오. 관계가 대체로 선형적이라고 볼 수 있는가, 아니면 비선형적인가? 선형 회귀선과 2차 다항 회귀선을 함께 적합하기 위해 `geom_smooth(method = "lm", se = F) + geom_smooth(method = "lm", se = F, formula = y ~ poly(x, 2, raw= T))`을 사용하시오. 이번 경우 어느 모델이 더 적절한가?
+2.  예상 중간 경력 소득(`mid_career_pay`)을 종속 변수(𝑦축)로 하고, 주 외 등록금(`out_of_state_tuition`)을 독립 변수(𝑥축)로 하는 산점도를 생성하시오. 관계가 대체로 선형적이라고 볼 수 있는가, 아니면 비선형적인가? 선형 회귀선과 2차 다항 회귀선을 함께 적합하기 위해 `geom_smooth(method = "lm", se = F) + geom_smooth(method = "lm", se = F, formula = y ~ poly(x, 2, raw= T))`을 사용하시오. 어느 모델이 더 적절한가?
 
 3.  주 외 등록금을 1000으로 나눈 새로운 변수를 생성하시오. 이를 이용하여 예상 중간 경력 소득을 회귀 분석하시오. 회귀 계수를 해석하시오.
 
-4.  예상 중간 경력 소득을 주 외 등록금을 1000으로 나눈 변수와 그 제곱 항을 포함하여 회귀 분석하시오. *힌트:* `poly(x, 2, raw = T)` 또는 `x + I(x^2)`를 사용할 수 있음. 제곱 항의 계수가 양수라는 것은 무엇을 의미하는가?
+4.  예상 중간 경력 소득을 주 외 등록금/1000과 그 제곱 항을 포함하여 회귀 분석하시오. *힌트:* `poly(x, 2, raw = T)` 또는 `x + I(x^2)`를 사용할 수 있음. 제곱 항의 계수가 양수라는 것은 무엇을 의미하는가?
 
 ```{r, echo=FALSE, eval=FALSE}
 ggplot(data, aes(x = out_of_state_tuition, y = mid_career_pay)) +
@@ -451,7 +441,7 @@ lm(mid_career_pay ~ poly(tuition_scaled, 2, raw = TRUE), data = data)
 
 -   ***한 변수의 효과가 다른 변수의 값에 따라 달라질 것***이라고 가정하는 경우.
 
-    -   *예제:* 교육 수준이 임금에 미치는 영향이 성별에 따라 달라질 수 있음.
+    -   *예제:* 교육 수준이 임금에 미치는 영향이 **성별**에 따라 달라질 수 있음.
 
 -   만약 $x_1$과 $x_2$를 상호작용 변수로 추가한다면, 회귀 모형을 다음과 같이 만듬:
 
@@ -471,7 +461,7 @@ $$y_i =  b_0 + b_1 x_{1,i} + b_2 x_{2,i} + b_3x_{1,i} \times x_{2,i} + ... + e_i
 
 ## 교차 변수 (Interacting Regressors)
 
--   *STAR* 실험 데이터: 작은 학급과 일반 학급의 효과는 교사의 경험에 따라 어떻게 달라지는가?
+-   *STAR* 실험 데이터: 작은 학급과 일반 학급의 효과는 **교사의 경험**ㄴ에 따라 어떻게 달라지는가?
 
 -   회귀 모형은 다음과 같이 변함:
 
@@ -502,7 +492,7 @@ $$
 `math` 점수에 대한 회귀 분석을 실행한 결과 (모든 학년 포함):
 
 ```{r, echo = FALSE}
-star_df = read.csv("https://www.dropbox.com/s/bf1fog8yasw3wjj/star_data.csv?dl=1")
+star_df = read.csv("https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/star_data.csv")
 star_df = star_df %>% filter(star != "regular+aide")
 star_df$small = star_df$star == "small"
 star_df = star_df[complete.cases(star_df),]
@@ -514,11 +504,11 @@ lm(math ~ small+ experience + small*experience, star_df)
 
 ***해석***
 
--   교차항은 작은 학급의 효과가 교사의 경험에 따라 달라지도록 함.
+-   교차항은 작은 학급의 효과가 **교사의 경험**에 따라 달라지도록 함.
 
 -   작은 학급에 배정되는 것이 math 점수에 긍정적인 영향을 줌.
 
--   그러나 이 효과는 교사의 경험이 많아질수록 감소함.
+-   그러나 이 효과는 **교사의 경험**이 많아질수록 감소함.
 
 ------------------------------------------------------------------------
 
@@ -679,21 +669,21 @@ knitr::include_graphics("chapter_regext_files/figure-html/graph_reg_b0_b1_b2_b3.
 `r countdown(minutes = 10, top = 0)`
 :::
 
-**CPS1985 데이터 분석**
 
 1.  `AER` 패키지에서 `CPS1985` 데이터를 불러오시오.
 
 2.  변수의 정의를 확인하기 위해 도움말을 참조하시오: `?CPS1985`
 
-3.  해당 데이터에서 사람들이 **파트타임** 또는 **풀타임**으로 근무하는지 여부가 중요한가? 그 이유는 무엇인가?
+3.  `wage` 변수의 자연 로그 값을 저장하는 `log_wage` 변수를 생성하시오.
 
-4.  `wage` 변수의 자연 로그 값을 저장하는 `log_wage` 변수를 생성하시오.
+4.  `log_wage`를 `gender`와 `education`에 대해 회귀 분석을 수행하고 이를 `reg1`으로 저장하시오. 각 계수를 해석하시오.
 
-5.  `log_wage`를 `gender`와 `education`에 대해 회귀 분석을 수행하고 이를 `reg1`으로 저장하시오. 각 계수를 해석하시오.
+5.  `log_wage`를 `gender`, `education` 및 `gender*education`로 회귀 분석을 수행하고 이를 `reg2`로 저장하시오. 각 계수를 해석하시오. **성별 임금 격차가 교육 수준이 증가할수록 줄어드는가?**
 
-6.  `log_wage`를 `gender`, `education` 및 `gender*education` (상호작용 변수)로 회귀 분석을 수행하고 이를 `reg2`로 저장하시오. 각 계수를 해석하시오. **성별 임금 격차가 교육 수준이 증가할수록 줄어드는가?**
+6.  해당 교차 효과를 시각적으로 나타내는 그래프를 생성하시오. (*힌트:* `aes`에서 `color = gender`를 사용하고, `geom_smooth(method = "lm", se = F)`를 활용하여 성별별 회귀선을 그리시오.)
 
-7.  해당 상호작용 효과를 시각적으로 나타내는 그래프를 생성하시오. (*힌트:* `aes`에서 `color = gender`를 사용하고, `geom_smooth(method = "lm", se = F)`를 활용하여 성별별 회귀선을 그리시오.)
+
+
 
 # Standardized Regression
 
@@ -701,7 +691,7 @@ knitr::include_graphics("chapter_regext_files/figure-html/graph_reg_b0_b1_b2_b3.
 
 ## 표준화 회귀 분석 (Standardized Regression)
 
--   변수를 **표준화(standardizing)** 한다는 것이 무엇을 의미하는지 정의해 보자.
+-   변수를 **표준화(standardizing)** 한다는 것은...
 
 > ***표준화***란 변수 $z$의 평균을 빼고, 그 값을 변수의 표준편차로 나누는 것을 의미함:
 
@@ -806,10 +796,12 @@ knitr::include_graphics("chapter_regext_files/figure-html/graph_after.png")
 `r countdown(minutes = 10, top = 0)`
 :::
 
-[학년별 성적 데이터](https://www.dropbox.com/s/wwp2cs9f0dubmhr/grade5.dta?dl=1): 데이터를 불러오기 위해서는 `haven` 패키지의 `read_dta()` 함수를 사용. 아래는 평균 수학 시험 점수를 전체 독립 변수 세트에 대해 회귀 분석한 결과:
+[grade5.dta](https://chung-jiwoong.github.io/FMB819-Slides/chapter_slr/data/grade5.dta) 다운로드 `haven` 패키지의 `read_dta()` 함수를 사용. 
+
+아래는 평균 수학 시험 점수를 전체 독립 변수 세트에 대해 회귀 분석한 결과:
 
 ```{r echo = FALSE}
-grades = read_dta(file = "https://www.dropbox.com/s/wwp2cs9f0dubmhr/grade5.dta?dl=1")
+grades = read_dta(file = "https://chung-jiwoong.github.io/FMB819-Slides/chapter_slr/data/grade5.dta")
 
 reg_full <- lm(avgverb ~ classize + disadvantaged + school_enrollment + female + religious, grades)
 reg_full$coefficients

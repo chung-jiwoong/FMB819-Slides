@@ -11,7 +11,7 @@ format:
     chalkboard: true
     slide-number: true
 revealjs-plugins:
-  - revealjs-text-resizer # Thanks to https://github.com/gadenbuie/revealjs-text-resizer#readme
+  - revealjs-text-resizer 
 ---
 
 ```{r setup, include=FALSE,warning=FALSE,message=FALSE}
@@ -220,7 +220,7 @@ ggplot(grades, aes(x = disadvantaged, y = avgmath)) +
 **추정하려는 회귀 모델** 다중 회귀 분석(Multiple Regression)
 
 $$
- \textrm{average math score}_i = b_0 + b_1 \textrm{class size}_i + b_2 \textrm{\% disadvantaged}_i + e_i
+ \textrm{average math score}_i = b_0 + b_1 \textrm{class size}_i + b_2 \textrm{% disadvantaged}_i + e_i
 $$
 
 
@@ -302,7 +302,7 @@ lm(formula = dependent variable ~  independent variable 1 + independent variable
    data = data.frame containing the data)
 ```
 
--   학급 규모와 학생 성취: 다중 회귀 분석: $\textrm{average math score}_i = b_0 + b_1 \textrm{class size}_i + b_2 \textrm{\% disadvantaged}_i + e_i$
+-   학급 규모와 학생 성취: 다중 회귀 분석: $\textrm{average math score}_i = b_0 + b_1 \textrm{class size}_i + b_2 \textrm{% disadvantaged}_i + e_i$
 
 ```{r}
 lm(avgmath ~ classize + disadvantaged, grades)
@@ -845,14 +845,14 @@ reg1 <- lm(avgmath ~ classize, grades)
 reg1$coefficients
 ```
 
-***다중회귀모형:*** $\text{average math score} = c_0 + c_1\text{class size} + \color{#d90502}{c_2}\text{\% disadvantaged} + e$
+***다중회귀모형:*** $\text{average math score} = c_0 + c_1\text{class size} + \color{#d90502}{c_2}\text{% disadvantaged} + e$
 
 ```{r, echo = FALSE}
 reg2 <- lm(avgmath ~ classize + disadvantaged, grades)
 reg2$coefficients
 ```
 
-***누락변수와 독립변수***: $\text{\% disadvantaged} = d_0 + \color{#d96502}{d_1}\text{class size} + e$
+***누락변수와 독립변수***: $\text{% disadvantaged} = d_0 + \color{#d96502}{d_1}\text{class size} + e$
 
 ```{r, echo = FALSE}
 reg3 <- lm(disadvantaged ~ classize, grades)
