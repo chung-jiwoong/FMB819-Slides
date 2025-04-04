@@ -323,7 +323,7 @@
 </ul>
 <p><strong>추정하려는 회귀 모델</strong> 다중 회귀 분석(Multiple Regression)</p>
 <p><span class="math display">\[
-\textrm{average math score}_i = b_0 + b_1 \textrm{class size}_i + b_2 \textrm{% disadvantaged}_i + e_i
+\textrm{average math score}_i = b_0 + b_1 \textrm{class size}_i + b_2 \textrm{\% disadvantaged}_i + e_i
 \]</span></p>
 </section>
 <section id="다중-회귀-분석의-목적" class="slide level2">
@@ -402,7 +402,7 @@ y_i = b_0 + b_1 x_{1,i} + b_2 x_{2,i}  + b_3 x_{3,i} + \dots + b_k x_{k,i} + e_i
 <span id="cb2-2"><a href=""></a>   <span class="at">data =</span> data.frame containing the data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
-<li>학급 규모와 학생 성취: 다중 회귀 분석: <span class="math inline">\(\textrm{average math score}_i = b_0 + b_1 \textrm{class size}_i + b_2 \textrm{% disadvantaged}_i + e_i\)</span></li>
+<li>학급 규모와 학생 성취: 다중 회귀 분석: <span class="math inline">\(\textrm{average math score}_i = b_0 + b_1 \textrm{class size}_i + b_2 \textrm{\% disadvantaged}_i + e_i\)</span></li>
 </ul>
 <div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
@@ -482,7 +482,7 @@ y_i = b_0 + b_1 x_{1,i} + b_2 x_{2,i}  + b_3 x_{3,i} + \dots + b_k x_{k,i} + e_i
 <section id="task-1" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 1</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_6a7b7cfe" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_32bed6ce" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
 <ul>
 <li><strong>읽기(Reading) 점수를 종속 변수(Dependent Variable)</strong> 로 설정하여 회귀 분석을 수행</li>
@@ -797,7 +797,7 @@ x_2 \neq ax_1 + b
 <section id="task-2" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 2</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_72f40af7" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_633d5e1b" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
 <ol type="1">
 <li><strong>STAR 데이터</strong>를 다운로드 <a href="https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/star_data.csv">링크</a>. <code>read.csv()</code>를 사용하여 <code>star_df</code> 객체에 저장. <code>NA</code> 값이 있는 행을 제거: <code>star_df &lt;- star_df[complete.cases(star_df),]</code></li>
@@ -911,14 +911,14 @@ b_1 = c_1 + OVB
 ##  57.7939158   0.3174906</code></pre>
 </div>
 </div>
-<p><strong><em>다중회귀모형:</em></strong> <span class="math inline">\(\text{average math score} = c_0 + c_1\text{class size} + \color{#d90502}{c_2}\text{% disadvantaged} + e\)</span></p>
+<p><strong><em>다중회귀모형:</em></strong> <span class="math inline">\(\text{average math score} = c_0 + c_1\text{class size} + \color{#d90502}{c_2}\text{\% disadvantaged} + e\)</span></p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
 <pre><code>##   (Intercept)      classize disadvantaged 
 ##   69.94438332    0.07167819   -0.33957877</code></pre>
 </div>
 </div>
-<p><strong><em>누락변수와 독립변수</em></strong>: <span class="math inline">\(\text{% disadvantaged} = d_0 + \color{#d96502}{d_1}\text{class size} + e\)</span></p>
+<p><strong><em>누락변수와 독립변수</em></strong>: <span class="math inline">\(\text{\% disadvantaged} = d_0 + \color{#d96502}{d_1}\text{class size} + e\)</span></p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
 <pre><code>## (Intercept)    classize 
@@ -946,7 +946,7 @@ b_1 = c_1 + OVB
 <section id="task-3" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 3</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_e778b846" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_9f3a39f9" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
 <ol type="1">
 <li><p>Task 2에서 필터링한 <em>STAR</em> 데이터를 사용하여 <code>math</code>를 <code>school</code> 변수에 대해 회귀 분석하시오. <code>school</code> 변수가 포함하는 값들을 먼저 확인. 회귀 계수를 해석하시오. 누락된 범주 (category)는? 결과가 예상과 일치하는가? 만약 다르다면 왜 그런가? 누락된 변수가 존재할 가능성이 있는가?</p></li>

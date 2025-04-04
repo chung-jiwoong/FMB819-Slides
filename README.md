@@ -57,7 +57,8 @@
 **주제6: Linear Regression Extensions**
 
 [HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_regext/chapter_regext.html) / 
-[.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_regext/chapter_regext.qmd)
+[.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_regext/chapter_regext.qmd) / 
+[Tasks](https://chung-jiwoong.github.io/FMB819-Slides/chapter_regext/tasks/regext_tasks.qmd)
 
 
 **주제7: Sampling**

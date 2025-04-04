@@ -491,7 +491,7 @@ poly(x, 3, raw = TRUE)3
 <section id="task-1" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 1</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_6e554cfc" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_94819a20" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
 <ol type="1">
 <li><p>데이터를 <a href="https://www.dropbox.com/s/2v5mb04nzw2u7bd/college_tuition_income.csv?dl=1">여기</a>에서 다운로드. 이 데이터셋은 미국 대학의 등록금과 졸업생의 예상 소득 정보를 포함. 데이터에 대한 자세한 설명은 <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-03-10/readme.md">여기</a>.</p></li>
@@ -606,7 +606,7 @@ smallTRUE:experience
 <section id="task-2" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 2</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_aa8a201a" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_6c7a8f67" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
 <ol type="1">
 <li><p><code>AER</code> 패키지에서 <code>CPS1985</code> 데이터를 불러오시오.</p></li>
@@ -625,7 +625,7 @@ smallTRUE:experience
 <section id="표준화-회귀-분석-standardized-regression" class="slide level2">
 <h2>표준화 회귀 분석 (Standardized Regression)</h2>
 <ul>
-<li>변수를 <strong>표준화(standardizing)</strong> 한다는 것이 무엇을 의미하는지 정의해 보자.</li>
+<li>변수를 <strong>표준화(standardizing)</strong> 한다는 것은…</li>
 </ul>
 <blockquote>
 <p><strong><em>표준화</em></strong>란 변수 <span class="math inline">\(z\)</span>의 평균을 빼고, 그 값을 변수의 표준편차로 나누는 것을 의미함:</p>
@@ -687,9 +687,10 @@ smallTRUE:experience
 <section id="task-3" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 3</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_ab1c9402" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_9247bab5" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
-<p><a href="https://www.dropbox.com/s/wwp2cs9f0dubmhr/grade5.dta?dl=1">학년별 성적 데이터</a>: 데이터를 불러오기 위해서는 <code>haven</code> 패키지의 <code>read_dta()</code> 함수를 사용. 아래는 평균 수학 시험 점수를 전체 독립 변수 세트에 대해 회귀 분석한 결과:</p>
+<p><a href="https://chung-jiwoong.github.io/FMB819-Slides/chapter_slr/data/grade5.dta">grade5.dta</a> 다운로드 <code>haven</code> 패키지의 <code>read_dta()</code> 함수를 사용.</p>
+<p>아래는 평균 수학 시험 점수를 전체 독립 변수 세트에 대해 회귀 분석한 결과:</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
 <pre><code>      (Intercept)          classize     disadvantaged school_enrollment 
@@ -708,7 +709,7 @@ smallTRUE:experience
 <section id="다음-수업-예고" class="slide level2">
 <h2>다음 수업 예고</h2>
 <ul>
-<li><p>지금까지 우리는 항상 전체 모집단에서 <strong>표본</strong>을 추출하여 작업해 왔음.</p></li>
+<li><p>지금까지 항상 전체 모집단에서 <strong>표본</strong>을 추출하여 작업해 왔음.</p></li>
 <li><p>매번 새로운 표본을 모집단에서 다시 추출한다고 가정하면:</p>
 <ul>
 <li><p>같은 결과를 얻을 수 있을까?</p></li>
