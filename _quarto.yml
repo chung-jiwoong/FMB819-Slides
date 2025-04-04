@@ -1,0 +1,7 @@
+project:
+  title: "FMB819-Slides"
+
+format:
+  revealjs:
+    css: styles/styles.css
+

@@ -15,6 +15,8 @@ revealjs-plugins:
 ---
 
 
+
+
 ```{r setup, include=FALSE,warning=FALSE,message=FALSE}
 options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(
@@ -574,11 +576,12 @@ toy_data_random <- toy_data_random %>%
 
 ------------------------------------------------------------------------
 
+
 ## 무작위 배정(Randomization)을 통한 인과 추론 문제 해결
 
 **📌 무작위 실험(Randomized experiments)**:\
 - 사람들을 **무작위(randomly)**로 처치군과 통제군에 배정함.\
-- 이 경우, 처치 배정은 **잠재적 결과(potential outcomes)와 독립적(independent)**.
+- 이 경우, 처치 배정은 **잠재적 결과(potential outcomes)와 독립적(independent)**. \ 
 - 즉 $\mathbb{E}(Y_i^0 | D_i = 1)$과 $\mathbb{E}(Y_i^0 | D_i = 0)$이 서로 다를 이유가 없음. \
 - 따라서, **선택 편향(selection bias)이 0이 됨**.
 
@@ -671,7 +674,7 @@ $$
 `r countdown(minutes = 10, top = 0)`
 :::
 
-📂 1. **데이터 불러오기**: 데이터 다운로드 [링크](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/star_data.csv)\
+1. **데이터 불러오기**: 데이터 다운로드 [링크](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/star_data.csv)\
 - 데이터를 `star_df` 객체에 저장. 변수 설명 [**도움말 확인**](https://rdrr.io/cran/AER/man/STAR.html).\
 (📌**데이터가 재구성(reshaped)되어, 변수명 끝의 "k", "1" 등의 숫자는 무시.**)
 
@@ -681,28 +684,27 @@ $$
 star_df = read_csv("https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/star_data.csv")
 ```
 
-🔍 2. **데이터의 기본 정보 확인**
+2. **데이터의 기본 정보 확인**
 
 -   **관찰 단위(Unit of observation)**는 무엇인가?
 -   (i) 랜덤 학급 배정(random class assignment): `star`, (ii) 학생의 학년(class grade): `grade`, (iii) 결과 변수(outcomes of interest): `read` & `math`
 
 
 
-📊 3. **데이터 크기 및 결측값(NA) 분석**
+3. **데이터 크기 및 결측값(NA) 분석**
 
--   총 관측치 수는 몇 개인가? 원래에는 학생별로 관측단위였는데, 학년-학생 단위로 데이터를 재구조화하였기 때문에 NA 값이 많음. 또한 `NA`는 여러 가지 이유로 실험을 떠나게 된 학생들임.
+-   총 관측치 수는 몇 개인가? 원래는 학생별로 관측단위였는데, 학년-학생 단위로 데이터를 재구조화하였기 때문에 NA 값이 많음. 또한 `NA`는 여러 가지 이유로 실험을 떠나게 된 학생들임.
 
 
-🚀 4. **결측값 처리 (NA 제거)**
+4. **결측값 처리 (NA 제거)**
 
 -   다음 코드 실행하여 결측값이 없는 경우만 유지:
 
-```{r, echo=TRUE, eval=FALSE}
-star_df <- star_df[complete.cases(star_df)] # 또는
-star_df <- na.omit(star_df)
+```{r, echo=TRUE}
+star_df <- star_df[complete.cases(star_df),] # 또는 star_df <- na.omit(star_df)
 ```
 
-📈 5. **무작위 배정 확인 (Balancing Checks)**
+5. **무작위 배정 확인 (Balancing Checks)**
 
 -   랜덤 배정이 잘 이루어졌는지 확인하기 위해, 그룹별 기초 통계량을 계산.
 -   다음 항목별 평균 비율(%)을 학년별(grade) 및 처치군별(treatment class)로 비교: 1️⃣ 여학생 비율 (percentage of girls), 2️⃣ 아프리카계 미국인 비율 (percentage of African Americans), 3️⃣ 무료 급식 대상 비율 (percentage of free lunch qualifiers)을 살펴보자.
@@ -755,13 +757,20 @@ diff_table = data.frame(
         diff_regular_aide_regular = round(mean_regular_aide - mean_regular, 3)
     ) %>%
     arrange(factor(grade, levels = c("k","1","2","3")))
+
+# diff_table    
 ```
 
+grade | test | mean regular | mean small | ATE
+--------|---------|:---------:|:---------:|:---------:
+k | math | `r round(diff_table[1,3], 2)` | `r round(diff_table[1,4], 2)` | `r round(diff_table[1,4] - diff_table[1,3], 2)`
+k | read | `r round(diff_table[2,3], 2)` | `r round(diff_table[2,4], 2)` | `r round(diff_table[2,4] - diff_table[2,3], 2)`
 
+<!-- 
 | grade | test | mean regular | mean small | ATE |
 |---------------|---------------|:-------------:|:-------------:|:-------------:|
 | k | math | 484.45 | 493.34 | 8.9 |
-| k | read | 435.76 | 441.13 | 5.37 |
+| k | read | 435.76 | 441.13 | 5.37 | -->
 
 📌 이 ATE 값들의 해석은?
 
@@ -826,32 +835,15 @@ $$
 \end{cases}
 $$
 
-::::: columns
-::: {.column width="55%"}
 ```{r, echo = TRUE}
 star_df_k_small <- star_df %>%
     filter(star %in% c("regular", "small") &
            grade == "k") %>% 
     mutate(small = (star == "small"))
-```
 
-```{r, echo=TRUE, eval = F}
 star_df_k_small %>% count(star, grade)
-
-star_df_k_small %>% count(small)
 ```
-:::
 
-::: {.column width="45%"}
-```{r, echo = FALSE}
-star_df_k_small %>%
-  count(star, grade)
-
-star_df_k_small %>%
-  count(small)
-```
-:::
-:::::
 
 ------------------------------------------------------------------------
 
@@ -871,10 +863,12 @@ lm(math ~ small, data = star_df_k_small)
 
 ::::: columns
 ::: {.column width="50%"}
+
 ```{r, echo=TRUE}
 b_0 = mean(star_df_k_small$math[star_df_k_small$small == FALSE])
 b_0
 ```
+
 :::
 
 ::: {.column width="50%"}
@@ -884,6 +878,8 @@ delta
 ```
 :::
 :::::
+
+
 
 
 ------------------------------------------------------------------------
@@ -948,8 +944,8 @@ baseline_graph_mean
 
 
 ```{r, echo = F, fig.height=4.75, fig.width = 8}
-b_0 <- 484.4464  # Replace with actual value
-delta <- 8.895193  # Replace with actual value
+# b_0 <- 484.4464  # Replace with actual value
+# delta <- 8.895193  # Replace with actual value
 # 회귀선(Regression Line) 추가
 baseline_graph_mean + 
   geom_abline(slope = delta, intercept = b_0, linewidth = .5) +
@@ -966,8 +962,8 @@ baseline_graph_mean +
 **📌 회귀 분석의 독립 변수(regressor)는 더미 변수(dummy variable)**
 
 ```{r, echo = FALSE, fig.height=4.75, fig.width = 8}
-b_0 <- 484.4464  # Replace with actual value
-delta <- 8.895193  # Replace with actual value
+# b_0 <- 484.4464  # Replace with actual value
+# delta <- 8.895193  # Replace with actual value
 #더미 변수(small = 1 또는 small = 0)에 따른 수학 점수(Math Score) 분포 확인
 star_df_k_small %>%
     mutate(small = ifelse(small == "TRUE",1,0)) %>%
@@ -1049,14 +1045,14 @@ $$
 `r countdown(minutes = 10, top = 0)`
 :::
 
-📌 1. 아래 코드를 실행하여 **1학년(grade == "1")이며, 일반 학급(regular) 또는 소규모 학급(small)에 속한 학생들만 선택**.
+1. 아래 코드를 실행하여 **1학년(grade == "1")이며, 일반 학급(regular) 또는 소규모 학급(small)에 속한 학생들만 선택**.
 
 ```{r, echo=TRUE}
 star_df_clean <- star_df %>%
     filter(grade == "1" & star %in% c("small", "regular"))
 ```
 
-📊 2. 두 그룹의 평균 수학 점수 및 차이 계산 (Base R 사용)
+2. 두 그룹의 평균 수학 점수 및 차이 계산 (Base R 사용)
 
 ```{r, echo=FALSE, eval = FALSE}
 # 일반 학급(regular)과 소규모 학급(small) 평균 수학 점수 계산
@@ -1072,7 +1068,7 @@ mean_math_small
 diff_math
 ```
 
-🔄 3. 더미 변수 생성: 소규모 학급(small) = 1 (TRUE), 일반 학급(regular) = 0 (FALSE) **힌트**: `treatment = (star == "small")`.
+3. 더미 변수 생성: 소규모 학급(small) = 1 (TRUE), 일반 학급(regular) = 0 (FALSE) **힌트**: `treatment = (star == "small")`.
 
 ```{r, echo=FALSE, eval = FALSE}
 star_df_clean <- star_df_clean %>%
@@ -1118,7 +1114,7 @@ summary(lm_result)
 📌 두 가지 주요한 경우
 
 -   **✅ 선택이 관측 가능한 특성(Observable Characteristics)에서 발생하는 경우**
-    -   **다중 회귀(Multiple Regression)** → **다음 주에 학습!**
+    -   **다중 회귀(Multiple Regression)** 
 -   **⚠️ 선택이 관측 불가능한 특성(Unobservable Characteristics)에서 발생하는 경우**
     -   **회귀 불연속 설계(Regression Discontinuity Design, RDD)** → Optional
     -   **이중 차분법(Difference-in-Differences, DID)** → Optional
@@ -1220,6 +1216,4 @@ $$
     - 대학에 가는 학생들이 **대학에서 더 많은 학습 효과를 얻을 가능성**이 높음 (더 동기 부여된 학생들일 수 있음).  
 
 🔙 [이전으로 돌아가기](#naive_comp)
-
-
 

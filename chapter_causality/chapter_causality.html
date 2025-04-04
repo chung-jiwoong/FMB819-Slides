@@ -95,6 +95,7 @@
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="chapter_causality_files/libs/revealjs/dist/theme/quarto-8f3eebe07241f08526c91a7e9cbef8fd.css">
+  <link rel="stylesheet" href="../styles/styles.css">
   <link href="chapter_causality_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="chapter_causality_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="chapter_causality_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -925,7 +926,7 @@ ATE = \mathop{\mathbb{E}}(\delta_i) = \mathop{\mathbb{E}}(\delta) = \delta
 <section id="task-1" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 1</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_ff0d7a29" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_9ed0d9a1" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
 <p>📂 <strong>1. 데이터 불러오기 및 변수 생성</strong></p>
 <ul>
@@ -975,7 +976,7 @@ SDO = ATE + \text{Selection Bias} + \text{Heterogeneous Treatment Effect Bias}
 <h2>무작위 배정(Randomization)을 통한 인과 추론 문제 해결</h2>
 <p><strong>📌 무작위 실험(Randomized experiments)</strong>:<br>
 - 사람들을 <strong>무작위(randomly)</strong>로 처치군과 통제군에 배정함.<br>
-- 이 경우, 처치 배정은 <strong>잠재적 결과(potential outcomes)와 독립적(independent)</strong>. - 즉 <span class="math inline">\(\mathbb{E}(Y_i^0 | D_i = 1)\)</span>과 <span class="math inline">\(\mathbb{E}(Y_i^0 | D_i = 0)\)</span>이 서로 다를 이유가 없음.<br>
+- 이 경우, 처치 배정은 <strong>잠재적 결과(potential outcomes)와 독립적(independent)</strong>. &nbsp; - 즉 <span class="math inline">\(\mathbb{E}(Y_i^0 | D_i = 1)\)</span>과 <span class="math inline">\(\mathbb{E}(Y_i^0 | D_i = 0)\)</span>이 서로 다를 이유가 없음.<br>
 - 따라서, <strong>선택 편향(selection bias)이 0이 됨</strong>.</p>
 <p>✅ 무작위 배정이 이루어진다면:</p>
 <p><span class="math display">\[
@@ -1049,31 +1050,43 @@ SDO = \mathop{\mathbb{E}}(Y_i^1|D_i=1) - \mathop{\mathbb{E}}(Y_i^0|D_i=0) = ATE
 <section id="task-2" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 2</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_3aee9ca0" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_aa0a3ec3" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
-<p>📂 1. <strong>데이터 불러오기</strong>: 데이터 다운로드 <a href="https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/star_data.csv">링크</a><br>
-- 데이터를 <code>star_df</code> 객체에 저장. 변수 설명 <a href="https://rdrr.io/cran/AER/man/STAR.html"><strong>도움말 확인</strong></a>.<br>
-(📌<strong>데이터가 재구성(reshaped)되어, 변수명 끝의 “k”, “1” 등의 숫자는 무시.</strong>)</p>
-<p>🔍 2. <strong>데이터의 기본 정보 확인</strong></p>
+<ol type="1">
+<li><strong>데이터 불러오기</strong>: 데이터 다운로드 <a href="https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/star_data.csv">링크</a><br>
+</li>
+</ol>
+<ul>
+<li>데이터를 <code>star_df</code> 객체에 저장. 변수 설명 <a href="https://rdrr.io/cran/AER/man/STAR.html"><strong>도움말 확인</strong></a>.<br>
+(📌<strong>데이터가 재구성(reshaped)되어, 변수명 끝의 “k”, “1” 등의 숫자는 무시.</strong>)</li>
+</ul>
+<ol start="2" type="1">
+<li><strong>데이터의 기본 정보 확인</strong></li>
+</ol>
 <ul>
 <li><strong>관찰 단위(Unit of observation)</strong>는 무엇인가?</li>
 <li><ol type="i">
 <li>랜덤 학급 배정(random class assignment): <code>star</code>, (ii) 학생의 학년(class grade): <code>grade</code>, (iii) 결과 변수(outcomes of interest): <code>read</code> &amp; <code>math</code></li>
 </ol></li>
 </ul>
-<p>📊 3. <strong>데이터 크기 및 결측값(NA) 분석</strong></p>
+<ol start="3" type="1">
+<li><strong>데이터 크기 및 결측값(NA) 분석</strong></li>
+</ol>
 <ul>
-<li>총 관측치 수는 몇 개인가? 원래에는 학생별로 관측단위였는데, 학년-학생 단위로 데이터를 재구조화하였기 때문에 NA 값이 많음. 또한 <code>NA</code>는 여러 가지 이유로 실험을 떠나게 된 학생들임.</li>
+<li>총 관측치 수는 몇 개인가? 원래는 학생별로 관측단위였는데, 학년-학생 단위로 데이터를 재구조화하였기 때문에 NA 값이 많음. 또한 <code>NA</code>는 여러 가지 이유로 실험을 떠나게 된 학생들임.</li>
 </ul>
-<p>🚀 4. <strong>결측값 처리 (NA 제거)</strong></p>
+<ol start="4" type="1">
+<li><strong>결측값 처리 (NA 제거)</strong></li>
+</ol>
 <ul>
 <li>다음 코드 실행하여 결측값이 없는 경우만 유지:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>star_df <span class="ot">&lt;-</span> star_df[<span class="fu">complete.cases</span>(star_df)] <span class="co"># 또는</span></span>
-<span id="cb1-2"><a href=""></a>star_df <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(star_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>star_df <span class="ot">&lt;-</span> star_df[<span class="fu">complete.cases</span>(star_df),] <span class="co"># 또는 star_df &lt;- na.omit(star_df)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>📈 5. <strong>무작위 배정 확인 (Balancing Checks)</strong></p>
+<ol start="5" type="1">
+<li><strong>무작위 배정 확인 (Balancing Checks)</strong></li>
+</ol>
 <ul>
 <li>랜덤 배정이 잘 이루어졌는지 확인하기 위해, 그룹별 기초 통계량을 계산.</li>
 <li>다음 항목별 평균 비율(%)을 학년별(grade) 및 처치군별(treatment class)로 비교: 1️⃣ 여학생 비율 (percentage of girls), 2️⃣ 아프리카계 미국인 비율 (percentage of African Americans), 3️⃣ 무료 급식 대상 비율 (percentage of free lunch qualifiers)을 살펴보자.</li>
@@ -1095,13 +1108,6 @@ SDO = \mathop{\mathbb{E}}(Y_i^1|D_i=1) - \mathop{\mathbb{E}}(Y_i^0|D_i=0) = ATE
 <li><strong>대상 학년(Grade)</strong>: <strong>유치원(Kindergarten, k)</strong></li>
 </ul>
 <table class="caption-top">
-<colgroup>
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>grade</th>
@@ -1128,6 +1134,11 @@ SDO = \mathop{\mathbb{E}}(Y_i^1|D_i=1) - \mathop{\mathbb{E}}(Y_i^0|D_i=0) = ATE
 </tr>
 </tbody>
 </table>
+<!-- 
+| grade | test | mean regular | mean small | ATE |
+|---------------|---------------|:-------------:|:-------------:|:-------------:|
+| k | math | 484.45 | 493.34 | 8.9 |
+| k | read | 435.76 | 441.13 | 5.37 | -->
 <p>📌 이 ATE 값들의 해석은?</p>
 <p>📉 회귀분석(regression)으로 표현할 수 있을까?</p>
 </section>
@@ -1173,37 +1184,21 @@ Y_i &amp;= \mathbb{E}[Y_i^0] + D_i \delta + Y_i^0 - \mathbb{E}[Y_i^0] \\
 0 \quad \text{(일반 학급 배정)}
 \end{cases}
 \]</span></p>
-<div class="columns">
-<div class="column" style="width:55%;">
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a>star_df_k_small <span class="ot">&lt;-</span> star_df <span class="sc">%&gt;%</span></span>
 <span id="cb2-2"><a href=""></a>    <span class="fu">filter</span>(star <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"regular"</span>, <span class="st">"small"</span>) <span class="sc">&amp;</span></span>
 <span id="cb2-3"><a href=""></a>           grade <span class="sc">==</span> <span class="st">"k"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-4"><a href=""></a>    <span class="fu">mutate</span>(<span class="at">small =</span> (star <span class="sc">==</span> <span class="st">"small"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>star_df_k_small <span class="sc">%&gt;%</span> <span class="fu">count</span>(star, grade)</span>
-<span id="cb3-2"><a href=""></a></span>
-<span id="cb3-3"><a href=""></a>star_df_k_small <span class="sc">%&gt;%</span> <span class="fu">count</span>(small)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column" style="width:45%;">
-<div class="cell" data-layout-align="center">
+<span id="cb2-4"><a href=""></a>    <span class="fu">mutate</span>(<span class="at">small =</span> (star <span class="sc">==</span> <span class="st">"small"</span>))</span>
+<span id="cb2-5"><a href=""></a></span>
+<span id="cb2-6"><a href=""></a>star_df_k_small <span class="sc">%&gt;%</span> <span class="fu">count</span>(star, grade)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## # A tibble: 2 × 3
 ##   star    grade     n
 ##   &lt;chr&gt;   &lt;chr&gt; &lt;int&gt;
-## 1 regular k      2194
-## 2 small   k      1900</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>## # A tibble: 2 × 2
-##   small     n
-##   &lt;lgl&gt; &lt;int&gt;
-## 1 FALSE  2194
-## 2 TRUE   1900</code></pre>
+## 1 regular k      1781
+## 2 small   k      1578</code></pre>
 </div>
 </div>
-</div></div>
 </section>
 <section id="프로젝트-star-실험-회귀-분석-1" class="slide level2">
 <h2>프로젝트 STAR 실험: 회귀 분석</h2>
@@ -1216,7 +1211,7 @@ Y_i &amp;= \mathbb{E}[Y_i^0] + D_i \delta + Y_i^0 - \mathbb{E}[Y_i^0] \\
 ## 
 ## Coefficients:
 ## (Intercept)    smallTRUE  
-##     483.199        7.732</code></pre>
+##     484.446        8.895</code></pre>
 </div>
 </div>
 <p>📌 회귀 분석 계수 의미 정리: <span class="math inline">\(b_0 = \mathbb{E}[Y_i^0]\)</span> and <span class="math inline">\(\delta = \mathbb{E}[Y_i | D_i = 1] - \mathbb{E}[Y_i | D_i = 0]\)</span></p>
@@ -1227,18 +1222,18 @@ Y_i &amp;= \mathbb{E}[Y_i^0] + D_i \delta + Y_i^0 - \mathbb{E}[Y_i^0] \\
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>b_0 <span class="ot">=</span> <span class="fu">mean</span>(star_df_k_small<span class="sc">$</span>math[star_df_k_small<span class="sc">$</span>small <span class="sc">==</span> <span class="cn">FALSE</span>])</span>
-<span id="cb7-2"><a href=""></a>b_0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>b_0 <span class="ot">=</span> <span class="fu">mean</span>(star_df_k_small<span class="sc">$</span>math[star_df_k_small<span class="sc">$</span>small <span class="sc">==</span> <span class="cn">FALSE</span>])</span>
+<span id="cb5-2"><a href=""></a>b_0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>## [1] NA</code></pre>
+<pre><code>## [1] 484.4464</code></pre>
 </div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a>delta <span class="ot">=</span> <span class="fu">mean</span>(star_df_k_small<span class="sc">$</span>math[star_df_k_small<span class="sc">$</span>small <span class="sc">==</span> <span class="cn">TRUE</span>]) <span class="sc">-</span> <span class="fu">mean</span>(star_df_k_small<span class="sc">$</span>math[star_df_k_small<span class="sc">$</span>small <span class="sc">==</span> <span class="cn">FALSE</span>])</span>
-<span id="cb9-2"><a href=""></a>delta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>delta <span class="ot">=</span> <span class="fu">mean</span>(star_df_k_small<span class="sc">$</span>math[star_df_k_small<span class="sc">$</span>small <span class="sc">==</span> <span class="cn">TRUE</span>]) <span class="sc">-</span> <span class="fu">mean</span>(star_df_k_small<span class="sc">$</span>math[star_df_k_small<span class="sc">$</span>small <span class="sc">==</span> <span class="cn">FALSE</span>])</span>
+<span id="cb7-2"><a href=""></a>delta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>## [1] NA</code></pre>
+<pre><code>## [1] 8.895193</code></pre>
 </div>
 </div>
 </div></div>
@@ -1247,22 +1242,22 @@ Y_i &amp;= \mathbb{E}[Y_i^0] + D_i \delta + Y_i^0 - \mathbb{E}[Y_i^0] \\
 <h2>더미 변수를 사용한 회귀 분석: 그래프</h2>
 <p><strong>📌 회귀 분석의 독립 변수(regressor)는 더미 변수(dummy variable)</strong></p>
 
-<img data-src="chapter_causality_files/figure-revealjs/unnamed-chunk-11-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"></section>
+<img data-src="chapter_causality_files/figure-revealjs/unnamed-chunk-9-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"></section>
 <section id="더미-변수를-사용한-회귀-분석-그래프-1" class="slide level2">
 <h2>더미 변수를 사용한 회귀 분석: 그래프</h2>
 <p><strong>📌 회귀 분석의 독립 변수(regressor)는 더미 변수(dummy variable)</strong></p>
 
-<img data-src="chapter_causality_files/figure-revealjs/unnamed-chunk-12-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"></section>
+<img data-src="chapter_causality_files/figure-revealjs/unnamed-chunk-10-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"></section>
 <section id="더미-변수를-사용한-회귀-분석-그래프-2" class="slide level2">
 <h2>더미 변수를 사용한 회귀 분석: 그래프</h2>
 <p><strong>📌 회귀 분석의 독립 변수(regressor)는 더미 변수(dummy variable)</strong></p>
 
-<img data-src="chapter_causality_files/figure-revealjs/unnamed-chunk-13-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"></section>
+<img data-src="chapter_causality_files/figure-revealjs/unnamed-chunk-11-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"></section>
 <section id="더미-변수를-사용한-회귀-분석-그래프-3" class="slide level2">
 <h2>더미 변수를 사용한 회귀 분석: 그래프</h2>
 <p><strong>📌 회귀 분석의 독립 변수(regressor)는 더미 변수(dummy variable)</strong></p>
 
-<img data-src="chapter_causality_files/figure-revealjs/unnamed-chunk-14-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"></section>
+<img data-src="chapter_causality_files/figure-revealjs/unnamed-chunk-12-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"></section>
 <section id="더미-변수를-사용한-회귀-분석-공식으로-표현" class="slide level2">
 <h2>더미 변수를 사용한 회귀 분석: 공식으로 표현</h2>
 <p>📌 회귀 모델: <span class="math inline">\(\text{math score}_i = b_0 + \delta \text{small}_i + e_i\)</span></p>
@@ -1291,18 +1286,24 @@ ATE &amp;= \mathbb{E}[\textrm{math score} | \text{small}_i = 1] - \mathbb{E}[\te
 \]</span></p>
 <p>✅ <strong>이미 알고 있었지만, 이제 이 결과가 왜 성립하는지 공식적으로 이해할 수 있음!</strong> 🎉</p>
 </section>
-<section id="task-3" class="slide level2" data-background-color="#ffebf0">
+<section id="task-3" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 3</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_40c798b2" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_8786b2f2" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
-<p>📌 1. 아래 코드를 실행하여 <strong>1학년(grade == “1”)이며, 일반 학급(regular) 또는 소규모 학급(small)에 속한 학생들만 선택</strong>.</p>
+<ol type="1">
+<li>아래 코드를 실행하여 <strong>1학년(grade == “1”)이며, 일반 학급(regular) 또는 소규모 학급(small)에 속한 학생들만 선택</strong>.</li>
+</ol>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a>star_df_clean <span class="ot">&lt;-</span> star_df <span class="sc">%&gt;%</span></span>
-<span id="cb11-2"><a href=""></a>    <span class="fu">filter</span>(grade <span class="sc">==</span> <span class="st">"1"</span> <span class="sc">&amp;</span> star <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"small"</span>, <span class="st">"regular"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a>star_df_clean <span class="ot">&lt;-</span> star_df <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href=""></a>    <span class="fu">filter</span>(grade <span class="sc">==</span> <span class="st">"1"</span> <span class="sc">&amp;</span> star <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"small"</span>, <span class="st">"regular"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>📊 2. 두 그룹의 평균 수학 점수 및 차이 계산 (Base R 사용)</p>
-<p>🔄 3. 더미 변수 생성: 소규모 학급(small) = 1 (TRUE), 일반 학급(regular) = 0 (FALSE) <strong>힌트</strong>: <code>treatment = (star == "small")</code>.</p>
+<ol start="2" type="1">
+<li>두 그룹의 평균 수학 점수 및 차이 계산 (Base R 사용)</li>
+</ol>
+<ol start="3" type="1">
+<li>더미 변수 생성: 소규모 학급(small) = 1 (TRUE), 일반 학급(regular) = 0 (FALSE) <strong>힌트</strong>: <code>treatment = (star == "small")</code>.</li>
+</ol>
 <p>📈 4. 회귀 분석 실행</p>
 <p>❓ 5. 결과 해석: 회귀 분석 결과가 2번 질문에서 구한 평균 차이와 일치하는가?</p>
 </section>
@@ -1345,7 +1346,7 @@ ATE &amp;= \mathbb{E}[\textrm{math score} | \text{small}_i = 1] - \mathbb{E}[\te
 <ul>
 <li><strong>✅ 선택이 관측 가능한 특성(Observable Characteristics)에서 발생하는 경우</strong>
 <ul>
-<li><strong>다중 회귀(Multiple Regression)</strong> → <strong>다음 주에 학습!</strong></li>
+<li><strong>다중 회귀(Multiple Regression)</strong></li>
 </ul></li>
 <li><strong>⚠️ 선택이 관측 불가능한 특성(Unobservable Characteristics)에서 발생하는 경우</strong>
 <ul>
