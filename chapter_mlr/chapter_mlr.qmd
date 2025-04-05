@@ -381,7 +381,7 @@ summary(reg)
 
 -   추가된 변수들의 계수(sign & magnitude)를 해석하시오.
 -   추가된 변수가 포함됨으로 인해 classize 및 disadvantaged의 계수는 어떻게 변했는가?
--   전체 모델의 설명력이 증가했는가? (R\^2 값 확인)
+-   전체 모델의 설명력이 증가했는가? ($R^2$ 값 확인)
 
 ```{r, echo=FALSE, eval=FALSE}
 reg_full <- lm(avgverb ~ ., data = grades)
