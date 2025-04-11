@@ -43,7 +43,7 @@
 [HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/chapter_causality.html) / 
 [.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_causality/chapter_causality.qmd) / 
 [Tasks](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/tasks/causality_tasks.qmd) / 
-[Solution: Part 1](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/tasks/causality_solution_part1.html)
+[Solution: 전체](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/tasks/causality_solution.html)
 
 
 
@@ -51,7 +51,8 @@
 
 [HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_mlr/chapter_mlr.html) / 
 [.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_mlr/chapter_mlr.qmd) / 
-[Tasks](https://chung-jiwoong.github.io/FMB819-Slides/chapter_mlr/tasks/mlr_tasks.qmd)
+[Tasks](https://chung-jiwoong.github.io/FMB819-Slides/chapter_mlr/tasks/mlr_tasks.qmd) / 
+[Solution: Part 1](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/tasks/mlr_solution_part1.html)
     
 
 **주제6: Linear Regression Extensions**
