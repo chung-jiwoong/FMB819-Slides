@@ -1,28 +1,17 @@
 ---
-title: "FMB819: R을 이용한 데이터분석"
-subtitle: "<span style='font-size:1.5em; color:#a01616;'>Sampling</span>"
-# date: "`r Sys.Date()`"
-format:
+title: "Sampling"
+subtitle: "FMB819: R을 이용한 데이터분석"
+author: "고려대학교 경영대학 정지웅"
+format: 
   revealjs:
-    slide-number: true
-    # smaller: true
-    scrollable: true
-    chalkboard: true
+    theme: simple
     transition: fade
     transition-speed: fast
-    #incremental: true
-    #lib_dir: libs
-    css: [default, "../css/kubs.css", "../css/kubs-fonts.css"]
-    #nature:
-      # beforeInit: ["../js/ru_xaringan.js"]
-      #highlightStyle: github
-      #highlightLines: true
-      #countIncrementalSlides: false
-    #  ratio: "16:9"
-    # includes:
-    #   in_header: "../libs/partials/header.html"
+    scrollable: true
+    chalkboard: true
+    slide-number: true
 revealjs-plugins:
-  - revealjs-text-resizer
+  - revealjs-text-resizer 
 ---
 
 ```{r setup, include=FALSE,warning=FALSE,message=FALSE}
@@ -61,7 +50,7 @@ set.seed(1234)
 
 ## Today's Agenda
 
--   샘플링을 직접 경험하며 **샘플링**, **샘플링 변동성**, **샘플링 분포** 개념을 익히기.
+-   **샘플링**, **샘플링 변동성**, **샘플링 분포** 개념을 익히기.
 
 -   **샘플링 용어**:
 
@@ -116,17 +105,15 @@ knitr::include_graphics("../img/photos/pasta/pasta_bowl.JPG")
 
 -   만약 *새로운* 표본을 추출한다면 (이전에 뽑은 20개의 파스타를 다시 그릇에 넣고)? 이전처럼 *녹색* 파스타 14개가 나올까?
 
--   이 활동을 여러 번 반복하면 어떻게 될까?
-
 -   아마 아닐 것임. 표본은 추출할 때마다 달라질 것임.
 
--   핵심 포인트: 표본은 *무작위로* 추출됨.
+-   핵심 포인트: 표본은 **무작위로** 추출.
 
 ------------------------------------------------------------------------
 
 ## 18개의 표본 추출
 
--   수업 중에는 실제 파스타를 준비할 수 없어서, 집에서 20개의 파스타를 *복원 추출*하여 18개의 표본을 뽑았음.
+-   20개의 파스타를 *복원 추출*하여 18개의 표본을 뽑아 보면
 
 -   각각의 표본은 다음과 같음:
 
@@ -139,7 +126,7 @@ knitr::include_graphics("../img/photos/pasta/pasta_bowl.JPG")
 
 ## 18개의 표본 추출
 
--   수업 중에는 실제 파스타를 준비할 수 없어서, 집에서 20개의 파스타를 *복원 추출*하여 18개의 표본을 뽑았음.
+-   20개의 파스타를 *복원 추출*하여 18개의 표본을 뽑아 보면
 
 -   각각의 표본은 다음과 같음:
 
@@ -260,7 +247,7 @@ pasta_samples %>%
 
     1.  **전수 조사(Census)**: 시간이 많이 걸리고, 많은 경우 매우 비용이 많이 듦.
 
-    2.  **표본 추출(Sampling)**: 볼에서 20개의 파스타를 무작위로 뽑아 ***추정값***을 얻음.\
+    2.  **표본 추출(Sampling)**: 그룻에서 20개의 파스타를 무작위로 뽑아 ***추정값***을 얻음.\
         첫 번째 ***추정값***은 0.70이었지만, 이는 대부분의 다른 ***추정값***보다 높았음.
 
 -   **중요**: 각 *표본*은 ***무작위***로 추출됨 → 표본이 서로 다름! → 추출된 비율이 달라짐 → ***표본 변동(Sampling Variation)***
@@ -272,11 +259,10 @@ pasta_samples %>%
 ::::: columns
 ::: {.column width="50%"}
 -   볼 안의 녹색, 빨간색, 노란색 파스타 개수를 정확히 셈.
--   볼 안의 모든 파스타 데이터는 [여기](https://www.dropbox.com/s/qpjsk0rfgc0gx80/pasta.csv?dl=1) CSV 파일에 저장됨.
+-   볼 안의 모든 파스타 데이터는 [여기]("https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_sampling/data/pasta.csv") CSV 파일에 저장됨.
 
 ```{r, echo = TRUE}
-bowl <- read.csv("https://www.dropbox.com/s/qpjsk0rfgc0gx80/pasta.csv?dl=1")
-
+bowl <- read.csv("https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_sampling/data/pasta.csv")
 head(bowl)
 ```
 :::
@@ -290,7 +276,7 @@ nrow(bowl)
 ```
 
 -   손으로 직접 파스타를 고르는 대신, 가상으로 표본을 추출할 것임.
--   *가상 삽*을 사용하여 가상 볼에서 50개의 파스타를 무작위로 선택함.
+-   *가상 삽*을 사용하여 가상 그룻에서 50개의 파스타를 무작위로 선택함.
 :::
 :::::
 

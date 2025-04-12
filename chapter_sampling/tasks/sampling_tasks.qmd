@@ -1,0 +1,49 @@
+---
+title: "수업 과제"
+author: "홍길동 (2025012345)"       #이름과 학번을 넣으세요
+date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
+format: html
+echo: true  
+include: true 
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+    echo = TRUE,
+    message = FALSE,
+    warning = FALSE,
+    comment = "##")
+```
+
+
+## Task 1 {background-color="#ffebf0"}
+
+::: {style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;"}
+`r countdown(minutes = 5, top = 0)`
+:::
+
+1.  이전 슬라이드에서 녹색 파스타 비율을 포함하는 `data.frame`을 생성하시오. 이 데이터 프레임의 이름을 `pasta`로 지정하고, 비율을 포함하는 변수를 `prop_green`으로 설정하시오.\
+    (힌트: `data.frame()` 함수를 사용하여 데이터 프레임을 생성할 수 있음.)\
+    비율 값은 다음과 같음: `(0.7, 0.7, 0.5, 0.5, 0.3, 0.5, 0.4, 0.45, 0.55, 0.4, 0.35, 0.45, 0.45, 0.7, 0.55, 0.5, 0.35, 0.65)`
+
+
+```{r}
+pasta <- data.frame(prop_green = c(0.7,0.7,0.5,0.5,0.3,0.5,0.4,0.45,0.55,0.4,0.35,0.45,0.45,0.7,0.55,0.5,0.35,0.65))
+```
+
+
+2.  `ggplot2`를 사용하여 이 비율의 히스토그램을 생성하시오.\
+    `geom_histogram()` 함수에서 다음 매개변수를 사용하시오:\
+    `boundary = 0.325, binwidth = 0.05`.
+
+```{r}
+library(tidyverse)
+pasta %>%
+    ggplot(aes(x = prop_green)) +
+    geom_histogram(boundary = 0.325, binwidth = 0.05, color = "white", fill = "darkgreen")
+```
+
+
+
+3.  무엇을 관찰할 수 있는가?

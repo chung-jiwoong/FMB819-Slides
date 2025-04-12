@@ -61,7 +61,7 @@ countdown(
 -   **누락 변수 편향** (Omitted Variable Bias)
 -   **조정된** $R^2$ (Adjusted $R^2$)
 -   **실증 분석:**
-    -   *학급 규모* (Class Size)와 *학생 성취* (Student Performance)
+    -   *학급 규모* (size)와 *학생 성취* (Student Performance)
 
 ------------------------------------------------------------------------
 
@@ -88,7 +88,7 @@ ggplot(aes(x = classize, y = avgmath)) +
   xlim(0,45) +
   ylim(0, 100) +
   labs(
-    x = "Class size",
+    x = "size",
     y = "Average score",
     title = "Mathematics") +
   theme_bw(base_size = 14)
@@ -107,7 +107,7 @@ ggplot(aes(x = classize, y = avgmath)) +
   xlim(0,45) +
   ylim(0, 100) +
   labs(
-    x = "Class size",
+    x = "size",
     y = "Average score",
     title = "Mathematics") +
   theme_bw(base_size = 14) +
@@ -129,7 +129,7 @@ ggplot(aes(x = classize, y = avgmath)) +
   xlim(0,45) +
   ylim(0, 100) +
   labs(
-    x = "Class size",
+    x = "size",
     y = "Average score",
     title = "Mathematics") +
   theme_bw(base_size = 20) +
@@ -176,8 +176,8 @@ ggplot(grades, aes(x = disadvantaged, y = classize)) +
   ylim(0,45) +
   labs(
     x = "% class coming from disadvantaged backgrounds",
-    y = "Class size",
-    title = "Relationship with class size") +
+    y = "size",
+    title = "Relationship with size") +
   theme_bw(base_size = 20) +
   geom_smooth(se = FALSE, method = "lm", colour = "#d90502")
 ```
@@ -195,8 +195,8 @@ ggplot(grades, aes(x = disadvantaged, y = avgmath)) +
   ylim(0,100) +
   labs(
     x = "% class coming from disadvantaged backgrounds",
-    y = "Average math score",
-    title = "Relationship with average math score") +
+    y = "avg math",
+    title = "Relationship with avg math") +
   theme_bw(base_size = 20) +
   geom_smooth(se = FALSE, method = "lm", colour = "#d90502")
 ```
@@ -220,7 +220,7 @@ ggplot(grades, aes(x = disadvantaged, y = avgmath)) +
 **추정하려는 회귀 모델** 다중 회귀 분석(Multiple Regression)
 
 $$
- \textrm{average math score}_i = b_0 + b_1 \textrm{class size}_i + b_2 \textrm{\% disadvantaged}_i + e_i
+ \textrm{avg math}_i = b_0 + b_1 \text{size}_i + b_2 \text{\% disadvantaged}_i + e_i
 $$
 
 
@@ -302,7 +302,7 @@ lm(formula = dependent variable ~  independent variable 1 + independent variable
    data = data.frame containing the data)
 ```
 
--   학급 규모와 학생 성취: 다중 회귀 분석: $\textrm{average math score}_i = b_0 + b_1 \textrm{class size}_i + b_2 \textrm{\% disadvantaged}_i + e_i$
+-   학급 규모와 학생 성취: 다중 회귀 분석: $\textrm{avg math}_i = b_0 + b_1 \textrm{size}_i + b_2 \textrm{ \% disadvantaged}_i + e_i$
 
 ```{r}
 lm(avgmath ~ classize + disadvantaged, grades)
@@ -333,7 +333,7 @@ lm(avgmath ~ classize + disadvantaged, grades)
 
 1.  각 회귀 계수의 해석
 
--   $b_0 = 69.94$: 학급 규모 (classize) 와 불리한 배경을 가진 학생 비율 이 모두 0일 때 → 평균 수학 점수(average math score)의 예측값은 69.94
+-   $b_0 = 69.94$: 학급 규모 (classize) 와 불리한 배경을 가진 학생 비율 이 모두 0일 때 → 평균 수학 점수(avg math)의 예측값은 69.94
 
 -   $b_1 = 0.07$: 불리한 배경을 가진 학생 비율을 일정하게 유지할 경우, 학급 규모가 1명 증가하면 → 평균 수학 점수가 평균적으로 0.07점 증가하는 것과 연관됨(associated).
 
@@ -351,7 +351,7 @@ lm(avgmath ~ classize + disadvantaged, grades)
 
 2.  단순 선형 회귀(SLM)와 비교했을 때 classize 계수의 변화는 어떻게 설명할 수 있는가?
 
--   $b_1$ 값이 감소: disadvantaged 변수를 추가하자 학급 규모(class size)의 계수($b_1$)가 감소함. 이는 예상된 결과 → 큰 학급일수록 불리한 배경을 가진 학생 비율이 작아지는 경향이 있었기 때문. 즉, 단순 선형 회귀에서는 학급 규모가 학생 성취에 미치는 "순수한 효과"뿐만 아니라, 불리한 배경을 가진 학생 비율이 적은 영향도 포함하고 있었음.
+-   $b_1$ 값이 감소: disadvantaged 변수를 추가하자 학급 규모(size)의 계수($b_1$)가 감소함. 이는 예상된 결과 → 큰 학급일수록 불리한 배경을 가진 학생 비율이 작아지는 경향이 있었기 때문. 즉, 단순 선형 회귀에서는 학급 규모가 학생 성취에 미치는 "순수한 효과"뿐만 아니라, 불리한 배경을 가진 학생 비율이 적은 영향도 포함하고 있었음.
 
 ------------------------------------------------------------------------
 
@@ -399,7 +399,7 @@ summary(reg_full)
 *예)*: 아래 회귀 모델에서 각 계수의 의미는?
 
 $$
-\text{average math score}_i = b_0 + b_1\text{class size}_i + b_2\text{religious}_i +e_i
+\text{avg math}_i = b_0 + b_1\text{size}_i + b_2\text{religious}_i +e_i
 $$
 
 -   `religious`: **1이면** 해당 학교가 *종교 학교*, **0이면** 해당 학교가 *일반 학교*
@@ -412,71 +412,67 @@ lm(avgmath ~ classize + religious, grades)
 
 ## 연속형 변수와 더미 변수를 포함한 회귀 분석
 
-::: callout
 $$
-\text{average math score}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{class size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
+\text{avg math}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
 $$
-:::
 
 -   다음이 성립
 
 \begin{align}
-\mathbb{E}(\text{average math score} | \text{religious} = 0 \text{ & } \text{class size} = 0) &= \color{#d96502}{b_0} + \color{#d90502}{b_1} \times 0 + \color{#027D83}{b_2} \times 0 \\
+\mathbb{E}(\text{avg math} | \text{religious} = 0 \text{ & } \text{size} = 0) &= \color{#d96502}{b_0} + \color{#d90502}{b_1} \times 0 + \color{#027D83}{b_2} \times 0 \\
 &= \color{#d96502}{b_0}
 \end{align}
 
-**절편 ($b_0$)**: `religious = 0` (일반 학교)이고, `class size = 0`인 경우의 **예측된 평균 수학 점수**
+**절편 ($b_0$)**: `religious = 0` (일반 학교)이고, `size = 0`인 경우의 **예측된 평균 수학 점수**
 
 -   $\color{#d96502}{b_0}$ 는 학급 규모가 0이고, 학교가 일반 학교일 때의 평균 수학 점수를 의미.
 
 ------------------------------------------------------------------------
 
-## 연속형 변수와 더미 변수를 포함한 회귀 분석 (Formal Interpretation)
+## 연속형 변수와 더미 변수를 포함한 회귀 분석
 
-::: callout
 $$
-\text{average math score}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{class size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
+\text{avg math}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
 $$
-:::
+
 
 -   또한 다음이 성립
 
 \begin{equation}
-\mathbb{E}(\text{average math score} | \text{religious} \in \{0,1\} \text{ & } \color{#d90502}{\text{class size} = n_1}) = \color{#d96502}{b_0} + \color{#d90502}{b_1} \times n_1 + \color{#027D83}{b_2} \times \text{religious}
+\mathbb{E}(\text{avg math} | \text{religious} \in \{0,1\} \text{ & } \color{#d90502}{\text{size} = n_1}) = \color{#d96502}{b_0} + \color{#d90502}{b_1} \times n_1 + \color{#027D83}{b_2} \times \text{religious}
 \end{equation}
 \begin{multline}
-\mathbb{E}(\text{average math score} | \text{religious} \in \{0,1\} \text{ & } \color{#d90502}{\text{class size} = n_1+1}) = \\ \color{#d96502}{b_0} + \color{#d90502}{b_1} \times (n_1+1) + \color{#027D83}{b_2} \times \text{religious}
+\mathbb{E}(\text{avg math} | \text{religious} \in \{0,1\} \text{ & } \color{#d90502}{\text{size} = n_1+1}) = \\ \color{#d96502}{b_0} + \color{#d90502}{b_1} \times (n_1+1) + \color{#027D83}{b_2} \times \text{religious}
 \end{multline}
 \begin{multline}
-\mathbb{E}(\text{average math score} | \text{religious} \in \{0,1\} \text{ & } \color{#d90502}{\text{class size} = n_1+1}) - \\ \mathbb{E}(\text{average math score} | \text{religious} \in \{0,1\} \text{ & } \color{#d90502}{\text{class size} = n_1}) \\
+\mathbb{E}(\text{avg math} | \text{religious} \in \{0,1\} \text{ & } \color{#d90502}{\text{size} = n_1+1}) - \\ \mathbb{E}(\text{avg math} | \text{religious} \in \{0,1\} \text{ & } \color{#d90502}{\text{size} = n_1}) \\
 = \color{#d96502}{b_0} + \color{#d90502}{b_1} \times (n_1+1) + \color{#027D83}{b_2} \times \text{religious} - (\color{#d96502}{b_0} + \color{#d90502}{b_1} \times n_1 + \color{#027D83}{b_2} \times \text{religious}) = \color{#d90502}{b_1}
 \end{multline}
 
--   $\color{#d90502}{b_1}$은 학급 규모(class size)가 1명 증가할 때, 평균 수학 점수가 평균적으로 변화하는 정도를 나타냄. 단, **학교의 종교적 특성(`religious` 변수)은 일정하게 유지된 상태에서**
+-   $\color{#d90502}{b_1}$은 학급 규모(size)가 1명 증가할 때, 평균 수학 점수가 평균적으로 변화하는 정도를 나타냄. 단, **학교의 종교적 특성(`religious` 변수)은 일정하게 유지된 상태에서**
 
 ------------------------------------------------------------------------
 
-## 연속형 변수와 더미 변수를 포함한 회귀 분석 (Formal Interpretation)
+## 연속형 변수와 더미 변수를 포함한 회귀 분석
 
-::: callout
 $$
-\text{average math score}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{class size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
+\text{avg math}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
 $$
-:::
+
 
 -   그리고 다음이 성립
 
 \begin{align}
-\mathbb{E}(\text{average math score} | \color{#027D83}{\text{religious} = 1} \text{ & } \text{class size} \in \mathbb{N}) &= \color{#d96502}{b_0} + \color{#d90502}{b_1} \times \text{class size} + \color{#027D83}{b_2} \times 1 \\
-&= \color{#d96502}{b_0} + \color{#d90502}{b_1} \times \text{class size} + \color{#027D83}{b_2}
+\mathbb{E}(\text{avg math} | \color{#027D83}{\text{religious} = 1} \text{ & } \text{size} \in \mathbb{N}) &= \color{#d96502}{b_0} + \color{#d90502}{b_1} \times \text{size} + \color{#027D83}{b_2} \times 1 \\
+&= \color{#d96502}{b_0} + \color{#d90502}{b_1} \times \text{size} + \color{#027D83}{b_2}
 \end{align}
 \begin{align}
-\mathbb{E}(\text{average math score} | \color{#027D83}{\text{religious} = 0} \text{ & } \text{class size} \in \mathbb{N}) &= \color{#d96502}{b_0} + \color{#d90502}{b_1} \times \text{class size} + \color{#027D83}{b_2} \times 0 \\
-&= \color{#d96502}{b_0} + \color{#d90502}{b_1} \times \text{class size}
+\mathbb{E}(\text{avg math} | \color{#027D83}{\text{religious} = 0} \text{ & } \text{size} \in \mathbb{N}) &= \color{#d96502}{b_0} + \color{#d90502}{b_1} \times \text{size} + \color{#027D83}{b_2} \times 0 \\
+&= \color{#d96502}{b_0} + \color{#d90502}{b_1} \times \text{size}
 \end{align}
 \begin{multline}
-\mathbb{E}(\text{average math score} | \color{#027D83}{\text{religious} = 1} \text{ & } \text{class size} \in \mathbb{N}) - \\ \mathbb{E}(\text{average math score} | \color{#027D83}{\text{religious} =0} \text{ & } \text{class size} \in \mathbb{N}) \\
-= \color{#d96502}{b_0} + \color{#d90502}{b_1} \times \text{class size} + \color{#027D83}{b_2}- (\color{#d96502}{b_0} + \color{#d90502}{b_1} \times \text{class size}) = \color{#027D83}{b_2}
+\mathbb{E}(\text{avg math} | \color{#027D83}{\text{religious} = 1} \text{ & } \text{size} \in \mathbb{N}) - \\ \mathbb{E}(\text{avg math} | \color{#027D83}{\text{religious} =0} \text{ & } \text{size} \in \mathbb{N}) \\
+= \color{#d96502}{b_0} + \color{#d90502}{b_1} \times \text{size} + \color{#027D83}{b_2}- (\color{#d96502}{b_0} + \color{#d90502}{b_1} \times \text{size}) = \color{#027D83}{b_2}
 \end{multline}
 
 $\rightarrow$ $\color{#027D83}{b_2}$는 학급 규모를 일정하게 유지한 상태에서 **종교계 학교와 비종교계 학교 간 평균 수학 점수의 기대 차이**를 의미
@@ -485,34 +481,31 @@ $\rightarrow$ $\color{#027D83}{b_2}$는 학급 규모를 일정하게 유지한 
 
 ## 연속형 변수와 더미 변수를 포함한 회귀 분석: 요약
 
-::: callout
 $$
-\text{average math score}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{class size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
+\text{avg math}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
 $$
-:::
 
 \begin{equation}
-\color{#d96502}{b_0} = \mathbb{E}(\text{average math score} | \text{religious} = 0 \text{ & } \text{class size} = 0)
+\color{#d96502}{b_0} = \mathbb{E}(\text{avg math} | \text{religious} = 0 \text{ & } \text{size} = 0)
 \end{equation}
 \begin{multline}
-\color{#d90502}{b_1} = \mathbb{E}(\text{average math score} | \text{religious} \in \{0,1\} \text{ & } \color{#d90502}{\text{class size} = n_1+1}) - \\ \mathbb{E}(\text{average math score} | \text{religious} \in \{0,1\} \text{ & } \color{#d90502}{\text{class size} = n_1})
+\color{#d90502}{b_1} = \mathbb{E}(\text{avg math} | \text{religious} \in \{0,1\} \text{ & } \color{#d90502}{\text{size} = n_1+1}) - \\ \mathbb{E}(\text{avg math} | \text{religious} \in \{0,1\} \text{ & } \color{#d90502}{\text{size} = n_1})
 \end{multline}
 \begin{multline}
-\color{#027D83}{b_2} = \mathbb{E}(\text{average math score} | \color{#027D83}{\text{religious} = 1} \text{ & } \text{class size} \in \mathbb{N}) - \\ \mathbb{E}(\text{average math score} | \color{#027D83}{\text{religious} =0} \text{ & } \text{class size} \in \mathbb{N})
+\color{#027D83}{b_2} = \mathbb{E}(\text{avg math} | \color{#027D83}{\text{religious} = 1} \text{ & } \text{size} \in \mathbb{N}) - \\ \mathbb{E}(\text{avg math} | \color{#027D83}{\text{religious} =0} \text{ & } \text{size} \in \mathbb{N})
 \end{multline}
 \begin{equation}
-\color{#d96502}{b_0} + \color{#027D83}{b_2} = \mathbb{E}(\text{average math score} | \text{religious} = 1 \text{ & } \text{class size} = 0)
+\color{#d96502}{b_0} + \color{#027D83}{b_2} = \mathbb{E}(\text{avg math} | \text{religious} = 1 \text{ & } \text{size} = 0)
 \end{equation}
 
 ------------------------------------------------------------------------
 
 ## 연속형 변수와 더미 변수를 포함한 회귀 분석: 시각화
 
-::: callout
 $$
-\text{average math score}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{class size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
+\text{avg math}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
 $$
-:::
+
 
 ```{r, echo = FALSE, fig.height=5, fig.width = 10}
 base_graph <- grades %>%
@@ -521,7 +514,7 @@ base_graph <- grades %>%
     scale_color_viridis_d(labels = c("FALSE","TRUE")) +
     scale_x_continuous(lim = c(0,45), expand = c(0,0)) +
     scale_y_continuous(breaks = seq(30,90,20), minor_breaks = seq(40,80,10)) +
-    labs(x = "Class size", y = "Average math score", col = "Religious school") +
+    labs(x = "size", y = "avg math", col = "Religious school") +
     theme_bw(base_size = 20) +
     theme(legend.position = c(0,1),
           legend.justification = c(0,1),
@@ -536,11 +529,10 @@ base_graph
 
 ## 연속형 변수와 더미 변수를 포함한 회귀 분석: 시각화
 
-::: callout
 $$
-\text{average math score}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{class size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
+\text{avg math}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
 $$
-:::
+
 
 ```{r, echo = FALSE, fig.height=5, fig.width = 10}
 library(broom)  
@@ -557,11 +549,10 @@ graph_reg
 
 ## 연속형 변수와 더미 변수를 포함한 회귀 분석: 시각화
 
-::: callout
 $$
-\text{average math score}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{class size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
+\text{avg math}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
 $$
-:::
+
 
 ```{r, echo = FALSE, fig.height=5, fig.width = 10}
 library(latex2exp)
@@ -584,11 +575,10 @@ graph_reg_b0
 
 ## 연속형 변수와 더미 변수를 포함한 회귀 분석: 시각화
 
-::: callout
 $$
-\text{average math score}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{class size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
+\text{avg math}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
 $$
-:::
+
 
 ```{r, echo = FALSE, fig.height=5, fig.width = 10}
 graph_b0_b1 <- graph_reg_b0 + 
@@ -601,11 +591,10 @@ graph_b0_b1
 
 ## 연속형 변수와 더미 변수를 포함한 회귀 분석: 시각화
 
-::: callout
 $$
-\text{average math score}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{class size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
+\text{avg math}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
 $$
-:::
+
 
 ```{r, echo = FALSE, fig.height=5, fig.width = 10}
 graph_b0_b1 +
@@ -685,8 +674,8 @@ grades %>% count(is_religious == 1 - is_notreligious)
 -   💡 모든 계수는 이 **기준 그룹 대비 변화량**을 의미함.
 
 \begin{multline}
-\color{#027D83}{b_2} = \mathbb{E}(\text{average math score} | \color{#027D83}{\text{religious} = 1} \text{ & } \text{class size} \in \mathbb{N}) - \\  
-\mathbb{E}(\text{average math score} | \color{#027D83}{\text{religious} =0} \text{ & } \text{class size} \in \mathbb{N})
+\color{#027D83}{b_2} = \mathbb{E}(\text{avg math} | \color{#027D83}{\text{religious} = 1} \text{ & } \text{size} \in \mathbb{N}) - \\  
+\mathbb{E}(\text{avg math} | \color{#027D83}{\text{religious} =0} \text{ & } \text{size} \in \mathbb{N})
 \end{multline}
 
 -   즉, $b_2$는 종교 학교(`religious = 1`)와 일반 학교(`religious = 0`) 간의 평균 수학 점수 차이를 나타냄.
@@ -738,7 +727,7 @@ star_df <- star_df %>%
   )
 
 # sum 변수 값 확인
-unique(star_df$sum)
+# unique(star_df$sum)
 ```
 
 3.  `math`를 `regular_plus`로 회귀 분석. regular+aide 반에 있는 학생의 평균 `math` 점수는?
@@ -753,7 +742,7 @@ unique(star_df$sum)
 
 -   ***OVB*** 이란, 회귀 분석에서 중요한 **통제 변수(control variable)** 를 제외함으로써 발생하는 **편의(bias)** 을 의미.
 
--   이로 인해 관심 있는 독립 변수의 계수를 **신뢰할 수 없고(biased), 왜곡될 수 있음.**
+-   이로 인해 관심 있는 독립 변수의 계수를 **신뢰할 수 없고, 왜곡될 수 있음.**
 
 $y$: 종속변수, $x$: 독립변수, $z$: 누락변수인 경우 다음 회귀분석이 가능
 
@@ -835,24 +824,24 @@ $$
 -   학급 규모(`classize`)가 학생들의 평균 수학 점수(`avgmath`)에 미치는 영향
 
 $$
-\text{average math score} = b_0 + b_1\text{class size} + e
+\text{avg math} = b_0 + b_1\text{size} + e
 $$
 
-***단순회귀모형:*** $\text{average math score} = b_0 + b_1\text{class size} + e$
+***단순회귀모형:*** $\text{avg math} = b_0 + b_1\text{size} + e$
 
 ```{r, echo = FALSE}
 reg1 <- lm(avgmath ~ classize, grades)
 reg1$coefficients
 ```
 
-***다중회귀모형:*** $\text{average math score} = c_0 + c_1\text{class size} + \color{#d90502}{c_2}\text{\% disadvantaged} + e$
+***다중회귀모형:*** $\text{avg math} = c_0 + c_1\text{size} + \color{#d90502}{c_2}\text{ \% disadvantaged} + e$
 
 ```{r, echo = FALSE}
 reg2 <- lm(avgmath ~ classize + disadvantaged, grades)
 reg2$coefficients
 ```
 
-***누락변수와 독립변수***: $\text{\% disadvantaged} = d_0 + \color{#d96502}{d_1}\text{class size} + e$
+***누락변수와 독립변수***: $\text{\% disadvantaged} = d_0 + \color{#d96502}{d_1}\text{size} + e$
 
 ```{r, echo = FALSE}
 reg3 <- lm(disadvantaged ~ classize, grades)
