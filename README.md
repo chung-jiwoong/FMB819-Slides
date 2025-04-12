@@ -65,7 +65,8 @@
 **주제7: Sampling**
 
 [HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_sampling/chapter_sampling.html) / 
-[.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_sampling/chapter_sampling.qmd)
+[.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_sampling/chapter_sampling.qmd) / 
+[Tasks](https://chung-jiwoong.github.io/FMB819-Slides/chapter_sampling/tasks/sampling_tasks.qmd) 
 
 
 **주제8: Confidence Intervals and Hypothesis Testing**
