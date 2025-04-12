@@ -9,7 +9,8 @@
 <link href="chapter_ci_hyptest_files/libs/quarto-html/quarto-syntax-highlighting-48ffa3e5b9d089919c6712c39e5b00f2.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.6.41">
 
-  <title>FMB819: R을 이용한 데이터분석</title>
+  <meta name="author" content="고려대학교 경영대학 정지웅">
+  <title>Confidence Intervals and Hypothesis Testing</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -93,10 +94,8 @@
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="chapter_ci_hyptest_files/libs/revealjs/dist/theme/quarto-2f366650f320edcfcf53d73c80250a32.css">
-  <link rel="stylesheet" href="default">
-  <link rel="stylesheet" href="../css/kubs.css">
-  <link rel="stylesheet" href="../css/kubs-fonts.css">
+  <link rel="stylesheet" href="chapter_ci_hyptest_files/libs/revealjs/dist/theme/quarto-8f3eebe07241f08526c91a7e9cbef8fd.css">
+  <link rel="stylesheet" href="../styles/styles.css">
   <link href="chapter_ci_hyptest_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="chapter_ci_hyptest_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="chapter_ci_hyptest_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -201,10 +200,15 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">FMB819: R을 이용한 데이터분석</h1>
-  <p class="subtitle"><span style="font-size:1.5em; color:#a01616;">Confidence Intervals and Hypothesis Testing</span></p>
+  <h1 class="title">Confidence Intervals and Hypothesis Testing</h1>
+  <p class="subtitle">FMB819: R을 이용한 데이터분석</p>
 
 <div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+고려대학교 경영대학 정지웅 
+</div>
+</div>
 </div>
 
 </section>
@@ -212,15 +216,15 @@
 <h2>Today’s Agenda</h2>
 <ul>
 <li><p><em>신뢰 구간(Confidence interval)</em>: 가능한 <strong><em>값의 범위</em></strong> 제공</p></li>
-<li><p><em>가설 검정(Hypothesis testing</em>: 그룹 간 통계량 비교</p></li>
+<li><p><em>가설 검정(Hypothesis testing)</em>: 그룹 간 통계량 비교</p></li>
 </ul>
 </section>
 <section id="현실은" class="slide level2">
 <h2>현실은?</h2>
 <ul>
 <li><p>실제로는 모집단에서 <strong><em>단 한 개의 표본</em></strong>만 추출할 수 있음 (<strong><em>1000개</em></strong>가 아님!).</p></li>
-<li><p>또한, 모집단의 <strong><em>진짜 모수</em></strong>를 모르기 때문에 그것을 추정하는 것이 목표임.</p></li>
-<li><p>그럼 우리가 방금 했던 모든 것은 무슨 의미가 있었을까? For fun?</p></li>
+<li><p>또한, 모집단의 <strong><em>진짜 모수</em></strong>를 모름.</p></li>
+<li><p>그럼 우리가 지난 시간했던 것은 무슨 의미가 있었을까?</p></li>
 </ul>
 <p><br></p>
 <ul>
@@ -239,7 +243,7 @@
 <li><p>지금까지 우리는 표본에서 <strong><em>점 추정치</em></strong>만을 계산했음: <em>표본 평균</em>, <em>표본 비율</em>, <em>회귀 계수</em> 등.</p></li>
 <li><p>이 <strong><em>표본 통계량</em></strong>은 <strong><em>표본 변동성</em></strong>으로 인해 <strong><em>진짜 모집단 모수</em></strong>와 다를 수 있음.</p></li>
 <li><p>점 추정치 대신, 모집단 모수에 대한 <strong><em>가능한 값의 범위</em></strong>를 제공할 수도 있음.</p></li>
-<li><p>이것이 바로 <strong><em>신뢰 구간</em></strong> (Confidence interval)이 제공하는 것임.</p></li>
+<li><p>이것이 바로 <strong><em>신뢰 구간</em></strong> (Confidence interval)이 하는 일.</p></li>
 </ul>
 </section>
 <section id="신뢰-구간-구축" class="slide level2 scrollable">
@@ -247,19 +251,18 @@
 <ul>
 <li><p>신뢰 구간을 구축하는 여러 가지 방법이 있음:</p>
 <ol type="1">
-<li><p><em>이론적 접근</em>: 수학적 공식 (<strong><em>중심 극한 정리</em></strong>)을 사용하여 특정 조건 하에서 점 추정치의 표본 분포를 유도함 → <strong><em><code>R</code>이 내부적으로 수행하는 방식!</em></strong></p></li>
-<li><p><em>시뮬레이션 접근</em>: <strong><em>부트스트래핑(Bootstrapping)</em></strong> 방법을 사용하여 점 추정치의 표본 분포를 <em>재구성</em>함</p></li>
+<li><p><em>이론적 접근</em>: 수학적 공식 (<strong><em>중심 극한 정리</em></strong>)을 사용하여 특정 조건 하에서 점 추정치의 표본 분포를 유도함 → <strong><em><code>R</code>이 만드는 방식!</em></strong></p></li>
+<li><p><em>시뮬레이션 접근</em>: <strong><em>부트스트래핑(Bootstrapping)</em></strong> 방법을 사용하여 점 추정치의 표본 분포를 <em>재구성</em></p></li>
 </ol></li>
-<li><p>우리는 개념을 직관적으로 이해하기 위해 시뮬레이션에 초점을 맞출 것이며, 수학적 접근법은 다음에 다룰 예정임.</p></li>
-<li><p>실제로, 신뢰 구간을 계산할 때 <strong><em>부트스트래핑을 직접 수행할 필요 없음</em></strong>. <code>R</code>이 통계적 이론을 사용하여 자동으로 계산해 줌.</p></li>
+<li><p>우선 개념을 직관적으로 이해하기 위해 시뮬레이션에 초점을 맞출 것이며, 수학적 접근법은 다음에 다루겠음.</p></li>
 </ul>
 </section>
 <section id="다시-파스타로-돌아가기" class="slide level2">
 <h2>다시 파스타로 돌아가기</h2>
 <ul>
-<li><p>현실처럼, 우리의 파스타 그릇에서 <em>단 하나의 랜덤 표본</em>만 얻을 수 있다고 가정하자.</p></li>
-<li><p>표본 변동성(sampling variation)을 단일 표본으로 어떻게 연구할 수 있을까?<br>
-<code>👉</code> <strong><em>복원추출(bootstrap resampling)</em></strong>을 사용하면 됨!</p></li>
+<li><p>파스타 그릇에서 <em>단 하나의 랜덤 표본</em>만 얻을 수 있다고 가정하자.</p></li>
+<li><p>단일 표본으로 표본 변동성(sampling variation)을 어떻게 분석할 수 있을까?<br>
+<code>👉</code> <strong><em>복원추출(bootstrap resampling)</em></strong> 사용!</p></li>
 <li><p>먼저, 우리의 그릇에서 크기 <span class="math inline">\(n = 50\)</span>인 무작위 표본을 하나 추출해보자.</p></li>
 </ul>
 <div class="cell" data-layout-align="center">
@@ -304,7 +307,7 @@
 <ol type="1">
 <li><p>표본에서 <strong><em>하나의</em></strong> 파스타를 무작위로 선택하고 해당 색상을 기록한다.</p></li>
 <li><p>선택한 파스타를 표본에 다시 넣는다.</p></li>
-<li><p>위의 1번과 2번 과정을 49번 반복하여, <strong><em>새로운 표본의 크기가 원래 표본과 동일해질 때까지</em></strong> 진행한다.</p></li>
+<li><p>위의 1번과 2번 과정을 49번 반복하여, <strong><em>새로운 표본의 크기가 원래 표본과 크기가 같아질 때까지</em></strong> 진행한다.</p></li>
 <li><p>부트스트랩 표본에서 녹색 파스타의 비율을 계산한다.</p></li>
 </ol>
 <ul>
@@ -440,8 +443,8 @@
 <li><p><em>신뢰 구간(confidence interval)</em>: 그물로 물고기를 잡기.</p></li>
 </ul></li>
 <li><p>여기서 물고기는 전체 그릇에서 초록색 파스타의 실제 비율 <span class="math inline">\((p)\)</span>.</p></li>
-<li><p><em>점 추정치</em>는 표본에서 얻은 초록색 파스타의 비율 <span class="math inline">\((\hat{p})\)</span>.</p></li>
-<li><p><em>신뢰 구간</em>: 이전 부트스트랩 분포에서, <strong><em>대부분의 비율이 어디에 위치하는가?</em></strong></p></li>
+<li><p><strong>점 추정치</strong>는 표본에서 얻은 초록색 파스타의 비율 <span class="math inline">\((\hat{p})\)</span>.</p></li>
+<li><p><strong>신뢰 구간</strong>: 이전 부트스트랩 분포에서, <strong><em>대부분의 비율이 어디에 위치하는가?</em></strong></p></li>
 <li><p>신뢰 구간을 구성하는 방법: <strong><em>백분위수(percentile) 방법</em></strong>.</p></li>
 <li><p>신뢰 수준 <strong><em>confidence level</em></strong>을 지정해야 함: 일반적으로 90%, 95%, 99% 사용.</p></li>
 </ul>
@@ -487,31 +490,26 @@
 <h2>백분위수 방법: 95% 신뢰 구간 시각화</h2>
 
 <img data-src="chapter_ci_hyptest_files/figure-revealjs/unnamed-chunk-16-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"><ul>
-<li>모집단의 실제 모수값이 95% 신뢰 구간 내에 포함됨! 항상 그런가?</li>
+<li>모집단의 실제 모수값이 95% 신뢰 구간 내에 포함됨! 항상 그럴까?</li>
 </ul>
 </section>
 <section id="신뢰-구간-해석" class="slide level2">
 <h2>95% 신뢰 구간 해석</h2>
 <ul>
-<li><code>bowl</code>에서 100개의 서로 다른 표본을 반복적으로 추출하고, 각 표본에 대해 백분위수 방법을 사용하여 95% 신뢰 구간을 계산함.</li>
+<li><code>bowl</code>에서 100개의 서로 다른 표본을 반복적으로 추출하고, 각 표본에 대해 백분위수 방법을 사용하여 95% 신뢰 구간을 계산.</li>
 </ul>
 
 <img data-src="chapter_ci_hyptest_files/figure-revealjs/unnamed-chunk-17-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"><ul>
-<li>얼마나 많은 신뢰구간이 실제 모수값을 포함하고 있는가? 왜 그럴까?</li>
+<li>얼마나 많은 신뢰구간이 실제 모수값을 포함하고 있는가?</li>
 </ul>
 </section>
 <section id="신뢰-구간-해석-1" class="slide level2">
 <h2>95% 신뢰 구간 해석</h2>
 <blockquote>
-<p>정확한 해석: 표본추출 과정을 매우 여러 번 반복한다고 가정하면, 생성된 신뢰구간의 <strong><em>약 95%</em></strong>가 모집단의 참된 모수를 포함할 것으로 기대됨.</p>
+<p>정확한 해석: 표본추출 과정을 매우 여러 번 반복한다고 가정하면, 생성된 신뢰구간의 <strong><em>약 95%</em></strong>가 모집단의 실제 모수를 포함할 것으로 기대됨.</p>
 </blockquote>
 <ul>
-<li>즉, 95% 신뢰구간은 95%의 확률로 모집단 모수를 포함하는 것이 아니라, 동일한 방법으로 신뢰구간을 반복적으로 생성했을 때, 약 95%의 신뢰구간이 모집단 모수를 포함할 것을 의미함.</li>
-</ul>
-<blockquote>
-<p>간단한 해석: 우리는 모집단 모수를 포함할 가능성이 95%인 신뢰구간을 얻었다고 말할 수 있음.</p>
-</blockquote>
-<ul>
+<li><p>즉, 95% 신뢰구간은 95%의 확률로 모집단 모수를 포함하는 것이 아니라, 동일한 방법으로 신뢰구간을 반복적으로 생성했을 때, 약 95%의 신뢰구간이 모집단 모수를 포함할 것을 의미함.</p></li>
 <li><p><strong><em>질문:</em></strong></p>
 <ul>
 <li><p>신뢰수준이 증가하면 신뢰구간의 폭은 어떻게 변할까?</p></li>
@@ -537,7 +535,7 @@
 </ul></li>
 <li><p><strong><em>표본 크기의 영향:</em></strong> 표본 크기가 커질수록 신뢰구간은 더 좁아짐.</p>
 <ul>
-<li><strong>직관적 이해:</strong> 표본 크기가 커질수록 표본추출에 따른 변동(샘플링 변동)이 줄어들며, 따라서 부트스트랩 분포의 분산이 감소함. 결과적으로 신뢰구간이 더 좁아짐.</li>
+<li><strong>직관적 이해:</strong> 표본 크기가 커질수록 표본추출에 따른 표본변동성이 줄어들며, 따라서 부트스트랩 분포의 분산이 감소함. 결과적으로 신뢰구간이 더 좁아짐.</li>
 </ul></li>
 </ul>
 </section>
@@ -550,12 +548,9 @@
 <li><em>예시:</em> 남성과 여성 간의 평균 임금 차이. 이 차이가 <strong>유의미한(significant)</strong> 차이일까?</li>
 </ul></li>
 <li><p>이러한 비교는 <strong><em>가설검정(hypothesis testing)</em></strong>의 영역임.</p></li>
-<li><p>신뢰구간과 마찬가지로, 가설검정도 모집단에 대한 주장을 표본 정보를 기반으로 판단하는 데 사용됨.</p></li>
+<li><p>신뢰구간과 마찬가지로, 가설검정도 모집단에 대한 성격을 표본 정보를 기반으로 판단하는 데 사용됨.</p></li>
 <li><p>그러나 이러한 추론을 수행하는 방법론적 틀이 신뢰구간과는 <strong>약간 다름</strong>.</p></li>
 </ul>
-</section>
-<section class="slide level2">
-
 </section></section>
 <section>
 <section id="hypothesis-testing" class="title-slide slide level1 center">
@@ -566,9 +561,9 @@
 <h2>은행 승진에서 성차별이 존재하는가?</h2>
 <ul>
 <li><p>1974년 <em>Journal of Applied Psychology</em>에 게재된 <a href="https://pdfs.semanticscholar.org/39f6/d40e907ff08af4ddd3280c2ceee55ee1ddb6.pdf">논문</a>에서는 은행 여성 직원들이 차별을 받았는지 조사함.</p></li>
-<li><p>48명의 (남성) 관리자에게 <strong>동일한</strong> 지원자 이력서를 제공하되, 이름만 남성 또는 여성으로 변경하여 실험을 진행함.</p>
+<li><p>48명의 (남성) 관리자에게 <strong>동일한</strong> 지원자 이력서를 제공하되, 이름만 남성 또는 여성으로 변경하여 실험을 진행.</p>
 <ul>
-<li>각 이력서는 “<em>직원을 지점장으로 승진시킬지 여부를 결정하는 요청 메모 형식</em>”으로 작성됨.</li>
+<li>이력서는 “<em>직원을 지점장으로 승진시킬지 여부를 결정하는 요청 메모 형식</em>”으로 작성.</li>
 </ul></li>
 <li><p><strong>검증하고자 하는 가설:</strong> <em>승진에서 성차별이 존재하는가?</em></p></li>
 </ul>
@@ -631,15 +626,14 @@
 <ul>
 <li><strong><em>질문:</em></strong>
 <ul>
-<li>이 차이가 결정적인 증거인가?</li>
-<li>남성과 여성 간 승진률 차이가 우연히 발생할 가능성은 없는가?</li>
+<li>이 차이가 결정적인 증거인가? 남성과 여성 간 승진률 차이가 우연히 발생할 가능성은 없는가?</li>
 </ul></li>
 </ul>
 </section>
 <section id="가상의-세계-설정-성차별이-없는-경우" class="slide level2">
 <h2>가상의 세계 설정: 성차별이 없는 경우</h2>
 <ul>
-<li><p>만약 성차별이 전혀 존재하지 않는 세상이 있다면? 승진 결정은 성별과 <strong><em>완전히 독립적</em></strong>이어야 함.</p></li>
+<li><p>만약 성차별이 존재하지 않는 세상이 있다면? 승진 결정은 성별과 <strong><em>완전히 독립적</em></strong>이어야.</p></li>
 <li><p>이를 실험적으로 재현하기 위해, 기존 데이터에서 <code>gender</code> 변수를 무작위로 섞어(<code>shuffle</code>)<br>
 각 행에 다시 할당한 후, 승진율이 어떻게 변하는지 살펴보자.</p></li>
 </ul>
@@ -757,8 +751,8 @@
 <li>성차별이 없다고 가정했을 때, 0.292 차이가 발생할 확률은 얼마나 될까?</li>
 </ul>
 </section>
-<section id="방금-뭘한-것이지" class="slide level2">
-<h2>방금 뭘한 것이지?</h2>
+<section id="방금-한-것은" class="slide level2">
+<h2>방금 한 것은…</h2>
 <ul>
 <li><p>우리는 <strong><em>가설 검정(hypothesis testing)</em></strong> 절차를 실행했으며, 그중에서도 <strong><em>순열 검정(permutation test)</em></strong> 을 사용함.</p></li>
 <li><p>질문: <em>성차별이 없는 가상의 세계에서, 실제 관측된 승진율 차이가 발생할 가능성은 얼마나 될까?</em></p></li>
@@ -776,8 +770,8 @@
 </ul></li>
 <li><p>앞선 승진 실험의 경우: <span class="math display">\[\begin{align}H_0&amp;: p_m - p_f = 0\\H_A&amp;: p_m - p_f &gt; 0,\end{align}\]</span> 여기서 <span class="math inline">\(p_m =\)</span> 남성의 승진 비율, <span class="math inline">\(p_f =\)</span> 여성의 승진 비율.</p>
 <ul>
-<li>위의 대립가설은 <em>한쪽 검정(one-sided test)</em> 으로, <span class="math inline">\(p_m &gt; p_f\)</span>, 즉 여성에게 차별이 존재한다고 주장함.</li>
-<li><em>양쪽 검정(two-sided test)</em> 의 경우 <span class="math inline">\(H_A: p_m - p_f \neq 0\)</span> 로 표현됨.</li>
+<li>위의 대립가설은 <em>단측(한쪽) 검정(one-sided test)</em> 으로, <span class="math inline">\(p_m &gt; p_f\)</span>, 즉 여성에게 차별이 존재한다고 주장함.</li>
+<li><em>양측 검정(two-sided test)</em> 의 경우 <span class="math inline">\(H_A: p_m - p_f \neq 0\)</span> 로 표현됨.</li>
 </ul></li>
 </ul>
 </section>
@@ -822,7 +816,7 @@
 <h2>가설 검정의 표기법과 정의</h2>
 <ul>
 <li><p>귀무가설 <span class="math inline">\(H_0\)</span> 을 기각할지 여부를 결정하기 위해 <strong><em>유의수준</em></strong>을 설정함.</p></li>
-<li><p><strong><em>유의수준</em></strong> <span class="math inline">\((\alpha)\)</span>: p-값의 <em>컷오프 기준</em> 역할을 함.</p>
+<li><p><strong><em>유의수준</em></strong> <span class="math inline">\((\alpha)\)</span>: p-값의 <strong>컷오프 기준</strong> 역할을 함.</p>
 <ul>
 <li>일반적으로 사용되는 값: <span class="math inline">\(\alpha = 0.01\)</span>, <span class="math inline">\(0.05\)</span>, 또는 <span class="math inline">\(0.1\)</span>.</li>
 </ul></li>
@@ -831,7 +825,7 @@
 <li><p>p-값이 <strong><em>유의수준</em></strong> <span class="math inline">\(\alpha\)</span>보다 작으면, “<span class="math inline">\(\alpha\)</span> 유의수준에서 귀무가설을 기각한다.”</p></li>
 <li><p>반대로, p-값이 <span class="math inline">\(\alpha\)</span>보다 크면, “<span class="math inline">\(\alpha\)</span> 유의수준에서 귀무가설을 기각할 수 없다.”라고 표현함.</p></li>
 </ul></li>
-<li><p><strong><em>해석</em></strong>: 귀무가설이 참일 때 관측값이 <em>너무 일어날 가능성이 낮다면</em>, 해당 가설이 <strong><em>거짓일 가능성이 높음</em></strong>.</p></li>
+<li><p><strong><em>해석</em></strong>: 귀무가설이 참일 때 관측값이 일어날 가능성이 너무 낮다면, 해당 가설이 <strong>거짓일 가능성이 높음</strong>.</p></li>
 <li><p>우리 예제에서 이를 어떻게 적용하는지 살펴보자.</p></li>
 </ul>
 </section>
@@ -845,15 +839,17 @@
 <section id="p-value-계산-및-의사-결정" class="slide level2">
 <h2>p-value 계산 및 의사 결정</h2>
 <ul>
-<li>p-값의 정의를 다시 떠올려 보자: <strong><em>귀무가설</em></strong> <span class="math inline">\(H_0\)</span>이 참이라고 가정할 때, 우리가 얻은 통계량보다 같거나 더 극단적인* 값을 관측할 확률.*</li>
+<li>p-값의 정의를 다시 떠올려 보자: <strong><em>귀무가설</em></strong> <span class="math inline">\(H_0\)</span>이 참이라고 가정할 때, 우리가 얻은 통계량보다 같거나 더 극단적인 값을 관측할 확률.</li>
 </ul>
 <div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>p_value <span class="ot">&lt;-</span> <span class="fu">mean</span>(null_distribution<span class="sc">$</span>stat <span class="sc">&gt;=</span> <span class="fl">0.292</span>)</span>
+<span id="cb27-2"><a href=""></a>p_value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.007</code></pre>
 </div>
 </div>
 <ul>
-<li><p>차별이 없는 세상에서는 <span class="math inline">\(\hat{p_m} - \hat{p_f}\)</span> 값이 0.292 이상일 확률이 r 100*p_value%에 불과함.</p></li>
+<li><p>차별이 없는 세상에서는 <span class="math inline">\(\hat{p}_m - \hat{p}_f\)</span> 값이 0.292 이상일 확률이 0.7%에 불과함.</p></li>
 <li><p>따라서 5% 유의수준에서 귀무가설 <span class="math inline">\(H_0\)</span> (즉, 차별이 없다는 가설)을 기각할 수 있음.</p>
 <ul>
 <li>즉, <span class="math inline">\(\hat{p_m} - \hat{p_f} = 0.292\)</span>는 5% 유의수준에서 0과 통계적으로 유의미하게 다름.</li>
@@ -928,26 +924,26 @@
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a>null_distribution <span class="ot">&lt;-</span> promotions <span class="sc">%&gt;%</span> </span>
-<span id="cb28-2"><a href=""></a>  <span class="co"># takes formula, defines success</span></span>
-<span id="cb28-3"><a href=""></a>  <span class="fu">specify</span>(<span class="at">formula =</span> decision <span class="sc">~</span> gender,</span>
-<span id="cb28-4"><a href=""></a>          <span class="at">success =</span> <span class="st">"promoted"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb28-5"><a href=""></a>  <span class="co"># decisions are independent of gender</span></span>
-<span id="cb28-6"><a href=""></a>  <span class="fu">hypothesize</span>(<span class="at">null =</span> <span class="st">"independence"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb28-7"><a href=""></a>  <span class="co"># generate 1000 reshufflings of data</span></span>
-<span id="cb28-8"><a href=""></a>  <span class="fu">generate</span>(<span class="at">reps =</span> <span class="dv">1000</span>, <span class="at">type =</span> <span class="st">"permute"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb28-9"><a href=""></a>  <span class="co"># compute p_m - p_f from each reshuffle</span></span>
-<span id="cb28-10"><a href=""></a>  <span class="fu">calculate</span>(<span class="at">stat =</span> <span class="st">"diff in props"</span>,</span>
-<span id="cb28-11"><a href=""></a>            <span class="at">order =</span> <span class="fu">c</span>(<span class="st">"male"</span>, <span class="st">"female"</span>))</span>
-<span id="cb28-12"><a href=""></a></span>
-<span id="cb28-13"><a href=""></a><span class="fu">visualize</span>(null_distribution,</span>
-<span id="cb28-14"><a href=""></a>          <span class="at">bins =</span> <span class="dv">10</span>,</span>
-<span id="cb28-15"><a href=""></a>          <span class="at">fill =</span> <span class="st">"#d90502"</span>) <span class="sc">+</span> </span>
-<span id="cb28-16"><a href=""></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Sampling distribution"</span>,</span>
-<span id="cb28-17"><a href=""></a>       <span class="at">x =</span> <span class="st">"Difference in promotion rates (male - female)"</span>,</span>
-<span id="cb28-18"><a href=""></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>) <span class="sc">+</span></span>
-<span id="cb28-19"><a href=""></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="fl">0.4</span>, <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb28-20"><a href=""></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a>null_distribution <span class="ot">&lt;-</span> promotions <span class="sc">%&gt;%</span> </span>
+<span id="cb29-2"><a href=""></a>  <span class="co"># takes formula, defines success</span></span>
+<span id="cb29-3"><a href=""></a>  <span class="fu">specify</span>(<span class="at">formula =</span> decision <span class="sc">~</span> gender,</span>
+<span id="cb29-4"><a href=""></a>          <span class="at">success =</span> <span class="st">"promoted"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-5"><a href=""></a>  <span class="co"># decisions are independent of gender</span></span>
+<span id="cb29-6"><a href=""></a>  <span class="fu">hypothesize</span>(<span class="at">null =</span> <span class="st">"independence"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-7"><a href=""></a>  <span class="co"># generate 1000 reshufflings of data</span></span>
+<span id="cb29-8"><a href=""></a>  <span class="fu">generate</span>(<span class="at">reps =</span> <span class="dv">1000</span>, <span class="at">type =</span> <span class="st">"permute"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-9"><a href=""></a>  <span class="co"># compute p_m - p_f from each reshuffle</span></span>
+<span id="cb29-10"><a href=""></a>  <span class="fu">calculate</span>(<span class="at">stat =</span> <span class="st">"diff in props"</span>,</span>
+<span id="cb29-11"><a href=""></a>            <span class="at">order =</span> <span class="fu">c</span>(<span class="st">"male"</span>, <span class="st">"female"</span>))</span>
+<span id="cb29-12"><a href=""></a></span>
+<span id="cb29-13"><a href=""></a><span class="fu">visualize</span>(null_distribution,</span>
+<span id="cb29-14"><a href=""></a>          <span class="at">bins =</span> <span class="dv">10</span>,</span>
+<span id="cb29-15"><a href=""></a>          <span class="at">fill =</span> <span class="st">"#d90502"</span>) <span class="sc">+</span> </span>
+<span id="cb29-16"><a href=""></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Sampling distribution"</span>,</span>
+<span id="cb29-17"><a href=""></a>       <span class="at">x =</span> <span class="st">"Difference in promotion rates (male - female)"</span>,</span>
+<span id="cb29-18"><a href=""></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>) <span class="sc">+</span></span>
+<span id="cb29-19"><a href=""></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="fl">0.4</span>, <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb29-20"><a href=""></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">

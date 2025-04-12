@@ -72,7 +72,8 @@
 **주제8: Confidence Intervals and Hypothesis Testing**
 
 [HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_ci_hyptest/chapter_ci_hyptest.html) / 
-[.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_ci_hyptest/chapter_ci_hyptest.qmd)
+[.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_ci_hyptest/chapter_ci_hyptest.qmd) / 
+과제 없음!
 
 
 **주제9: Regression Inference**
