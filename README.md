@@ -52,7 +52,7 @@
 [HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_mlr/chapter_mlr.html) / 
 [.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_mlr/chapter_mlr.qmd) / 
 [Tasks](https://chung-jiwoong.github.io/FMB819-Slides/chapter_mlr/tasks/mlr_tasks.qmd) / 
-[Solution: Part 1](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/tasks/mlr_solution_part1.html)
+[Solution: 전체](https://chung-jiwoong.github.io/FMB819-Slides/chapter_mlr/tasks/mlr_solution.html)
     
 
 **주제6: Linear Regression Extensions**
@@ -66,7 +66,8 @@
 
 [HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_sampling/chapter_sampling.html) / 
 [.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_sampling/chapter_sampling.qmd) / 
-[Tasks](https://chung-jiwoong.github.io/FMB819-Slides/chapter_sampling/tasks/sampling_tasks.qmd) 
+[Tasks](https://chung-jiwoong.github.io/FMB819-Slides/chapter_sampling/tasks/sampling_tasks.qmd) / 
+[Solution: 전체](https://chung-jiwoong.github.io/FMB819-Slides/chapter_sampling/tasks/sampling_solution.html)
 
 
 **주제8: Confidence Intervals and Hypothesis Testing**

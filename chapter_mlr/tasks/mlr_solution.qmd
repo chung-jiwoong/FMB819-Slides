@@ -1,0 +1,220 @@
+---
+title: "Multiple Linear Regressionn"
+format: html
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+    echo = TRUE,
+    message = FALSE,
+    warning = FALSE,
+    comment = "##")
+```
+
+
+## Task 1
+
+-   **읽기(Reading) 점수를 종속 변수(Dependent Variable)** 로 설정하여 회귀 분석을 수행
+
+1.  `haven` 패키지의 `read_dta()` 함수를 사용하여 데이터를 불러오기. 데이터를 `grades`라는 객체에 저장
+
+```{r, echo=FALSE, eval=TRUE}
+library(haven)
+grades <- read_dta("https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/grade5.dta")
+```
+
+2.  avgverb (읽기 점수)를 종속 변수로, classize와 disadvantaged를 독립 변수로 사용하여 회귀분석. 결과를 reg 객체에 저장. 각 계수(coefficient)의 의미는 무엇인가? 단순 선형 회귀(Simple Linear Regression)와 비교했을 때 계수는 어떻게 달라졌는가? 수학 점수 회귀 분석(Math Score Regression)과 비교했을 때 계수의 차이점은 무엇인가?
+
+```{r}
+reg <- lm(avgverb ~ classize + disadvantaged, grades)
+reg
+```
+
+**절편(intercept)은 학급 크기(class size)와 저소득 학생 비율이 0일 때의 예상 읽기 점수이며, 그 값은 80입니다. 수업에서 논의했듯이, 현실에서는 학생이 없으면 시험 점수도 존재할 수 없기 때문에 이 값은 의미가 없습니다. 학급 규모에 대한 계수는 -0.03으로, 저소득 학생 비율을 통제할 때 학급에 학생 1명이 추가되면 평균 읽기 점수가 0.03점 감소한다는 뜻입니다. 이는 수학 점수를 종속 변수로 했을 때 양의 값을 보였던 것과 반대이며, 읽기 점수가 0에서 100까지인 점을 고려할 때 매우 작은 효과입니다. 저소득 학생 비율(disadvantaged)의 계수는 -0.35로, 학급 크기를 고정하면 저소득 학생 비율이 1%p 증가할 때 평균 읽기 점수는 0.35점 감소한다는 뜻입니다. 이는 수학 점수 분석 결과와 유사한 크기이며, 10%p 증가 시에도 점수는 3.5점 정도만 감소합니다.**
+
+
+(Optional) 데이터셋에서 추가 가능한 변수를 확인하고 회귀 분석을 확장하시오. 모든 변수를 포함한 회귀 분석을 수행하고 reg_full 객체에 저장.
+
+-   추가된 변수들의 계수(sign & magnitude)를 해석하시오.
+-   추가된 변수가 포함됨으로 인해 classize 및 disadvantaged의 계수는 어떻게 변했는가?
+-   전체 모델의 설명력이 증가했는가? (R\^2 값 확인)
+  
+```{r}
+reg_full <- lm(avgverb ~ classize + disadvantaged + school_enrollment + female + religious, grades)
+reg_full
+```
+
+
+## Task 2
+
+1.  **STAR 데이터**를 다운로드 [링크](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/star_data.csv). `read.csv()`를 사용하여 `star_df` 객체에 저장. `NA` 값이 있는 행을 제거: `star_df <- star_df[complete.cases(star_df),]`
+
+```{r}
+library(tidyverse)
+
+star_df <- read.csv("https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/star_data.csv")
+
+star_df <- star_df[complete.cases(star_df),]
+
+star_df_2 <- star_df %>%
+    filter(grade == "2")
+```
+
+2.  세 개의 더미 변수를 생성 (*힌트*: `dummy = (variable=="value")`):
+
+-   `small`: 학생이 소규모 학급에 배정되었으면 TRUE, 아니면 FALSE
+-   `regular`: 학생이 일반 학급에 배정되었으면 TRUE, 아니면 FALSE
+-   `regular_plus`: 학생이 보조 교사가 있는 일반 학급에 배정되었으면 TRUE, 아니면 FALSE
+-   또한, sum 변수를 만들어 위 세 개 변수의 합을 확인. 무엇을 뜻하는가?
+
+```{r}
+star_df_2 <- star_df_2 %>%
+    mutate(small = (star == "small"),
+           regular = (star == "regular"),
+           regular_plus = (star == "regular+aide"),
+           sum = small + regular + regular_plus)
+
+star_df_2 %>% count(sum)
+```
+** `sum` 변수는 항상 1입니다. 이는 `small`, `regular`, `regular_plus` 세 변수는 완전히 공선형(collinear)이라는 의미입니다. 즉, 서로 선형 결합으로 표현할 수 있습니다. 예: `small = 1 - (regular + regular_plus)` **
+
+
+3.  `math`를 `regular_plus`로 회귀 분석. regular+aide 반에 있는 학생의 평균 `math` 점수는?
+
+```{r}
+reg_small <- lm(math ~ small, star_df_2)
+reg_small
+```
+**회귀 변수인 small이 더미 변수인 경우, 절편은 FALSE 그룹의 평균이며 계수는 TRUE와 FALSE 그룹 간 평균 차이를 의미합니다. 이 경우, 작은 학급이 아닌 학생들의 예상 수학 점수는 약 `r round(reg_small$coefficients[1],2)`이고, 작은 학급에 속한 학생들과의 차이는 7.56점입니다. 따라서 작은 학급 학생의 예상 점수는 `r round(reg_small$coefficients[1],2)` + `r round(reg_small$coefficients[2],2)` = `r round(reg_small$coefficients[1] + reg_small$coefficients[2],2)` 입니다.
+
+수학적으로는 다음과 같습니다:**
+$$
+\mathbb{E}(\text{math score } | \text{ small} = 0) = b_0 + b_1 \times 0 = b_0 \approx `r round(reg_small$coefficients[1],2)` \\
+\mathbb{E}(\text{math score } | \text{ small} = 1) = b_0 + b_1 \times 1 = b_0 + b_1 \approx `r round(reg_small$coefficients[1] + reg_small$coefficients[2],2)`
+$$
+
+```{r}
+reg_regular <- lm(math ~ regular, star_df_2)
+reg_regular
+
+reg_plus <- lm(math ~ regular_plus, star_df_2)
+reg_plus
+```
+
+**다음이 성립함:**
+$$
+\mathbb{E}(\text{math score } | \text{ regular} = 0) = b_0 + b_1 \times 0 = b_0 \approx `r round(reg_regular$coefficients[1],2)` \\
+\mathbb{E}(\text{math score } | \text{ regular} = 1) = b_0 + b_1 \times 1 = b_0 + b_1 \approx `r round(reg_regular$coefficients[1] + reg_regular$coefficients[2],2)` \\
+\mathbb{E}(\text{math score } | \text{ regular+aide} = 0) = b_0 + b_1 \times 0 = b_0 \approx `r round(reg_plus$coefficients[1],2)` \\
+\mathbb{E}(\text{math score } | \text{ regular+aide} = 1) = b_0 + b_1 \times 1 = b_0 + b_1 \approx `r round(reg_plus$coefficients[1] + reg_plus$coefficients[2],2)`
+$$
+
+
+4.  `math`를 `small`, `regular`, `regular_plus`로 회귀 분석. 어느 범주가 사라졌나?
+
+```{r}
+reg_full <- lm(math ~ small + regular + regular_plus, star_df_2)
+reg_full
+```
+
+**`regular_plus` 변수가 자동으로 제외됩니다. 이는 `small`, `regular`, `regular_plus` 사이에 완전한 선형 종속성이 있기 때문입니다. 기준 범주는 `regular+aide`이며, 다른 계수들은 이 그룹을 기준으로 해석됩니다. 즉, 작은 학급 학생은 `regular+aide` 그룹보다 평균 6.25점 높고, 일반 학급 학생은 2.7점 낮습니다.**
+
+\begin{align}
+b_0 &= \mathbb{E}(\text{math score } | \text{ small} = 0 \text{ & } \text{ regular} = 0) \\
+&= \mathbb{E}(\text{math score } | \text{ regular + aide} = 1) \\
+&\approx `r round(reg_full$coefficients[1],2)`
+\end{align}
+
+이 결과를 이전 질문의 답과 비교해 보면, 정확히 같은 결과를 얻는다는 것을 알 수 있습니다.
+
+같은 방식으로, 우리는 다음과 같은 결론에 도달합니다:
+
+\begin{align}
+b_1 &= \mathbb{E}(\text{math score } | \text{ small} = 1 \text{ & } \text{ regular} \in \{0,1\}) - \mathbb{E}(\text{math score } | \text{ small} = 0 \text{ & } \text{ regular} \in \{0,1\}) \\
+&= b_0 + b_1 \times 1 + b_2 \times \text{regular} - (b_0 + b_1 \times 0 + b_2 \times \text{regular}) \\
+&\approx `r round(reg_full$coefficients[2],2)`
+\end{align}
+
+\begin{align}
+b_2 &= \mathbb{E}(\text{math score } | \text{ small} \in \{0,1\} \text{ & } \text{ regular} = 1) - \mathbb{E}(\text{math score } | \text{ small} \in \{0,1\} \text{ & } \text{ regular} = 0) \\
+&= b_0 + b_1 \times \text{small} + b_2 \times 1 - (b_0 + b_1 \times \text{small} + b_2 \times 0) \\
+&\approx `r round(reg_full$coefficients[3],2)`
+\end{align}
+
+쉽게 말하면, 해석은 다음과 같습니다: `regular+aide` 그룹을 기준으로 할 때, 작은 학급에 속한 학생들은 수학 시험에서 평균 6.25점 더 높은 점수를 받고, 일반 학급에 속한 학생들은 평균 2.7점 더 낮은 점수를 받습니다.
+
+5.  `math`를 `star` 변수로 회귀 분석. 어느 범주가 사라졌나? 계수를 해석하시오.
+
+```{r}
+lm(math ~ star, star_df_2)
+```
+
+**`R`은 실제로 범주형 변수에 대해 자동으로 더미 변수를 생성해 주기 때문에, 위에서 각 범주별로 일일이 더미 변수를 만드는 번거로운 작업을 할 필요가 없습니다! 기준(생략) 범주는 `regular`이므로, 회귀 계수들은 모두 `regular` 학급 학생들을 기준으로 한 평균 수학 점수의 차이로 해석해야 합니다.**
+
+
+## Task 3 
+
+1.  Task 2에서 필터링한 *STAR* 데이터를 사용하여 `math`를 `school` 변수에 대해 회귀 분석하시오. `school` 변수가 포함하는 값들을 먼저 확인. 회귀 계수를 해석하시오. 누락된 범주 (category)는? 결과가 예상과 일치하는가? 만약 다르다면 왜 그런가? 누락된 변수가 존재할 가능성이 있는가?
+
+```{r}
+star_df_2 %>% count(school)
+
+lm(math ~ school, star_df_2)
+```
+
+**`school` 변수는 학교의 위치 유형을 나타내는 범주형 변수입니다. 네 가지 범주가 있으며, 각각은 inner-city(도심), suburban(교외), rural(농촌), urban(도시)입니다.**
+
+**회귀 분석에서 생략된 기준 범주는 `inner-city`이므로, 절편은 inner-city에 위치한 학교 학생들의 평균 수학 점수를 나타냅니다. 나머지 계수들은 모두 inner-city 학생들의 예상 점수를 기준으로 해석해야 합니다. 예를 들어, 농촌 학교 학생들은 평균적으로 inner-city 학교 학생들보다 30점 더 높고, 교외 지역 학생들은 약 17점, 도시 지역 학생들은 약 20점 더 높습니다. 일반적으로 inner-city 지역은 저소득층 비율이 높기 때문에, 다른 지역에 비해 점수가 낮은 것이 그로 인해 설명될 수 있습니다. 생략된 변수는 학생 개인 혹은 학교 차원의 불리함을 나타내는 변수일 수 있습니다.**
+
+
+2.  `lunch` 변수가 `"free"`인 학생들의 비율을 **학교 위치(school) 별로 계산**하시오. 결과를 보고, **무료 점심 자격 여부(`free`) 변수를 추가하여 이전 회귀 분석을 다시 수행**하시오. `free` 변수를 추가했을 때 회귀 계수는 어떻게 변화하는가?
+
+```{r}
+star_df_2 %>%
+    group_by(school) %>%
+    summarise(mean(lunch == "free"))
+```
+
+**예상한 대로, 무료 급식 자격을 갖춘 학생들의 비율(이는 일반적으로 불리함을 나타내는 지표로 사용됨)은 inner-city 학교에서 현저히 높습니다 (해당 학생 비율이 거의 90%에 달함). 반면, 다른 지역에서는 그 비율이 34%에서 44% 사이로 나타납니다.**
+
+```{r}
+lm(math ~ school + lunch, star_df_2)
+```
+
+**학생들의 무료 급식 자격 여부를 회귀에 포함하면, rural, suburban, urban 지역에 대한 계수들이 크게 감소하는 것을 확인할 수 있습니다. 이는 학교 위치를 통제한 상태에서도, 무료 급식 자격이 없는 학생들이 평균적으로 자격이 있는 학생들보다 수학 점수가 유의미하게 더 높다는 것을 보여줍니다.**
+
+
+3.  `math`를 `star` 변수에 대해 회귀 분석하시오. 다음의 모든 변수를 포함하여 다중 회귀 분석을 수행하시오:\
+    `math ~ star + gender + ethnicity + lunch + degree + experience + school`. 무작위 실험이 **잘 수행되었다고 판단할 수 있는가?**
+```{r}
+lm(math ~ gender + experience, star_df_2)
+```
+
+**절편 계수는 교사의 경력을 일정하게 유지했을 때 여학생들의 평균 수학 점수를 나타냅니다. 숫자형 변수와 더미 변수를 모두 독립 변수로 포함하고 있기 때문에, 절편은 생략된 범주(이 경우 여성)에 해당하는 회귀선의 절편으로 해석할 수 있습니다.**
+
+**성별(gender)에 대한 계수는, 교사의 경력이 일정할 때 남학생과 여학생 간 수학 점수의 기대 차이를 나타냅니다. 이 계수는 음수이지만 크기가 작으며, 이는 교사의 경력이 동일할 때 평균적으로 남학생이 여학생보다 약간 낮은 점수를 받는다는 것을 의미합니다. 시각적으로 표현하면, 남학생의 회귀선이 여학생의 회귀선보다 아래에 위치한다는 뜻입니다.**
+
+**경력(experience)에 대한 계수는 교사의 경력이 1년 늘어날 때 평균적으로 수학 점수가 얼마나 변화하는지를 보여줍니다(성별을 통제한 상태에서). 평균적으로 교사의 경력이 1년 증가할 때 수학 점수는 0.03점 증가합니다. 이는 매우 미미한 효과로, 점수가 3점 오르기 위해서는 100년의 경력 증가가 필요하다는 의미입니다.**
+
+
+4.  **다중 회귀 분석**에서 얻은 **수정된** $R^2$ 값을 확인하시오. 수정된 $R^2$ 값이 의미하는 바는 무엇인가? 관측 가능한 개별 학생, 교사, 학교 특성이 학업 성취도에 미치는 중요성에 대해 어떤 결론을 내릴 수 있는가?
+
+```{r}
+lm(math ~ star, star_df_2)
+```
+
+**계수의 해석은 일반적인 조건부 평균 간의 비교입니다. 즉, 작은 학급에 속한 학생들은 일반 학급(생략된 기준 범주)에 속한 학생들보다 평균적으로 8.94점 더 높은 수학 점수를 받으며, 일반+보조교사 학급에 속한 학생들은 평균적으로 2.70점 더 높게 나타납니다.**
+
+```{r}
+reg_all <- lm(math ~ star + gender + ethnicity + lunch + degree + experience + school, star_df_2)
+reg_all
+```
+
+**처치 변수 `star`에 대한 계수는 이전의 단순 회귀에 비해 아주 약간만 감소합니다. 이는 무작위 실험(randomized experiment)이었기 때문에 예상 가능한 결과이며, 무작위 배정이 잘 이루어졌다고 볼 수 있습니다. 만약 무작위 배정이 제대로 되지 않았다면, 다른 변수들을 통제했을 때 `star`의 계수가 더 크게 변했을 것입니다.**
+
+
+5.  (Optional) `math`를 `gender`와 `experience` 변수에 대해 회귀 분석하시오. 회귀 계수를 어떻게 해석할 수 있는가? 이러한 회귀 분석 결과를 시각적으로 표현한다면 어떻게 보일 것인가?
+```{r}
+summary(reg_all)
+```
+
+**이전 회귀의 조정된 $R^2$ 값은 약 0.15로, 이는 해당 모형이 학생들의 수학 점수 변동 중 약 15%만 설명한다는 것을 의미합니다. 다시 말해, 전체 점수 변동의 85%는 설명되지 않은 상태로 남아 있습니다. 쉽게 말하면, 학급 규모, 성별, 인종, 무료 급식 여부, 교사 경력 및 학위, 학교 위치 등은 이 데이터에서 학생들의 수학 점수 차이를 설명하는 데 큰 역할을 하지 못한다는 뜻입니다. 이를 조금 확대 해석하면, 교육 성과의 대부분은 이러한 관측 가능한 변수들로 설명되지 않는다는 주장도 가능합니다. 다만, **이것이 해당 변수들이 교육 성과에 중요한 인과적 효과를 갖지 않는다는 뜻은 절대 아닙니다.**
