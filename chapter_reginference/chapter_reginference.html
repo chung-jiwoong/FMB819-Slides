@@ -9,7 +9,8 @@
 <link href="chapter_reginference_files/libs/quarto-html/quarto-syntax-highlighting-48ffa3e5b9d089919c6712c39e5b00f2.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.6.41">
 
-  <title>FMB819: R을 이용한 데이터분석</title>
+  <meta name="author" content="고려대학교 경영대학 정지웅">
+  <title>Regression Inference</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -93,10 +94,8 @@
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="chapter_reginference_files/libs/revealjs/dist/theme/quarto-2f366650f320edcfcf53d73c80250a32.css">
-  <link rel="stylesheet" href="default">
-  <link rel="stylesheet" href="../css/kubs.css">
-  <link rel="stylesheet" href="../css/kubs-fonts.css">
+  <link rel="stylesheet" href="chapter_reginference_files/libs/revealjs/dist/theme/quarto-8f3eebe07241f08526c91a7e9cbef8fd.css">
+  <link rel="stylesheet" href="../styles/styles.css">
   <link href="chapter_reginference_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="chapter_reginference_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="chapter_reginference_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -201,17 +200,22 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">FMB819: R을 이용한 데이터분석</h1>
-  <p class="subtitle"><span style="font-size:1.5em; color:#a01616;">Regression Inference</span></p>
+  <h1 class="title">Regression Inference</h1>
+  <p class="subtitle">FMB819: R을 이용한 데이터분석</p>
 
 <div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+고려대학교 경영대학 정지웅 
+</div>
+</div>
 </div>
 
 </section>
 <section id="todays-agenda" class="slide level2">
 <h2>Today’s Agenda</h2>
 <ul>
-<li><p><strong><em>회귀 테이블 (regression table)</em></strong> 완전히 이해하기</p></li>
+<li><p><strong><em>회귀 테이블 (regression table)</em></strong> 이해하기</p></li>
 <li><p><strong><em>이론 기반 (theory-based)</em></strong> vs.&nbsp;<strong><em>시뮬레이션 기반 (simulation-based)</em></strong> 추론 비교</p></li>
 <li><p><strong><em>고전적 회귀 모델 (Classical Regression Model)</em></strong> 가정</p></li>
 <li><p>실증적 응용 사례:</p>
@@ -224,7 +228,7 @@
 <section id="star_again" class="slide level2">
 <h2>학급 크기와 학생 성취도</h2>
 <ul>
-<li><p><strong><em>STAR</em></strong> 실험 데이터를 다시 살펴보고 다음에 집중하겠음:</p>
+<li><p><strong><em>STAR</em></strong> 실험 데이터를 다시 살펴보자:</p>
 <ul>
 <li><em>소규모 학급 (small)</em> 과 <em>일반 학급 (regular)</em></li>
 <li><em>유치원 (Kindergarten) 학년</em></li>
@@ -275,7 +279,7 @@ Coefficients:
 <div class="columns">
 <div class="column" style="width:50%;">
 <ul>
-<li>사실, 모델의 예측값은…</li>
+<li>사실, 우리가 추정한 모델은…</li>
 </ul>
 <p><span class="math display">\[\hat{y} = b_0 + b_1 x_1\]</span></p>
 </div><div class="column" style="width:50%;">
@@ -307,8 +311,8 @@ Coefficients:
 </ul>
 <table class="caption-top">
 <colgroup>
-<col style="width: 55%">
-<col style="width: 44%">
+<col style="width: 23%">
+<col style="width: 76%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -360,19 +364,20 @@ Coefficients:
 <section id="task-1" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 1</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_fde8ac7b" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_dd7f878a" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
-<p><em>녹색 파스타 비율</em>의 샘플링 분포를 생성했던 것처럼, <span class="math inline">\(b_\textrm{small}\)</span>의 부트스트랩 분포를 생성하고자 함.</p>
+<p><strong>녹색 파스타 비율</strong>의 샘플링 분포를 생성한 것처럼, <span class="math inline">\(b_\textrm{small}\)</span>의 부트스트랩 분포를 생성하자.</p>
 <ol type="1">
-<li><p><a href="#/star_again">학급 크기와 학생 성취도</a> <strong>슬라이드에서 데이터 로딩 및 정리 코드</strong>를 복사하여 실행하시오.</p></li>
+<li><p>학급 크기와 학생 성취도 슬라이드(<a href="#/star_again">링크</a>)에서 데이터 로딩 및 정리 코드**를 복사하여 실행.</p></li>
 <li><p><strong><code>star_df</code>에서 1,000개의 샘플을 추출하여</strong> <span class="math inline">\(b_\textrm{small}\)</span>의 부트스트랩 분포를 생성하시오. 아래 코드를 사용하면 됨:</p></li>
 </ol>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>bootstrap_distrib <span class="ot">&lt;-</span> star_df <span class="sc">%&gt;%</span> </span>
-<span id="cb5-2"><a href=""></a>    <span class="fu">mutate</span>(<span class="at">small=</span><span class="fu">as.numeric</span>(small)) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-3"><a href=""></a>    <span class="fu">specify</span>(<span class="at">response =</span> math, <span class="at">explanatory =</span> small) <span class="sc">%&gt;%</span></span>
-<span id="cb5-4"><a href=""></a>    <span class="fu">generate</span>(<span class="at">reps =</span> <span class="dv">1000</span>, <span class="at">type =</span> <span class="st">"bootstrap"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb5-5"><a href=""></a>    <span class="fu">calculate</span>(<span class="at">stat =</span> <span class="st">"slope"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="fu">library</span>(infer)</span>
+<span id="cb5-2"><a href=""></a>bootstrap_distrib <span class="ot">&lt;-</span> star_df <span class="sc">%&gt;%</span> </span>
+<span id="cb5-3"><a href=""></a>    <span class="fu">mutate</span>(<span class="at">small=</span><span class="fu">as.numeric</span>(small)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-4"><a href=""></a>    <span class="fu">specify</span>(<span class="at">response =</span> math, <span class="at">explanatory =</span> small) <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href=""></a>    <span class="fu">generate</span>(<span class="at">reps =</span> <span class="dv">1000</span>, <span class="at">type =</span> <span class="st">"bootstrap"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-6"><a href=""></a>    <span class="fu">calculate</span>(<span class="at">stat =</span> <span class="st">"slope"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="3" type="1">
 <li>이 시뮬레이션된 샘플링 분포를 시각화하고, <span class="math inline">\(b_\textrm{small}\)</span>의 평균과 표준 오차를 계산하시오.</li>
@@ -381,9 +386,9 @@ Coefficients:
 <section id="부트스트랩-분포" class="slide level2">
 <h2>부트스트랩 분포</h2>
 
-<img data-src="chapter_reginference_files/figure-revealjs/unnamed-chunk-6-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"><p><strong><em>표준 오차 (Standard error)</em></strong>: 1.76 <span class="math inline">\(\rightarrow\)</span> 테이블의 값 (r reg_summary_star_df[2,2])과 매우 유사함!</p>
+<img data-src="chapter_reginference_files/figure-revealjs/unnamed-chunk-6-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"><p><strong><em>표준 오차 (Standard error)</em></strong>: 1.63 <span class="math inline">\(\rightarrow\)</span> 테이블의 값 (1.68)과 매우 유사함!</p>
 <ul>
-<li>하지만 정확히 일치하지 않는 이유는 R이 사용하는 이론적 접근법 대신 부트스트랩 방법을 사용했기 때문임.</li>
+<li>정확히 일치하지 않는 이유는 <code>R</code>이 사용하는 이론적 접근법 대신 부트스트랩 (시뮬레이션) 방법을 사용했기 때문임.</li>
 </ul>
 </section>
 <section id="회귀분석-결과-다시-확인" class="slide level2">
@@ -425,7 +430,7 @@ Coefficients:
 <section id="검정-통계량과-p-값" class="slide level2">
 <h2>검정 통계량과 p-값</h2>
 <ul>
-<li><p>이전 강의에서 살펴보았듯이, 가설 검정을 수행하려면 다음을 수행해야 함:</p>
+<li><p>이미 살펴보았듯이, 가설 검정을 수행하려면 다음을 수행해야 함:</p>
 <ul>
 <li><p><strong>검정 통계량</strong> (<code>statistic</code>)의 <strong>표본 분포</strong>를 유도하여 귀무 가설 <span class="math inline">\(H_0\)</span>이 참일 때의 <em>귀무 분포</em>를 생성함.</p></li>
 <li><p>관측된 <strong>검정 통계량</strong>이 이 가상의 세계에서 얼마나 극단적인지를 정량화함.</p></li>
@@ -442,7 +447,7 @@ Coefficients:
 <span id="cb8-2"><a href=""></a><span class="fu">round</span>(observed_stat,<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>smallTRUE 
-     5.06 </code></pre>
+     5.45 </code></pre>
 </div>
 </div>
 </div><div class="column" style="width:50%;">
@@ -451,7 +456,7 @@ Coefficients:
 </ul>
 </div></div>
 <ul>
-<li><p>p-값은 귀무 분포에서 <span class="math inline">\(\pm\)</span> 관측된 검정 통계량 바깥쪽의 면적을 측정함.</p></li>
+<li><p>p-값은 귀무 분포에서 <span class="math inline">\(\pm\)</span> <strong><em>관측된 검정 통계량</em></strong> 바깥쪽의 면적을 측정함.</p></li>
 <li><p>마지막으로, 일반적인 유의 수준 <span class="math inline">\(\alpha\)</span> = 0.1, 0.05, 0.01에서 <span class="math inline">\(H_0\)</span>을 기각할 수 있는지 확인함.</p></li>
 </ul>
 </section>
@@ -483,7 +488,7 @@ Coefficients:
 <span id="cb11-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">test_stat =</span> stat<span class="sc">/</span><span class="fu">sd</span>(bootstrap_distrib<span class="sc">$</span>stat))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
-<li>부트스트랩 분포에서 <span class="math inline">\(\hat{SE}(b_\textrm{small})\)</span> 값은 1.76로 계산되었음.</li>
+<li>부트스트랩 분포에서 <span class="math inline">\(\hat{SE}(b_\textrm{small})\)</span> 값은 1.63로 계산되었음.</li>
 </ul>
 </div></div>
 </section>
@@ -495,14 +500,14 @@ Coefficients:
 <h2><span class="math inline">\(\beta_\textrm{small} = 0\)</span> vs <span class="math inline">\(\beta_\textrm{small} \neq 0\)</span> 검정</h2>
 
 <img data-src="chapter_reginference_files/figure-revealjs/unnamed-chunk-12-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"><ul>
-<li>귀무 가설(<span class="math inline">\(H_0\)</span>)이 참일 때, <span class="math inline">\(b_\textrm{small}\)</span> = r coeff_star[2] 값을 얻을 확률은 매우 낮음.</li>
+<li>귀무 가설(<span class="math inline">\(H_0\)</span>)이 참일 때, <span class="math inline">\(b_\textrm{small}\)</span> = 8.9 값을 얻을 확률은 매우 낮음.</li>
 </ul>
 </section>
 <section id="beta_textrmsmall-0-vs-beta_textrmsmall-neq-0-검정-3" class="slide level2">
 <h2><span class="math inline">\(\beta_\textrm{small} = 0\)</span> vs <span class="math inline">\(\beta_\textrm{small} \neq 0\)</span> 검정</h2>
 <ul>
-<li><p><span class="math inline">\(H_0\)</span>를 기각할지 여부를 결정하기 위해, <strong>양측 검정</strong>을 고려해야 함.</p></li>
-<li><p>즉, <em>더 극단적인 값</em>이란 -5.057보다 작거나 <strong>또는</strong> 5.057보다 큰 경우를 의미함.</p></li>
+<li><p><span class="math inline">\(H_0\)</span> 를 기각할지 여부를 결정하기 위해, <strong>양측 검정</strong>을 고려해야 함.</p></li>
+<li><p>즉, <em>더 극단적인 값</em>이란 -5.447보다 작거나 <strong>또는</strong> 5.447보다 큰 경우를 의미함.</p></li>
 </ul>
 </section>
 <section id="beta_textrmsmall-0-vs-beta_textrmsmall-neq-0-검정-4" class="slide level2">
@@ -515,8 +520,8 @@ Coefficients:
 <section id="beta_textrmsmall-0-vs-beta_textrmsmall-neq-0-검정-5" class="slide level2">
 <h2><span class="math inline">\(\beta_\textrm{small} = 0\)</span> vs <span class="math inline">\(\beta_\textrm{small} \neq 0\)</span> 검정</h2>
 <ul>
-<li><p>귀무가설 (H_0)을 기각할지 결정하려면, <strong>양측 검정</strong>을 고려해야 함.<br>
-<em>더 극단적인 값</em>이란 -5.06 이하이거나 5.06 이상을 의미함.</p></li>
+<li><p>귀무가설 (<span class="math inline">\(H_0\)</span>)을 기각할지 결정하려면, <strong>양측 검정</strong>을 고려해야 함.<br>
+<em>더 극단적인 값</em>이란 -5.45 이하이거나 5.45 이상을 의미함.</p></li>
 <li><p><em>p-값</em>을 계산하면 다음과 같음:</p></li>
 </ul>
 <div class="cell" data-layout-align="center">
@@ -534,8 +539,8 @@ Coefficients:
 <section id="beta_textrmsmall-0-vs-beta_textrmsmall-neq-0-검정-6" class="slide level2">
 <h2><span class="math inline">\(\beta_\textrm{small} = 0\)</span> vs <span class="math inline">\(\beta_\textrm{small} \neq 0\)</span> 검정</h2>
 <ul>
-<li><p>귀무가설 (H_0)을 기각할지 결정하려면, <strong>양측 검정</strong>을 고려해야 함.<br>
-<em>더 극단적인 값</em>이란 -5.06 이하이거나 5.06 이상을 의미함.</p></li>
+<li><p>귀무가설 (<span class="math inline">\(H_0\)</span>)을 기각할지 결정하려면, <strong>양측 검정</strong>을 고려해야 함.<br>
+<em>더 극단적인 값</em>이란 -5.45 이하이거나 5.45 이상을 의미함.</p></li>
 <li><p><em>p-값</em>을 계산하면 다음과 같음:</p></li>
 </ul>
 <div class="cell" data-layout-align="center">
@@ -549,10 +554,10 @@ Coefficients:
 <li><p>이 값은 회귀 분석 표에 나오는 값과 동일함.</p></li>
 <li><p><strong><em>답:</em></strong></p>
 <ul>
-<li><p><em>p-값</em>이 0이므로, 어떤 유의수준에서도 (H_0)를 기각할 수 있음.<br>
-p-값은 항상 ()보다 작음.</p></li>
-<li><p>다시 말해, (b_)은 <strong>어떤 유의수준에서도 0과 통계적으로 다름</strong>.</p></li>
-<li><p>또한 (b_)이 <em>통계적으로 유의함</em> (어떤 유의수준에서도) 라고 할 수 있음.</p></li>
+<li><p><em>p-값</em>이 0이므로, 어떤 유의수준에서도 (<span class="math inline">\(H_0\)</span>)를 기각할 수 있음.<br>
+p-값은 항상 (<span class="math inline">\(\alpha\)</span>)보다 작음.</p></li>
+<li><p>다시 말해, (<span class="math inline">\(b_\textrm{small}\)</span>)은 <strong>어떤 유의수준에서도 0과 통계적으로 다름</strong>.</p></li>
+<li><p>또한 (<span class="math inline">\(b_\textrm{small}\)</span>)이 <em>통계적으로 유의함</em> (어떤 유의수준에서도) 라고 할 수 있음.</p></li>
 </ul></li>
 </ul>
 </section>
@@ -576,10 +581,10 @@ p-값은 항상 ()보다 작음.</p></li>
 <section id="회귀-추론-이론-1" class="slide level2">
 <h2>회귀 추론: 이론</h2>
 <ul>
-<li><p>이론 기반 접근법은 하나의 기본적인 결과를 사용함: 표본 통계량 <span class="math inline">\(\frac{b - \beta}{\hat{\textrm{SE}(b)}}\)</span> 은 표본 크기가 커질수록 <strong><em>표준 정규 분포</em></strong>로 <em>수렴</em>함.</p>
+<li><p>이론 기반 접근법 근간: 표본 통계량 <span class="math inline">\(\frac{b - \beta}{\hat{\textrm{SE}(b)}}\)</span> 은 표본 크기가 커질수록 <strong><em>표준 정규 분포</em></strong>로 <em>수렴</em>함.</p>
 <ul>
-<li><span class="math inline">\(\hat{\textrm{SE}(b)}\)</span>는 <span class="math inline">\(b\)</span>의 표준편차에 대한 표본 추정량임.</li>
-<li>이 값은 이론적 공식을 통해 얻어짐 (<a href="https://scpoecon.github.io/ScPoEconometrics/std-errors.html#se-theory">여기서</a>에서 확인 가능) 하지만 여기서는 다루지 않겠음.</li>
+<li><span class="math inline">\(\hat{\textrm{SE}(b)}\)</span> 는 <span class="math inline">\(b\)</span> 의 표준편차에 대한 표본 추정량임.</li>
+<li>이 값은 이론적 공식을 통해 얻어짐 (<a href="https://scpoecon.github.io/ScPoEconometrics/std-errors.html#se-theory">링크</a>에서 확인 가능) 하지만 여기서는 다루지 않겠음.</li>
 </ul></li>
 <li><p><strong><em>표준 정규 분포</em></strong>는 평균이 0이고 표준편차가 1인 <em>정규 분포</em>임.</p></li>
 <li><p>여기서는 표본 분포를 시뮬레이션할 필요가 없음. 이론적으로 유도된 분포를 사용하여 신뢰구간을 구성하거나 가설 검정을 수행할 수 있음.</p></li>
@@ -625,7 +630,7 @@ p-값은 항상 ()보다 작음.</p></li>
 <pre><code># A tibble: 1 × 2
   lower_bound upper_bound
         &lt;dbl&gt;       &lt;dbl&gt;
-1        5.45        12.3</code></pre>
+1        5.69        12.1</code></pre>
 </div>
 </div>
 </div></div>
@@ -636,10 +641,10 @@ p-값은 항상 ()보다 작음.</p></li>
 <section id="task-2" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 2</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_b6b2f474" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_a18f689d" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
 <ol type="1">
-<li><p>Task 1에서 생성한 부트스트랩 분포를 사용하여 <em>퍼센타일 방법</em>으로 95% 신뢰구간을 계산하라.</p></li>
+<li><p>Task 1에서 생성한 부트스트랩 분포를 사용하여 <em>퍼센타일 방법</em>으로 95% 신뢰구간을 계산하시오.</p></li>
 <li><p>이전 슬라이드에서 구한 신뢰구간과 얼마나 유사한가?</p></li>
 </ol>
 </section>
@@ -714,7 +719,7 @@ H_A:&amp; \beta_k \neq 0
 <section id="회귀-분석-표-해석" class="slide level2">
 <h2>회귀 분석 표 해석</h2>
 
-<img data-src="reg_inference_files/figure-html/reg_table.png" class="quarto-figure quarto-figure-center r-stretch" width="500"><ul>
+<img data-src="../img/photos/reg_table.png" class="quarto-figure quarto-figure-center r-stretch" width="500"><ul>
 <li><p>각 열은 하나의 회귀 분석을 나타냄. 첫 번째 회귀 분석에서 다음을 확인할 수 있음:</p>
 <ul>
 <li>결과 변수 이름: <span style="color: #2F528F;">파란색</span></li>
@@ -763,12 +768,12 @@ y_i = \beta_0 + \beta_1 x_{1,i} + ... + \beta_k x_{k,i} + \varepsilon_i
 <li>이 가정을 위반하면 <span class="math inline">\(\beta_k\)</span>의 추정값이 <strong>편향됨</strong>.</li>
 </ul>
 </section>
-<section id="오차-기대값-독립성-mean-independence-of-error-eu-small" class="slide level2">
-<h2>오차 기대값 독립성 Mean Independence of Error: E[u | small] = ?</h2>
+<section id="오차-기대값-독립성-eu-small" class="slide level2">
+<h2>오차 기대값 독립성: <span class="math inline">\(E[u | small] = ?\)</span></h2>
 
 <img data-src="chapter_reginference_files/figure-revealjs/unnamed-chunk-23-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"></section>
-<section id="오차-기대값-독립성-mean-independence-of-error-eu-small-1" class="slide level2">
-<h2>오차 기대값 독립성 Mean Independence of Error: E[u | small] = ?</h2>
+<section id="오차-기대값-독립성-eu-small-1" class="slide level2">
+<h2>오차 기대값 독립성: <span class="math inline">\(E[u | small] = ?\)</span></h2>
 
 <img data-src="chapter_reginference_files/figure-revealjs/unnamed-chunk-24-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"></section>
 <section id="외생성-exogeneity-가정" class="slide level2">
@@ -836,34 +841,34 @@ y_i = \beta_0 + \beta_1 x_{1,i} + ... + \beta_k x_{k,i} + \varepsilon_i
 <section id="task-3-1" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 3-1</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_1aaf0c2f" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_d2f47877" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
 <p>다시 교육과 성별이 임금에 미치는 효과에 대한 질문으로 돌아가 보겠음.</p>
 <ol type="1">
-<li><code>AER</code> 패키지에서 <code>CPS1985</code> 데이터를 로드하고, 각 변수의 정의를 확인하라: <code>?CPS1985</code></li>
+<li><code>AER</code> 패키지에서 <code>CPS1985</code> 데이터를 로드하고, 각 변수의 정의를 확인: <code>?CPS1985</code></li>
 </ol>
-<ol type="1">
-<li><code>wage</code>의 로그 값을 <code>log_wage</code> 변수로 생성하라.</li>
+<ol start="2" type="1">
+<li><code>wage</code>의 로그 값을 <code>log_wage</code> 변수로 생성.</li>
 </ol>
-<ol type="1">
-<li><code>log_wage</code>를 <code>gender</code>와 <code>education</code>에 회귀 분석하고, 결과를 <code>reg1</code>으로 저장하라.</li>
+<ol start="3" type="1">
+<li><code>log_wage</code>를 <code>gender</code>와 <code>education</code>에 회귀 분석하고, 결과를 <code>reg1</code>으로 저장.</li>
 </ol>
 <ul>
-<li>각 계수를 해석하라.</li>
+<li>각 계수를 해석하시오.</li>
 <li>계수들이 통계적으로 유의한가? 어느 유의수준에서 유의한가?</li>
 </ul>
-<ol type="1">
-<li><code>log_wage</code>를 <code>gender</code>, <code>education</code> 그리고 <code>gender*education</code>의 상호작용 항과 함께 회귀 분석하고, 결과를 <code>reg2</code>로 저장하라.</li>
+<ol start="4" type="1">
+<li><code>log_wage</code>를 <code>gender</code>, <code>education</code> 그리고 <code>gender*education</code>의 상호작용 항과 함께 회귀 분석하고, 결과를 <code>reg2</code>로 저장.</li>
 </ol>
 <ul>
-<li><span class="math inline">\(female \times education\)</span>에 해당하는 계수를 어떻게 해석할 수 있는가?</li>
+<li><span class="math inline">\(female \times education\)</span> 에 해당하는 계수를 어떻게 해석할 수 있는가?</li>
 <li>이 계수의 귀무가설을 5% 유의수준에서 기각할 수 있는가? 10% 유의수준에서는?</li>
 </ul>
 </section>
 <section id="task-3-2" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 3-2</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_ed15281a" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+<p></p><div class="countdown" id="timer_83935048" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
 </div>
 <ol type="1">
 <li>로그 임금과 교육 수준 간의 관계를 나타내는 산점도를 생성하라.</li>

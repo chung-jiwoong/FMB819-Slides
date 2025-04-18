@@ -1,0 +1,99 @@
+---
+title: "수업 과제"
+author: "홍길동 (2025012345)"       #이름과 학번을 넣으세요
+date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
+format: html
+echo: true  
+include: true 
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+    echo = TRUE,
+    message = FALSE,
+    warning = FALSE,
+    comment = "##")
+```
+
+## Task 1
+
+**녹색 파스타 비율**의 샘플링 분포를 생성한 것처럼, $b_\textrm{small}$의 부트스트랩 분포를 생성하자.
+
+1.  학급 크기와 학생 성취도 슬라이드([링크](#star_again))에서 데이터 로딩 및 정리 코드**를 복사하여 실행.
+
+
+
+2.  **`star_df`에서 1,000개의 샘플을 추출하여** $b_\textrm{small}$ 의 부트스트랩 분포를 생성하시오. 아래 코드를 사용하면 됨:
+
+
+3.  이 시뮬레이션된 샘플링 분포를 시각화하고, $b_\textrm{small}$의 평균과 표준 오차를 계산하시오.
+
+
+
+
+---
+
+## Task 2 
+
+
+1.  Task 1에서 생성한 부트스트랩 분포를 사용하여 *퍼센타일 방법*으로 95% 신뢰구간을 계산하시오.
+
+
+
+
+2.  이전 슬라이드에서 구한 신뢰구간과 얼마나 유사한가?
+
+
+
+
+---
+
+
+## Task 3-1
+
+다시 교육과 성별이 임금에 미치는 효과에 대한 질문으로 돌아가 보겠음.
+
+1.  `AER` 패키지에서 `CPS1985` 데이터를 로드하고, 각 변수의 정의를 확인: `?CPS1985`
+
+
+2.  `wage`의 로그 값을 `log_wage` 변수로 생성.
+
+
+3.  `log_wage`를 `gender`와 `education`에 회귀 분석하고, 결과를 `reg1`으로 저장.
+
+-   각 계수를 해석하시오.
+-   계수들이 통계적으로 유의한가? 어느 유의수준에서 유의한가?
+
+
+
+4.  `log_wage`를 `gender`, `education` 그리고 `gender*education`의 상호작용 항과 함께 회귀 분석하고, 결과를 `reg2`로 저장.
+
+
+-   $female \times education$ 에 해당하는 계수를 어떻게 해석할 수 있는가?
+-   이 계수의 귀무가설을 5% 유의수준에서 기각할 수 있는가? 10% 유의수준에서는?
+
+
+
+---
+
+
+## Task 3-2 
+
+
+1.  로그 임금과 교육 수준 간의 관계를 나타내는 산점도를 생성하라.
+
+2.  `geom_smooth`를 사용하여 *회귀선*을 추가하라. 이 선이 무엇을 나타내는가?
+
+
+
+
+3.  음영 영역이 무엇을 의미하는지 설명하라.
+
+-   `log_wage`를 `gender`, `education`, 그리고 `gender*education`의 상호작용 항과 함께 회귀 분석하고, 결과를 `reg_bootstrap`으로 저장하라.
+
+
+-   `reg_bootstrap`에서 남성의 절편 값을 `intercept_men_bootstrap`으로, 기울기 값을 `slope_men_bootstrap`으로 추출하여 저장하라. 여성의 경우도 동일하게 수행하라.
+
+
+-   이전 플롯에 이 부트스트랩 표본에서 예측된 두 회귀선을 추가하라 (*힌트*: `geom_abline`을 두 번 사용하라).

@@ -1,28 +1,17 @@
 ---
-title: "FMB819: R을 이용한 데이터분석"
-subtitle: "<span style='font-size:1.5em; color:#a01616;'>Regression Inference</span>"
-# date: "`r Sys.Date()`"
-format:
+title: "Regression Inference"
+subtitle: "FMB819: R을 이용한 데이터분석"
+author: "고려대학교 경영대학 정지웅"
+format: 
   revealjs:
-    slide-number: true
-    # smaller: true
-    scrollable: true
-    chalkboard: true
+    theme: simple
     transition: fade
     transition-speed: fast
-    #incremental: true
-    #lib_dir: libs
-    css: [default, "../css/kubs.css", "../css/kubs-fonts.css"]
-    #nature:
-      # beforeInit: ["../js/ru_xaringan.js"]
-      #highlightStyle: github
-      #highlightLines: true
-      #countIncrementalSlides: false
-    #  ratio: "16:9"
-    # includes:
-    #   in_header: "../libs/partials/header.html"
+    scrollable: true
+    chalkboard: true
+    slide-number: true
 revealjs-plugins:
-  - revealjs-text-resizer
+  - revealjs-text-resizer 
 ---
 
 ```{r setup, include=FALSE,warning=FALSE,message=FALSE}
@@ -72,7 +61,7 @@ library(jtools)
 
 ## Today's Agenda
 
--   ***회귀 테이블 (regression table)*** 완전히 이해하기
+-   ***회귀 테이블 (regression table)*** 이해하기
 
 -   ***이론 기반 (theory-based)*** vs. ***시뮬레이션 기반 (simulation-based)*** 추론 비교
 
@@ -87,7 +76,7 @@ library(jtools)
 
 ## 학급 크기와 학생 성취도 {#star_again}
 
--   ***STAR*** 실험 데이터를 다시 살펴보고 다음에 집중하겠음:
+-   ***STAR*** 실험 데이터를 다시 살펴보자:
 
     -   *소규모 학급 (small)* 과 *일반 학급 (regular)*
     -   *유치원 (Kindergarten) 학년*
@@ -132,7 +121,7 @@ reg_star
 
 ::::: columns
 ::: {.column width="50%"}
--   사실, 모델의 예측값은...
+-   사실, 우리가 추정한 모델은...
 
 $$\hat{y} = b_0 + b_1 x_1$$
 :::
@@ -169,7 +158,7 @@ coeff_star = coef(reg_star)
 -   여기서 새로운 3개의 열이 추가됨: `std.error`, `statistic`, `p.value`.
 
 | Entry | Meaning |
-|----------------------------------------|--------------------------------|
+|----------|--------------------------------|
 | `std. error` | $b_k$ 의 표준오차 (standard error) |
 | `statistic` | 귀무가설 $H_0:\beta_k = 0$ vs 대립가설 $H_A:\beta_k \neq 0$ 에 대한 검정 통계량 |
 | `p.value` | 귀무가설 $H_0:\beta_k = 0$ vs 대립가설 $H_A:\beta_k \neq 0$ 에 대한 p-값 |
@@ -208,13 +197,14 @@ coeff_star = coef(reg_star)
 `r countdown(minutes = 10, top = 0)`
 :::
 
-*녹색 파스타 비율*의 샘플링 분포를 생성했던 것처럼, $b_\textrm{small}$의 부트스트랩 분포를 생성하고자 함.
+**녹색 파스타 비율**의 샘플링 분포를 생성한 것처럼, $b_\textrm{small}$의 부트스트랩 분포를 생성하자.
 
-1.  [학급 크기와 학생 성취도](#star_again) **슬라이드에서 데이터 로딩 및 정리 코드**를 복사하여 실행하시오.
+1.  학급 크기와 학생 성취도 슬라이드([링크](#star_again))에서 데이터 로딩 및 정리 코드**를 복사하여 실행.
 
 2.  **`star_df`에서 1,000개의 샘플을 추출하여** $b_\textrm{small}$의 부트스트랩 분포를 생성하시오. 아래 코드를 사용하면 됨:
 
 ```{r, echo=TRUE, eval=FALSE}
+library(infer)
 bootstrap_distrib <- star_df %>% 
     mutate(small=as.numeric(small)) %>% 
     specify(response = math, explanatory = small) %>%
@@ -247,9 +237,9 @@ bootstrap_distrib %>%
     theme_bw(base_size = 14)
 ```
 
-***표준 오차 (Standard error)***: `r round(se_simul,2)` $\rightarrow$ 테이블의 값 (r reg_summary_star_df\[2,2\])과 매우 유사함!
+***표준 오차 (Standard error)***: `r round(se_simul,2)` $\rightarrow$ 테이블의 값 (`r reg_summary_star_df[2,2]`)과 매우 유사함!
 
--   하지만 정확히 일치하지 않는 이유는 R이 사용하는 이론적 접근법 대신 부트스트랩 방법을 사용했기 때문임.
+-   정확히 일치하지 않는 이유는 `R`이 사용하는 이론적 접근법 대신 부트스트랩 (시뮬레이션) 방법을 사용했기 때문임.
 
 ------------------------------------------------------------------------
 
@@ -290,7 +280,7 @@ $$\begin{align}H_0:& \beta_k = 0\\H_A:& \beta_k \neq 0\end{align}$$
 
 ## 검정 통계량과 p-값
 
--   이전 강의에서 살펴보았듯이, 가설 검정을 수행하려면 다음을 수행해야 함:
+-   이미 살펴보았듯이, 가설 검정을 수행하려면 다음을 수행해야 함:
 
     -   **검정 통계량** (`statistic`)의 **표본 분포**를 유도하여 귀무 가설 $H_0$이 참일 때의 *귀무 분포*를 생성함.
 
@@ -313,7 +303,7 @@ round(observed_stat,2)
 :::
 :::::
 
--   p-값은 귀무 분포에서 $\pm$ 관측된 검정 통계량 바깥쪽의 면적을 측정함.
+-   p-값은 귀무 분포에서 $\pm$ ***관측된 검정 통계량*** 바깥쪽의 면적을 측정함.
 
 -   마지막으로, 일반적인 유의 수준 $\alpha$ = 0.1, 0.05, 0.01에서 $H_0$을 기각할 수 있는지 확인함.
 
@@ -377,13 +367,13 @@ plot_null_distrib +
 
 ```
 
--   귀무 가설($H_0$)이 참일 때, $b_\textrm{small}$ = r coeff_star\[2\] 값을 얻을 확률은 매우 낮음.
+-   귀무 가설($H_0$)이 참일 때, $b_\textrm{small}$ = `r round(coeff_star[2],2)` 값을 얻을 확률은 매우 낮음.
 
 ------------------------------------------------------------------------
 
 ## $\beta_\textrm{small} = 0$ vs $\beta_\textrm{small} \neq 0$ 검정
 
--   $H_0$를 기각할지 여부를 결정하기 위해, **양측 검정**을 고려해야 함.
+-   $H_0$ 를 기각할지 여부를 결정하기 위해, **양측 검정**을 고려해야 함.
 
 -   즉, *더 극단적인 값*이란 `r round(-observed_stat,3)`보다 작거나 **또는** `r round(observed_stat,3)`보다 큰 경우를 의미함.
 
@@ -404,7 +394,7 @@ plot_null_distrib +
 
 ## $\beta_\textrm{small} = 0$ vs $\beta_\textrm{small} \neq 0$ 검정
 
--   귀무가설 (H_0)을 기각할지 결정하려면, **양측 검정**을 고려해야 함.\
+-   귀무가설 ($H_0$)을 기각할지 결정하려면, **양측 검정**을 고려해야 함.\
     *더 극단적인 값*이란 `r round(-observed_stat,2)` 이하이거나 `r round(observed_stat,2)` 이상을 의미함.
 
 -   *p-값*을 계산하면 다음과 같음:
@@ -422,7 +412,7 @@ p_value
 
 ## $\beta_\textrm{small} = 0$ vs $\beta_\textrm{small} \neq 0$ 검정
 
--   귀무가설 (H_0)을 기각할지 결정하려면, **양측 검정**을 고려해야 함.\
+-   귀무가설 ($H_0$)을 기각할지 결정하려면, **양측 검정**을 고려해야 함.\
     *더 극단적인 값*이란 `r round(-observed_stat,2)` 이하이거나 `r round(observed_stat,2)` 이상을 의미함.
 
 -   *p-값*을 계산하면 다음과 같음:
@@ -436,12 +426,12 @@ p_value
 
 -   ***답:***
 
-    -   *p-값*이 0이므로, 어떤 유의수준에서도 (H_0)를 기각할 수 있음.\
-        p-값은 항상 (\alpha)보다 작음.
+    -   *p-값*이 0이므로, 어떤 유의수준에서도 ($H_0$)를 기각할 수 있음.\
+        p-값은 항상 ($\alpha$)보다 작음.
 
-    -   다시 말해, (b\_\textrm{small})은 **어떤 유의수준에서도 0과 통계적으로 다름**.
+    -   다시 말해, ($b_\textrm{small}$)은 **어떤 유의수준에서도 0과 통계적으로 다름**.
 
-    -   또한 (b\_\textrm{small})이 *통계적으로 유의함* (어떤 유의수준에서도) 라고 할 수 있음.
+    -   또한 ($b_\textrm{small}$)이 *통계적으로 유의함* (어떤 유의수준에서도) 라고 할 수 있음.
 
 # Regression Inference: Theory
 
@@ -463,10 +453,10 @@ p_value
 
 ## 회귀 추론: 이론
 
--   이론 기반 접근법은 하나의 기본적인 결과를 사용함: 표본 통계량 $\frac{b - \beta}{\hat{\textrm{SE}(b)}}$ 은 표본 크기가 커질수록 ***표준 정규 분포***로 *수렴*함.
+-   이론 기반 접근법 근간: 표본 통계량 $\frac{b - \beta}{\hat{\textrm{SE}(b)}}$ 은 표본 크기가 커질수록 ***표준 정규 분포***로 *수렴*함.
 
-    -   $\hat{\textrm{SE}(b)}$는 $b$의 표준편차에 대한 표본 추정량임.
-    -   이 값은 이론적 공식을 통해 얻어짐 ([여기서](https://scpoecon.github.io/ScPoEconometrics/std-errors.html#se-theory)에서 확인 가능) 하지만 여기서는 다루지 않겠음.
+    -   $\hat{\textrm{SE}(b)}$ 는 $b$ 의 표준편차에 대한 표본 추정량임.
+    -   이 값은 이론적 공식을 통해 얻어짐 ([링크](https://scpoecon.github.io/ScPoEconometrics/std-errors.html#se-theory)에서 확인 가능) 하지만 여기서는 다루지 않겠음.
 
 -   ***표준 정규 분포***는 평균이 0이고 표준편차가 1인 *정규 분포*임.
 
@@ -527,7 +517,7 @@ bootstrap_distrib %>%
 `r countdown(minutes = 5, top = 0)`
 :::
 
-1.  Task 1에서 생성한 부트스트랩 분포를 사용하여 *퍼센타일 방법*으로 95% 신뢰구간을 계산하라.
+1.  Task 1에서 생성한 부트스트랩 분포를 사용하여 *퍼센타일 방법*으로 95% 신뢰구간을 계산하시오.
 
 2.  이전 슬라이드에서 구한 신뢰구간과 얼마나 유사한가?
 
@@ -633,8 +623,9 @@ export_summs(reg_simple_math, reg_gender_math, reg_simple_read, reg_gender_read,
 ## 회귀 분석 표 해석
 
 ```{r, echo = FALSE, out.width = "500px"}
-knitr::include_graphics("reg_inference_files/figure-html/reg_table.png")
+knitr::include_graphics("../img/photos/reg_table.png")
 ```
+
 
 -   각 열은 하나의 회귀 분석을 나타냄. 첫 번째 회귀 분석에서 다음을 확인할 수 있음:
 
@@ -655,7 +646,7 @@ knitr::include_graphics("reg_inference_files/figure-html/reg_table.png")
 
 -   이러한 가정들을 만족하는 모형을 *고전적 회귀 모형* (Classical Regression Model, CRM)이라고 함.
 
--   본격적으로 가정을 살펴보기 전에, 회귀 모형에 적용하는 몇 가지 작지만 중요한 수정 사항을 확인하겠음 (\[*단순선형회귀 강의*\] 참조).
+-   본격적으로 가정을 살펴보기 전에, 회귀 모형에 적용하는 몇 가지 작지만 중요한 수정 사항을 확인하겠음 ([*단순선형회귀 강의*] 참조).
 
 -   이미 표본 추정량 $b_k$ (또는 $\hat{\beta_k}$)와 모집단 모수 $\beta_k$의 차이를 언급했음.
 
@@ -683,7 +674,7 @@ knitr::include_graphics("reg_inference_files/figure-html/reg_table.png")
 
 ------------------------------------------------------------------------
 
-## 오차 기대값 독립성 Mean Independence of Error: E\[u \| small\] = ?
+## 오차 기대값 독립성: $E[u | small] = ?$
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE,fig.width=8,fig.height=5}
 library(ggridges)
@@ -757,7 +748,7 @@ cond_good
 
 ------------------------------------------------------------------------
 
-## 오차 기대값 독립성 Mean Independence of Error: E\[u \| small\] = ?
+## 오차 기대값 독립성: $E[u | small] = ?$
 
 ```{r, echo = FALSE,fig.width=8,fig.height=5}
 cond_bad
@@ -841,7 +832,7 @@ cond_bad
 
 다시 교육과 성별이 임금에 미치는 효과에 대한 질문으로 돌아가 보겠음.
 
-1.  `AER` 패키지에서 `CPS1985` 데이터를 로드하고, 각 변수의 정의를 확인하라: `?CPS1985`
+1.  `AER` 패키지에서 `CPS1985` 데이터를 로드하고, 각 변수의 정의를 확인: `?CPS1985`
 
 ```{r, eval=F}
 library(AER)
@@ -849,30 +840,30 @@ data("CPS1985")
 ?CPS1985
 ```
 
-1.  `wage`의 로그 값을 `log_wage` 변수로 생성하라.
+2.  `wage`의 로그 값을 `log_wage` 변수로 생성.
 
 ```{r, eval=F}
 CPS1985$log_wage <- log(CPS1985$wage)
 ```
 
-1.  `log_wage`를 `gender`와 `education`에 회귀 분석하고, 결과를 `reg1`으로 저장하라.
+3.  `log_wage`를 `gender`와 `education`에 회귀 분석하고, 결과를 `reg1`으로 저장.
 
 ```{r, eval=F}
 reg1 <- lm(log_wage ~ gender + education, data = CPS1985)
 summary(reg1)
 ```
 
--   각 계수를 해석하라.
+-   각 계수를 해석하시오.
 -   계수들이 통계적으로 유의한가? 어느 유의수준에서 유의한가?
 
-1.  `log_wage`를 `gender`, `education` 그리고 `gender*education`의 상호작용 항과 함께 회귀 분석하고, 결과를 `reg2`로 저장하라.
+4.  `log_wage`를 `gender`, `education` 그리고 `gender*education`의 상호작용 항과 함께 회귀 분석하고, 결과를 `reg2`로 저장.
 
 ```{r, eval=F}
 reg2 <- lm(log_wage ~ gender * education, data = CPS1985)
 summary(reg2)
 ```
 
--   $female \times education$에 해당하는 계수를 어떻게 해석할 수 있는가?
+-   $female \times education$ 에 해당하는 계수를 어떻게 해석할 수 있는가?
 -   이 계수의 귀무가설을 5% 유의수준에서 기각할 수 있는가? 10% 유의수준에서는?
 
 ------------------------------------------------------------------------
@@ -966,7 +957,7 @@ ggplot(data=cps,aes(y = log_wage, x = education, colour = gender)) +
 :::
 
 ::: {.column width="50%"}
-```{r,fig.height=7}
+```{r,fig.height=9}
 library(AER)
 data("CPS1985")
 cps = CPS1985 %>% mutate(log_wage = log(wage))
