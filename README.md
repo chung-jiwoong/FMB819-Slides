@@ -79,9 +79,10 @@
 
 **주제9: Regression Inference**
 
-[HTML](https://chung-jiwoong.github.io/FMB819-Slides/reg_inference/reg_inference.html) / 
-[.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/reg_inference/reg_inference.qmd) / 
-[Tasks](https://chung-jiwoong.github.io/FMB819-Slides/chapter_sampling/tasks/reginferencetasks.qmd) 
+[HTML](https://chung-jiwoong.github.io/FMB819-Slides/chapter_reginference/chapter_reginference.html) / 
+[.qmd](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_reginference/chapter_reginference.qmd) / 
+[Tasks](https://chung-jiwoong.github.io/FMB819-Slides/chapter_reginference/tasks/reginference_tasks.qmd) 
+
 
 **주제10: Differences-in-differences (Optional)**
 
