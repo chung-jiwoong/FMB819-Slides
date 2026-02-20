@@ -14,3 +14,9 @@ gapminder
 countdown
 xaringanExtra
 gganimate
+tidyquant
+zoo
+xts
+TTR
+quantmod
+PerformanceAnalytics

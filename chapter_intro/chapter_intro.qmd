@@ -14,8 +14,6 @@ revealjs-plugins:
   - revealjs-text-resizer # Thanks to https://github.com/gadenbuie/revealjs-text-resizer#readme
 ---
 
-
-
 ```{r setup, include = FALSE, warning = FALSE, message = FALSE}
 options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(
@@ -48,34 +46,18 @@ library(xaringanExtra)
     3.  기본적 통계 개념 이해하여
     4.  데이터 분석의 결과를 해석할 수 있다.
 
--   데이터 분석의 목표
 
-    1.  **기술 요약(Description)**: 현상을 설명
-    2.  **예측(Prediction)**: 관측되지 않는 값을 예측
-    3.  **인과 관계(Causality)**: 한 변수가 다른 변수에 미치는 영향 분석
+    
 
 ------------------------------------------------------------------------
 
-## 데이터 분석을 통해 답하고자 하는 질문
+## 데이터 분석의 목표
 
-1.  **기술요약(Description)**:
-    -   한국 성인 중 연 소득이 2천만원 미만인 사람은 몇 명인가? 평균 소득은 얼마인가? 대학 학위가 있는 사람과 없는 사람 간 평균 소득 차이는 얼마인가?
-2.  **예측(Prediction)**:
-    -   회사 웹사이트 방문자의 소득 (광고 목적)? 다음 분기 한국의 총소비 및 총소득은?
-3.  **인과 관계(Causality)**:
-    -   ***한 개인***이 대학 학위를 가졌을 때와 가지지 않았을 때의 소득 차이는 얼마나 될까? (다른 모든 조건 – 부모의 배경, 키, 사회적 기술 등 – 이 동일하다고 가정할 때), 해당 개인이 남성이었을 경우 소득은 얼마나 달라질까?
-
-------------------------------------------------------------------------
-
-## ...continued
+1.  **기술 요약(Description)**: 현상을 설명
+2.  **예측(Prediction)**: 관측되지 않는 값을 예측
+3.  **인과 관계(Causality)**: 한 변수가 다른 변수에 미치는 영향 분석
 
 -   많은 경우 의사 결정을 위해서 기술/예측/인과 관계를 조합적으로 파악할 필요
-
-    -   우수한 학생들을 돕기 위해 다른 학생들의 기회를 희생할 수 있는 특목고를 운영해야 할까?
-
-    -   특목고 운영 여부는 특목고가 다양한 학생들에게 미치는 **인과적 효과**뿐만 아니라, 현재 학생 **구성(기술)**과 미래 학생 **구성(예측)**을 고려해야.
-
-    -   물론 의사결정을 위해서는 가치판단이 필요: 이는 데이터 분석의 영역이 아님
 
 ------------------------------------------------------------------------
 
@@ -83,191 +65,138 @@ library(xaringanExtra)
 
 -   `R`은 강력한 통계 및 그래픽 기능을 갖춘 **프로그래밍 언어**.
 
--   `R`을 사용하는 이유
-
-    1.  **무료(free)**이며 **오픈소스(open source)**
+    1.  **무료**이며 **오픈소스(open source)**
     2.  **유연하고 강력함** → 데이터 정리, 시각화, 기계학습 등 거의 모든 분석 가능.\
     3.  [활발한 온라인 커뮤니티](https://stackoverflow.com/questions/tagged/r), 대부분의 문제에 대한 해결책 존재.
 
--   `R`의 많은 기능들 중 우리가 주로 사용할 것들은 ...
+-   `R`의 많은 기능들 중 우리가 주로 사용할 기능
+    -   **데이터 수집**: 웹에서 데이터 직접 불러오기
+    -   **데이터 가공**: 데이터 정리, 변환, 요약
+    -   **데이터 시각화**: 고급 그래프와 차트 생성
+    -   **통계 분석**: 회귀분석, 가설검정 등 다양한 통계 기법 적용
+---
+
+## 금융 데이터의 현실
+
+-   **데이터의 폭발적 증가:** 틱(Tick) 데이터, 대체 데이터(Alternative Data), 비정형 뉴스 텍스트 등 엑셀로 처리하기 힘듬.
+-   **엑셀의 치명적 한계:**
+    -   **인적 오류:** 복잡한 수식과 매크로는 추적이 어려움.
+    -   **재현성(Reproducibility) 부족:** 데이터 업데이트 시 매번 수작업으로 복사/붙여넣기를 반복.
+-   강력한 통계 엔진과 프로그래밍이 결합된 **R**이 유용.
+
+---
+
+## 1. 완벽한 재현성과 업무 자동화
+
+-   R은 "데이터 수집 → 전처리 → 분석 → 시각화 → 보고서 작성"의 전 과정을 **하나의 코드 파이프라인**으로 통합.
+
+```{r eval=TRUE, echo=TRUE, fig.width=8, fig.height=4, fig.align="center"}
+library(tidyquant)
+# 1. 삼성전자(005930.KS) 최근 1년 주가 수집
+samsung <- tq_get("005930.KS", from = Sys.Date() - 365)
+# 2. ggplot을 이용한 시각화 (autoplot 대신 사용)
+samsung %>%
+  ggplot(aes(x = date, y = close)) +
+  geom_line(color = "darkblue", linewidth = 1) +
+  labs(title = "Samsung (recent 1 year)", 
+       x = "Date", 
+       y = "Close Price (KRW)") +
+  theme_tq() # 금융 데이터에 어울리는 깔끔한 테마
+```
+
+---
+
+## 2. 금융에 적합한 생태계
+
+파이썬(Python)이 범용 프로그래밍 언어라면, **R은 통계와 데이터 분석을 위해 만든 '데이터를 위한 언어'**
+
+-   퀀트 투자, 리스크 관리, 알고리즘 트레이딩 분야에서 광범위하게 사용.
+-   **강력한 금융 생태계:** 수백 개의 전용 패키지 존재.
+    -   시계열 분석 (`xts`, `zoo`)
+    -   재무 데이터 처리 (`tidyquant`, `quantmod`)
+    -   포트폴리오 최적화 (`PortfolioAnalytics`) 등
+    -   기타 금융 관련 패키지들 <https://cran.r-project.org/web/views/Finance.html>
+
+---
+
+## 3. 시각화 및 커뮤니케이션
+
+-   **ggplot2** R의 시각화 생태계는 글로벌 언론사(NYT, BBC 등)와 헤지펀드에서 사용할 만큼 유연하고 미려함.
+-   **Quarto** 분석한 결과를 클릭 한 번으로 PDF, HTML, PPT 보고서로 변환 (지금 보는 이 슬라이드처럼).
+-   **Shiny**를 통해 직접 조작해볼 수 있는 '인터랙티브 웹 대시보드' 구축.
+
+---
+
+
+## Finance MBA가 R을 무기로 삼아야 하는 이유
+
+1.  단순 엑셀 모델러를 넘어, 대용량 데이터를 다루는 역량.
+2.  수작업 리포팅에 낭비되는 시간을 줄이고, 중요한 문제에 시간을 쏟을 수 있음.
+3.  최신 통계 및 기계학습 모델을 금융 데이터에 즉각적으로 적용 가능.
+
+
+------------------------------------------------------------------------
+
+## R / RStudio 설치 시 주의사항 (한글 경로 이슈)
+
+### **사용자 폴더 경로에 한글/특수문자(non-ASCII) 들어가면** R/RStudio 패키지 설치 과정에서 이유 모를 오류 뜨는 경우 있음
+
+- 예: `C:\Users\홍길동\...` 처럼 **프로필 경로에 한글** 들어간 케이스
+
+### 제일 안전한 예방책: 영문 사용자 계정으로 설치/사용
+- 설치 전에 **Windows 사용자 폴더 경로** 확인
+  - `C:\Users\사용자이름\...`
+- 사용자 이름(프로필 폴더명)에 한글 들어가 있으면
+  - **영문 이름 새 계정(가능하면 관리자 권한)** 하나 만들고
+  - 그 계정으로 R/RStudio 설치·사용
+- 주의할 점 있음: Windows에서 “표시 이름”만 바꿔도 실제 **프로필 폴더명은 그대로**인 경우 많음  
+  → 그래서 **새 계정 생성**이 더 확실함
+- 프로젝트/과제 폴더를 영문 경로에 두는 게 안전
+  - 예: ~/projects/finance_mba/ (폴더명 영문/숫자/언더스코어)
   
 
-
 ------------------------------------------------------------------------
 
-## 데이터 처리 (Data Wrangling)
+## `R` 설치 방법 (Windows / macOS)
 
--   데이터 분석 전에 데이터를 정리하는 데 많은 시간 소요됨.
-
--   `gapminder` 데이터셋:
-    -   1952\~2007년 각국의 기대수명, 1인당 GDP, 인구 데이터 포함.
-
-    -   각 연도별/대륙별 평균 기대수명과 평균 1인당 GDP 계산 목표.
-
-    -   우선 연도별/대륙별로 자료를 그룹핑을 하고, 평균 기대수명과 평균 1인당 GDP 계산
-
-::::: columns
-::: {.column width="50%"}
-```{r, gapminder, echo = T, eval = F}
-# load gapminder package
-library(gapminder)
-# load the dataset from the gapminder package
-data(gapminder, package = "gapminder") 
-# show first 4 lines of this dataframe
-head(gapminder,n = 4)
-```
-:::
-
-::: {.column width="50%"}
-```{r, gapminder, echo = F, eval = T}
-```
-:::
-:::::
-
-------------------------------------------------------------------------
-
-## ...continued
-
--   여러 가지 방법으로 이 작업 가능.
-
--   여기서는 `dplyr`패키지를 사용:
-
-```{r, echo = T}
-library(dplyr)
-# compute the required statistics
-gapminder_dplyr <- gapminder %>% 
-  group_by(continent, year) %>% 
-  summarise(count = n(),
-            mean_lifeexp = mean(lifeExp),
-            mean_gdppercap = mean(gdpPercap))
-# show first 5 lines of the new data
-head(gapminder_dplyr, n = 5)
-```
-
-------------------------------------------------------------------------
-
-## Visualisation
-
--   그래프를 그리기 `gapminder_dplyr`:
-
-```{r, echo = TRUE}
-ggplot(data = gapminder_dplyr,  # 데이터셋을 지정
-       mapping = aes(x = mean_lifeexp,  # x축: 평균 기대수명
-                     y = mean_gdppercap,  # y축: 평균 1인당 GDP
-                     color = continent,  # 색상: 대륙별 구분
-                     size = count)) +  # 점 크기: 국가 수
-  geom_point(alpha = 1/2) +  # 반투명한 점 그래프 생성 (alpha=0.5)
-  labs(x = "Average life expectancy",  # x축 라벨 설정
-       y = "Average GDP per capita",  # y축 라벨 설정
-       color = "Continent",  # 색상 범례 제목 설정
-       size = "Nb of countries") +  # 크기 범례 제목 설정
-  theme_bw()  # 흰색 배경의 테마 적용 (black & white theme)
-```
-
-------------------------------------------------------------------------
-
-## Animated Plotting
-
-
-
-```{r, example: gganimate, include = F, cache = T}
-# The package for animating ggplot2
-library(gganimate)
-# As before
-# gg <- ggplot(
-#   data = gapminder %>% filter(continent != "Oceania"),
-#   aes(gdpPercap, lifeExp, size = pop, color = country)
-# ) +
-# geom_point(alpha = 0.7, show.legend = FALSE) +
-# scale_colour_manual(values = country_colors) +
-# scale_size(range = c(2, 12)) +
-# scale_x_log10("GDP per capita", label = scales::comma) +
-# facet_wrap(~continent) +
-# theme_pander(base_size = 16) +
-# theme(panel.border = element_rect(color = "grey90", fill = NA)) +
-# # Here comes the gganimate-specific bits
-# labs(title = "Year: {frame_time}") +
-# ylab("Life Expectancy") +
-# transition_time(year) +
-# ease_aes("linear")
-# # Save the animation
-# anim_save(
-#   animation = gg,
-#   filename = "ex_gganimate.gif",
-#   path = "chapter_in1les/figure-html",
-#   width = 9,
-#   height = 4,
-#   units = "in",
-#   res = 150,
-#   nframes = 56
-# )
-```
-
-::: {style="text-align: center;"}
-![](chapter_intro_files/figure-html/ex_gganimate.gif)
-<small>출처: [Ed Rubin](https://raw.githack.com/edrubin/EC421S19/master/LectureNotes/01Intro/01_intro.html#40)</small>
-:::
-
-
-------------------------------------------------------------------------
-
-## 웹기반 앱 만들기
-
-<!-- <iframe src="https://9qhvt0-ji0woong-chung.shinyapps.io/buss254-stock-app/" width="100%" height="800px" style="border: none;"></iframe> -->
-
-```{r, echo = F, out.extra = 'style="border: none;"'}
-knitr::include_url("https://9qhvt0-ji0woong-chung.shinyapps.io/buss254-stock-app/", height = "800px")
-```
-
-
-------------------------------------------------------------------------
-
-## `R` 설치 방법: Windows 환경 기준
-
--   공식 웹사이트에서 다운로드하여 설치
+-   **Windows: 공식 웹사이트에서 다운로드하여 설치**
 
     1.  [CRAN 공식 웹사이트](https://posit.co/download/rstudio-desktop/)에 접속
     2.  "Download R for Windows" 클릭
     3.  "base" 패키지를 선택하고 최신 버전을 다운로드
-    4.  다운로드한 설치 파일 실행 후 기본 설정으로 설치 진행
+    4.  `.exe`파일 실행 후 기본 설정으로 설치
 
--   `winget`을 이용한 설치
+-   **macOS: 공식 웹사이트에서 다운로드하여 설치**
 
-    -   PowerShell 또는 명령 프롬프트(cmd) 열고 아래 명령어 실행
-
-    ``` {.sh style="font-size:1.2em"}
-    winget install -e --id RProject.R
-    ```
+    1.  [CRAN 공식 웹사이트](https://posit.co/download/rstudio-desktop/)에 접속
+    2.  "Download R for macOS" 클릭
+    3.  본인 칩셋(Apple Silicon / Intel)에 맞는 설치 파일 다운로드
+    4.  `.pkg` 파일 실행 후 기본 설정으로 설치
 
 
 ------------------------------------------------------------------------
 
-## `RStudio` 설치 방법
+## `RStudio` 설치 방법 (Windows / macOS)
 
 R 프로그래밍 언어를 위한 통합 개발 환경(IDE, Integrated Development Environment)
 
--   공식 웹사이트에서 다운로드하여 설치
+-   **공식 웹사이트에서 다운로드하여 설치 (Windows/macOS 공통)**
 
     1.  [CRAN 공식 웹사이트](https://posit.co/download/rstudio-desktop/) 접속
-    2.  "RStudio Desktop"의 무료 버전을 선택하여 다운로드
+    2.  "RStudio Desktop"의 선택하여 다운로드
     3.  다운로드한 설치 파일 실행 후 기본 설정으로 설치
     4.  설치 완료 후 RStudio 실행하여 정상 작동하는지 확인
 
 
--   `winget` 을 이용한 설치
+------------------------------------------------------------------------
 
-    -   PowerShell 또는 명령 프롬프트 열고 아래 명령어 실행
+## 설치가 어려울 때: Posit Cloud(온라인)
 
-    ``` {.sh style="font-size:1.2em"}
-    winget install -e --id Posit.RStudio
-    ```
+로컬 설치가 어렵거나 권한 문제가 있을 경우, 브라우저에서 바로 R을 실행할 수 있음.
 
-    -   RStudio 업그레이드가 필요할 경우 다음 명령어 실행
-
-    ``` {.sh style="font-size:1.2em"}
-    winget upgrade --id Posit.RStudio
-    ```
-
+1.  [Posit Cloud](https://posit.cloud/)에 접속 후 회원가입/로그인
+2.  `New RStudio Project`를 눌러 새 프로젝트 생성
+3.  좌측 `Files`/`Console`/`Terminal`을 이용해 로컬 RStudio처럼 실습 진행
 
 ------------------------------------------------------------------------
 
@@ -277,10 +206,10 @@ R 프로그래밍 언어를 위한 통합 개발 환경(IDE, Integrated Developm
 
 1.  **RStudio 실행**
 
-    -   Windows 검색창에서 "RStudio" 검색 후 실행.
+    -   Windows는 검색창, macOS는 Spotlight(`Command + Space`)에서 "RStudio" 검색 후 실행.
     -   콘솔에서 `version` 입력하여 설치된 R 버전 확인.
 
-    ``` {.sh style="font-size:1.2em"}
+    ```{r, echo=F, eval=F}
     version
     ```
 
@@ -288,17 +217,55 @@ R 프로그래밍 언어를 위한 통합 개발 환경(IDE, Integrated Developm
 
     -   다음 코드를 console에서 실행하여 정상 동작하는지 확인.
 
-    ``` {.sh style="font-size:1.2em"}
+    ```{r, echo=T, eval=T}
     print("R과 RStudio 설치 완료!")
     ```
 
 ------------------------------------------------------------------------
 
-## `RStudio` Layout
+## R 및 RStudio 업데이트 방법
 
-```{r, echo = F, out.width = "300px"}
+- R 엔진(코어)과 RStudio(편집기)는 별개 프로그램이므로 각각 따로 업데이트해야 함.
+
+::::: columns
+::: {.column width="50%"}
+**1. R 엔진 업데이트**
+
+- **Windows:** `installr` 패키지 활용 (오류 방지를 위해 RStudio가 아닌 기본 R GUI에서 실행하는 것을 권장)
+  ```r
+  install.packages("installr")
+  installr::updateR()
+  ```
+- **Mac:** [CRAN 홈페이지](https://cran.r-project.org/)에 접속해서 최신 `.pkg` 버전을 다운로드하고 그대로 덮어씌워서 설치함.
+:::
+
+::: {.column width="50%"}
+**2. RStudio 업데이트**
+
+- RStudio 상단 메뉴: **Help** -> **Check for Updates** 클릭함.
+- 업데이트 팝업창이 뜨면 안내에 따라 최신 버전 다운로드 및 설치 진행함.
+
+
+<br>
+
+**3. 패키지 일괄 업데이트 (중요 포인트)**
+
+- R 버전을 올리고 나면 기존에 깔아둔 패키지들도 버전에 맞게 새로고침 해줘야 에러가 안 남.
+  ```r
+  update.packages(ask = FALSE, checkBuilt = TRUE)
+  ```
+:::
+:::::
+
+---
+
+## `RStudio` 화면 구조
+
+<!-- ```{r, echo = F, out.width = "300px"}
 knitr::include_graphics("chapter_intro_files/figure-html/rstudio.png")
-```
+``` -->
+
+![](https://hyunyulhenry.github.io/quant_cookbook/images/rbasic_rstudio_base2.png){fig-align="center" width="85%"}
 
 ------------------------------------------------------------------------
 
@@ -357,7 +324,7 @@ RStudio를 실행하면 여러 창(윈도우)으로 구성되어 있음.
 -   **스크립트에서 코드 실행**:
     -   `Ctrl + Enter`: 현재 줄 실행.
     -   `Ctrl + Alt + R`: 전체 스크립트 실행.
--   **주석 작성**: `#`을 사용하여 코드 설명 추가 가능.
+-   **주석 작성**: `#` 을 사용하여 코드 설명 추가 가능.
 
 ```{r, echo=T}
 # 변수 선언
@@ -369,10 +336,43 @@ c <- a + b
 print(c)  # 결과: 15
 ```
 
+---
+
+## 몇 가지 유용한 설정
+
+### 배경 및 글자 색상 변경
+
+- R 스튜디오는 기본적으로 흰색 바탕에 검은색 글씨. 어두운 화면으로 설정을 변경 가능
+  - RStudio 상단 메뉴: **Tools** -> **Global Options** -> **Appearance** 탭에서 테마 선택 가능 (예: "Tomorrow Night Bright" 등 어두운 테마)
+
+### 스크림트 한글 깨짐 방지
+
+- 스크립트 내용 중 한글이 깨지는 것을 방지하기 위해 인코딩 방식을 설정
+  - RStudio 상단 메뉴: **Tools** -> **Global Options** -> **Code** 탭에서 "Saving" 섹션의 "Default text encoding"을 "UTF-8"로 설정
+  - 한글 깨짐이 해결되지 않는 경우, [File → Reopen with Encoding] 메뉴에서 [UTF-8] 항목을 선택
+  - [Set as default encoding for source files] 항목을 선택한 후 [OK]. UTF-8로 인코딩이 설정된 후 파일을 다시 열림
+  
+
+---
+
+## 몇 가지 유용한 설정
+
+### 프로젝트 만들기
+
+- 코딩 전에 **Project 만들면** 해당 과제/분석에 쓰는 코드·이미지·문서 파일을 **한 폴더 체계로 관리** 가능
+    - RStudio 상단 **육각형(Project) 버튼** 누르거나 `File → New Project` 클릭함
+      - `Create Project`에서 `New Directory` 선택함  
+      - `Project Type`에서 `New Project` 클릭함
+      - `Directory name`에 프로젝트 이름 입력함
+      - `Create project as subdirectory of`에서 프로젝트 폴더 만들 위치 선택함 (`Browse`로 고르면 됨)
+      - 아래 `Create Project` 클릭하면 RStudio가 재시작되면서 프로젝트 이름이 우측 상단에 표시되고, 파일 창도 프로젝트 폴더로 이동됨. 폴더 안에 `*.Rproj` 파일도 생성됨 (예: `fmb819.Rproj`). 이후 스크립트/데이터/이미지 전부 프로젝트 폴더에 저장하면서 작업하면 됨.
+      - 프로젝트 이름/폴더 경로에 한글 들어가면 오류 날 수 있으니 영문 추천
+
+
+
 ------------------------------------------------------------------------
 
 ## Task 1 {background-color="#ffebf0"}
-
 
 1.  새로운 R 스크립트를 생성하시오 (`File > New File > R Script`) 파일을 `lecture_intro.R`로 저장하시오.
 
@@ -409,15 +409,13 @@ example(lm)  # lm 함수의 사용 예제(example)를 실행하여 출력함
 ??lm  # "lm"과 관련된 모든 도움말 문서를 검색하여 표시함
 ```
 
-In practice:
-
 ![](chapter_intro_files/figure-html/learning_path.png){width="60%"}
 
 ------------------------------------------------------------------------
 
 ## 패키지 (Packages)
 
--   `R 패키지는 특정 기능을 제공하는 코드와 데이터를 포함한 소프트웨어 패키지
+-   `R` 패키지는 특정 기능을 제공하는 코드와 데이터를 포함한 소프트웨어 패키지
 
 -   패키지 설치는 간단. `install.packages` 함수를 사용:
 
@@ -430,15 +428,65 @@ In practice:
     ``` r
     library(ggplot2)
     ```
-    
+
 -   업데이트 하려면
 
     ``` r
     update.packages(ggplot2)
     ```
 
+
+# 데이터 형태 (Data Type)
+
 ------------------------------------------------------------------------
 
+## 데이터 형태 (Data Type)
+
+- R에서 데이터를 원활하게 다루기 위해 가장 먼저 알아야 할 것은 데이터의 형태(Type)임. 
+- 금융 데이터 분석에서는 주로 숫자, 문자열, 날짜 형태를 다룸.
+
+---
+
+## 숫자 형태
+
+R에서 기본적으로 다루는 숫자 데이터는 실수(Double) 형태임.
+
+```{r, echo=T, eval=F}
+dbl_var = c(1, 2.5, 4.5)
+typeof(dbl_var)
+```
+```{r, echo=T, eval=F}
+int_var = c(1L, 6L, 5L)
+typeof(int_var)
+```
+- 숫자 뒤에 L을 붙이면, 정수(Integer) 형태의 숫자가 만들어짐.
+
+- 수열 (*range*) 생성
+
+```{r, echo=T, eval=F}
+1:10
+10:1
+seq(0:10)
+seq(0, 10, by=2.5)
+seq(0, 10, length=5)
+rep(1:5, each=1)
+rep(1, 5)
+```
+
+---
+
+## 문자열 형태
+
+---
+
+
+
+# 데이터 구조 (Data Structures)
+
+---
+
+
+---
 
 ## 벡터 (Vectors)
 
@@ -458,14 +506,14 @@ c(1, 3, 5, 7, 8, 9)
 * 소괄호: 객체 값을 바로 출력    
 ```
 
-- 변수 목록보기/삭제하기
+-   변수 목록보기/삭제하기
 
 ```{r, echo=T}
 ls()
 rm()
 ```
 
-- 벡터의 결합
+-   벡터의 결합
 
 ```{r, echo=T}
 v1 <- c(1, 2, 3)
@@ -474,18 +522,8 @@ c(v1, v2)
 ```
 
 
--   수열 (*range*) 생성
 
-```{r, echo=T}
-1:10
-10:1
-seq(0:10)
-seq(0, 10, by=2.5)
-seq(0, 10, length=5)
-rep(1, 5)
-```
-
----
+------------------------------------------------------------------------
 
 ## 비교 논리 연산
 
@@ -513,7 +551,6 @@ a > pi
 a <= pi
 ```
 
-
 **Vector vs. Vector 비교**
 
 ```{r, echo=T}
@@ -528,7 +565,6 @@ v < w
 v >= w
 ```
 
-
 **Scalar vs. Vector 비교**
 
 ```{r, echo=T}
@@ -542,11 +578,11 @@ all(v == 0)
 
 ```
 
----
+------------------------------------------------------------------------
 
 ## 비교 논리 연산
 
-**is.~ () 함수 : 개체의 속성을 묻는 함수**
+**is.*() 함수 : 개체의 속성을 묻는 함수**
 
 ```{r, echo=T}
 u <- c(3, pi, Inf, NULL, NaN, NA)
@@ -562,18 +598,15 @@ is.nan(u)
 is.null(u)
 ```
 
-- `NULL`은 완전히 비어 있는 값으로, 벡터에 포함될 경우 자동으로 삭제됨.
+-   `NULL`은 완전히 비어 있는 값으로, 벡터에 포함될 경우 자동으로 삭제됨.
 
-- `na`는 not available, `nan`는 not a number (예, 0/0, sqrt(-1)).
+-   `na`는 not available, `nan`는 not a number (예, 0/0, sqrt(-1)).
 
-- `nan`은 숫자형 결측값, `na`는 모든 종류의 결측값이라 생각하면 됨. 
+-   `nan`은 숫자형 결측값, `na`는 모든 종류의 결측값이라 생각하면 됨.
 
-
----
-
+------------------------------------------------------------------------
 
 ## 인덱스의 활용
-
 
 -   대괄호 연산자 `[index]`를 사용하여 벡터 요소 위치 지정. 제외하고 싶은 원소의 인덱스는 음수 $-$로.
 
@@ -595,7 +628,7 @@ fib < 5
 fib[fib < 5]
 ```
 
-- `which()`: 조건에 해당하는 인덱스를 찾아줌
+-   `which()`: 조건에 해당하는 인덱스를 찾아줌
 
 ```{r, echo=T}
 which(fib == 0)
@@ -607,51 +640,49 @@ which.max(fib)
 which.min(fib)
 ```
 
-
----
-
+------------------------------------------------------------------------
 
 ## R 연산자 정리
 
 **1. 기초 연산자 (Arithmetic Operators)**
 
-| 연산자 | 설명 | 예제 | 결과 |
-|--------|------|------|------|
-| `+` | 덧셈 | `5 + 3` | `8` |
-| `-` | 뺄셈 | `5 - 3` | `2` |
-| `*` | 곱셈 | `5 * 3` | `15` |
-| `/` | 나눗셈 | `5 / 3` | `1.6667` |
-| `^` 또는 `**` | 거듭제곱 | `5^3` | `125` |
-| `%%` | 나머지 | `5 %% 3` | `2` |
-| `%/%` | 정수 나눗셈 | `5 %/% 3` | `1` |
+| 연산자        | 설명        | 예제      | 결과     |
+|---------------|-------------|-----------|----------|
+| `+`           | 덧셈        | `5 + 3`   | `8`      |
+| `-`           | 뺄셈        | `5 - 3`   | `2`      |
+| `*`           | 곱셈        | `5 * 3`   | `15`     |
+| `/`           | 나눗셈      | `5 / 3`   | `1.6667` |
+| `^` 또는 `**` | 거듭제곱    | `5^3`     | `125`    |
+| `%%`          | 나머지      | `5 %% 3`  | `2`      |
+| `%/%`         | 정수 나눗셈 | `5 %/% 3` | `1`      |
 
 **2. 관계 연산자 (Comparison Operators)**
 
-| 연산자 | 설명 | 예제 | 결과 |
-|--------|------|------|------|
-| `==` | 같음 | `5 == 3` | `FALSE` |
-| `!=` | 다름 | `5 != 3` | `TRUE` |
-| `>` | 초과 | `5 > 3` | `TRUE` |
-| `<` | 미만 | `5 < 3` | `FALSE` |
-| `>=` | 이상 | `5 >= 3` | `TRUE` |
-| `<=` | 이하 | `5 <= 3` | `FALSE` |
+| 연산자 | 설명 | 예제     | 결과    |
+|--------|------|----------|---------|
+| `==`   | 같음 | `5 == 3` | `FALSE` |
+| `!=`   | 다름 | `5 != 3` | `TRUE`  |
+| `>`    | 초과 | `5 > 3`  | `TRUE`  |
+| `<`    | 미만 | `5 < 3`  | `FALSE` |
+| `>=`   | 이상 | `5 >= 3` | `TRUE`  |
+| `<=`   | 이하 | `5 <= 3` | `FALSE` |
 
 **3. 논리 연산자 (Logical Operators)**
 
-| 연산자 | 설명 | 예제 | 결과 |
-|--------|------|------|------|
-| `&` | AND (벡터 연산) | `c(TRUE, FALSE) & c(TRUE, TRUE)` | `TRUE FALSE` |
-| `|` | OR (벡터 연산) | `c(TRUE, FALSE) | c(FALSE, FALSE)` | `TRUE FALSE` |
-| `!` | NOT | `!TRUE` | `FALSE` |
-| `&&` | AND (단일 값 연산) | `TRUE && FALSE` | `FALSE` |
-| `||` | OR (단일 값 연산) | `TRUE || FALSE` | `TRUE` |
+| 연산자 | 설명               | 예제                               | 결과         |
+|---------------------|-----------------|-----------------|-----------------|
+| `&`    | AND (벡터 연산)    | `c(TRUE, FALSE) & c(TRUE, TRUE)`   | `TRUE FALSE` |
+| `|`    | OR (벡터 연산)     | `c(TRUE, FALSE) | c(FALSE, FALSE)` | `TRUE FALSE` |
+| `!`    | NOT                | `!TRUE`                            | `FALSE`      |
+| `&&`   | AND (단일 값 연산) | `TRUE && FALSE`                    | `FALSE`      |
+| `||`   | OR (단일 값 연산)  | `TRUE || FALSE`                    | `TRUE`       |
 
-
+```{=html}
 <!--
 & 둘 다 TRUE이면 TRUE
 | 하나라도 TRUE이면 TRUE
---> 
-
+-->
+```
 
 ------------------------------------------------------------------------
 
@@ -667,7 +698,7 @@ example_data
 ```
 
 -   `data.frame`은 *행(rows)* 과 *열(columns)* 의 두 가지 차원을 가짐. *행렬(matrix)* 과 유사하며, `[row_index,col_index]` 형식으로 요소를 선택 가능.
-   
+
 ```{r, echo=T}
 example_data[2,2]
 ```
@@ -767,9 +798,7 @@ murders[murders$total > 500, c("state", "total")]
 murders[murders$state %in% c("California", "Texas"), c("state", "total")]
 ```
 
-
-* `subset` 명령어 사용 가능 (종종 더 직관적)
-
+-   `subset` 명령어 사용 가능 (종종 더 직관적)
 
 ``` r
 subset(murders, total > 500, select = c(state, total))
@@ -779,7 +808,6 @@ subset(murders, state %in% c("California", "Texas"), select = c(state, total))
 ------------------------------------------------------------------------
 
 ## Task 3 {background-color="#ffebf0"}
-
 
 1.  `murders` 데이터프레임에는 몇 개의 관측값(observations)이 있는가?
 
@@ -797,61 +825,61 @@ murders$total_percap = (murders$total / murders$population) * 10000
 
 `murders` 객체를 클릭하여 새 변수를 확인해 보시오.
 
-
-
-
 # 강의 관련 정보
 
 ------------------------------------------------------------------------
 
 ## 성적 산출
 
-1.  거의 모든 수업에서 **in-class assignment (`task`)** 를 완성해서 제출 $\rightarrow$ 40%: 과제당 점수: 40/과제 개수
+1.  수업에서 **in-class assignment (`task`)** 를 완성해서 제출 $\rightarrow$ 30%: 과제당 점수: 30/과제 개수
 
-2.  **기말 프로젝트** $\rightarrow$ 60%
+2.  **기말 시험** $\rightarrow$ 70%
 
 3.  출석은 확인하지 않음.
 
-4.  시험은 없음.
-
-5.  보통 A는 30%이내 (A+는 아주 뛰어난 경우), C는 총점 50점 미만의 경우, D/F 는 아주 저조한 경우
+4.  보통 A는 30%이내 (A+는 아주 뛰어난 경우), C는 총점 50점 미만의 경우, D/F 는 아주 저조한 경우
 
 ------------------------------------------------------------------------
 
 ## 수업 정책
 
-<p style="text-align: center; font-weight: bold; font-size: 1.5em;">Be nice. Be honest. Don't cheat.</p><br>
+<p style="text-align: center; font-weight: bold; font-size: 1.5em;">
 
-- **숙제는 늦게 제출하면 안됨**: 특별한 상황이 아닌 이상, 수업 끝나기 전에 모두 제출
+Be nice. Be honest. Don't cheat.
 
-- **부정행위 및 타인의 과제 무단 활용 금지**: C나 F 중 불리한 등급 받게 됨
+</p>
 
-- **그룹으로 협력**: 협력 장려, 다만 개인이 작성하여 제출
+<br>
+
+-   **숙제는 늦게 제출하면 안됨**: 수업 당일 저녁 11시까지 LMS에 제출
+
+-   **부정행위 및 타인의 과제 무단 활용 금지**: C나 F 중 불리한 등급 받게 됨
+
+-   **그룹으로 협력**: 협력 장려, 다만 개인이 작성하여 제출
 
 ------------------------------------------------------------------------
 
 ## 과제 제출 방법
 
-Quarto Document로 작성, Quarto Pub에 Publish하여, 웹페이지 링크를 LMS에 제출.
+Quarto Document로 작성 LMS에 제출.
 
 #### 1. 새 Quarto 문서 생성
 
-- RStudio에서 **File → New File → Quarto Document...** 선택
-- title과 포맷(HTML) 선택 후 **Create** 버튼 클릭
-- 생성된 `.qmd` 파일에서 문서를 작성.
-
+-   RStudio에서 **File → New File → Quarto Document...** 선택
+-   title과 포맷(HTML) 선택 후 **Create** 버튼 클릭
+-   생성된 `.qmd` 파일에서 문서를 작성.
 
 #### 2. 과제 템플릿 예시
 
-- 다음 양식을 이용하여 과제 제출: [과제 양식 링크](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_intro/tasks/intro_tasks.qmd)
+-   다음 양식을 이용하여 과제 제출: [과제 양식 링크](https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_intro/tasks/intro_tasks.qmd)
 
-- 과제 작성 후 적당한 곳에 저장, 예: `C:\Users\user\Documents\assignment\assign1.qmd`
+-   과제 작성 후 적당한 곳에 저장, 예: `C:\Users\user\Documents\assignment\assign1.qmd`
 
 #### 3. Quarto 문서 렌더링
 
-  -   RStudio에서 **Render 버튼** 클릭
+-   RStudio에서 **Render 버튼** 클릭
 
-  -   HTML 문서가 생성됨 (`홍길동.html` 생성됨)
+-   HTML 문서가 생성됨 (`홍길동.html` 생성됨)
 
 #### 4. 과제 제출
 
@@ -885,27 +913,8 @@ Quarto Document로 작성, Quarto Pub에 Publish하여, 웹페이지 링크를 L
 
 주제 12: ***Instrumental Variables*** (Optional)
 
-------------------------------------------------------------------------
-
-## 기타 유용한 자료
-
-#### 통계/ 계량경제
-
--   [*Mastering Metrics* by Angrist and Pischke](https://uspc-spo.primo.exlibrisgroup.com/permalink/33USPC_SPO/1d4eftp/alma991003947949705808)
--   [*Introductory Econometrics: A Modern Approach* by Wooldridge](https://uspc-spo.primo.exlibrisgroup.com/permalink/33USPC_SPO/mgsi7h/alma991003442469705808)
--   [*Introductory Econometrics* by Kaplan](https://kaplandm.github.io/teach.html)
-
-#### `R`의 활용
-
--   [ModernDive](https://moderndive.com/)
--   [Introduction to Econometrics with R](https://www.econometrics-with-r.org/)
--   [Modern Statistics with R](https://www.modernstatisticswithr.com/)
--   [Practical Statistics for Data Scientists](https://github.com/gedeck/practical-statistics-for-data-scientists)
--   [R for Data Science](https://r4ds.had.co.nz/)
--   [Awesome R Learning Resources](https://github.com/iamericfletcher/awesome-r-learning-resources)
 
 ------------------------------------------------------------------------
-
 
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 
@@ -916,4 +925,3 @@ THE END!
 
 </h2>
 :::
-
