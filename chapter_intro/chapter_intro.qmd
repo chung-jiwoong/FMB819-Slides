@@ -793,13 +793,92 @@ murders$total_percap = (murders$total / murders$population) * 10000
 
 ---
 
-## 변수 목록보기/삭제하기
+## 기타 유용한 명령어/함수
 
-```{r, echo=T}
+- 변수 목록보기/삭제하기
+```{r, echo=T, eval=F}
 ls()
 rm()
 rm(list=ls())  # 모든 객체 삭제
 ```
+
+- 함수 만들기
+```{r, echo=T, eval=F}
+add <- function(x, y) {
+  return(x + y)
+}
+add(3, 5)  # 결과: 8
+```
+
+- 엑셀 파일 불러오기
+```{r, echo=T, eval=F}
+install.packages(c("readxl","writexl"))
+library(readxl)
+library(writexl)
+data <- read_excel("path/to/your/file.xlsx")  # Excel 파일 불러오기
+write_xlsx(data, "path/to/save/file.xlsx")  # Excel로 저장
+```
+
+
+---
+
+## 기타 유용한 명령어/함수
+
+- If 구문
+```{r, echo=T, eval=F}
+x <- 10
+if (x > 5) {
+  print("x는 5보다 큽니다.")
+} else {
+  print("x는 5보다 작거나 같습니다.")
+}
+
+ifelse(x > 5, "x는 5보다 큽니다.", "x는 5보다 작거나 같습니다.")  # ifelse 함수로 간단히 표현
+```
+
+- for loop 구문
+```{r, echo=T, eval=F}
+for (i in 1:5) {
+  print(paste("현재 숫자:", i))
+}
+```
+
+- while loop 구문
+```{r, echo=T, eval=F}
+count <- 1 
+while (count <= 5) {
+  print(paste("현재 카운트:", count))
+  count <- count + 1
+}
+```
+
+- 함수 안에서 조건문과 반복문을 함께 사용하기
+```{r, echo=T, eval=F}
+my_function <- function(n) {
+  for (i in 1:n) {
+    if (i %% 2 == 0) {
+      print(paste(i, "는 짝수입니다."))
+    } else {
+      print(paste(i, "는 홀수입니다."))
+    }
+  }
+}
+my_function(10)  # 1부터 10까지 숫자에 대해 짝수/홀수 판별
+```
+
+- apply 계열 함수 (반복문 대체)
+```{r, echo=T, eval=F}
+my_matrix <- matrix(1:9, nrow=3)
+apply(my_matrix, 1, sum)  # 행별 합계 계산
+apply(my_matrix, 2, mean) # 열별 평균 계산
+```
+
+- lapply 계열 함수 (리스트에 적용)
+```{r, echo=T, eval=F} 
+my_list <- list(a = 1:5, b = 6:10)
+lapply(my_list, sum)  # 리스트의 각 원소에 대해 합계 계산
+```
+
 
 
 ------------------------------------------------------------------------
@@ -809,11 +888,8 @@ rm(list=ls())  # 모든 객체 삭제
 ```{r, echo=T}
 x <- 1
 x < 2
-
 x/0
-
 -x/0
-
 0/0
 ```
 
@@ -822,11 +898,8 @@ x/0
 ```{r, echo=T}
 a <- 3
 a == pi
-
 a != pi
-
 a > pi
-
 a <= pi
 ```
 
@@ -836,11 +909,8 @@ a <= pi
 v <- c(0, pi, 4)
 w <- rep(pi, 3)
 v == w
-
 v != w
-
 v < w
-
 v >= w
 ```
 
@@ -848,13 +918,9 @@ v >= w
 
 ```{r, echo=T}
 v == pi
-
 v > pi
-
 any(v == pi)
-
 all(v == 0)
-
 ```
 
 ------------------------------------------------------------------------
