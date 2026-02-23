@@ -6,8 +6,8 @@
 <script src="chapter_slr_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="chapter_slr_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="chapter_slr_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="chapter_slr_files/libs/quarto-html/quarto-syntax-highlighting-48ffa3e5b9d089919c6712c39e5b00f2.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.6.41">
+<link href="chapter_slr_files/libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.8.27">
 
   <meta name="author" content="고려대학교 경영대학 정지웅">
   <title>Simple Linear Regression</title>
@@ -29,8 +29,9 @@
       vertical-align: middle;
     }
     /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -41,7 +42,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -94,7 +95,8 @@
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="chapter_slr_files/libs/revealjs/dist/theme/quarto-8f3eebe07241f08526c91a7e9cbef8fd.css">
+  <link rel="stylesheet" href="chapter_slr_files/libs/revealjs/dist/theme/quarto-0fde88a82f0356838740f155f1088782.css">
+  <link rel="stylesheet" href="../styles/styles.css">
   <link href="chapter_slr_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="chapter_slr_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="chapter_slr_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -219,73 +221,44 @@
 <h2>Today’s Agenda</h2>
 <ul>
 <li><p><strong><em>단순 선형 회귀 모형(Simple Linear Regression Model)</em></strong> 및 <strong><em>최소제곱법(Ordinary Least Squares, OLS)</em></strong> <em>추정</em> 소개.</p></li>
-<li><p>실증 분석: 학급 규모와 학생 성취도의 관계</p></li>
-<li><p><strong>인과적(causal)</strong> 관계를 어떻게 밝힐 수 있을까?</p></li>
+<li><p>실증 분석: 코스피200 지수와 S&amp;P500 지수의 관계</p></li>
 </ul>
 </section>
-<section id="학급-규모와-학생-성취도" class="slide level2">
-<h2>학급 규모와 학생 성취도</h2>
+<section id="코스피200-지수와-sp500-지수" class="slide level2 scrollable">
+<h2>코스피200 지수와 S&amp;P500 지수</h2>
 <ul>
-<li><p>어떤 정책이 학생 학습 성취도 향상시키는가?</p></li>
-<li><p>학급 규모 축소는 <strong>수십 년간</strong> 교육 정책 논쟁의 핵심 주제였음.</p></li>
-<li><p><a href="https://economics.mit.edu/files/8273">Joshua Angrist와 Victor Lavy (1999)</a>의 연구에서 사용된 데이터 분석. 해당 데이터는 <a href="https://opportunityinsights.org/course/">Raj Chetty와 Greg Bruich의 강의</a>에서 제공됨.</p></li>
-<li><p>1991년 이스라엘 유대인 공립 초등학교 5학년생(10-11세)의 시험 점수와 학급/학교 특성 포함.</p></li>
-<li><p>국가 단위 시험을 통해 <strong>수학</strong> 및 (히브리어) <strong>읽기</strong> 능력 평가했으며, 원점수는 1-100 사이 척도로 변환됨.</p></li>
+<li><p>“S&amp;P500이 움직일 때 코스피200이 얼마나 같이 움직이는가?”</p></li>
+<li><p>이번 예시에서는 웹에서 코스피200/ S&amp;P500 일별 종가를 불러와 수익률을 계산함.</p></li>
+<li><p>실습에서는 두 관계를 함께 봄:</p>
+<ol type="1">
+<li><strong>동일일 관계</strong>: <span class="math inline">\(r^{KOSPI200}_t\)</span> vs <span class="math inline">\(r^{SP500}_t\)</span></li>
+<li><strong>익일 관계</strong>: <span class="math inline">\(r^{KOSPI200}_{t+1}\)</span> vs <span class="math inline">\(r^{SP500}_t\)</span></li>
+</ol></li>
 </ul>
 </section>
 <section id="task-1" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 1</h2>
-<div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_78157acd" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">07</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
-</div>
+<p><countdown-timer class="countdown" id="timer_7b5f3fe6" minutes="7" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
 <ol type="1">
-<li><p>데이터를 <a href="https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/grade5.dta">여기</a>에서 다운로드해서 <code>grades</code>로 저장하시오.<br>
-<strong>힌트</strong>: <code>haven</code> 라이브러리의 <code>read_dta</code> 함수 사용해서 <code>.dta</code> 형식의 파일 불러오면 됨. (참고: <em>.dta</em>는 <a href="https://www.stata.com/"><em>Stata</em></a>에서 사용하는 데이터 파일 확장자임.)</p></li>
+<li>코스피200 및 S&amp;P500 일별 종가 데이터를 불러와 날짜를 기준으로 두 지수를 병합한 뒤, <code>merged_px</code> 객체를 생성하시오. 그리고 일별 수익률 변수(<code>ret_sp500</code>, <code>ret_kospi200</code>, <code>ret_kospi200_lead</code>)를 생성하시오.<br>
+</li>
+</ol>
+<ol start="2" type="1">
 <li><p>데이터셋 설명:</p>
 <ul>
-<li>관측 단위는? 즉, 각 행이 무엇을 의미하는가?<br>
-</li>
 <li>총 몇 개의 관측치가 있는가?<br>
 </li>
-<li>데이터셋을 확인하고 어떤 변수가 있는지 확인하시오. <code>avgmath</code>와 <code>avgverb</code>는 뭘 의미하는가?<br>
-</li>
-<li><code>skimr</code> 패키지의 <code>skim</code> 함수 사용해서 <code>classize</code>, <code>avgmath</code>, <code>avgverb</code> 변수에 대한 기본적인 요약 통계 확인함.<br>
+<li>데이터셋을 확인하고 어떤 변수가 있는지 확인하시오.</li>
+<li><code>skimr</code> 패키지의 <code>skim</code> 함수 사용해서 생성한 수익률 변수에 대한 기본적인 요약 통계 확인.<br>
 <strong>힌트</strong>: <code>dplyr</code>의 <code>select</code> 사용해서 변수 선택한 후 <code>%&gt;%</code>로 <code>skim()</code> 적용하면 됨.</li>
 </ul></li>
-<li><p>학급 규모와 학생 성취도 간 실제 (선형) 관계에 대해 어떤 관계가 있을 것이라 생각하는가?</p></li>
-<li><p>학급 규모와 수학/언어 점수 간 상관관계는?</p></li>
+</ol>
+<ol start="3" type="1">
+<li>S&amp;P500 수익률(<code>ret_sp500</code>)과 코스피200 수익률(<code>ret_kospi200</code>, <code>ret_kospi200_lead</code>)의 상관관계는?</li>
 </ol>
 </section>
-<section id="학급-규모와-학생-성취도-scatter-plot" class="slide level2">
-<h2>학급 규모와 학생 성취도: Scatter plot</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-2-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
-</figure>
-</div>
-</div>
-</div>
-</div><div class="column" style="width:50%;">
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-3-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
-</figure>
-</div>
-</div>
-</div>
-</div></div>
-<ul>
-<li>상관계수에서 보듯이 어느 정도 양의 관계 있음. 학급 규모별 평균 점수 계산해서 더 명확하게 살펴보자</li>
-</ul>
-</section>
-<section id="학급-규모와-학생-성취도-binned-scatter-plot" class="slide level2">
-<h2>학급 규모와 학생 성취도: Binned Scatter Plot</h2>
+<section id="코스피200-지수와-sp500-지수-scatter-plot" class="slide level2">
+<h2>코스피200 지수와 S&amp;P500 지수: Scatter plot</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
@@ -308,17 +281,45 @@
 </div>
 </div>
 </div></div>
+<ul>
+<li>S&amp;P500 수익률을 구간(bin)으로 묶어 평균 관계를 더 명확하게 살펴보자.</li>
+</ul>
 </section>
-<section id="학급-규모와-학생-성취도-regression-line" class="slide level2">
-<h2>학급 규모와 학생 성취도: Regression Line</h2>
-<p>학급 규모와 학생 성취도의 관계를 시각적으로 요약하는 방법: <strong>산점도를 통과하는 선(Line)</strong></p>
+<section id="코스피200-지수와-sp500-지수-binned-scatter-plot" class="slide level2">
+<h2>코스피200 지수와 S&amp;P500 지수: Binned Scatter Plot</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-6-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-7-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="코스피200-지수와-sp500-지수-regression-line" class="slide level2">
+<h2>코스피200 지수와 S&amp;P500 지수: Regression Line</h2>
+<p>코스피200 지수와 S&amp;P500 지수의 관계를 시각적으로 요약하는 방법: <strong>산점도를 통과하는 선(Line)</strong></p>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell" data-layout-align="left">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-left">
 <figure>
-<p><img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-6-1.svg" class="quarto-figure quarto-figure-left" width="672"></p>
+<p><img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-8-1.svg" class="quarto-figure quarto-figure-left" width="672"></p>
 </figure>
 </div>
 </div>
@@ -328,7 +329,7 @@
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-left">
 <figure>
-<p><img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-7-1.svg" class="quarto-figure quarto-figure-left" width="672"></p>
+<p><img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-9-1.svg" class="quarto-figure quarto-figure-left" width="672"></p>
 </figure>
 </div>
 </div>
@@ -340,49 +341,46 @@
 </section>
 <section id="단순-선형-회귀-simple-linear-regression" class="slide level2">
 <h2>단순 선형 회귀 (Simple Linear Regression)</h2>
-<p>지금까지 분석을 좀 더 공식적으로 정리하자면</p>
+<p>지금까지 분석을 정리하자면</p>
 <ul>
 <li><p>두 변수 간의 관계에 관심 있음:</p>
 <ul>
-<li><p>결과변수 (종속변수, dependent variable): <em>average mathematics score</em> <span class="math inline">\((y)\)</span></p></li>
-<li><p>설명변수 (독립변수, independent variable): <em>class size</em> <span class="math inline">\((x)\)</span></p></li>
+<li><p>결과변수 (종속변수, dependent variable): <em>KOSPI200 return</em> <span class="math inline">\((y)\)</span></p></li>
+<li><p>설명변수 (독립변수, independent variable): <em>S&amp;P500 return</em> <span class="math inline">\((x)\)</span></p></li>
 </ul></li>
-<li><p>각 학급 <span class="math inline">\(i\)</span>에 대해 <span class="math inline">\(x_i\)</span>와 <span class="math inline">\(y_i\)</span>를 관측할 수 있음. 예, 학급 규모와 평균 수학 점수의 <em>결합 분포(joint distribution)</em>를 시각화할 수 있음.</p></li>
-<li><p>회귀선은 이 관계를 <strong>선(line)</strong> 하나로 요약하고 있음. 절편 <span class="math inline">\(b_0\)</span>와 기울기 <span class="math inline">\(b_1\)</span>을 갖는 선의 방정식은 다음과 같음:</p></li>
-</ul>
-<p><span class="math display">\[
+<li><p>각 거래일 <span class="math inline">\(i\)</span>에 대해 <span class="math inline">\(x_i\)</span>와 <span class="math inline">\(y_i\)</span>를 관측할 수 있음. 예, S&amp;P500 수익률과 코스피200 수익률의 <em>결합 분포(joint distribution)</em>를 시각화할 수 있음.</p></li>
+<li><p>회귀선은 이 관계를 <strong>선(line)</strong> 하나로 요약하고 있음. 절편 <span class="math inline">\(b_0\)</span>와 기울기 <span class="math inline">\(b_1\)</span>을 갖는 선의 방정식은 다음과 같음: <span class="math display">\[
 \widehat{y}_i = b_0 + b_1 x_i
-\]</span></p>
-<ul>
-<li><span class="math inline">\(\widehat{y}_i\)</span>는 <em>관측값</em> <span class="math inline">\(i\)</span>에서의 예측값(prediction)을 의미함. 즉, 주어진 회귀 직선에 따라 우리가 <span class="math inline">\(y_i\)</span>를 어떻게 예측하는지 보여줌.</li>
+\]</span></p></li>
+<li><p><span class="math inline">\(\widehat{y}_i\)</span>는 <em>관측값</em> <span class="math inline">\(i\)</span>에서의 예측값(prediction)을 의미함. 즉, 주어진 회귀 직선에 따라 우리가 <span class="math inline">\(y_i\)</span>를 어떻게 예측하는지 보여줌.</p></li>
 </ul>
 </section>
 <section id="직선의-방정식" class="slide level2">
 <h2>직선의 방정식</h2>
 
-<img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-8-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-10-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
 <section id="직선의-방정식-1" class="slide level2">
 <h2>직선의 방정식</h2>
 
-<img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-9-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-11-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
 <section id="직선의-방정식-2" class="slide level2">
 <h2>직선의 방정식</h2>
 
-<img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-10-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-12-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
 <section id="simple-linear-regression-잔차residual" class="slide level2">
 <h2>Simple Linear Regression: 잔차(Residual)</h2>
 <ul>
 <li>만약 모든 데이터가 직선 위에 있다면, <span class="math inline">\(\widehat{y}_i = y_i\)</span>.</li>
 </ul>
 
-<img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-11-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section>
+<img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-13-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section>
 <section id="simple-linear-regression-잔차residual-1" class="slide level2">
 <h2>Simple Linear Regression: 잔차(Residual)</h2>
 <ul>
 <li>만약 모든 데이터가 직선 위에 있다면, <span class="math inline">\(\widehat{y}_i = y_i\)</span>.</li>
 </ul>
 
-<img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-12-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section>
+<img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-14-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section>
 <section id="simple-linear-regression-잔차residual-2" class="slide level2">
 <h2>Simple Linear Regression: 잔차(Residual)</h2>
 <ul>
@@ -394,30 +392,22 @@ y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 \]</span></p></li>
 </ul>
 </section>
-<section id="simple-linear-regression-graphically" class="slide level2">
-<h2>Simple Linear Regression: Graphically</h2>
-
-<img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-13-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
 <section id="simple-linear-regression-graphically-1" class="slide level2">
-<h2>Simple Linear Regression: Graphically</h2>
+<h2>Simple Linear Regression: Graphically 1</h2>
 
-<img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-14-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<img data-src="chapter_slr_files/figure-revealjs/slr1-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
 <section id="simple-linear-regression-graphically-2" class="slide level2">
-<h2>Simple Linear Regression: Graphically</h2>
+<h2>Simple Linear Regression: Graphically 2</h2>
 
 <img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-15-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
 <section id="simple-linear-regression-graphically-3" class="slide level2">
-<h2>Simple Linear Regression: Graphically</h2>
+<h2>Simple Linear Regression: Graphically 3</h2>
 
 <img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-16-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
 <section id="simple-linear-regression-graphically-4" class="slide level2">
-<h2>Simple Linear Regression: Graphically</h2>
+<h2>Simple Linear Regression: Graphically 4</h2>
 
-<img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-17-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
-<section id="simple-linear-regression-graphically-5" class="slide level2">
-<h2>Simple Linear Regression: Graphically</h2>
-
-<img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-18-1.svg" class="quarto-figure quarto-figure-center r-stretch" style="width:100.0%"><p>무엇을 “최소화”하는 직선을 구해야할까?</p>
+<img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-17-1.svg" class="quarto-figure quarto-figure-center r-stretch" style="width:100.0%"><p>무엇을 “최소화”하는 직선을 구해야할까?</p>
 </section>
 <section id="ordinary-least-squares-ols-추정" class="slide level2">
 <h2>Ordinary Least Squares (OLS) 추정</h2>
@@ -426,29 +416,7 @@ y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 <li><p><span class="math inline">\(\sum_{i = 1}^N e_1^2 + \dots + e_N^2\)</span> 값이 <strong>최소화하는</strong> <span class="math inline">\((b_0, b_1)\)</span> 값을 선택.</p></li>
 </ul>
 
-<img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-19-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section>
-<section id="ordinary-least-squares-ols-추정-1" class="slide level2">
-<h2>Ordinary Least Squares (OLS) 추정</h2>
-<ul>
-<li><p>오차(error)의 부호 <span class="math inline">\((+/-)\)</span>가 서로 상쇄. <strong>제곱 잔차(squared residuals)</strong>를 고려 <span class="math display">\[\forall i \in [1,N], e_i^2 = (y_i - \widehat y_i)^2 = (y_i - b_0 - b_1 x_i)^2\]</span></p></li>
-<li><p><span class="math inline">\(\sum_{i = 1}^N e_1^2 + \dots + e_N^2\)</span> 값이 <strong>최소화하는</strong> <span class="math inline">\((b_0, b_1)\)</span> 값을 선택.</p></li>
-</ul>
-
-<img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-20-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section>
-<section id="ordinary-least-squares-ols-추정-2" class="slide level2">
-<h2>Ordinary Least Squares (OLS) 추정</h2>
-<div class="cell" data-layout-align="center">
-<iframe src="https://gustavek.shinyapps.io/reg_simple/" width="960" height="800px" data-external="1" style="border: none;">
-</iframe>
-</div>
-</section>
-<section id="ordinary-least-squares-ols-추정-3" class="slide level2">
-<h2>Ordinary Least Squares (OLS) 추정</h2>
-<div class="cell" data-layout-align="center">
-<iframe src="https://gustavek.shinyapps.io/SSR_cone/" width="960" height="800px" data-external="1" style="border: none;">
-</iframe>
-</div>
-</section>
+<img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-18-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section>
 <section id="ordinary-least-squares-ols-계수-공식" class="slide level2">
 <h2>Ordinary Least Squares (OLS) 계수 공식</h2>
 <ul>
@@ -488,31 +456,12 @@ y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 <li>OLS는 <code>lm</code>함수를 사용하여 추정가능</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">lm</span>(<span class="at">formula =</span> dependent variable <span class="sc">~</span>  independent variable, <span class="at">data =</span> data.frame containing the data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">lm</span>(<span class="at">formula =</span> dependent variable <span class="sc">~</span>  independent variable, <span class="at">data =</span> data.frame containing the data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p><strong><em>학급 규모와 학생 성적</em></strong></p>
+<p><strong><em>코스피200 지수와 S&amp;P500 지수</em></strong></p>
 <ul>
-<li>다음과 같은 선형 모형을 OLS로 추정하자: <span class="math inline">\(\textrm{average math score}_i = b_0 + b_1 \textrm{class size}_i + e_i\)</span></li>
+<li>다음과 같은 선형 모형을 OLS로 추정: <span class="math inline">\(\textrm{KOSPI200 return}_i = b_0 + b_1 \textrm{S&amp;P500 return}_i + e_i\)</span></li>
 </ul>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="co"># OLS regression of class size on average maths score</span></span>
-<span id="cb2-2"><a href=""></a><span class="fu">lm</span>(avgmath_cs <span class="sc">~</span> classize, grades_avg_cs) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column" style="width:50%;">
-<div class="cell" data-layout-align="center">
-<div class="cell-output cell-output-stdout">
-<pre><code>## 
-## Call:
-## lm(formula = avgmath_cs ~ classize, data = grades_avg_cs)
-## 
-## Coefficients:
-## (Intercept)     classize  
-##     61.1092       0.1913</code></pre>
-</div>
-</div>
-</div></div>
 </section>
 <section id="ordinary-least-squares-ols-prediction" class="slide level2">
 <h2>Ordinary Least Squares (OLS): Prediction</h2>
@@ -520,47 +469,42 @@ y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 <div class="cell-output cell-output-stdout">
 <pre><code>## 
 ## Call:
-## lm(formula = avgmath_cs ~ classize, data = grades_avg_cs)
+## lm(formula = ret_kospi200_mean ~ ret_sp500_bin, data = returns_bin)
 ## 
 ## Coefficients:
-## (Intercept)     classize  
-##     61.1092       0.1913</code></pre>
+##   (Intercept)  ret_sp500_bin  
+##      -20.9828         0.1725</code></pre>
 </div>
 </div>
 <p>이 결과가 의미하는 것 (<span class="math inline">\(i\)</span> 첨자 생략):</p>
 <p><span class="math display">\[
 \begin{aligned}
 \widehat y &amp;= b_0 + b_1 x \\
-\widehat {\text{average math score}} &amp;= b_0 + b_1 \cdot \text{class size} \\
-\widehat {\text{average math score}} &amp;= 61.11 + 0.19 \cdot \text{class size}
+\widehat {\text{KOSPI200 return}} &amp;= b_0 + b_1 \cdot \text{S&amp;P500 return}
 \end{aligned}
 \]</span></p>
-<p>학생 수가 26명일 때 예상되는 평균 성적은?</p>
+<p>S&amp;P500 수익률이 30bp일 때 예상되는 코스피200 수익률은?</p>
 <p><span class="math display">\[
 \begin{aligned}
-\widehat {\text{average math score}} &amp;= 61.11 + 0.19 \cdot 26 \\
-\widehat {\text{average math score}} &amp;= 66.08
+\widehat {\text{KOSPI200 return}} &amp;= b_0 + b_1 \cdot 30
 \end{aligned}
 \]</span></p>
 </section>
 <section id="task-2" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 2</h2>
-<div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_3bde3887" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
-</div>
-<p>다음 코드를 실행하여 데이터를 학급 규모(class size) 수준에서 집계하시오:</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>grades_avg_cs <span class="ot">&lt;-</span> grades <span class="sc">%&gt;%</span></span>
-<span id="cb5-2"><a href=""></a>  <span class="fu">group_by</span>(classize) <span class="sc">%&gt;%</span></span>
-<span id="cb5-3"><a href=""></a>  <span class="fu">summarise</span>(<span class="at">avgmath_cs =</span> <span class="fu">mean</span>(avgmath),</span>
-<span id="cb5-4"><a href=""></a>            <span class="at">avgverb_cs =</span> <span class="fu">mean</span>(avgverb))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<p><countdown-timer class="countdown" id="timer_2b708478" minutes="5" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
 <ol type="1">
-<li><p>평균 언어 점수(<code>avgverb_cs</code>)를 학급 규모(<code>classize</code>)에 대해 회귀분석 수행. 회귀 계수(coefficients)를 해석하시오.</p></li>
-<li><p>이 회귀분석에서 OLS 계수 <span class="math inline">\(b_0\)</span> 및 <span class="math inline">\(b_1\)</span>을 직접 계산 (공식 이용).<br>
-<em>힌트</em>: <code>cov</code>, <code>var</code>, <code>mean</code> 함수 사용.</p></li>
-<li><p>학급 규모가 0일 때, 예측된 평균 언어 점수는 얼마인가? 이 값이 실제로 의미가 있는가?</p></li>
-<li><p>학급 규모가 30명일 때, 예측된 평균 언어 점수는 얼마인가?</p></li>
+<li>익일 코스피200 평균 수익률(<code>ret_kospi200_lead</code>)을 S&amp;P500 수익률 구간(<code>ret_sp500</code>)에 대해 회귀분석 수행. 회귀 계수(coefficients)를 해석하시오.</li>
+</ol>
+<ol start="2" type="1">
+<li>이 회귀분석에서 OLS 계수 <span class="math inline">\(b_0\)</span> 및 <span class="math inline">\(b_1\)</span>을 직접 계산 (공식 이용).<br>
+<em>힌트</em>: <code>cov</code>, <code>var</code>, <code>mean</code> 함수 사용.</li>
+</ol>
+<ol start="3" type="1">
+<li>S&amp;P500 수익률이 0bp일 때, 예측된 익일 코스피200 수익률은 얼마인가?</li>
+</ol>
+<ol start="4" type="1">
+<li>S&amp;P500 수익률이 30bp일 때, 예측된 익일 코스피200 수익률은 얼마인가?</li>
 </ol>
 </section>
 <section id="예측값과-잔차의-성질" class="slide level2">
@@ -594,9 +538,9 @@ y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 <li>Francis Anscombe (1973)는 통계적으로 <em>완전히 동일한</em> 네 개의 데이터셋을 만들었음. 하지만 <strong>시각적으로 보면 완전히 다름!</strong></li>
 </ul>
 
-<img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-28-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"><div class="cell" data-layout-align="center">
+<img data-src="chapter_slr_files/figure-revealjs/unnamed-chunk-25-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"><div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<table class="table table-striped caption-top" data-quarto-postprocess="true" style="font-size: 20px; margin-left: auto; margin-right: auto;">
+<table class="table table-striped caption-top" style="font-size: 20px; margin-left: auto; margin-right: auto;">
 <thead>
 <tr class="header">
 <th style="text-align: right;" data-quarto-table-cell-role="th">dataset</th>
@@ -632,8 +576,6 @@ y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 </tr>
 </tbody>
 </table>
-
-
 </div>
 </div>
 </section>
@@ -651,7 +593,7 @@ y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 </ul>
 </div><div class="column" style="width:50%;">
 <ul>
-<li>예를 들어, 아래 데이터를 사용해 이전 회귀 모델을 적용할 수 있음:</li>
+<li>예를 들어, 아래 데이터를 사용해 다중 회귀 모델을 적용할 수 있음:</li>
 </ul>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -667,8 +609,7 @@ y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 <section id="분산-분석-analysis-of-variance" class="slide level2">
 <h2>분산 분석 (Analysis of Variance)</h2>
 <ul>
-<li><p>다음 관계를 기억할 것:<br>
-<span class="math display">\[
+<li><p>다음 관계를 기억할 것: <span class="math display">\[
 y_i = \widehat{y}_i + e_i
 \]</span></p></li>
 <li><p>이를 기반으로 <strong>다음과 같은 분산 분해(variance decomposition)</strong>를 얻음: <span class="math display">\[\begin{align}
@@ -676,12 +617,12 @@ Var(y) &amp;= Var(\widehat{y} + e)\\
 &amp;= Var(\widehat{y}) + Var(e) + 2 Cov(\widehat{y},e)\\
 &amp;= Var(\widehat{y}) + Var(e)
 \end{align}\]</span></p></li>
+<li><p>총 변동 (SST) = 모델이 설명한 변동 (SSE) + 설명되지 않은 변동 (SSR)</p></li>
 <li><p>왜냐하면:</p>
 <ul>
 <li><span class="math inline">\(Var(x+y) = Var(x) + Var(y) + 2Cov(x,y)\)</span></li>
 <li><span class="math inline">\(Cov(\hat{y},e) = 0\)</span></li>
 </ul></li>
-<li><p>총 변동 (SST) = 모델이 설명한 변동 (SSE) + 설명되지 않은 변동 (SSR)</p></li>
 </ul>
 </section>
 <section id="적합도-평가-goodness-of-fit" class="slide level2">
@@ -693,7 +634,7 @@ Var(y) &amp;= Var(\widehat{y} + e)\\
 R^2 = \frac{\text{variance explained}}{\text{total variance}} = \frac{SSE}{SST} = 1 - \frac{SSR}{SST}\in[0,1]
 \]</span></p>
 <ul>
-<li><p><span class="math inline">\(R^2\)</span> 값이 <strong>1에 가까울수록</strong>, 모델의 <strong>설명력(explanatory power)</strong>이 <strong><em>높음.</em></strong></p></li>
+<li><p><span class="math inline">\(R^2\)</span> 값이 <strong>1에 가까울수록</strong>, 모델의 <strong>설명력</strong>이 <strong><em>높음.</em></strong></p></li>
 <li><p><span class="math inline">\(R^2\)</span> 값이 <strong>0에 가까울수록</strong>, 모델의 <strong>설명력</strong>이 <strong><em>낮음</em></strong>.</p></li>
 <li><p>예를 들어, <span class="math inline">\(R^2 = 0.5\)</span>이면, <strong><span class="math inline">\(x\)</span>의 변화가 <span class="math inline">\(y\)</span>의 변화 중 50%를 설명함</strong>.</p></li>
 <li><p>낮은 <span class="math inline">\(R^2\)</span> 값이 무조건 모델이 쓸모없다는 뜻은 아님! <strong>예측(predictive power)</strong>보다는 <strong>인과적 메커니즘(causal mechanisms)</strong>에 더 초점을 맞추는 경우.</p></li>
@@ -702,36 +643,29 @@ R^2 = \frac{\text{variance explained}}{\text{total variance}} = \frac{SSE}{SST} 
 </section>
 <section id="task-3" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 3</h2>
-<div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p></p><div class="countdown" id="timer_9099a9a8" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
-</div>
+<p><countdown-timer class="countdown" id="timer_3f512dc1" minutes="10" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
 <ol type="1">
-<li><p><code>avgmath_cs</code>를 <code>classize</code>에 대해 회귀(regress)하고 결과를 <code>math_reg</code> 객체에 저장.</p></li>
-<li><p><code>summary(math_reg)</code>를 실행하여 <strong>(다중)</strong> <span class="math inline">\(R^2\)</span> 값을 확인함. 이 값의 의미를 해석할 것.</p></li>
-<li><p><code>classize</code>와 <code>avgmath_cs</code> 간 <strong>상관계수(correlation)</strong>를 제곱하여 계산. 이 값은 <strong>단일 설명변수</strong>(one regressor)를 가진 회귀에서 <span class="math inline">\(R^2\)</span>와 상관계수 간의 관계를 보여줌을 보이시오.</p></li>
-<li><p>1번과 2번을 <code>avgverb_cs</code>에 대해 반복함.<br>
-어떤 시험에서 학급 규모의 분산이 학생 점수의 분산을 더 많이 설명하는지 비교하시오.</p></li>
-<li><p>(Optional) <code>broom</code> 패키지를 설치 및 로드한 후, <code>math_reg</code>를 <code>augment()</code> 함수에 전달하여 새로운 객체에 저장함.<br>
-<code>avgmath_cs</code>의 분산(SST)과 예측값 <code>.fitted</code>의 분산(SSE)을 사용하여 <span class="math inline">\(R^2\)</span> 값을 직접 계산하시오. (이전 슬라이드의 공식을 참고할 것.)</p></li>
+<li><code>ret_kospi200</code>를 <code>ret_sp500</code>에 대해 회귀(regress)하고 결과를 <code>kospi_reg</code> 객체에 저장.</li>
+</ol>
+<ol start="2" type="1">
+<li><p><code>summary(kospi_reg)</code>를 실행하여 <strong>(다중)</strong> <span class="math inline">\(R^2\)</span> 값을 확인함. 이 값의 의미를 해석할 것.</p></li>
+<li><p><code>ret_sp500</code>와 <code>ret_kospi200</code> 간 <strong>상관계수(correlation)</strong>를 제곱하여 계산. 이 값은 <strong>단일 설명변수</strong>(one regressor)를 가진 회귀에서 <span class="math inline">\(R^2\)</span>와 상관계수 간의 관계를 보여줌을 보이시오.</p></li>
+</ol>
+<ol start="4" type="1">
+<li>1번과 2번을 <code>ret_kospi200_lead</code>에 대해 반복함.<br>
+동일일 코스피200 수익률과 익일 코스피200 수익률 중 어떤 결과가 S&amp;P500 수익률 변화로 더 많이 설명되는지 비교하시오.</li>
+</ol>
+<ol start="5" type="1">
+<li>(Optional) <code>broom</code> 패키지를 설치 및 로드한 후, <code>kospi_reg</code>를 <code>augment()</code> 함수에 전달하여 새로운 객체에 저장함.<br>
+<code>ret_kospi200_lead</code>의 분산(SST)과 예측값의 분산(SSE)을 사용하여 <span class="math inline">\(R^2\)</span> 값을 직접 계산하시오. (이전 슬라이드의 공식을 참고할 것.)
+<ul>
+<li><code>broom</code> 패키지의 <code>augment()</code> 함수는 회귀 결과에 예측값과 잔차를 추가하는 데 사용됨.<br>
+</li>
+</ul></li>
 </ol>
 </section>
-<section id="인과-관계를-찾아가는-길" class="slide level2">
-<h2>🔍 인과 관계를 찾아가는 길</h2>
-<p>✅ <strong><em>데이터를 어떻게 다룰까?</em></strong> : 읽기(Read), 정리(Tidy), 시각화(Visualize)…</p>
-<p>🚧 <strong><em>변수간 관계를 어떻게 요약할까? </em></strong> 단순 선형 회귀(Simple Linear Regression)</p>
-<p>❌ 인과 관계(Causality)란 무엇인가?</p>
-<p>❌ 전체 모집단을 관측하지 못하면 어떻게 할까?</p>
-<p>❌ 우리의 연구 결과가 단순한 무작위(Randomness) 때문일 수도 있을까?</p>
-<p>❌ 실제로 외생성을 어떻게 찾아낼 수 있을까?</p>
-</section>
-<section class="slide level2">
-
-<p><link href="https://fonts.googleapis.com/css2?family=Pacifico&amp;display=swap" rel="stylesheet"></p>
-<div style="display: flex; justify-content: center; align-items: center; height: 70vh;">
-<h2 style="color: #ff6666; text-align: center; font-family: 'Pacifico', cursive; font-size: 50px;">
-<p>THE END!</p>
-</h2>
-</div>
+<section id="the-end" class="title-slide slide level1 center">
+<h1>THE END!</h1>
 
 </section>
     </div>
@@ -926,7 +860,7 @@ R^2 = \frac{\text{variance explained}}{\text{total variance}} = \frac{SSE}{SST} 
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],
@@ -1029,190 +963,173 @@ R^2 = \frac{\text{variance explained}}{\text{total variance}} = \frac{SSE}{SST} 
     
 
     <script id="quarto-html-after-body" type="application/javascript">
-    window.document.addEventListener("DOMContentLoaded", function (event) {
-      const toggleBodyColorMode = (bsSheetEl) => {
-        const mode = bsSheetEl.getAttribute("data-mode");
-        const bodyEl = window.document.querySelector("body");
-        if (mode === "dark") {
-          bodyEl.classList.add("quarto-dark");
-          bodyEl.classList.remove("quarto-light");
-        } else {
-          bodyEl.classList.add("quarto-light");
-          bodyEl.classList.remove("quarto-dark");
-        }
-      }
-      const toggleBodyColorPrimary = () => {
-        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-        if (bsSheetEl) {
-          toggleBodyColorMode(bsSheetEl);
-        }
-      }
-      toggleBodyColorPrimary();  
-      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
-      tabsets.forEach(function(tabset) {
-        const tabby = new Tabby('#' + tabset.id);
-      });
-      const isCodeAnnotation = (el) => {
-        for (const clz of el.classList) {
-          if (clz.startsWith('code-annotation-')) {                     
-            return true;
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
           }
+          return false;
         }
-        return false;
-      }
-      const onCopySuccess = function(e) {
-        // button target
-        const button = e.trigger;
-        // don't keep focus
-        button.blur();
-        // flash "checked"
-        button.classList.add('code-copy-button-checked');
-        var currentTitle = button.getAttribute("title");
-        button.setAttribute("title", "Copied!");
-        let tooltip;
-        if (window.bootstrap) {
-          button.setAttribute("data-bs-toggle", "tooltip");
-          button.setAttribute("data-bs-placement", "left");
-          button.setAttribute("data-bs-title", "Copied!");
-          tooltip = new bootstrap.Tooltip(button, 
-            { trigger: "manual", 
-              customClass: "code-copy-button-tooltip",
-              offset: [0, -8]});
-          tooltip.show();    
-        }
-        setTimeout(function() {
-          if (tooltip) {
-            tooltip.hide();
-            button.removeAttribute("data-bs-title");
-            button.removeAttribute("data-bs-toggle");
-            button.removeAttribute("data-bs-placement");
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
           }
-          button.setAttribute("title", currentTitle);
-          button.classList.remove('code-copy-button-checked');
-        }, 1000);
-        // clear code selection
-        e.clearSelection();
-      }
-      const getTextToCopy = function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
           for (const childEl of codeEl.children) {
             if (isCodeAnnotation(childEl)) {
               childEl.remove();
             }
           }
           return codeEl.innerText;
-      }
-      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-        text: getTextToCopy
-      });
-      clipboard.on('success', onCopySuccess);
-      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-          text: getTextToCopy,
-          container: window.document.getElementById('quarto-embedded-source-code-modal')
-        });
-        clipboardModal.on('success', onCopySuccess);
-      }
-        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-        var mailtoRegex = new RegExp(/^mailto:/);
-          var filterRegex = new RegExp('/' + window.location.host + '/');
-        var isInternal = (href) => {
-            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
         }
-        // Inspect non-navigation links and adorn them if external
-     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-        for (var i=0; i<links.length; i++) {
-          const link = links[i];
-          if (!isInternal(link.href)) {
-            // undo the damage that might have been done by quarto-nav.js in the case of
-            // links that we want to consider external
-            if (link.dataset.originalHref !== undefined) {
-              link.href = link.dataset.originalHref;
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
             }
           }
-        }
-      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-        const config = {
-          allowHTML: true,
-          maxWidth: 500,
-          delay: 100,
-          arrow: false,
-          appendTo: function(el) {
-              return el.closest('section.slide') || el.parentElement;
-          },
-          interactive: true,
-          interactiveBorder: 10,
-          theme: 'light-border',
-          placement: 'bottom-start',
-        };
-        if (contentFn) {
-          config.content = contentFn;
-        }
-        if (onTriggerFn) {
-          config.onTrigger = onTriggerFn;
-        }
-        if (onUntriggerFn) {
-          config.onUntrigger = onUntriggerFn;
-        }
-          config['offset'] = [0,0];
-          config['maxWidth'] = 700;
-        window.tippy(el, config); 
-      }
-      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-      for (var i=0; i<noterefs.length; i++) {
-        const ref = noterefs[i];
-        tippyHover(ref, function() {
-          // use id or data attribute instead here
-          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-          try { href = new URL(href).hash; } catch {}
-          const id = href.replace(/^#\/?/, "");
-          const note = window.document.getElementById(id);
-          if (note) {
-            return note.innerHTML;
-          } else {
-            return "";
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
           }
-        });
-      }
-      const findCites = (el) => {
-        const parentEl = el.parentElement;
-        if (parentEl) {
-          const cites = parentEl.dataset.cites;
-          if (cites) {
-            return {
-              el,
-              cites: cites.split(' ')
-            };
-          } else {
-            return findCites(el.parentElement)
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
           }
-        } else {
-          return undefined;
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
         }
-      };
-      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-      for (var i=0; i<bibliorefs.length; i++) {
-        const ref = bibliorefs[i];
-        const citeInfo = findCites(ref);
-        if (citeInfo) {
-          tippyHover(citeInfo.el, function() {
-            var popup = window.document.createElement('div');
-            citeInfo.cites.forEach(function(cite) {
-              var citeDiv = window.document.createElement('div');
-              citeDiv.classList.add('hanging-indent');
-              citeDiv.classList.add('csl-entry');
-              var biblioDiv = window.document.getElementById('ref-' + cite);
-              if (biblioDiv) {
-                citeDiv.innerHTML = biblioDiv.innerHTML;
-              }
-              popup.appendChild(citeDiv);
-            });
-            return popup.innerHTML;
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
           });
         }
-      }
-    });
-    </script>
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
     
 
 </body></html>

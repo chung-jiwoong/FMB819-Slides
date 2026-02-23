@@ -2,90 +2,73 @@
 title: "수업 과제"
 author: "홍길동 (2025012345)"       #이름과 학번을 넣으세요
 date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
-format: html
+format: 
+  html:
+    toc: false
+    theme: default
 echo: true  
 include: true 
 ---
 
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(
-    echo = TRUE,
-    message = FALSE,
-    warning = FALSE,
-    comment = "##")
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Task 1: Getting to know the data
 
-1.  데이터를 [여기](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/grade5.dta)에서 다운로드해서 `grades`로 저장하시오.\
-    **힌트**: `haven` 라이브러리의 `read_dta` 함수 사용해서 `.dta` 형식의 파일 불러오면 됨. (참고: *.dta*는 [*Stata*](https://www.stata.com/)에서 사용하는 데이터 파일 확장자임.)
+
+## Task 1 
+
+
+1.  코스피200 및 S&P500 일별 종가 데이터를 불러와 날짜를 기준으로 두 지수를 병합한 뒤, `merged_px` 객체를 생성하시오. 그리고 일별 수익률 변수(`ret_sp500`, `ret_kospi200`, `ret_kospi200_lead`)를 생성하시오.\
 
 
 2.  데이터셋 설명:
 
-    -   관측 단위는? 즉, 각 행이 무엇을 의미하는가?\
     -   총 몇 개의 관측치가 있는가?\
-    -   데이터셋을 확인하고 어떤 변수가 있는지 확인하시오. `avgmath`와 `avgverb`는 뭘 의미하는가?\
-    -   `skimr` 패키지의 `skim` 함수 사용해서 `classize`, `avgmath`, `avgverb` 변수에 대한 기본적인 요약 통계 확인함.\
+    -   데이터셋을 확인하고 어떤 변수가 있는지 확인하시오.
+    -   `skimr` 패키지의 `skim` 함수 사용해서 생성한 수익률 변수에 대한 기본적인 요약 통계 확인.\
         **힌트**: `dplyr`의 `select` 사용해서 변수 선택한 후 `%>%`로 `skim()` 적용하면 됨.
-  
 
-
-3.  학급 규모와 학생 성취도 간 실제 (선형) 관계에 대해 어떤 관계가 있을 것이라 생각하는가?
-
-
-4.  학급 규모와 수학/언어 점수 간 상관관계는?
+3.  S\&P500 수익률(`ret_sp500`)과 코스피200 수익률(`ret_kospi200`, `ret_kospi200_lead`)의 상관관계는?
 
 
 
-## Task 2: OLS Regression
 
-다음 코드를 실행하여 데이터를 학급 규모(class size) 수준에서 집계하시오:
-
-```{r, eval=F}
-grades_avg_cs <- grades %>%
-  group_by(classize) %>%
-  summarise(avgmath_cs = mean(avgmath),
-            avgverb_cs = mean(avgverb))
-```
-
-1.  평균 언어 점수(`avgverb_cs`)를 학급 규모(`classize`)에 대해 회귀분석 수행. 회귀 계수(coefficients)를 해석하시오.
+## Task 2 
 
 
-2. 이 회귀분석에서 OLS 계수 $b_0$ 및 $b_1$을 직접 계산 (공식 이용). \
+1.  익일 코스피200 평균 수익률(`ret_kospi200_lead`)을 S\&P500 수익률 구간(`ret_sp500`)에 대해 회귀분석 수행. 회귀 계수(coefficients)를 해석하시오.
+
+
+2.  이 회귀분석에서 OLS 계수 $b_0$ 및 $b_1$을 직접 계산 (공식 이용). \
     *힌트*: `cov`, `var`, `mean` 함수 사용.
 
 
-
-3.  학급 규모가 0일 때, 예측된 평균 언어 점수는 얼마인가? 이 값이 실제로 의미가 있는가?
-
+3.  S\&P500 수익률이 0bp일 때, 예측된 익일 코스피200 수익률은 얼마인가?
 
 
-4.  학급 규모가 30명일 때, 예측된 평균 언어 점수는 얼마인가?
+4.  S\&P500 수익률이 30bp일 때, 예측된 익일 코스피200 수익률은 얼마인가?
 
 
 
 
+## Task 3
 
 
-## Task 3: $R^2$ and goodness of fit
-
-1.  `avgmath_cs`를 `classize`에 대해 회귀(regress)하고 결과를 `math_reg` 객체에 저장.
+1.  `ret_kospi200`를 `ret_sp500`에 대해 회귀(regress)하고 결과를 `kospi_reg` 객체에 저장.
 
 
-2.  `summary(math_reg)`를 실행하여 **(다중)** $R^2$ 값을 확인함. 이 값의 의미를 해석할 것.
+2.  `summary(kospi_reg)`를 실행하여 **(다중)** $R^2$ 값을 확인함. 이 값의 의미를 해석할 것.
 
-
-3.  `classize`와 `avgmath_cs` 간 **상관계수(correlation)**를 제곱하여 계산. 이 값은 **단일 설명변수**(one regressor)를 가진 회귀에서 $R^2$와 상관계수 간의 관계를 보여줌을 보이시오.
-
-
-
-4.  1번과 2번을 `avgverb_cs`에 대해 반복함.\
-    어떤 시험에서 학급 규모의 분산이 학생 점수의 분산을 더 많이 설명하는지 비교하시오.
+3.  `ret_sp500`와 `ret_kospi200` 간 **상관계수(correlation)**를 제곱하여 계산. 이 값은 **단일 설명변수**(one regressor)를 가진 회귀에서 $R^2$와 상관계수 간의 관계를 보여줌을 보이시오.
 
 
 
-5.  (Optional) `broom` 패키지를 설치 및 로드한 후, `math_reg`를 `augment()` 함수에 전달하여 새로운 객체에 저장함.\
-    `avgmath_cs`의 분산(SST)과 예측값 `.fitted`의 분산(SSE)을 사용하여 $R^2$ 값을 직접 계산하시오. (이전 슬라이드의 공식을 참고할 것.)
+4.  1번과 2번을 `ret_kospi200_lead`에 대해 반복함.\
+    동일일 코스피200 수익률과 익일 코스피200 수익률 중 어떤 결과가 S\&P500 수익률 변화로 더 많이 설명되는지 비교하시오.
+
+
+5.  (Optional) `broom` 패키지를 설치 및 로드한 후, `kospi_reg`를 `augment()` 함수에 전달하여 새로운 객체에 저장함.\
+    `ret_kospi200_lead`의 분산(SST)과 예측값의 분산(SSE)을 사용하여 $R^2$ 값을 직접 계산하시오. (이전 슬라이드의 공식을 참고할 것.)
+    - `broom` 패키지의 `augment()` 함수는 회귀 결과에 예측값과 잔차를 추가하는 데 사용됨.\
 

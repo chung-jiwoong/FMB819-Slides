@@ -884,31 +884,6 @@ reg3$coefficients
 
 5.  (Optional) `math`를 `gender`와 `experience` 변수에 대해 회귀 분석하시오. 회귀 계수를 어떻게 해석할 수 있는가? 이러한 회귀 분석 결과를 시각적으로 표현한다면 어떻게 보일 것인가?
 
-------------------------------------------------------------------------
-
-## 🔍 인과 관계를 찾아가는 길
-
-✅ ***데이터를 어떻게 다룰까?*** : 읽기(Read), 정리(Tidy), 시각화(Visualize)...
-
-🚧 ***변수간 관계를 어떻게 요약할까?*** ...단순 / 다중 선형 회귀...계속 학습
-
-✅ 인과 관계(Causality)란 무엇인가?
-
-❌ 전체 모집단을 관측하지 못하면 어떻게 할까?
-
-❌ 우리의 연구 결과가 단순한 무작위(Randomness) 때문일 수도 있을까?
-
-❌ 실제로 외생성을 어떻게 찾아낼 수 있을까?
-
-------------------------------------------------------------------------
 
 
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-
-::: {style="display: flex; justify-content: center; align-items: center; height: 70vh;"}
-<h2 style="color: #ff6666; text-align: center; font-family: &#39;Pacifico&#39;, cursive; font-size: 50px;">
-
-THE END!
-
-</h2>
-:::
+# THE END!

@@ -14,6 +14,8 @@ revealjs-plugins:
   - revealjs-text-resizer # Thanks to https://github.com/gadenbuie/revealjs-text-resizer#readme
 ---
 
+
+
 ```{r setup, include=FALSE,warning=FALSE,message=FALSE}
 options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(
@@ -28,176 +30,208 @@ knitr::opts_chunk$set(
 )
 
 library("tidyverse")
-library("kableExtra")
 # library("repmis")
-library("gridExtra")
-library("haven")
-library("ggpubr")
-library("huxtable")
-library(countdown)
-# countdown style
-countdown(
-  color_border              = "#d90502",
-  color_text                = "black",
-  color_running_background  = "#d90502",
-  color_running_text        = "white",
-  color_finished_background = "white",
-  color_finished_text       = "#d90502",
-  color_finished_border     = "#d90502"
-)
+
+if (requireNamespace("kableExtra", quietly = TRUE)) {
+  library("kableExtra")
+}
+
+if (requireNamespace("countdown", quietly = TRUE)) {
+  library(countdown)
+  # countdown style
+  countdown(
+    color_border              = "#d90502",
+    color_text                = "black",
+    color_running_background  = "#d90502",
+    color_running_text        = "white",
+    color_finished_background = "white",
+    color_finished_text       = "#d90502",
+    color_finished_border     = "#d90502"
+  )
+} else {
+  countdown <- function(minutes = 0, top = 0, ...) {
+    paste0("[Timer: ", minutes, " min]")
+  }
+}
 ```
 
 ## Today's Agenda
 
 -   ***단순 선형 회귀 모형(Simple Linear Regression Model)*** 및 ***최소제곱법(Ordinary Least Squares, OLS)*** *추정* 소개.
 
--   실증 분석: 학급 규모와 학생 성취도의 관계
+-   실증 분석: 코스피200 지수와 S&P500 지수의 관계
 
--   **인과적(causal)** 관계를 어떻게 밝힐 수 있을까?
 
 ------------------------------------------------------------------------
 
-## 학급 규모와 학생 성취도
+## 코스피200 지수와 S&P500 지수
 
--   어떤 정책이 학생 학습 성취도 향상시키는가?
+-   "S&P500이 움직일 때 코스피200이 얼마나 같이 움직이는가?"
 
--   학급 규모 축소는 **수십 년간** 교육 정책 논쟁의 핵심 주제였음.
+-   이번 예시에서는 웹에서 코스피200/ S&P500 일별 종가를 불러와 수익률을 계산함.
 
--   [Joshua Angrist와 Victor Lavy (1999)](https://economics.mit.edu/files/8273)의 연구에서 사용된 데이터 분석. 해당 데이터는 [Raj Chetty와 Greg Bruich의 강의](https://opportunityinsights.org/course/)에서 제공됨.
+-   실습에서는 두 관계를 함께 봄:
+    1) **동일일 관계**: $r^{KOSPI200}_t$ vs $r^{SP500}_t$
+    2) **익일 관계**: $r^{KOSPI200}_{t+1}$ vs $r^{SP500}_t$
 
--   1991년 이스라엘 유대인 공립 초등학교 5학년생(10-11세)의 시험 점수와 학급/학교 특성 포함.
-
--   국가 단위 시험을 통해 **수학** 및 (히브리어) **읽기** 능력 평가했으며, 원점수는 1-100 사이 척도로 변환됨.
 
 ------------------------------------------------------------------------
 
 ## Task 1 {background-color="#ffebf0"}
 
-::: {style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;"}
-`r countdown(minutes = 7, top = 0)`
-:::
+`r countdown(minutes = 7, top = "20px", right = "10px", font_size = "0.8em")`
 
-1.  데이터를 [여기](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/grade5.dta)에서 다운로드해서 `grades`로 저장하시오.\
-    **힌트**: `haven` 라이브러리의 `read_dta` 함수 사용해서 `.dta` 형식의 파일 불러오면 됨. (참고: *.dta*는 [*Stata*](https://www.stata.com/)에서 사용하는 데이터 파일 확장자임.)
+
+1.  코스피200 및 S&P500 일별 종가 데이터를 불러와 날짜를 기준으로 두 지수를 병합한 뒤, `merged_px` 객체를 생성하시오. 그리고 일별 수익률 변수(`ret_sp500`, `ret_kospi200`, `ret_kospi200_lead`)를 생성하시오.\
+
+
+```{r, echo=FALSE, eval=TRUE}
+library(dplyr)
+library(tidyverse)
+
+sp500_px <- read_csv("https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/data/%5Espx_d.csv") |>
+  transmute(date = as.Date(Date), sp500_close = as.numeric(Close)) |> 
+  arrange(date)
+
+ks200_px <- read_csv("https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/data/%5Ekospi_d.csv") |>
+  transmute(date = as.Date(Date), kospi200_close = as.numeric(Close)) |> 
+  arrange(date)
+
+merged_px <- inner_join(sp500_px, ks200_px, by = "date") |> 
+  mutate(
+    ret_sp500 =  10000 * (log(sp500_close) - log(lag(sp500_close))),
+    ret_kospi200 =  10000 * (log(kospi200_close) - log(lag(kospi200_close)))
+  ) |> 
+  mutate(ret_kospi200_lead = lead(ret_kospi200)) |> 
+  drop_na()
+```
+
+
 
 2.  데이터셋 설명:
 
-    -   관측 단위는? 즉, 각 행이 무엇을 의미하는가?\
     -   총 몇 개의 관측치가 있는가?\
-    -   데이터셋을 확인하고 어떤 변수가 있는지 확인하시오. `avgmath`와 `avgverb`는 뭘 의미하는가?\
-    -   `skimr` 패키지의 `skim` 함수 사용해서 `classize`, `avgmath`, `avgverb` 변수에 대한 기본적인 요약 통계 확인함.\
+    -   데이터셋을 확인하고 어떤 변수가 있는지 확인하시오.
+    -   `skimr` 패키지의 `skim` 함수 사용해서 생성한 수익률 변수에 대한 기본적인 요약 통계 확인.\
         **힌트**: `dplyr`의 `select` 사용해서 변수 선택한 후 `%>%`로 `skim()` 적용하면 됨.
 
-3.  학급 규모와 학생 성취도 간 실제 (선형) 관계에 대해 어떤 관계가 있을 것이라 생각하는가?
-
-4.  학급 규모와 수학/언어 점수 간 상관관계는?
-
-```{r, echo=FALSE}
-# 데이터 불러오기
-grades = read_dta(file = "https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/grade5.dta")
+```{r, echo=FALSE, eval=FALSE}
+if (!requireNamespace("skimr")) {install.packages("skimr")}
+library(skimr)
+returns_raw <- merged_px %>% select(date, ret_sp500, ret_kospi200, ret_kospi200_lead)
+skim(returns_raw)
 ```
+
+3.  S\&P500 수익률(`ret_sp500`)과 코스피200 수익률(`ret_kospi200`, `ret_kospi200_lead`)의 상관관계는?
+
+```{r, echo=FALSE, eval=FALSE}
+cor(returns_raw$ret_sp500, returns_raw$ret_kospi200)
+cor(returns_raw$ret_sp500, returns_raw$ret_kospi200_lead)
+```
+
 
 ------------------------------------------------------------------------
 
-## 학급 규모와 학생 성취도: Scatter plot
+## 코스피200 지수와 S&P500 지수: Scatter plot
+
 
 ::::: columns
 ::: {.column width="50%"}
 ```{r, echo=FALSE, fig.height=6}
-g_math = ggplot(grades, aes(x = classize, y = avgmath)) + 
+returns_raw <- merged_px %>% select(date, ret_sp500, ret_kospi200, ret_kospi200_lead)
+
+g_sameday = ggplot(returns_raw, aes(x = ret_sp500, y = ret_kospi200)) + 
     geom_point(size = 2, alpha = 0.5) +
-    xlim(0, 45) +
-    ylim(0, 100) +
     labs(
-      x = "Class size",
-      y = "Average score",
-      title = "Mathematics") +
+      x = "S&P500 return",
+      y = "Return",
+      title = "KOSPI200 (same day)") +
     theme_bw(base_size = 20)
-g_math
+g_sameday
 ```
 :::
 
 ::: {.column width="50%"}
 ```{r, echo=FALSE,fig.height=6}
-g_verb = ggplot(grades, aes(x = classize, y = avgverb)) + 
+g_lead = ggplot(returns_raw, aes(x = ret_sp500, y = ret_kospi200_lead)) + 
     geom_point(size = 2, alpha = 0.5) +
-    xlim(0,45) +
-    ylim(0, 100) +
-    labs(x = "Class size",
-         y = "Average score",
-         title = "Reading") +
+    labs(x = "S&P500 return",
+         y = "Return",
+         title = "KOSPI200 (next day)") +
     theme_bw(base_size = 20)
-g_verb
+g_lead
 ```
 :::
 :::::
 
--   상관계수에서 보듯이 어느 정도 양의 관계 있음. 학급 규모별 평균 점수 계산해서 더 명확하게 살펴보자
+-   S&P500 수익률을 구간(bin)으로 묶어 평균 관계를 더 명확하게 살펴보자.
 
 ------------------------------------------------------------------------
 
-## 학급 규모와 학생 성취도: Binned Scatter Plot
+## 코스피200 지수와 S&P500 지수: Binned Scatter Plot
+
 
 ::::: columns
 ::: {.column width="50%"}
 ```{r, echo=FALSE, fig.height=6}
-# Compute average scores by class size
-grades_avg_cs <- grades %>%
-  group_by(classize) %>%
-  summarise(avgmath_cs = mean(avgmath),
-            avgverb_cs = mean(avgverb))
+library(dplyr)
+# Create bins for S&P500 (10bp intervals)
+returns_raw <- returns_raw |>
+  mutate(ret_sp500_bin = round(ret_sp500 / 10) * 10)
 
-g_math_cs = ggplot(grades_avg_cs, aes(x = classize, y = avgmath_cs)) + 
+# Compute average returns by S&P500 return bins
+returns_bin <- returns_raw |>
+  group_by(ret_sp500_bin) |>
+  summarise(ret_kospi200_mean = mean(ret_kospi200),
+            ret_kospi200_lead_mean = mean(ret_kospi200_lead),
+            .groups = "drop") 
+
+g_sameday_bin = ggplot(returns_bin, aes(x = ret_sp500_bin, y = ret_kospi200_mean)) + 
     geom_point(size = 2) +
-    xlim(0, 45) +
-    ylim(0, 100) +
     labs(
-      x = "Class size",
-      y = "Average score",
-      title = "Mathematics") +
+      x = "S&P500 return bin",
+      y = "Average return",
+      title = "KOSPI200 (same day)") +
     theme_bw(base_size = 20)
-g_math_cs
+g_sameday_bin
 ```
 :::
 
 ::: {.column width="50%"}
 ```{r, echo=FALSE,fig.height=6}
-g_verb_cs = ggplot(grades_avg_cs, aes(x = classize, y = avgverb_cs)) + 
+g_lead_bin = ggplot(returns_bin, aes(x = ret_sp500_bin, y = ret_kospi200_lead_mean)) + 
     geom_point(size = 2) +
-    xlim(0, 45) +
-    ylim(0, 100) +
     labs(
-      x = "Class size",
-      y = "Average score",
-      title = "Reading") +
+      x = "S&P500 return bin",
+      y = "Average return",
+      title = "KOSPI200 (next day)") +
     theme_bw(base_size = 20)
-g_verb_cs
+g_lead_bin
 ```
 :::
 :::::
 
+
 ------------------------------------------------------------------------
 
-## 학급 규모와 학생 성취도: Regression Line
+## 코스피200 지수와 S&P500 지수: Regression Line
 
-학급 규모와 학생 성취도의 관계를 시각적으로 요약하는 방법: **산점도를 통과하는 선(Line)**
+코스피200 지수와 S&P500 지수의 관계를 시각적으로 요약하는 방법: **산점도를 통과하는 선(Line)**
 
 ::::: columns
 ::: {.column width="50%"}
 ```{r, echo=FALSE, fig.align='left', fig.height=4, fig.width=7}
-g_math_cs +
-    ylim(50, 80) +
+g_sameday_bin +
     theme_bw(base_size = 14) +
-    geom_hline(yintercept = 65, col = "#d90502")
+    geom_hline(yintercept = 0, col = "#d90502")
 ```
 :::
 
 ::: {.column width="50%"}
 ```{r,echo=FALSE, fig.align='left', fig.height=4,fig.width=7}
-g_math_cs +
-  ylim(50, 80) +
+g_sameday_bin +
   theme_bw(base_size = 14) +
-  geom_abline(intercept = 55,slope = 0.6, col = "#d90502")
+  geom_abline(intercept = -10, slope = 0.8, col = "#d90502")
 ```
 :::
 :::::
@@ -208,18 +242,17 @@ g_math_cs +
 
 ## 단순 선형 회귀 (Simple Linear Regression)
 
-지금까지 분석을 좀 더 공식적으로 정리하자면
+지금까지 분석을 정리하자면
 
 -   두 변수 간의 관계에 관심 있음:
 
-    -   결과변수 (종속변수, dependent variable): *average mathematics score* $(y)$
+    -   결과변수 (종속변수, dependent variable): *KOSPI200 return* $(y)$
 
-    -   설명변수 (독립변수, independent variable): *class size* $(x)$
+    -   설명변수 (독립변수, independent variable): *S&P500 return* $(x)$
 
--   각 학급 $i$에 대해 $x_i$와 $y_i$를 관측할 수 있음. 예, 학급 규모와 평균 수학 점수의 *결합 분포(joint distribution)*를 시각화할 수 있음.
+-   각 거래일 $i$에 대해 $x_i$와 $y_i$를 관측할 수 있음. 예, S&P500 수익률과 코스피200 수익률의 *결합 분포(joint distribution)*를 시각화할 수 있음.
 
 -   회귀선은 이 관계를 **선(line)** 하나로 요약하고 있음. 절편 $b_0$와 기울기 $b_1$을 갖는 선의 방정식은 다음과 같음:
-
 $$
 \widehat{y}_i = b_0 + b_1 x_i
 $$
@@ -254,11 +287,10 @@ base_plot
 ## 직선의 방정식
 
 ```{r, echo = F, fig.width = 10, fig.height = 5}
-library('latex2exp')
 plot_b_0 <- base_plot + 
     annotate(geom = "segment", x = 0, xend = 0, y = 0, yend = b_0, arrow = arrow(angle = 12, type = "closed"), color = "#DE9854") +
     annotate(geom = "segment", x = -5, xend = 0, y = b_0, yend = b_0, arrow = arrow(angle = 12, type = "closed", ends = "first"), color = "#DE9854") +
-    scale_y_continuous(limits = c(0,100), expand = c(0,0), breaks = c(0,25,b_0,50,75,100), labels = c("0","25",parse(text = TeX("$b_0$")),"50","75","100"), minor_breaks = seq(0,100,12.5)) +
+    scale_y_continuous(limits = c(0,100), expand = c(0,0), breaks = c(0,25,b_0,50,75,100), labels = c("0","25","b0","50","75","100"), minor_breaks = seq(0,100,12.5)) +
     theme(axis.text.y = element_text(color = c("grey30", "grey30", "#DE9854", "grey30", "grey30", "grey30")),
           axis.ticks.y = element_line(color = c("grey30", "grey30", "#DE9854", "grey30", "grey30", "grey30")),
           panel.grid.minor = element_line(color = c("grey92", "grey92", "grey92", "grey92", "grey92", "grey92")),
@@ -327,86 +359,59 @@ plot_ex + geom_line(color = "#d90502")
 
 ------------------------------------------------------------------------
 
-## Simple Linear Regression: Graphically
 
-```{r, echo = F, fig.width = 10, fig.height = 5}
-plot_1 <- g_math_cs +
-    ylim(50, 80) +
-    theme_bw(base_size = 14)
+## Simple Linear Regression: Graphically 1
+
+```{r slr1, echo = FALSE, fig.width = 10, fig.height = 5}
+focus_x <- returns_bin$ret_sp500_bin[which.min(abs(returns_bin$ret_sp500_bin - 600))]  # 600에 가장 가까운 ret_sp500_bin 값 선택
+
+plot_1 <- g_sameday_bin +
+  theme_bw(base_size = 14)
+
 plot_1
 ```
 
 ------------------------------------------------------------------------
 
-## Simple Linear Regression: Graphically
+## Simple Linear Regression: Graphically 2
 
 ```{r, echo = F, fig.width = 10, fig.height = 5}
-plot_2 <- plot_1 +
-  stat_smooth(data = grades_avg_cs, method = "lm", se = FALSE, colour = "#d90502") +
-  annotate("text", x = 6.5, y = 64, label = "hat(y)", parse = TRUE, colour = "#d90502", size = 6)
+plot_2 <- g_sameday_bin +
+  theme_bw(base_size = 14) +
+  stat_smooth(data = returns_bin, method = "lm", se = FALSE, colour = "#d90502") +
+  annotate("text", x = -260, y = 230, label = "hat(y)", parse = TRUE, colour = "#d90502", size = 6)
 plot_2
 ```
 
+
+
 ------------------------------------------------------------------------
 
-## Simple Linear Regression: Graphically
+## Simple Linear Regression: Graphically 3
 
 ```{r, echo = F, fig.width = 10, fig.height = 5}
-g_math_cs +
-    ylim(50, 80) +
-    theme_bw(base_size = 14) +
+kospi_sp500_reg <- lm(ret_kospi200_mean ~ ret_sp500_bin, data = returns_bin)
+kospi_sp500_reg <- broom::augment(kospi_sp500_reg)  # 회귀 결과에 예측값과 잔차 추가
+
+g_sameday_bin +
+  theme_bw(base_size = 14) +
   stat_smooth(method = "lm", se = FALSE, colour = "#d90502") +
-  annotate("text", x = 6.5, y = 64, label = "hat(y)", parse = TRUE, colour = "#d90502", size = 6) +
-  geom_point(data = grades_avg_cs %>% filter(classize == 17), aes(x = classize, y = avgmath_cs), color = "#d90502", size = 4) +
-  annotate("text", x = 17, y = 69, label = "y[x = 17]", parse = TRUE, colour = "#d90502", size = 6)
+  annotate("text", x = -260, y = 230, label = "hat(y)", parse = TRUE, colour = "#d90502", size = 6) +
+  geom_segment(data = kospi_sp500_reg,
+               aes(xend = ret_sp500_bin, yend = .fitted), color = "#d90502", size = 0.5)
 ```
 
 ------------------------------------------------------------------------
 
-## Simple Linear Regression: Graphically
-
-```{r, echo = F, fig.width = 10, fig.height = 5}
-math_class_reg <- lm(avgmath_cs ~ classize, data = grades_avg_cs)
-math_class_reg <- broom::augment(math_class_reg)
-
-g_math_cs +
-    ylim(50, 80) +
-    theme_bw(base_size = 14) +
-  stat_smooth(method = "lm", se = FALSE, colour = "#d90502") +
-  annotate("text", x = 6.5, y = 64, label = "hat(y)", parse = TRUE, colour = "#d90502", size = 6) +
-  geom_point(data = grades_avg_cs %>% filter(classize == 17), aes(x = classize, y = avgmath_cs), color = "#d90502", size = 4) +
-  annotate("text", x = 17, y = 69, label = "y[x = 17]", parse = TRUE, colour = "#d90502", size = 6) +
-  geom_segment(data = math_class_reg %>% filter(classize == 17),
-               aes(xend = classize, yend = .fitted), color = "#d90502", size = 1) +
-  annotate("text", x = 18, y = 65.55, label = "e[x = 17]", parse = TRUE, colour = "#d90502", size = 6)
-```
-
-------------------------------------------------------------------------
-
-## Simple Linear Regression: Graphically
-
-```{r, echo = F, fig.width = 10, fig.height = 5}
-g_math_cs +
-    ylim(50, 80) +
-    theme_bw(base_size = 14) +
-  stat_smooth(method = "lm", se = FALSE, colour = "#d90502") +
-  annotate("text", x = 6.5, y = 64, label = "hat(y)", parse = TRUE, colour = "#d90502", size = 6) +
-  geom_segment(data = math_class_reg,
-               aes(xend = classize, yend = .fitted), color = "#d90502", size = 0.5)
-```
-
-------------------------------------------------------------------------
-
-## Simple Linear Regression: Graphically
+## Simple Linear Regression: Graphically 4
 
 ```{r, echo = F, out.width = "100%", fig.height = 5}
-g_math_cs +
-    ylim(50, 80) +
+g_sameday_bin +
     theme_bw(base_size = 14) +
   stat_smooth(method = "lm", se = FALSE, colour = "#d90502") +
-  annotate("text", x = 6.5, y = 64, label = "hat(y)", parse = TRUE, colour = "#d90502", size = 6) +
-  geom_segment(data = math_class_reg,
-               aes(xend = classize, yend = .fitted), color = "#d90502", size = 0.5)
+  annotate("text", x = -260, y = 230, label = "hat(y)", parse = TRUE, colour = "#d90502", size = 6) +
+  geom_segment(data = kospi_sp500_reg,
+               aes(xend = ret_sp500_bin, yend = .fitted), color = "#d90502", size = 0.5)
 ```
 
 무엇을 "최소화"하는 직선을 구해야할까?
@@ -419,55 +424,13 @@ g_math_cs +
 
 -   $\sum_{i = 1}^N e_1^2 + \dots + e_N^2$ 값이 **최소화하는** $(b_0, b_1)$ 값을 선택.
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE,fig.width=7,fig.height = 4}
-g_math_cs +
-    ylim(50, 80) +
-    xlim(0, 50) +
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7,fig.height = 4}
+g_sameday_bin +
+    ylim(-300, 300) +
+    xlim(-400, 400) +
     theme_bw(base_size = 14) +
     stat_smooth(method = "lm", se = FALSE, colour = "darkgreen") +
-  coord_fixed(ratio = 0.65)
-```
-
-------------------------------------------------------------------------
-
-## Ordinary Least Squares (OLS) 추정
-
--   오차(error)의 부호 $(+/-)$가 서로 상쇄. **제곱 잔차(squared residuals)**를 고려 $$\forall i \in [1,N], e_i^2 = (y_i - \widehat y_i)^2 = (y_i - b_0 - b_1 x_i)^2$$
-
--   $\sum_{i = 1}^N e_1^2 + \dots + e_N^2$ 값이 **최소화하는** $(b_0, b_1)$ 값을 선택.
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE,fig.width=7,fig.height = 3.5}
-g_math_cs +
-    ylim(50, 80) +
-    xlim(0, 50) +
-    theme_bw(base_size = 14) +
-    stat_smooth(method = "lm", se = FALSE, colour = "darkgreen") +
-    geom_rect(data = math_class_reg,
-              aes(
-              xmin = classize,
-              xmax = classize + abs(.resid)*0.65,
-              ymin = avgmath_cs,
-              ymax = avgmath_cs - .resid),
-              fill = "darkgreen",
-              alpha = 0.3) +
-  coord_fixed(ratio = 0.65)
-```
-
-------------------------------------------------------------------------
-
-## Ordinary Least Squares (OLS) 추정
-
-```{r, echo = F, out.extra = 'style="border: none;"'}
-knitr::include_url("https://gustavek.shinyapps.io/reg_simple/", height = "800px")
-```
-
-
-------------------------------------------------------------------------
-
-## Ordinary Least Squares (OLS) 추정
-
-```{r, echo = F, out.extra = 'style="border: none;"'}
-knitr::include_url("https://gustavek.shinyapps.io/SSR_cone/", height = "800px")
+  coord_fixed(ratio = 1)
 ```
 
 ------------------------------------------------------------------------
@@ -512,33 +475,23 @@ knitr::include_url("https://gustavek.shinyapps.io/SSR_cone/", height = "800px")
 lm(formula = dependent variable ~  independent variable, data = data.frame containing the data)
 ```
 
-***학급 규모와 학생 성적***
+***코스피200 지수와 S&P500 지수***
 
--   다음과 같은 선형 모형을 OLS로 추정하자: $\textrm{average math score}_i = b_0 + b_1 \textrm{class size}_i + e_i$
+-   다음과 같은 선형 모형을 OLS로 추정: 
+  $\textrm{KOSPI200 return}_i = b_0 + b_1 \textrm{S&P500 return}_i + e_i$
 
-::::: columns
-::: {.column width="50%"}
-```{r echo=T, eval = FALSE}
-# OLS regression of class size on average maths score
-lm(avgmath_cs ~ classize, grades_avg_cs) 
-```
-:::
 
-::: {.column width="50%"}
-```{r echo=F, eval = TRUE}
-# OLS regression of class size on average maths score
-lm(avgmath_cs ~ classize, grades_avg_cs) 
-```
-:::
-:::::
 
-------------------------------------------------------------------------
+
+
+-----------------------------------------------------------
 
 ## Ordinary Least Squares (OLS): Prediction
 
 ```{r echo=F, eval = TRUE}
-# OLS regression of class size on average maths score
-lm(formula = avgmath_cs~classize, data = grades_avg_cs)
+# OLS regression of KOSPI200 return on S&P500 return
+kospi_reg <- lm(formula = ret_kospi200_mean ~ ret_sp500_bin, data = returns_bin)
+kospi_reg
 ```
 
 이 결과가 의미하는 것 ($i$ 첨자 생략):
@@ -546,17 +499,15 @@ lm(formula = avgmath_cs~classize, data = grades_avg_cs)
 $$
 \begin{aligned}
 \widehat y &= b_0 + b_1 x \\
-\widehat {\text{average math score}} &= b_0 + b_1 \cdot \text{class size} \\
-\widehat {\text{average math score}} &= 61.11 + 0.19 \cdot \text{class size}
+\widehat {\text{KOSPI200 return}} &= b_0 + b_1 \cdot \text{S&P500 return}
 \end{aligned}
 $$
 
-학생 수가 26명일 때 예상되는 평균 성적은?
+S\&P500 수익률이 30bp일 때 예상되는 코스피200 수익률은?
 
 $$
 \begin{aligned}
-\widehat {\text{average math score}} &= 61.11 + 0.19 \cdot 26 \\
-\widehat {\text{average math score}} &= 66.08
+\widehat {\text{KOSPI200 return}} &= b_0 + b_1 \cdot 30
 \end{aligned}
 $$
 
@@ -564,27 +515,36 @@ $$
 
 ## Task 2 {background-color="#ffebf0"}
 
-::: {style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;"}
-`r countdown(minutes = 5, top = 0)`
-:::
+`r countdown(minutes = 5, top = "20px", right = "10px", font_size = "0.8em")`
 
-다음 코드를 실행하여 데이터를 학급 규모(class size) 수준에서 집계하시오:
 
-```{r, echo=T, eval = F}
-grades_avg_cs <- grades %>%
-  group_by(classize) %>%
-  summarise(avgmath_cs = mean(avgmath),
-            avgverb_cs = mean(avgverb))
+1.  익일 코스피200 평균 수익률(`ret_kospi200_lead`)을 S\&P500 수익률 구간(`ret_sp500`)에 대해 회귀분석 수행. 회귀 계수(coefficients)를 해석하시오.
+
+```{r, echo=F, eval=F}
+kospi_reg <- lm(ret_kospi200_lead ~ ret_sp500, data = merged_px)
+summary(kospi_reg)
 ```
-
-1.  평균 언어 점수(`avgverb_cs`)를 학급 규모(`classize`)에 대해 회귀분석 수행. 회귀 계수(coefficients)를 해석하시오.
 
 2.  이 회귀분석에서 OLS 계수 $b_0$ 및 $b_1$을 직접 계산 (공식 이용). \
     *힌트*: `cov`, `var`, `mean` 함수 사용.
+```{r, echo=F, eval=F}
+b_1 <- cov(merged_px$ret_sp500, merged_px$ret_kospi200_lead) / var(merged_px$ret_sp500)
+b_0 <- mean(merged_px$ret_kospi200_lead) - b_1 * mean(merged_px$ret_sp500)
+b_0
+b_1
+```
 
-3.  학급 규모가 0일 때, 예측된 평균 언어 점수는 얼마인가? 이 값이 실제로 의미가 있는가?
+3.  S\&P500 수익률이 0bp일 때, 예측된 익일 코스피200 수익률은 얼마인가?
 
-4.  학급 규모가 30명일 때, 예측된 평균 언어 점수는 얼마인가?
+```{r, echo=F, eval=F}
+b_0 + b_1 * 0
+```
+
+4.  S\&P500 수익률이 30bp일 때, 예측된 익일 코스피200 수익률은 얼마인가?
+
+```{r, echo=F, eval=F}
+b_0 + b_1 * 30
+```
 
 ------------------------------------------------------------------------
 
@@ -649,9 +609,12 @@ par(op)
 ```
 
 ```{r,echo = FALSE}
-ch = kable(round(covs,3))
-ch %>%
-   kable_styling(bootstrap_options = "striped", font_size = 20)
+ch = knitr::kable(round(covs,3))
+if (requireNamespace("kableExtra", quietly = TRUE)) {
+  ch %>% kableExtra::kable_styling(bootstrap_options = "striped", font_size = 20)
+} else {
+  ch
+}
 ```
 
 
@@ -672,7 +635,7 @@ ch %>%
 :::
 
 ::: {.column width="50%"}
--   예를 들어, 아래 데이터를 사용해 이전 회귀 모델을 적용할 수 있음:
+-   예를 들어, 아래 데이터를 사용해 다중 회귀 모델을 적용할 수 있음:
 
 ```{r non-line-cars-ols2, echo=FALSE, fig.height=6}
 data(mtcars)
@@ -695,7 +658,7 @@ mtcars %>% ggplot(aes(x = hp, y = mpg)) +
 
 ## 분산 분석 (Analysis of Variance)
 
--   다음 관계를 기억할 것:\
+-   다음 관계를 기억할 것:
     $$
     y_i = \widehat{y}_i + e_i
     $$
@@ -706,12 +669,14 @@ mtcars %>% ggplot(aes(x = hp, y = mpg)) +
     &= Var(\widehat{y}) + Var(e)
     \end{align}$$
 
+-   총 변동 (SST) = 모델이 설명한 변동 (SSE) + 설명되지 않은 변동 (SSR)
+
 -   왜냐하면:
 
     -   $Var(x+y) = Var(x) + Var(y) + 2Cov(x,y)$
     -   $Cov(\hat{y},e) = 0$
 
--   총 변동 (SST) = 모델이 설명한 변동 (SSE) + 설명되지 않은 변동 (SSR)
+
 
 ------------------------------------------------------------------------
 
@@ -723,7 +688,7 @@ $$
 R^2 = \frac{\text{variance explained}}{\text{total variance}} = \frac{SSE}{SST} = 1 - \frac{SSR}{SST}\in[0,1]
 $$
 
-  - $R^2$ 값이 **1에 가까울수록**, 모델의 **설명력(explanatory power)**이 ***높음.***
+  - $R^2$ 값이 **1에 가까울수록**, 모델의 **설명력**이 ***높음.***
   - $R^2$ 값이 **0에 가까울수록**, 모델의 **설명력**이 ***낮음***.
   - 예를 들어, $R^2 = 0.5$이면, **$x$의 변화가 $y$의 변화 중 50%를 설명함**.
 
@@ -736,23 +701,46 @@ $$
 
 ## Task 3 {background-color="#ffebf0"}
 
-::: {style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;"}
-`r countdown(minutes = 10, top = 0)`
-:::
-
-1.  `avgmath_cs`를 `classize`에 대해 회귀(regress)하고 결과를 `math_reg` 객체에 저장.
-
-2.  `summary(math_reg)`를 실행하여 **(다중)** $R^2$ 값을 확인함. 이 값의 의미를 해석할 것.
-
-3.  `classize`와 `avgmath_cs` 간 **상관계수(correlation)**를 제곱하여 계산. 이 값은 **단일 설명변수**(one regressor)를 가진 회귀에서 $R^2$와 상관계수 간의 관계를 보여줌을 보이시오.
-
-4.  1번과 2번을 `avgverb_cs`에 대해 반복함.\
-    어떤 시험에서 학급 규모의 분산이 학생 점수의 분산을 더 많이 설명하는지 비교하시오.
-
-5.  (Optional) `broom` 패키지를 설치 및 로드한 후, `math_reg`를 `augment()` 함수에 전달하여 새로운 객체에 저장함.\
-    `avgmath_cs`의 분산(SST)과 예측값 `.fitted`의 분산(SSE)을 사용하여 $R^2$ 값을 직접 계산하시오. (이전 슬라이드의 공식을 참고할 것.)
+`r countdown(minutes = 10, top = "20px", right = "10px", font_size = "0.8em")`
 
 
+1.  `ret_kospi200`를 `ret_sp500`에 대해 회귀(regress)하고 결과를 `kospi_reg` 객체에 저장.
+```{r, echo=F, eval=F}
+kospi_reg <- lm(ret_kospi200 ~ ret_sp500, data = merged_px)
+summary(kospi_reg)
+```
+
+2.  `summary(kospi_reg)`를 실행하여 **(다중)** $R^2$ 값을 확인함. 이 값의 의미를 해석할 것.
+
+3.  `ret_sp500`와 `ret_kospi200` 간 **상관계수(correlation)**를 제곱하여 계산. 이 값은 **단일 설명변수**(one regressor)를 가진 회귀에서 $R^2$와 상관계수 간의 관계를 보여줌을 보이시오.
+
+```{r, echo=F, eval=F}
+cor(merged_px$ret_sp500, merged_px$ret_kospi200)^2
+```
+
+4.  1번과 2번을 `ret_kospi200_lead`에 대해 반복함.\
+    동일일 코스피200 수익률과 익일 코스피200 수익률 중 어떤 결과가 S\&P500 수익률 변화로 더 많이 설명되는지 비교하시오.
+```{r, echo=F, eval=F}
+kospi_reg <- lm(ret_kospi200_lead ~ ret_sp500, data = merged_px)
+summary(kospi_reg)
+```
+
+5.  (Optional) `broom` 패키지를 설치 및 로드한 후, `kospi_reg`를 `augment()` 함수에 전달하여 새로운 객체에 저장함.\
+    `ret_kospi200_lead`의 분산(SST)과 예측값의 분산(SSE)을 사용하여 $R^2$ 값을 직접 계산하시오. (이전 슬라이드의 공식을 참고할 것.)
+    - `broom` 패키지의 `augment()` 함수는 회귀 결과에 예측값과 잔차를 추가하는 데 사용됨.\
+```{r, echo=F, eval=F}
+if (!requireNamespace("broom")) {install.packages("broom")}
+library(broom)
+kospi_reg_aug <- augment(kospi_reg) # 회귀 결과에 예측값과 잔차 추가
+SST <- var(merged_px$ret_kospi200_lead) * (nrow(merged_px) - 1)
+SSE <- var(kospi_reg_aug$.fitted) * (nrow(kospi_reg_aug) - 1)
+R_squared <- SSE / SST
+R_squared
+```
 
 
-THE END!
+
+
+# THE END!
+
+

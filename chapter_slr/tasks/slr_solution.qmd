@@ -1,213 +1,140 @@
 ---
-title: "Simple Linear Regression"
-format: html
+title: "수업 과제"
+author: "홍길동 (2025012345)"       #이름과 학번을 넣으세요
+date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
+format: 
+  html:
+    toc: false
+    theme: default
+echo: true  
+include: true 
 ---
 
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(
-    echo = TRUE,
-    message = FALSE,
-    warning = FALSE,
-    comment = "##")
-```
-
-## Task 1: Getting to know the data
-
-1.  데이터를 [여기](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/grade5.dta)에서 다운로드해서 `grades`로 저장하시오.\
-    **힌트**: `haven` 라이브러리의 `read_dta` 함수 사용해서 `.dta` 형식의 파일 불러오면 됨. (참고: *.dta*는 [*Stata*](https://www.stata.com/)에서 사용하는 데이터 파일 확장자임.)
-
 ```{r}
-library(haven)
-link <- "https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/grade5.dta"
-grades <- read_dta(link)
+knitr::opts_chunk$set(echo = TRUE)
 ```
+
+
+
+## Task 1 
+
+
+1.  코스피200 및 S&P500 일별 종가 데이터를 불러와 날짜를 기준으로 두 지수를 병합한 뒤, `merged_px` 객체를 생성하시오. 그리고 일별 수익률 변수(`ret_sp500`, `ret_kospi200`, `ret_kospi200_lead`)를 생성하시오.\
+
+
+```{r, echo=FALSE, eval=TRUE}
+library(dplyr)
+library(tidyverse)
+
+sp500_px <- read_csv("https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/data/%5Espx_d.csv") |>
+  transmute(date = as.Date(Date), sp500_close = as.numeric(Close)) |> 
+  arrange(date)
+
+ks200_px <- read_csv("https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/data/%5Ekospi_d.csv") |>
+  transmute(date = as.Date(Date), kospi200_close = as.numeric(Close)) |> 
+  arrange(date)
+
+merged_px <- inner_join(sp500_px, ks200_px, by = "date") |> 
+  mutate(
+    ret_sp500 =  10000 * (log(sp500_close) - log(lag(sp500_close))),
+    ret_kospi200 =  10000 * (log(kospi200_close) - log(lag(kospi200_close)))
+  ) |> 
+  mutate(ret_kospi200_lead = lead(ret_kospi200)) |> 
+  drop_na()
+```
+
+
 
 2.  데이터셋 설명:
 
-    -   관측 단위는? 즉, 각 행이 무엇을 의미하는가?\
     -   총 몇 개의 관측치가 있는가?\
-    -   데이터셋을 확인하고 어떤 변수가 있는지 확인하시오. `avgmath`와 `avgverb`는 뭘 의미하는가?\
-    -   `skimr` 패키지의 `skim` 함수 사용해서 `classize`, `avgmath`, `avgverb` 변수에 대한 기본적인 요약 통계 확인함.\
+    -   데이터셋을 확인하고 어떤 변수가 있는지 확인하시오.
+    -   `skimr` 패키지의 `skim` 함수 사용해서 생성한 수익률 변수에 대한 기본적인 요약 통계 확인.\
         **힌트**: `dplyr`의 `select` 사용해서 변수 선택한 후 `%>%`로 `skim()` 적용하면 됨.
-  
-```{r}
-nrow(grades)
-```
 
-```{r}
-names(grades)
-```
-
-`avgmath`: 학급의 평균 수학 점수
-`avgverb`: 학급의 평균 언어 점수
-
-```{r}
-if (!require("skimr")) install.packages("skimr")
-
+```{r, echo=FALSE, eval=FALSE}
+if (!requireNamespace("skimr")) {install.packages("skimr")}
 library(skimr)
-library(tidyverse)
-
-grades %>%
-    select(classize, avgmath, avgverb) %>%
-    skim()
+returns_raw <- merged_px %>% select(date, ret_sp500, ret_kospi200, ret_kospi200_lead)
+skim(returns_raw)
 ```
 
-`skim` 함수는 변수에 대한 몇 가지 유용한 통계를 제공합니다. 반 크기와 평균 점수 변수에는 결측값이 없습니다. 반 크기는 최소 5명에서 최대 44명까지 분포하며, 평균적으로 약 30명입니다. 작은 반의 수는 비교적 적으며, 25번째 백분위수(1사분위수)는 26명입니다. 또한 평균 수학 점수가 평균 언어 점수보다 약간 낮았으며, 수학 점수의 분포가 언어 점수보다 더 넓게 퍼져 있음을 알 수 있습니다.
+3.  S\&P500 수익률(`ret_sp500`)과 코스피200 수익률(`ret_kospi200`, `ret_kospi200_lead`)의 상관관계는?
 
-3.  학급 규모와 학생 성취도 간 실제 (선형) 관계에 대해 어떤 관계가 있을 것이라 생각하는가?
-
-한편으로는, 작은 반에서는 개별화된 학습이 더 용이할 수 있으며, 교사들이 성취도가 낮은 학생들을 더 쉽게 모니터링할 수 있습니다. 그러나 교사들이 작은 반의 장점을 충분히 활용할 수 있도록 훈련되지 않았다면, 작은 반이 반드시 유익하지 않을 수도 있습니다.  
-
-또한, 국가에 따라 작은 반이 경제적으로 열악한 지역에서 더 흔할 수 있으며, 이 경우 반 크기와 학생 성취도 사이에 **양의 관계**가 나타날 수 있습니다. 반대로, 보다 신중한 부모들은 작은 반이 자녀에게 더 유리할 것이라고 생각하여 반 크기가 작은 지역으로 이사할 가능성이 높으며, 이 경우 반 크기와 학생 성취도 사이에 **음의 관계**가 나타날 가능성이 큽니다.  
-
-산점도를 사용하면 반 크기와 학생 성취도 간의 관계를 처음으로 탐색하는 데 도움이 될 것입니다.
-
-```{r}
-# cowplot 패키지 로드 (ggplot2 그래프를 결합하기 위해 사용)
-library(cowplot)
-
-# 첫 번째 산점도: 반 크기(classize)와 평균 언어 점수(avgverb)의 관계
-scatter_verb <- grades %>%
-    ggplot() +  # ggplot 객체 생성
-    aes(x = classize, y = avgverb) +  # x축: 반 크기, y축: 평균 언어 점수
-    geom_point() +  # 산점도 추가
-    scale_x_continuous(limits = c(0, 45), breaks = seq(0, 45, 5)) +  # x축 범위를 0~45로 설정하고 5 단위로 눈금 추가
-    scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, 20)) +  # y축 범위를 0~100으로 설정하고 20 단위로 눈금 추가
-    labs(x = "Class size",  # x축 라벨 설정
-         y = "Average reading score")  # y축 라벨 설정
-
-# 두 번째 산점도: 반 크기(classize)와 평균 수학 점수(avgmath)의 관계
-scatter_math <- grades %>%
-    ggplot() +  # ggplot 객체 생성
-    aes(x = classize, y = avgmath) +  # x축: 반 크기, y축: 평균 수학 점수
-    geom_point() +  # 산점도 추가
-    scale_x_continuous(limits = c(0, 45), breaks = seq(0, 45, 5)) +  # x축 범위를 0~45로 설정하고 5 단위로 눈금 추가
-    scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, 20)) +  # y축 범위를 0~100으로 설정하고 20 단위로 눈금 추가
-    labs(x = "Class size",  # x축 라벨 설정
-         y = "Average math score")  # y축 라벨 설정
-
-# cowplot의 plot_grid()를 사용하여 두 개의 산점도를 하나의 플롯으로 결합
-plot_grid(scatter_verb, scatter_math, labels = c("Reading", "Mathematics"))
-# labels 옵션을 사용하여 각각의 플롯에 "Reading"과 "Mathematics"라는 레이블 추가
+```{r, echo=FALSE, eval=FALSE}
+cor(returns_raw$ret_sp500, returns_raw$ret_kospi200)
+cor(returns_raw$ret_sp500, returns_raw$ret_kospi200_lead)
 ```
 
-4.  학급 규모와 수학/언어 점수 간 상관관계는?
 
-```{r}
-grades %>%
-    summarise(cor_verb = cor(classize, avgverb),
-             cor_math = cor(classize, avgmath))
+
+
+## Task 2 
+
+
+1.  익일 코스피200 평균 수익률(`ret_kospi200_lead`)을 S\&P500 수익률 구간(`ret_sp500`)에 대해 회귀분석 수행. 회귀 계수(coefficients)를 해석하시오.
+
+```{r, echo=T, eval=T}
+kospi_reg <- lm(ret_kospi200_lead ~ ret_sp500, data = merged_px)
+summary(kospi_reg)
 ```
 
-두 상관계수는 양수이며, 이는 이전 산점도에서 관찰된 양의 상관관계와 일치합니다. 그러나 상관계수는 약 **0.2**로 상당히 낮아, 관계가 그리 강하지 않음을 시사합니다.  
-
-상관계수가 **1**이면 완전한 **양의 선형 관계**를 의미하며, 즉 모든 점이 동일한 직선 위에 놓이게 됩니다. 반대로, 상관계수가 **-1**이면 완전한 **음의 선형 관계**를 의미합니다. 상관계수가 **0**이면 **선형적인 관계가 전혀 없음을** 뜻합니다.
-
-
-## Task 2: OLS Regression
-
-다음 코드를 실행하여 데이터를 학급 규모(class size) 수준에서 집계하시오:
-
-```{r}
-grades_avg_cs <- grades %>%
-  group_by(classize) %>%
-  summarise(avgmath_cs = mean(avgmath),
-            avgverb_cs = mean(avgverb))
-```
-
-1.  평균 언어 점수(`avgverb_cs`)를 학급 규모(`classize`)에 대해 회귀분석 수행. 회귀 계수(coefficients)를 해석하시오.
-
-```{r}
-lm(avgverb_cs ~ classize, grades_avg_cs)
-```
-
-**\( b_0 \) (절편)의 해석:**  반 크기가 0명일 때 예측된 평균 언어 점수는 69.19입니다. 하지만 이는 현실적으로 의미가 없습니다. 왜냐하면 반에 학생이 한 명도 없다면 점수도 존재할 수 없기 때문입니다. 따라서 *표본 외 예측* (out-of-sample predictions), 즉 데이터 범위를 벗어난 값에 대한 예측에는 주의해야 합니다.
-
-**\( b_1 \) (기울기)의 해석:**  평균적으로, 반 크기가 학생 1명 증가할 때 평균 언어 점수가 0.13만큼 증가하는 것으로 나타났습니다.
-
-
-2. 이 회귀분석에서 OLS 계수 $b_0$ 및 $b_1$을 직접 계산 (공식 이용). \
+2.  이 회귀분석에서 OLS 계수 $b_0$ 및 $b_1$을 직접 계산 (공식 이용). \
     *힌트*: `cov`, `var`, `mean` 함수 사용.
-
-```{r}
-cov_x_y = grades_avg_cs %>%
-    summarise(cov(classize, avgmath_cs))
-var_x = var(grades_avg_cs$classize)
-b_1 = cov_x_y / var_x
-b_1
-
-y_bar = mean(grades_avg_cs$avgmath_cs)
-x_bar = mean(grades_avg_cs$classize)
-b_0 = y_bar - b_1 * x_bar
+```{r, echo=T, eval=T}
+b_1 <- cov(merged_px$ret_sp500, merged_px$ret_kospi200_lead) / var(merged_px$ret_sp500)
+b_0 <- mean(merged_px$ret_kospi200_lead) - b_1 * mean(merged_px$ret_sp500)
 b_0
+b_1
+```
+
+3.  S\&P500 수익률이 0bp일 때, 예측된 익일 코스피200 수익률은 얼마인가?
+
+```{r, echo=T, eval=T}
+b_0 + b_1 * 0
+```
+
+4.  S\&P500 수익률이 30bp일 때, 예측된 익일 코스피200 수익률은 얼마인가?
+
+```{r, echo=T, eval=T}
+b_0 + b_1 * 30
 ```
 
 
-3.  학급 규모가 0일 때, 예측된 평균 언어 점수는 얼마인가? 이 값이 실제로 의미가 있는가?
 
-기울기 계수 $b_1$ 는 평균 수학 점수에서 얻은 계수와 매우 유사합니다. 이는 예상된 결과인데, 두 점수에 대한 산점도가 서로 비슷한 패턴을 보였기 때문입니다.
-
+## Task 3
 
 
-4.  학급 규모가 30명일 때, 예측된 평균 언어 점수는 얼마인가?
-
-
-반 크기가 30명일 때의 예측된 평균 언어 점수는 다음과 같습니다:  $69.19 + 0.13 \times 30 = `r 69.19 + 0.13 * 30`$
-
-
-
-
-
-
-## Task 3: $R^2$ and goodness of fit
-
-1.  `avgmath_cs`를 `classize`에 대해 회귀(regress)하고 결과를 `math_reg` 객체에 저장.
-
-```{r}
-math_reg <- lm(avgmath_cs ~ classize, grades_avg_cs)
+1.  `ret_kospi200`를 `ret_sp500`에 대해 회귀(regress)하고 결과를 `kospi_reg` 객체에 저장.
+```{r, echo=T, eval=T}
+kospi_reg <- lm(ret_kospi200 ~ ret_sp500, data = merged_px)
+summary(kospi_reg)
 ```
 
-2.  `summary(math_reg)`를 실행하여 **(다중)** $R^2$ 값을 확인함. 이 값의 의미를 해석할 것.
+2.  `summary(kospi_reg)`를 실행하여 **(다중)** $R^2$ 값을 확인함. 이 값의 의미를 해석할 것.
 
-```{r}
-summary(math_reg)
+3.  `ret_sp500`와 `ret_kospi200` 간 **상관계수(correlation)**를 제곱하여 계산. 이 값은 **단일 설명변수**(one regressor)를 가진 회귀에서 $R^2$와 상관계수 간의 관계를 보여줌을 보이시오.
+
+```{r, echo=T, eval=T}
+cor(merged_px$ret_sp500, merged_px$ret_kospi200)^2
 ```
 
-$R^2$ 값은 약 **0.28**로, 이는 평균 수학 점수의 변동성 중 약 **28%**가 반 크기에 의해 설명된다는 것을 의미합니다.
-
-3.  `classize`와 `avgmath_cs` 간 **상관계수(correlation)**를 제곱하여 계산. 이 값은 **단일 설명변수**(one regressor)를 가진 회귀에서 $R^2$와 상관계수 간의 관계를 보여줌을 보이시오.
-
-```{r}
-grades_avg_cs %>%
-  summarise(cor_sq = cor(classize, avgmath_cs)^2)
+4.  1번과 2번을 `ret_kospi200_lead`에 대해 반복함.\
+    동일일 코스피200 수익률과 익일 코스피200 수익률 중 어떤 결과가 S\&P500 수익률 변화로 더 많이 설명되는지 비교하시오.
+```{r, echo=T, eval=T}
+kospi_reg <- lm(ret_kospi200_lead ~ ret_sp500, data = merged_px)
+summary(kospi_reg)
 ```
 
-단 하나의 독립 변수를 가진 회귀 분석에서는 \( R^2 \) 값이 **종속 변수와 독립 변수 간의 상관계수의 제곱**과 동일합니다.
-
-
-4.  1번과 2번을 `avgverb_cs`에 대해 반복. 어떤 시험에서 학급 규모의 분산이 학생 점수의 분산을 더 많이 설명하는지 비교하시오.
-
-```{r}
-verb_reg <- lm(avgverb_cs ~ classize, grades_avg_cs)
-summary(verb_reg)
-```
-
-\( R^2 \) 값이 수학 점수에서 더 크므로, 반 크기가 읽기 점수보다 수학 점수의 변동성을 더 많이 설명한다는 것을 의미합니다.
-
-
-
-5.  (Optional) `broom` 패키지를 설치 및 로드한 후, `math_reg`를 `augment()` 함수에 전달하여 새로운 객체에 저장함.\
-    `avgmath_cs`의 분산(SST)과 예측값 `.fitted`의 분산(SSE)을 사용하여 $R^2$ 값을 직접 계산하시오. (이전 슬라이드의 공식을 참고할 것.)
-
-```{r}
-if (!require("bloom")) install.packages("bloom", dependencies=TRUE, repos = "https://cloud.r-project.org/")
-
+5.  (Optional) `broom` 패키지를 설치 및 로드한 후, `kospi_reg`를 `augment()` 함수에 전달하여 새로운 객체에 저장함.\
+    `ret_kospi200_lead`의 분산(SST)과 예측값의 분산(SSE)을 사용하여 $R^2$ 값을 직접 계산하시오. (이전 슬라이드의 공식을 참고할 것.)
+    - `broom` 패키지의 `augment()` 함수는 회귀 결과에 예측값과 잔차를 추가하는 데 사용됨.\
+```{r, echo=T, eval=T}
+if (!requireNamespace("broom")) {install.packages("broom")}
 library(broom)
-
-math_reg_aug <- augment(math_reg)
-SST = var(grades_avg_cs$avgmath_cs)
-SSE = var(math_reg_aug$.fitted)
-SSE/SST
+kospi_reg_aug <- augment(kospi_reg) # 회귀 결과에 예측값과 잔차 추가
+SST <- var(merged_px$ret_kospi200_lead) * (nrow(merged_px) - 1)
+SSE <- var(kospi_reg_aug$.fitted) * (nrow(kospi_reg_aug) - 1)
+R_squared <- SSE / SST
+R_squared
 ```
-
