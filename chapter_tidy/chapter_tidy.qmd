@@ -42,19 +42,11 @@ countdown(
 
 ## Working With Data
 
-<!-- * Economists work with `data`. -->
 
-<!-- ```{r, echo = F, out.width = "400px"} -->
-
-<!-- knitr::include_graphics("chapter_tidy_files/figure-html/data_science_pipeline.png") -->
-
-<!-- ``` -->
-
-<!-- -- -->
 
 -   [2014년 뉴욕타임즈 기사](https://www.nytimes.com/2014/08/18/technology/for-big-data-scientists-hurdle-to-insights-is-janitor-work.html)에 따르면, "데이터 과학자들은 데이터를 분석하기 전에 **50%에서 80%의 시간**을 데이터 수집 및 정리에 소비한다."라고 함.
 
--   다음 두 강의에서는 **데이터 정리, 시각화, 요약**의 기본을 배움.
+- 본 강의에서는 **데이터 정리(Tidying), 시각화(Visualising), 요약(Summarising)**의 기본을 배움.
 
 # Tidying Data
 
@@ -62,35 +54,37 @@ countdown(
 
 ## `dplyr` 소개
 
--   [`dplyr`](https://dplyr.tidyverse.org)은 [`tidyverse`](https://www.tidyverse.org) 패키지군의 일부.
--   [`data.table`](https://github.com/Rdatatable/data.table/wiki)도 대안으로 사용 가능하며, 대용량 데이터에 최적화되어 있음.
--   여기서는 `dplyr`을 다룸.
+-   [`dplyr`](https://dplyr.tidyverse.org)은 [`tidyverse`](https://www.tidyverse.org) 패키지군의 핵심 데이터 조작 패키지.
+-   [`data.table`](https://github.com/Rdatatable/data.table/wiki)도 대안으로 사용 가능하며, 거대 용량 데이터 처리에 최적화되어 있음.
+-   본 강의에서는 문법이 직관적이고 가독성이 높은 `dplyr`을 다룸.
+
 
 ------------------------------------------------------------------------
 
 ## `dplyr` 개요
 
--   Hadley Wickham의 "R for Data Science", 링크 [영문판](https://r4ds.had.co.nz/transform.html), [국문판](https://bookdown.org/sulgi/r4ds/)
-    -   [치트시트](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf)도 매우 유용.
--   `dplyr`은 여러 **verbs** 중심으로 구성되어 있음.
--   `data.frame` 또는 `tibble` 형식의 데이터를 다룰 것임.
+-   `dplyr`은 직관적인 영어 동사(**verbs**) 중심으로 구성되어 있음.
+-   `data.frame` 또는 `tibble` 형식의 데이터를 주로 다룸.
 
 $$\text{verb}(\underbrace{\text{data.frame}}_{\text{1st argument}}, \underbrace{\text{what to do}}_\text{2nd argument})$$
 
--   또는 `pipe` 연산자 `%>%` 이용 (`magrittr` 패키지) 또는 `|>`도 가능:
+-   파이프 연산자 `%>%` (`magrittr` 패키지) 또는 R 4.1.0 이상 기본 `|>` 를 이용하면 코드를 물 흐르듯 작성 가능:
 
 $$\underbrace{\text{data.frame}}_{\text{1st argument}} \underbrace{\text{ %>% }}_{\text{"pipe" operator}} \text{verb}(\underbrace{\text{what to do}}_\text{2nd argument})$$
+
+
+
 
 ------------------------------------------------------------------------
 
 ## 주요 `dplyr` verbs
 
-1.  `filter()`: 특정 조건을 만족하는 행 선택
-2.  `arrange()`: 행 정렬
-3.  `select()`: 특정 열 선택
-4.  `mutate()`: 기존 열을 이용하여 새 변수 생성
-5.  `summarise()`: 요약 통계 계산
-6.  `group_by()`: 그룹별 연산 수행 가능
+1.  `filter()`: 특정 조건을 만족하는 **행(Row)** 선택
+2.  `arrange()`: 행 정렬 (오름차순/내림차순)
+3.  `select()`: 특정 **열(Column)** 선택
+4.  `mutate()`: 기존 열을 연산하여 **새 변수(열)** 생성
+5.  `summarise()`: 데이터 요약 통계 계산
+6.  `group_by()`: 범주형 변수를 기준으로 **그룹별 연산** 수행
 
 ------------------------------------------------------------------------
 
@@ -99,16 +93,21 @@ $$\underbrace{\text{data.frame}}_{\text{1st argument}} \underbrace{\text{ %>% }}
 -   2016년 미국 대선과 관련된 여론조사 데이터를 포함
 
 ```{r dslabs, echo = TRUE}
-library(dslabs)
-library(tidyverse)
+if (!require("dslabs")) install.packages("dslabs")
+if (!require("tidyverse")) install.packages("tidyverse")
 data(polls_us_election_2016, package = "dslabs")
-polls_us_election_2016 <- as_tibble(polls_us_election_2016) # 데이터를 'tibble' 형식으로 변환
-head(polls_us_election_2016[,1:6]) # 데이터의 첫 6개의 행과 첫 6개의 열을 출력
+# 데이터를 'tibble' 형식으로 변환
+polls_us_election_2016 <- as_tibble(polls_us_election_2016) 
+# 데이터의 첫 6개의 행과 첫 6개의 열을 출력
+head(polls_us_election_2016[,1:6]) 
 ```
+
+- tibble은 data.frame의 개선된 버전으로, 더 깔끔한 출력과 편리한 기능을 제공.
+
 
 ------------------------------------------------------------------------
 
-## 예제 데이터: 2016년 미국 대선 여론조사 (`dslabs` 패키지)
+## 예제 데이터: 구조 확인
 
 -   이 데이터셋에 어떤 변수가 포함되어 있는지 확인
 
@@ -122,60 +121,50 @@ str(polls_us_election_2016) # 데이터의 구조를 요약하여 출력
 
 ```{r, echo=TRUE}
 # 표본 크기(samplesize)가 2000보다 큰 행만 선택, 츨력
-polls_us_election_2016 %>%
+polls_us_election_2016 %>% 
   filter(samplesize > 2000)
 ```
 
+
 ------------------------------------------------------------------------
 
-## `dplyr`: `filter()`
+## `dplyr`: `filter()` 의 연산자들
 
 기본적인 비교 연산자:
 
--   `>`: 크다 (greater than)
-
--   `<`: 작다 (smaller than)
-
--   `>=`: 크거나 같다 (greater than or equal to)
-
--   `<=`: 작거나 같다 (smaller than or equal to)
-
+-   `>`: 크다 (greater than) / `<`: 작다 (smaller than)
+-   `>=`: 크거나 같다 / `<=`: 작거나 같다
 -   `!=`: 같지 않다 (not equal to)
-
--   `==`: 같다 (equal to)
+-   `==`: 같다 (equal to) - **주의! `=` 가 아니라 `==` 임**
 
 논리 연산자:
 
-1.  `x & y`: `x` **그리고** `y` (둘 다 참일 때만 참)
+1.  `x & y`: `x` **그리고** `y` (AND: 둘 다 참일 때만 참)
+2.  `x | y`: `x` **또는** `y` (OR: 둘 중 하나라도 참이면 참)
+3.  `!y`: **y가 아닐 때** (NOT: 논리 반전)
 
-2.  `x | y`: `x` **또는** `y` (둘 중 하나라도 참이면 참)
-
-3.  `!y`: **y가 아닐 때** (논리 반전)
 
 ------------------------------------------------------------------------
+## `dplyr`: `filter()` 와 `%in%`
 
-## `dplyr`: `filter()`
-
--   `%in%` 연산자의 이용
-
--   `x %in% y`는 `x`가 `y`의 요소인지 확인
-
--   `!(x %in% y)`를 사용하면 반대의 논리 적용
+-   `%in%` 연산자: `x`가 `y` 벡터 안에 포함되어 있는지 확인
+-   `!(x %in% y)`: 반대로 포함되지 않은 것만 필터링
 
 ```{r, echo=TRUE}
 # 3이 1부터 3까지의 숫자 중 하나인지 확인 (TRUE)
 3 %in% 1:3  
 
-# 벡터화된 연산: 2와 5가 2부터 10 사이의 숫자 중 하나인지 확인 (각각 TRUE와 TRUE)
+# 벡터화된 연산: 2와 5가 2부터 10 사이의 숫자 중 하나인지 확인
 c(2,5) %in% 2:10  
 
 # 문자열 비교: "S" 또는 "Po"가 벡터 `c("Sciences","Po")`의 요소인지 확인
 c("K","Uni") %in% c("Korea","University")  
 ```
 
+
 ------------------------------------------------------------------------
 
-## `dplyr`: `filter()`
+## `dplyr`: `filter()` 복합 조건
 
 A 등급을 받은 여론조사 중 표본 크기가 2,000명 이상이고, 트럼프가 최소 45%의 지지를 받은 여론조사는?
 
@@ -183,34 +172,36 @@ A 등급을 받은 여론조사 중 표본 크기가 2,000명 이상이고, 트�
 # polls_us_election_2016 데이터에서 
 # 1. 등급(grade)이 "A"이고
 # 2. 표본 크기(samplesize)가 2000명보다 크며
-# 3. 트럼프의 여론조사 지지율(rawpoll_trump)이 45% 이상인 행을 필터링합니다.
+# 3. 트럼프의 여론조사 지지율(rawpoll_trump)이 45% 이상인 행을 필터링.
 polls_us_election_2016 %>%
   filter(grade == "A" & samplesize > 2000 & rawpoll_trump > 45) 
 ```
+
 
 ------------------------------------------------------------------------
 
 ## `dplyr`: `mutate()`
 
-1.  각 여론조사에서 트럼프와 클린턴의 지지율 합계
-2.  트럼프의 원래(raw) 지지율과 FiveThirtyEight의 조정(adjusted) 지지율 간의 차이
+새로운 변수(열)를 만들 때 사용.
+1. 각 여론조사에서 트럼프와 클린턴의 지지율 합계
+2. 트럼프의 원래(raw) 지지율과 조정(adjusted) 지지율 간의 차이
 
 ```{r, echo=TRUE}
 #| code-line-numbers: "|5|6|7"
-# 1. trump_clinton_tot: 트럼프와 클린턴의 지지율 합계
-# 2. trump_raw_adj_diff: 트럼프의 원래 지지율과 538 조정 지지율 간의 차이
-# 마지막으로 names() 함수를 사용하여 데이터의 변수명을 확인.
 polls_us_election_2016 %>%
-  mutate(trump_clinton_tot = rawpoll_trump + rawpoll_clinton, # 트럼프와 클린턴 지지율 합계
+  mutate(trump_clinton_tot = rawpoll_trump + rawpoll_clinton, # 두 후보 지지율 합계
          trump_raw_adj_diff = rawpoll_trump - adjpoll_trump) %>% # 원래 지지율과 조정 지지율 차이
-  names() # 변수명 출력
+  names() # 새롭게 생성된 변수명 확인
 ```
+
+
 
 ------------------------------------------------------------------------
 
 ## `dplyr`: `select()`
 
--   다음 변수만 선택: `state, startdate, enddate, pollster, rawpoll_clinton, rawpoll_trump`
+-   분석에 필요한 특정 열(변수)만 골라낼 때 사용. 데이터의 용량을 줄이고 직관성을 높임.
+
 
 ```{r, echo = TRUE}
 # select() 함수를 사용하여 특정 열만 선택.
@@ -230,20 +221,21 @@ polls_us_election_2016 %>%
 
 ## `dplyr`: `summarise()`
 
+-   원하는 통계량으로 데이터를 요약 (평균, 최대값, 최소값 등)
 -   트럼프의 최대 지지율은 얼마인가?
 
 ```{r, echo = TRUE}
 # summarise() 함수를 사용하여 트럼프의 최대(raw) 지지율을 계산
 # max() 함수는 주어진 열에서 가장 큰 값을 반환
-
 polls_us_election_2016 %>%
-  summarise(max_trump = max(rawpoll_trump)) # 트럼프의 최대 지지율 계산
+  summarise(max_trump = max(rawpoll_trump)) 
 ```
 
 ------------------------------------------------------------------------
 
 ## `dplyr`: `group_by()`
 
+-   `group_by()` 단독으로는 데이터에 눈에 띄는 변화가 없지만, `summarise()`나 `mutate()`와 결합하면 강력해짐.
 -   여론조사 등급(grade)별 클린턴의 평균 지지율은 얼마인가?
 
 ```{r, echo = TRUE}
@@ -391,32 +383,6 @@ polls_us_election_2016 %>%
 
 ------------------------------------------------------------------------
 
-## 다른 `R` 명령어에서도 사용 가능
-
-::::: columns
-::: {.column width="50%"}
-```{r, echo=TRUE}
-polls_us_election_2016$samplesize %>% 
-    mean(na.rm = TRUE) #samplesize 값들의 평균을 계산하되, NA(결측값)는 제거 
-```
-:::
-
-::: {.column width="50%"}
-```{r, echo=TRUE}
-polls_us_election_2016 %>% 
-    count() # 총 행 개수를 계산 (즉, 수행된 여론조사의 총 개수) 
-```
-:::
-:::::
-
--   `%>%` 연산자는 magrittr 패키지에서 제공.
--   R v4.1.0부터 기본 제공(base) 파이프 연산자인 `|>` 추가
-
-```{r, echo=TRUE}
-polls_us_election_2016$samplesize |> mean(na.rm = TRUE)
-```
-
-------------------------------------------------------------------------
 
 ## 결측값(`NA`) 처리
 
@@ -491,37 +457,39 @@ data(polls_us_election_2016)
 
 ------------------------------------------------------------------------
 
-## 금융 자료 다루기  {background-color="#E2E2E2"}
+## 주가 자료 다루기  {background-color="#E2E2E2"}
 
-```{r, echo=T, eval=F}
+```{r, echo=T, eval=T}
 if (!require("tidyquant")) install.packages("tidyquant")
-if (!require("DT")) install.packages("DT")
-if (!require("ggthems")) install.packages("ggthemes")
-if (!require("highcharter")) install.packages("highcharter")
-
 library(tidyquant)
-library(DT)
 
-apple_stock <- tq_get("AAPL", from="2010-01-01", to="2024-12-31")
+# 1. Apple(AAPL)과 Microsoft(MSFT) 주가 데이터 수집 (2020년 이후)
+tech_stocks <- tq_get(c("AAPL", "MSFT"), from="2020-01-01", to=Sys.Date())
 
-# 일별 수익률 계산
-apple_stock <- apple_stock %>% 
-  arrange(date) %>%
-  mutate(daily_return = adjusted / lag(adjusted) - 1)
-head(apple_stock)
+# 2. 일별 수익률(Daily Return) 계산하기
+tech_returns <- tech_stocks %>% 
+  group_by(symbol) %>%         # 종목별로 그룹화 (중요!)
+  arrange(date) %>%            # 날짜순 정렬
+  mutate(
+    # 어제 종가 대비 오늘 종가의 수익률 계산. lag() 함수는 '이전 행'의 값을 가져옴
+    daily_return = adjusted / lag(adjusted) - 1 
+  ) %>%
+  drop_na() # lag() 연산으로 인해 발생하는 첫 날의 NA값 제거
+
+head(tech_returns %>% select(symbol, date, adjusted, daily_return))
 ```
-
-
-
 
 
 # Visualising Data
 
 ## 기본 `R` 그래프와 `ggplot2`
 
--   `ggplot2` (이 패키지는 `tidyverse`의 일부) 기본 `R`의 그래프 기능은 보다 훨씬 강력함
+-   `ggplot2` (이 패키지는 `tidyverse`의 일부) 기본 `R`의 그래프 기능은 보다 유연함
+
+- 데이터를 시각적 요소(색상, 형태, 크기 등)에 '매핑(Mapping)'한다는 철학(Grammar of Graphics)을 가짐.
 
 -   예제를 실행하기 위해 `gapminder` 데이터셋 사용.
+
 
 ------------------------------------------------------------------------
 
@@ -549,14 +517,16 @@ tail(gapminder, n = 2) # 데이터의 마지막 2행 출력
 `r countdown(minutes = 5, top = 0)`
 :::
 
-다음 코드를 실행하여 데이터를 로드합니다.
+다음 코드를 실행하여 데이터를 로드.
 
 ```{r, eval = F}
 library(dslabs)
 data(gapminder, package = "dslabs")
 ```
 
-1.  대륙/연도별 평균 인구(변수명: mean_pop)를 계산하고, 결과를 새로운 객체 gapminder_mean에 저장하시오. **힌트**: 각 연도별 대륙당 하나의 관측치(행)만 있어야 함. `group_by` 및 `summarise` 사용
+1.  대륙(continent)/연도(year)별 **평균 인구(변수명: mean_pop)**를 계산하고, 결과를 새로운 객체 `gapminder_mean`에 저장하시오. 
+    **힌트**: 두 개의 기준으로 그룹화해야 하므로 `group_by(continent, year)`를 사용하고 `summarise`를 적용.
+
 
 ```{r, echo=F}
 gapminder_mean <- gapminder %>%
@@ -786,7 +756,7 @@ Geoms
 
 ------------------------------------------------------------------------
 
-## (Y)Our first plot!
+## (Y)Our first plot! 
 
 ::::: columns
 ::: {.column width="40%"}
@@ -821,7 +791,7 @@ gapminder_mean %>%
 
 ------------------------------------------------------------------------
 
-## (Y)Our first plot!
+## (Y)Our first plot!  
 
 ::::: columns
 ::: {.column width="40%"}
@@ -841,7 +811,7 @@ gapminder_mean %>%
 
 ------------------------------------------------------------------------
 
-## (Y)Our first plot!
+## (Y)Our first plot! 
 
 ::::: columns
 ::: {.column width="40%"}
@@ -969,8 +939,8 @@ Geoms
 Facet
 
 ``` r
-+ facet_wrap() 
-+ facet_grid()
++ facet_wrap()      # 여러 개의 작은 그래프로 분할 (자동 배치)
++ facet_grid()      # 행과 열로 그래프를 체계적으로 배열
 ```
 :::
 
@@ -1194,7 +1164,7 @@ g + scale_x_continuous(breaks = seq(1950, 2020, 10))
 
 ------------------------------------------------------------------------
 
-## `ggplot` 심화 탐구
+## `ggplot` 심화 학습
 
 -   `ggplot2`는 사용자가 정의할 수 있는 무수한 옵션을 제공.
 
@@ -1226,41 +1196,48 @@ g + scale_x_continuous(breaks = seq(1950, 2020, 10))
 ---
 
 
-## 금융 자료 다루기 {background-color="#E2E2E2"}
+## 주가 자료 다루기 {background-color="#E2E2E2"}
 
-```{r, echo=T, eval=F}
-library(ggplot2)
+```{r, echo=T, eval=T}
+# 1. ggplot2 정적 차트 (보고서/논문용)
 library(ggthemes)
-
-apple_stock %>% ggplot() + aes(x=date, y=adjusted) +
-  geom_line(color="blue", linewidth=1) +
-  labs(title="Apple Stock Prices", x="Date", y="Adjusted Close") +
-  theme_economist()
+tech_returns %>% 
+  ggplot(aes(x = date, y = adjusted, color = symbol)) +
+  geom_line(linewidth = 1) +
+  labs(title="Tech Stocks Price Trend", x="Date", y="Adjusted Close") +
+  theme_economist() # 이코노미스트 잡지 스타일 테마
 ```
 
-```{r, echo=T, eval=F}
+
+## 주가 자료 다루기 {background-color="#E2E2E2"}
+
+```{r, echo=T, eval=T}
+# 2. highcharter 동적 차트 (웹/대시보드용)
+if (!require("highcharter")) install.packages("highcharter")
 library(highcharter)
 
-highchart(type = "stock") |> 
-  hc_add_series(apple_stock, type = "line", hcaes(x = date, y = adjusted), name = "Apple Price") |> 
-  hc_add_series(apple_stock, type = "column", hcaes(x = date, y = volume), name = "Trading Volume", yAxis = 1) |> 
+# 애플 주가와 거래량을 하나의 인터랙티브 차트로 표현
+apple_only <- tech_stocks %>% filter(symbol == "AAPL")
+
+highchart(type = "stock") %>% 
+  hc_add_series(apple_only, type = "line", hcaes(x = date, y = adjusted), name = "AAPL Price") %>% 
+  hc_add_series(apple_only, type = "column", hcaes(x = date, y = volume), name = "Volume", yAxis = 1) %>% 
   hc_yAxis_multiples(
     list(title = list(text = "Stock Price")),
     list(title = list(text = "Trading Volume"), opposite = TRUE)
-  ) |> 
-  hc_title(text = "AAPL Stock Price and Trading Volume") |>
-  hc_add_theme(hc_theme_ft())
+  ) %>% 
+  hc_title(text = "AAPL Stock Price and Volume")
 ```
 
 # Summarising
 
 ## Summarising Data
 
--   일반적으로 데이터를 시각화하거나 요약 통계를 통해 데이터를 분석을 시작.
+-   시각화를 통해 큰 흐름을 파악했다면, 구체적인 수치로 데이터를 요약할 차례.
+-   **요약 통계(summary statistics)**: 대규모의 데이터를 몇 개의 핵심 숫자로 압축.
+-   특히, **중심 경향(central tendency)**과 **산포도/변동성(spread)**를 중점적으로 다룸.
 
--   이제 **요약 통계(summary statistics)**를 살펴보겠음.
 
--   특히, **중심 경향(central tendency)**과 **산포도(spread)**를 중점적으로 다룰 것임.
 
 ------------------------------------------------------------------------
 
@@ -1445,15 +1422,6 @@ knitr::include_graphics("chapter_tidy_files/figure-html/correlation.svg")
 
 \[ *Source: [mathisfun](https://www.mathsisfun.com/data/correlation.html)*\]
 
-------------------------------------------------------------------------
-
-## Correlation
-
-<!-- * [App](https://gustavek.shinyapps.io/corr_continuous/) -->
-
-```{r, echo = F}
-knitr::include_url("https://gustavek.shinyapps.io/corr_continuous/", height = "800px")
-```
 
 ------------------------------------------------------------------------
 
@@ -1476,30 +1444,14 @@ knitr::include_url("https://gustavek.shinyapps.io/corr_continuous/", height = "8
 
 4.  2015년 출산율(fertility)과 유아 사망률(infant mortality)의 상관관계를 계산하시오. NA 값을 제외하려면 `cor()` 함수의 `use` 인수를 "pairwise.complete.obs"로 설정. 이 상관관계 값이 Task 3에서 생성한 그래프와 일치하는가?
 
-------------------------------------------------------------------------
 
-## 🔍 인과 관계를 찾아가는 길
+## Task (Optional): 주가 데이터 분석 {background-color="#ebf8ff"}
 
-✅ **데이터를 어떻게 다룰까?** : 읽기(Read), 정리(Tidy), 시각화(Visualize)...
+1.  `tidyquant`를 이용하여 한국의 대표 주식인 **삼성전자("005930.KS")**와 미국의 시장 지수인 **S&P500 ETF("SPY")**의 2021년 1월 1일 이후 주가 데이터를 다운로드하시오. (`tq_get`에 티커를 벡터 `c()` 형태로 입력)
+2.  `group_by()`와 `mutate()`, `lag()` 함수를 사용하여 두 종목의 **일별 수익률(daily_return)**을 각각 계산하고 `drop_na()`로 결측치를 제거하시오.
+3.  `ggplot2`를 사용하여 두 종목의 일별 수익률 분포를 비교하는 **밀도 그래프(`geom_density`)**를 겹쳐서(alpha 값 조정) 그리시오.
+4.  `summarise()`를 활용하여 두 종목 각각의 일평균 수익률(`mean`)과 변동성(`sd`)을 계산하시오.
+5.  두 종목의 수익률 간 **상관계수(`cor`)**를 계산하시오. (상관관계를 구하려면 두 수익률을 가로(열)로 나란히 배치해야 하는데, 한국과 미국의 휴장일이 달라 데이터의 길이가 어긋나는 현상이 발생하기 때문에 날짜를 기준으로 데이터를 맞추는 과정(`pivot_wider`)이 필수적.)
 
-❌ 변수 간 관계를 어떻게 요약할까? 단순 선형 회귀(Simple Linear Regression)
 
-❌ 인과 관계(Causality)란 무엇인가?
-
-❌ 전체 모집단을 관측하지 못하면 어떻게 할까?
-
-❌ 우리의 연구 결과가 단순한 무작위(Randomness) 때문일 수도 있을까?
-
-❌ 실제로 외생성을 어떻게 찾아낼 수 있을까?
-
-------------------------------------------------------------------------
-
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-
-::: {style="display: flex; justify-content: center; align-items: center; height: 70vh;"}
-<h2 style="color: #ff6666; text-align: center; font-family: &#39;Pacifico&#39;, cursive; font-size: 50px;">
-
-THE END!
-
-</h2>
-:::
+# THE END!

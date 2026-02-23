@@ -1,6 +1,9 @@
 ---
 title: "Tidying, Visualising and Summarising Data - Tasks (Part 1)"
-output: html
+format: 
+  html:
+    toc: false
+    theme: default
 ---
 
 

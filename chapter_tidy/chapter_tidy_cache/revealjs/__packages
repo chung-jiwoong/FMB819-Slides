@@ -10,3 +10,11 @@ dplyr
 stringr
 forcats
 lubridate
+tidyquant
+zoo
+xts
+TTR
+quantmod
+PerformanceAnalytics
+ggthemes
+highcharter
