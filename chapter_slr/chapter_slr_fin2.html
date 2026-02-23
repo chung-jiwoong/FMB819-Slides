@@ -217,76 +217,45 @@
 <ul>
 <li><p><strong><em>단순 선형 회귀 모형(Simple Linear Regression Model)</em></strong> 및 <strong><em>최소제곱법(Ordinary Least Squares, OLS)</em></strong> <em>추정</em> 소개.</p></li>
 <li><p>실증 분석: 코스피200 지수와 S&amp;P500 지수의 관계</p></li>
-<li><p><strong>인과적(causal)</strong> 관계를 어떻게 밝힐 수 있을까?</p></li>
 </ul>
 </section>
 <section id="코스피200-지수와-sp500-지수" class="slide level2 scrollable">
 <h2>코스피200 지수와 S&amp;P500 지수</h2>
 <ul>
-<li><p>금융시장에서 서로 다른 국가의 주가지수 수익률은 같은 뉴스(금리, 경기전망, 위험회피 심리)에 함께 반응하는 경향이 있음.</p></li>
-<li><p>따라서 “S&amp;P500이 움직일 때 코스피200이 얼마나 같이 움직이는가?”는 매우 기본적인 실증 질문임.</p></li>
+<li><p>“S&amp;P500이 움직일 때 코스피200이 얼마나 같이 움직이는가?””</p></li>
 <li><p>이번 예시에서는 웹에서 코스피200/ S&amp;P500 일별 종가를 불러와 수익률을 계산함.</p></li>
 <li><p>실습에서는 두 관계를 함께 봄:</p>
 <ol type="1">
 <li><strong>동일일 관계</strong>: <span class="math inline">\(r^{KOSPI200}_t\)</span> vs <span class="math inline">\(r^{SP500}_t\)</span></li>
 <li><strong>익일 관계</strong>: <span class="math inline">\(r^{KOSPI200}_{t+1}\)</span> vs <span class="math inline">\(r^{SP500}_t\)</span></li>
 </ol></li>
-<li><p>지수 수준(level)을 일간 <strong>로그 수익률(log return)</strong>로 변환하고, 단위를 해석하기 쉽도록 <strong>bp(basis points, 1bp = 0.01%)</strong>로 표현함.</p></li>
 </ul>
 </section>
 <section id="task-1" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 1</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p><countdown-timer class="countdown" id="timer_b7396dba" minutes="7" seconds="0" update-every="1" tabindex="0" style="top:0;right:0;"></countdown-timer></p>
+<p><countdown-timer class="countdown" id="timer_48376f56" minutes="7" seconds="0" update-every="1" tabindex="0" style="top:0;right:0;"></countdown-timer></p>
 </div>
 <ol type="1">
-<li><p>코스피200 및 S&amp;P500 일별 종가 데이터를 불러와 <code>returns_raw</code> 객체를 생성하시오.<br>
-<strong>힌트</strong>: 날짜를 기준으로 두 지수를 병합한 뒤, <code>log</code>와 <code>lag</code>를 사용해 수익률을 계산하면 됨.</p></li>
+<li>코스피200 및 S&amp;P500 일별 종가 데이터를 불러와 날짜를 기준으로 두 지수를 병합한 뒤, <code>merged_px</code> 객체를 생성하시오. 그리고 일별 수익률 변수(<code>ret_sp500</code>, <code>ret_kospi200</code>, <code>ret_kospi200_lead</code>)를 생성하시오.<br>
+</li>
+</ol>
+<ol start="2" type="1">
 <li><p>데이터셋 설명:</p>
 <ul>
-<li>관측 단위는? 즉, 각 행이 무엇을 의미하는가?<br>
-</li>
 <li>총 몇 개의 관측치가 있는가?<br>
 </li>
-<li>데이터셋을 확인하고 어떤 변수가 있는지 확인하시오. <code>ret_sp500_bp</code>, <code>ret_kospi200_bp</code>, <code>ret_kospi200_lead_bp</code>는 각각 무엇을 의미하는가?<br>
-</li>
-<li><code>skimr</code> 패키지의 <code>skim</code> 함수 사용해서 <code>ret_sp500_bp</code>, <code>ret_kospi200_bp</code>, <code>ret_kospi200_lead_bp</code> 변수에 대한 기본적인 요약 통계 확인함.<br>
+<li>데이터셋을 확인하고 어떤 변수가 있는지 확인하시오.</li>
+<li><code>skimr</code> 패키지의 <code>skim</code> 함수 사용해서 생성한 수익률 변수에 대한 기본적인 요약 통계 확인.<br>
 <strong>힌트</strong>: <code>dplyr</code>의 <code>select</code> 사용해서 변수 선택한 후 <code>%&gt;%</code>로 <code>skim()</code> 적용하면 됨.</li>
 </ul></li>
-<li><p>코스피200 지수와 S&amp;P500 지수 간 실제 (선형) 관계에 대해 어떤 관계가 있을 것이라 생각하는가?</p></li>
-<li><p>S&amp;P500 수익률(<code>ret_sp500_bp</code>)과 코스피200 수익률(<code>ret_kospi200_bp</code>, <code>ret_kospi200_lead_bp</code>)의 상관관계는?</p></li>
+</ol>
+<ol start="3" type="1">
+<li>S&amp;P500 수익률(<code>ret_sp500</code>)과 코스피200 수익률(<code>ret_kospi200</code>, <code>ret_kospi200_lead</code>)의 상관관계는?</li>
 </ol>
 </section>
 <section id="코스피200-지수와-sp500-지수-scatter-plot" class="slide level2">
 <h2>코스피200 지수와 S&amp;P500 지수: Scatter plot</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-2-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
-</figure>
-</div>
-</div>
-</div>
-</div><div class="column" style="width:50%;">
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-3-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
-</figure>
-</div>
-</div>
-</div>
-</div></div>
-<ul>
-<li>상관계수에서 보듯이 양(+)의 선형 관계가 보임. S&amp;P500 수익률을 구간(bin)으로 묶어 평균 관계를 더 명확하게 살펴보자.</li>
-</ul>
-</section>
-<section id="코스피200-지수와-sp500-지수-binned-scatter-plot" class="slide level2">
-<h2>코스피200 지수와 S&amp;P500 지수: Binned Scatter Plot</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
@@ -309,6 +278,34 @@
 </div>
 </div>
 </div></div>
+<ul>
+<li>S&amp;P500 수익률을 구간(bin)으로 묶어 평균 관계를 더 명확하게 살펴보자.</li>
+</ul>
+</section>
+<section id="코스피200-지수와-sp500-지수-binned-scatter-plot" class="slide level2">
+<h2>코스피200 지수와 S&amp;P500 지수: Binned Scatter Plot</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-6-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-7-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
 </section>
 <section id="코스피200-지수와-sp500-지수-regression-line" class="slide level2">
 <h2>코스피200 지수와 S&amp;P500 지수: Regression Line</h2>
@@ -319,7 +316,7 @@
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-left">
 <figure>
-<p><img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-6-1.svg" class="quarto-figure quarto-figure-left" width="672"></p>
+<p><img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-8-1.svg" class="quarto-figure quarto-figure-left" width="672"></p>
 </figure>
 </div>
 </div>
@@ -329,7 +326,7 @@
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-left">
 <figure>
-<p><img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-7-1.svg" class="quarto-figure quarto-figure-left" width="672"></p>
+<p><img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-9-1.svg" class="quarto-figure quarto-figure-left" width="672"></p>
 </figure>
 </div>
 </div>
@@ -345,8 +342,8 @@
 <ul>
 <li><p>두 변수 간의 관계에 관심 있음:</p>
 <ul>
-<li><p>결과변수 (종속변수, dependent variable): <em>KOSPI200 return (bp)</em> <span class="math inline">\((y)\)</span></p></li>
-<li><p>설명변수 (독립변수, independent variable): <em>S&amp;P500 return (bp)</em> <span class="math inline">\((x)\)</span></p></li>
+<li><p>결과변수 (종속변수, dependent variable): <em>KOSPI200 return</em> <span class="math inline">\((y)\)</span></p></li>
+<li><p>설명변수 (독립변수, independent variable): <em>S&amp;P500 return</em> <span class="math inline">\((x)\)</span></p></li>
 </ul></li>
 <li><p>각 거래일 <span class="math inline">\(i\)</span>에 대해 <span class="math inline">\(x_i\)</span>와 <span class="math inline">\(y_i\)</span>를 관측할 수 있음. 예, S&amp;P500 수익률과 코스피200 수익률의 <em>결합 분포(joint distribution)</em>를 시각화할 수 있음.</p></li>
 <li><p>회귀선은 이 관계를 <strong>선(line)</strong> 하나로 요약하고 있음. 절편 <span class="math inline">\(b_0\)</span>와 기울기 <span class="math inline">\(b_1\)</span>을 갖는 선의 방정식은 다음과 같음:</p></li>
@@ -361,29 +358,29 @@
 <section id="직선의-방정식" class="slide level2">
 <h2>직선의 방정식</h2>
 
-<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-8-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-10-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
 <section id="직선의-방정식-1" class="slide level2">
 <h2>직선의 방정식</h2>
 
-<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-9-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-11-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
 <section id="직선의-방정식-2" class="slide level2">
 <h2>직선의 방정식</h2>
 
-<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-10-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-12-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
 <section id="simple-linear-regression-잔차residual" class="slide level2">
 <h2>Simple Linear Regression: 잔차(Residual)</h2>
 <ul>
 <li>만약 모든 데이터가 직선 위에 있다면, <span class="math inline">\(\widehat{y}_i = y_i\)</span>.</li>
 </ul>
 
-<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-11-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section>
+<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-13-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section>
 <section id="simple-linear-regression-잔차residual-1" class="slide level2">
 <h2>Simple Linear Regression: 잔차(Residual)</h2>
 <ul>
 <li>만약 모든 데이터가 직선 위에 있다면, <span class="math inline">\(\widehat{y}_i = y_i\)</span>.</li>
 </ul>
 
-<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-12-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section>
+<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-14-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section>
 <section id="simple-linear-regression-잔차residual-2" class="slide level2">
 <h2>Simple Linear Regression: 잔차(Residual)</h2>
 <ul>
@@ -398,27 +395,27 @@ y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 <section id="simple-linear-regression-graphically" class="slide level2">
 <h2>Simple Linear Regression: Graphically</h2>
 
-<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-13-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-15-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
 <section id="simple-linear-regression-graphically-1" class="slide level2">
 <h2>Simple Linear Regression: Graphically</h2>
 
-<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-14-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-16-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
 <section id="simple-linear-regression-graphically-2" class="slide level2">
 <h2>Simple Linear Regression: Graphically</h2>
 
-<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-15-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-17-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
 <section id="simple-linear-regression-graphically-3" class="slide level2">
 <h2>Simple Linear Regression: Graphically</h2>
 
-<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-16-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-18-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
 <section id="simple-linear-regression-graphically-4" class="slide level2">
 <h2>Simple Linear Regression: Graphically</h2>
 
-<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-17-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-19-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
 <section id="simple-linear-regression-graphically-5" class="slide level2">
 <h2>Simple Linear Regression: Graphically</h2>
 
-<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-18-1.svg" class="quarto-figure quarto-figure-center r-stretch" style="width:100.0%"><p>무엇을 “최소화”하는 직선을 구해야할까?</p>
+<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-20-1.svg" class="quarto-figure quarto-figure-center r-stretch" style="width:100.0%"><p>무엇을 “최소화”하는 직선을 구해야할까?</p>
 </section>
 <section id="ordinary-least-squares-ols-추정" class="slide level2">
 <h2>Ordinary Least Squares (OLS) 추정</h2>
@@ -427,7 +424,7 @@ y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 <li><p><span class="math inline">\(\sum_{i = 1}^N e_1^2 + \dots + e_N^2\)</span> 값이 <strong>최소화하는</strong> <span class="math inline">\((b_0, b_1)\)</span> 값을 선택.</p></li>
 </ul>
 
-<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-19-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section>
+<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-21-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section>
 <section id="ordinary-least-squares-ols-추정-1" class="slide level2">
 <h2>Ordinary Least Squares (OLS) 추정</h2>
 <ul>
@@ -435,7 +432,7 @@ y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 <li><p><span class="math inline">\(\sum_{i = 1}^N e_1^2 + \dots + e_N^2\)</span> 값이 <strong>최소화하는</strong> <span class="math inline">\((b_0, b_1)\)</span> 값을 선택.</p></li>
 </ul>
 
-<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-20-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section>
+<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-22-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section>
 <section id="ordinary-least-squares-ols-추정-2" class="slide level2">
 <h2>Ordinary Least Squares (OLS) 추정</h2>
 <div class="cell" data-layout-align="center">
@@ -510,7 +507,7 @@ y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 ## 
 ## Coefficients:
 ##   (Intercept)  ret_sp500_bin  
-##      -36.1618         0.7517</code></pre>
+##      -20.9828         0.1725</code></pre>
 </div>
 </div>
 </div></div>
@@ -525,34 +522,34 @@ y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 ## 
 ## Coefficients:
 ##   (Intercept)  ret_sp500_bin  
-##      -36.1618         0.7517</code></pre>
+##      -20.9828         0.1725</code></pre>
 </div>
 </div>
 <p>이 결과가 의미하는 것 (<span class="math inline">\(i\)</span> 첨자 생략):</p>
 <p><span class="math display">\[
 \begin{aligned}
 \widehat y &amp;= b_0 + b_1 x \\
-\widehat {\text{KOSPI200 return (bp)}} &amp;= b_0 + b_1 \cdot \text{S\&amp;P500 return (bp)}
+\widehat {\text{KOSPI200 return}} &amp;= b_0 + b_1 \cdot \text{S\&amp;P500 return}
 \end{aligned}
 \]</span></p>
 <p>S&amp;P500 수익률이 30bp일 때 예상되는 코스피200 수익률은?</p>
 <p><span class="math display">\[
 \begin{aligned}
-\widehat {\text{KOSPI200 return (bp)}} &amp;= b_0 + b_1 \cdot 30
+\widehat {\text{KOSPI200 return}} &amp;= b_0 + b_1 \cdot 30
 \end{aligned}
 \]</span></p>
 </section>
 <section id="task-2" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 2</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p><countdown-timer class="countdown" id="timer_466ce225" minutes="5" seconds="0" update-every="1" tabindex="0" style="top:0;right:0;"></countdown-timer></p>
+<p><countdown-timer class="countdown" id="timer_9bed1e52" minutes="5" seconds="0" update-every="1" tabindex="0" style="top:0;right:0;"></countdown-timer></p>
 </div>
 <p>다음 코드를 실행하여 S&amp;P500 수익률 구간(10bp 단위) 수준으로 집계하시오:</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>returns_bin <span class="ot">&lt;-</span> returns_raw <span class="sc">%&gt;%</span></span>
 <span id="cb5-2"><a href=""></a>  <span class="fu">group_by</span>(ret_sp500_bin) <span class="sc">%&gt;%</span></span>
-<span id="cb5-3"><a href=""></a>  <span class="fu">summarise</span>(<span class="at">ret_kospi200_bin =</span> <span class="fu">mean</span>(ret_kospi200_bp),</span>
-<span id="cb5-4"><a href=""></a>            <span class="at">ret_kospi200_lead_bin =</span> <span class="fu">mean</span>(ret_kospi200_lead_bp))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-3"><a href=""></a>  <span class="fu">summarise</span>(<span class="at">ret_kospi200_bin =</span> <span class="fu">mean</span>(ret_kospi200),</span>
+<span id="cb5-4"><a href=""></a>            <span class="at">ret_kospi200_lead_bin =</span> <span class="fu">mean</span>(ret_kospi200_lead))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol type="1">
 <li><p>익일 코스피200 평균 수익률(<code>ret_kospi200_lead_bin</code>)을 S&amp;P500 수익률 구간(<code>ret_sp500_bin</code>)에 대해 회귀분석 수행. 회귀 계수(coefficients)를 해석하시오.</p></li>
@@ -593,7 +590,7 @@ y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 <li>Francis Anscombe (1973)는 통계적으로 <em>완전히 동일한</em> 네 개의 데이터셋을 만들었음. 하지만 <strong>시각적으로 보면 완전히 다름!</strong></li>
 </ul>
 
-<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-28-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"><div class="cell" data-layout-align="center">
+<img data-src="chapter_slr_fin2_files/figure-revealjs/unnamed-chunk-30-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"><div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <table class="caption-top">
 <thead>
@@ -700,7 +697,7 @@ R^2 = \frac{\text{variance explained}}{\text{total variance}} = \frac{SSE}{SST} 
 <section id="task-3" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 3</h2>
 <div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
-<p><countdown-timer class="countdown" id="timer_11addecc" minutes="10" seconds="0" update-every="1" tabindex="0" style="top:0;right:0;"></countdown-timer></p>
+<p><countdown-timer class="countdown" id="timer_a8732b7e" minutes="10" seconds="0" update-every="1" tabindex="0" style="top:0;right:0;"></countdown-timer></p>
 </div>
 <ol type="1">
 <li><p><code>ret_kospi200_bin</code>를 <code>ret_sp500_bin</code>에 대해 회귀(regress)하고 결과를 <code>kospi_reg</code> 객체에 저장.</p></li>
@@ -711,7 +708,9 @@ R^2 = \frac{\text{variance explained}}{\text{total variance}} = \frac{SSE}{SST} 
 <li><p>(Optional) <code>broom</code> 패키지를 설치 및 로드한 후, <code>kospi_reg</code>를 <code>augment()</code> 함수에 전달하여 새로운 객체에 저장함.<br>
 <code>ret_kospi200_bin</code>의 분산(SST)과 예측값 <code>.fitted</code>의 분산(SSE)을 사용하여 <span class="math inline">\(R^2\)</span> 값을 직접 계산하시오. (이전 슬라이드의 공식을 참고할 것.)</p></li>
 </ol>
-<p>THE END!</p>
+</section>
+<section id="the-end" class="title-slide slide level1 center">
+<h1>THE END!</h1>
 
 </section>
     </div>

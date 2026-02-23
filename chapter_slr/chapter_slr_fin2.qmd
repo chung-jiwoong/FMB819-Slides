@@ -74,9 +74,6 @@ if (requireNamespace("countdown", quietly = TRUE)) {
     1) **동일일 관계**: $r^{KOSPI200}_t$ vs $r^{SP500}_t$
     2) **익일 관계**: $r^{KOSPI200}_{t+1}$ vs $r^{SP500}_t$
 
--   지수 수준(level)을 일간 **로그 수익률(log return)**로 변환하고, 단위를 해석하기 쉽도록 **bp(basis points, 1bp = 0.01%)**로 표현함.
--   로그 수익률을 사용하는 이유: 로그 수익률은 지수 수준의 곱셈적 관계를 덧셈적 관계로 변환하여 분석을 단순화함. 또한, 로그 수익률은 연속적으로 복리되는 수익률을 나타내는 데 적합함.
-
 
 ------------------------------------------------------------------------
 
@@ -87,159 +84,132 @@ if (requireNamespace("countdown", quietly = TRUE)) {
 :::
 
 
-1.  코스피200 및 S&P500 일별 종가 데이터를 불러와 `returns_raw` 객체를 생성하시오.\
-    **힌트**: 날짜를 기준으로 두 지수를 병합한 뒤, `log`와 `lag`를 사용해 수익률을 계산하면 됨.
+1.  코스피200 및 S&P500 일별 종가 데이터를 불러와 날짜를 기준으로 두 지수를 병합한 뒤, `merged_px` 객체를 생성하시오. 그리고 일별 수익률 변수(`ret_sp500`, `ret_kospi200`, `ret_kospi200_lead`)를 생성하시오.\
 
-```{r}
-sp500_px <- read_csv("https://stooq.com/q/d/l/?s=^spx")
-head(sp500_px)
-ks200_px <- read_csv("https://stooq.com/q/d/l/?s=^ks200")
-head(ks200_px)
+```{r, echo=FALSE, eval=TRUE}
+library(dplyr)
+sp500_px <- read_csv("https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/data/%5Espx_d.csv") |>
+  transmute(date = as.Date(Date), sp500_close = as.numeric(Close)) |> 
+  arrange(date)
+
+ks200_px <- read_csv("https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/data/%5Ekospi_d.csv") |>
+  transmute(date = as.Date(Date), kospi200_close = as.numeric(Close)) |> 
+  arrange(date)
+
+merged_px <- inner_join(sp500_px, ks200_px, by = "date") |> 
+  mutate(
+    ret_sp500 =  10000 * (log(sp500_close) - log(lag(sp500_close))),
+    ret_kospi200 =  10000 * (log(kospi200_close) - log(lag(kospi200_close)))
+  ) |> 
+  mutate(ret_kospi200_lead = lead(ret_kospi200)) |> 
+  drop_na()
 ```
 
-```{r}
-sp500_px <- read_csv("https://raw.githubusercontent.com/gustavek/teaching/master/data/sp500_px.csv")
-head(sp500_px)
-```
+
 
 2.  데이터셋 설명:
 
-    -   관측 단위는? 즉, 각 행이 무엇을 의미하는가?\
     -   총 몇 개의 관측치가 있는가?\
-    -   데이터셋을 확인하고 어떤 변수가 있는지 확인하시오. `ret_sp500_bp`, `ret_kospi200_bp`, `ret_kospi200_lead_bp`는 각각 무엇을 의미하는가?\
-    -   `skimr` 패키지의 `skim` 함수 사용해서 `ret_sp500_bp`, `ret_kospi200_bp`, `ret_kospi200_lead_bp` 변수에 대한 기본적인 요약 통계 확인함.\
+    -   데이터셋을 확인하고 어떤 변수가 있는지 확인하시오.
+    -   `skimr` 패키지의 `skim` 함수 사용해서 생성한 수익률 변수에 대한 기본적인 요약 통계 확인.\
         **힌트**: `dplyr`의 `select` 사용해서 변수 선택한 후 `%>%`로 `skim()` 적용하면 됨.
 
-3.  코스피200 지수와 S&P500 지수 간 실제 (선형) 관계에 대해 어떤 관계가 있을 것이라 생각하는가?
-
-4.  S\&P500 수익률(`ret_sp500_bp`)과 코스피200 수익률(`ret_kospi200_bp`, `ret_kospi200_lead_bp`)의 상관관계는?
-
-```{r, echo=FALSE}
-# Stooq CSV 다운로드 시도 후 결합하는 함수
-fetch_stooq <- function(symbol_candidates, value_name) {
-  for (sym in symbol_candidates) {
-    url <- paste0(
-      "https://stooq.com/q/d/l/?s=",
-      URLencode(sym, reserved = TRUE),
-      "&i=d"
-    )
-    dat <- tryCatch(read.csv(url), error = function(e) NULL)
-    if (!is.null(dat) && all(c("Date", "Close") %in% names(dat)) && nrow(dat) > 0) {
-      out <- as_tibble(dat) %>%
-        transmute(date = as.Date(Date), !!value_name := as.numeric(Close)) %>%
-        arrange(date)
-      if (nrow(out) > 0 && sum(is.finite(out[[value_name]])) > 100) return(out)
-    }
-  }
-  NULL
-}
-
-sp500_px <- fetch_stooq(c("^spx", "^gspc", "spx.us"), "sp500_close")
-kospi200_px <- fetch_stooq(c("^ks200", "^kospi200", "ks200.kr"), "kospi200_close")
-
-# 외부 접속이 안 되는 환경에서는 렌더가 끊기지 않도록 대체 샘플 사용
-if (is.null(sp500_px) || is.null(kospi200_px)) {
-  fallback <- as_tibble(as.data.frame(EuStockMarkets)) %>%
-    transmute(
-      date = seq.Date(as.Date("1991-01-01"), by = "day", length.out = nrow(EuStockMarkets)),
-      # 대체 샘플에서는 FTSE/DAX를 각각 S&P500/KOSPI200의 프록시로 사용
-      sp500_close = FTSE,
-      kospi200_close = DAX
-    )
-  merged_px <- fallback
-} else {
-  merged_px <- inner_join(sp500_px, kospi200_px, by = "date")
-}
-
-returns_raw <- merged_px %>%
-  mutate(
-    ret_sp500_bp = 10000 * (log(sp500_close) - log(lag(sp500_close))),
-    ret_kospi200_bp = 10000 * (log(kospi200_close) - log(lag(kospi200_close)))
-  ) %>%
-  mutate(ret_kospi200_lead_bp = lead(ret_kospi200_bp)) %>%
-  drop_na() %>%
-  mutate(ret_sp500_bin = round(ret_sp500_bp / 10) * 10)
+```{r, echo=FALSE, eval=FALSE}
+if (!requireNamespace("skimr")) {install.packages("skimr")}
+library(skimr)
+returns_raw <- merged_px %>% select(date, ret_sp500, ret_kospi200, ret_kospi200_lead)
+skim(returns_raw)
 ```
+
+3.  S\&P500 수익률(`ret_sp500`)과 코스피200 수익률(`ret_kospi200`, `ret_kospi200_lead`)의 상관관계는?
+```{r, echo=FALSE, eval=FALSE}
+cor(returns_raw$ret_sp500, returns_raw$ret_kospi200)
+cor(returns_raw$ret_sp500, returns_raw$ret_kospi200_lead)
+```
+
 
 ------------------------------------------------------------------------
 
 ## 코스피200 지수와 S&P500 지수: Scatter plot
 
+
 ::::: columns
 ::: {.column width="50%"}
 ```{r, echo=FALSE, fig.height=6}
-g_math = ggplot(returns_raw, aes(x = ret_sp500_bp, y = ret_kospi200_bp)) + 
+returns_raw <- merged_px %>% select(date, ret_sp500, ret_kospi200, ret_kospi200_lead)
+
+g_sameday = ggplot(returns_raw, aes(x = ret_sp500, y = ret_kospi200)) + 
     geom_point(size = 2, alpha = 0.5) +
-    xlim(-400, 400) +
-    ylim(-450, 450) +
     labs(
-      x = "S&P500 return (bp)",
-      y = "Return (bp)",
+      x = "S&P500 return",
+      y = "Return",
       title = "KOSPI200 (same day)") +
     theme_bw(base_size = 20)
-g_math
+g_sameday
 ```
 :::
 
 ::: {.column width="50%"}
 ```{r, echo=FALSE,fig.height=6}
-g_verb = ggplot(returns_raw, aes(x = ret_sp500_bp, y = ret_kospi200_lead_bp)) + 
+g_lead = ggplot(returns_raw, aes(x = ret_sp500, y = ret_kospi200_lead)) + 
     geom_point(size = 2, alpha = 0.5) +
-    xlim(-400, 400) +
-    ylim(-450, 450) +
-    labs(x = "S&P500 return (bp)",
-         y = "Return (bp)",
+    labs(x = "S&P500 return",
+         y = "Return",
          title = "KOSPI200 (next day)") +
     theme_bw(base_size = 20)
-g_verb
+g_lead
 ```
 :::
 :::::
 
--   상관계수에서 보듯이 양(+)의 선형 관계가 보임. S&P500 수익률을 구간(bin)으로 묶어 평균 관계를 더 명확하게 살펴보자.
+-   S&P500 수익률을 구간(bin)으로 묶어 평균 관계를 더 명확하게 살펴보자.
 
 ------------------------------------------------------------------------
 
 ## 코스피200 지수와 S&P500 지수: Binned Scatter Plot
 
+
 ::::: columns
 ::: {.column width="50%"}
 ```{r, echo=FALSE, fig.height=6}
+# Create bins for S&P500 and KOSPI200 returns (10bp intervals)
+returns_raw <- returns_raw %>%
+  mutate(ret_sp500_bin = round(ret_sp500 / 10) * 10) %>%  
+  mutate(ret_kospi200_bin = round(ret_kospi200 / 10) * 10) %>%
+  mutate(ret_kospi200_lead_bin = round(ret_kospi200_lead / 10) * 10)
+
 # Compute average returns by S&P500 return bins
 returns_bin <- returns_raw %>%
   group_by(ret_sp500_bin) %>%
-  summarise(ret_kospi200_bin = mean(ret_kospi200_bp),
-            ret_kospi200_lead_bin = mean(ret_kospi200_lead_bp),
-            .groups = "drop")
+  summarise(ret_kospi200_bin = mean(ret_kospi200),
+            ret_kospi200_lead_bin = mean(ret_kospi200_lead),
+            .groups = "drop") # ungroup after summarise
 
-g_math_cs = ggplot(returns_bin, aes(x = ret_sp500_bin, y = ret_kospi200_bin)) + 
+g_sameday_bin = ggplot(returns_bin, aes(x = ret_sp500_bin, y = ret_kospi200_bin)) + 
     geom_point(size = 2) +
-    xlim(-400, 400) +
-    ylim(-450, 450) +
     labs(
-      x = "S&P500 return bin (bp)",
-      y = "Average return (bp)",
+      x = "S&P500 return bin",
+      y = "Average return",
       title = "KOSPI200 (same day)") +
     theme_bw(base_size = 20)
-g_math_cs
+g_sameday_bin
 ```
 :::
 
 ::: {.column width="50%"}
 ```{r, echo=FALSE,fig.height=6}
-g_verb_cs = ggplot(returns_bin, aes(x = ret_sp500_bin, y = ret_kospi200_lead_bin)) + 
+g_lead_bin = ggplot(returns_bin, aes(x = ret_sp500_bin, y = ret_kospi200_lead_bin)) + 
     geom_point(size = 2) +
-    xlim(-400, 400) +
-    ylim(-450, 450) +
     labs(
-      x = "S&P500 return bin (bp)",
-      y = "Average return (bp)",
+      x = "S&P500 return bin",
+      y = "Average return",
       title = "KOSPI200 (next day)") +
     theme_bw(base_size = 20)
-g_verb_cs
+g_lead_bin
 ```
 :::
 :::::
+
 
 ------------------------------------------------------------------------
 
@@ -250,8 +220,7 @@ g_verb_cs
 ::::: columns
 ::: {.column width="50%"}
 ```{r, echo=FALSE, fig.align='left', fig.height=4, fig.width=7}
-g_math_cs +
-    ylim(-300, 300) +
+g_sameday_bin +
     theme_bw(base_size = 14) +
     geom_hline(yintercept = 0, col = "#d90502")
 ```
@@ -259,8 +228,7 @@ g_math_cs +
 
 ::: {.column width="50%"}
 ```{r,echo=FALSE, fig.align='left', fig.height=4,fig.width=7}
-g_math_cs +
-  ylim(-300, 300) +
+g_sameday_bin +
   theme_bw(base_size = 14) +
   geom_abline(intercept = -10, slope = 0.8, col = "#d90502")
 ```
@@ -277,9 +245,9 @@ g_math_cs +
 
 -   두 변수 간의 관계에 관심 있음:
 
-    -   결과변수 (종속변수, dependent variable): *KOSPI200 return (bp)* $(y)$
+    -   결과변수 (종속변수, dependent variable): *KOSPI200 return* $(y)$
 
-    -   설명변수 (독립변수, independent variable): *S&P500 return (bp)* $(x)$
+    -   설명변수 (독립변수, independent variable): *S&P500 return* $(x)$
 
 -   각 거래일 $i$에 대해 $x_i$와 $y_i$를 관측할 수 있음. 예, S&P500 수익률과 코스피200 수익률의 *결합 분포(joint distribution)*를 시각화할 수 있음.
 
@@ -396,7 +364,7 @@ plot_ex + geom_line(color = "#d90502")
 ```{r, echo = F, fig.width = 10, fig.height = 5}
 focus_x <- returns_bin$ret_sp500_bin[which.min(abs(returns_bin$ret_sp500_bin - 20))]
 
-plot_1 <- g_math_cs +
+plot_1 <- g_sameday_bin +
     ylim(-300, 300) +
     theme_bw(base_size = 14)
 plot_1
@@ -420,7 +388,7 @@ plot_2
 ```{r, echo = F, fig.width = 10, fig.height = 5}
 focus_point <- returns_bin %>% filter(ret_sp500_bin == focus_x)
 
-g_math_cs +
+g_sameday_bin +
     ylim(-300, 300) +
     theme_bw(base_size = 14) +
   stat_smooth(method = "lm", se = FALSE, colour = "#d90502") +
@@ -438,7 +406,7 @@ kospi_sp500_reg <- lm(ret_kospi200_bin ~ ret_sp500_bin, data = returns_bin)
 kospi_sp500_reg <- broom::augment(kospi_sp500_reg)
 focus_aug <- kospi_sp500_reg %>% filter(ret_sp500_bin == focus_x)
 
-g_math_cs +
+g_sameday_bin +
     ylim(-300, 300) +
     theme_bw(base_size = 14) +
   stat_smooth(method = "lm", se = FALSE, colour = "#d90502") +
@@ -455,7 +423,7 @@ g_math_cs +
 ## Simple Linear Regression: Graphically
 
 ```{r, echo = F, fig.width = 10, fig.height = 5}
-g_math_cs +
+g_sameday_bin +
     ylim(-300, 300) +
     theme_bw(base_size = 14) +
   stat_smooth(method = "lm", se = FALSE, colour = "#d90502") +
@@ -469,7 +437,7 @@ g_math_cs +
 ## Simple Linear Regression: Graphically
 
 ```{r, echo = F, out.width = "100%", fig.height = 5}
-g_math_cs +
+g_sameday_bin +
     ylim(-300, 300) +
     theme_bw(base_size = 14) +
   stat_smooth(method = "lm", se = FALSE, colour = "#d90502") +
@@ -489,7 +457,7 @@ g_math_cs +
 -   $\sum_{i = 1}^N e_1^2 + \dots + e_N^2$ 값이 **최소화하는** $(b_0, b_1)$ 값을 선택.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE,fig.width=7,fig.height = 4}
-g_math_cs +
+g_sameday_bin +
     ylim(-300, 300) +
     xlim(-400, 400) +
     theme_bw(base_size = 14) +
@@ -506,7 +474,7 @@ g_math_cs +
 -   $\sum_{i = 1}^N e_1^2 + \dots + e_N^2$ 값이 **최소화하는** $(b_0, b_1)$ 값을 선택.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE,fig.width=7,fig.height = 3.5}
-g_math_cs +
+g_sameday_bin +
     ylim(-300, 300) +
     xlim(-400, 400) +
     theme_bw(base_size = 14) +
@@ -616,7 +584,7 @@ kospi_reg
 $$
 \begin{aligned}
 \widehat y &= b_0 + b_1 x \\
-\widehat {\text{KOSPI200 return (bp)}} &= b_0 + b_1 \cdot \text{S\&P500 return (bp)}
+\widehat {\text{KOSPI200 return}} &= b_0 + b_1 \cdot \text{S\&P500 return}
 \end{aligned}
 $$
 
@@ -624,7 +592,7 @@ S\&P500 수익률이 30bp일 때 예상되는 코스피200 수익률은?
 
 $$
 \begin{aligned}
-\widehat {\text{KOSPI200 return (bp)}} &= b_0 + b_1 \cdot 30
+\widehat {\text{KOSPI200 return}} &= b_0 + b_1 \cdot 30
 \end{aligned}
 $$
 
@@ -641,8 +609,8 @@ $$
 ```{r, echo=T, eval = F}
 returns_bin <- returns_raw %>%
   group_by(ret_sp500_bin) %>%
-  summarise(ret_kospi200_bin = mean(ret_kospi200_bp),
-            ret_kospi200_lead_bin = mean(ret_kospi200_lead_bp))
+  summarise(ret_kospi200_bin = mean(ret_kospi200),
+            ret_kospi200_lead_bin = mean(ret_kospi200_lead))
 ```
 
 1.  익일 코스피200 평균 수익률(`ret_kospi200_lead_bin`)을 S\&P500 수익률 구간(`ret_sp500_bin`)에 대해 회귀분석 수행. 회귀 계수(coefficients)를 해석하시오.
