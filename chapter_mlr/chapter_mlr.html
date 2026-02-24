@@ -6,8 +6,8 @@
 <script src="chapter_mlr_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="chapter_mlr_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="chapter_mlr_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="chapter_mlr_files/libs/quarto-html/quarto-syntax-highlighting-48ffa3e5b9d089919c6712c39e5b00f2.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.6.41">
+<link href="chapter_mlr_files/libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.8.27">
 
   <meta name="author" content="고려대학교 경영대학 정지웅">
   <title>Multiple Regression</title>
@@ -29,8 +29,9 @@
       vertical-align: middle;
     }
     /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -41,7 +42,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -94,7 +95,7 @@
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="chapter_mlr_files/libs/revealjs/dist/theme/quarto-8f3eebe07241f08526c91a7e9cbef8fd.css">
+  <link rel="stylesheet" href="chapter_mlr_files/libs/revealjs/dist/theme/quarto-0fde88a82f0356838740f155f1088782.css">
   <link rel="stylesheet" href="../styles/styles.css">
   <link href="chapter_mlr_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="chapter_mlr_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -220,10 +221,6 @@
 <li><strong>더미 변수 함정</strong> (Dummy Variable Trap)</li>
 <li><strong>누락 변수 편향</strong> (Omitted Variable Bias)</li>
 <li><strong>조정된</strong> <span class="math inline">\(R^2\)</span> (Adjusted <span class="math inline">\(R^2\)</span>)</li>
-<li><strong>실증 분석:</strong>
-<ul>
-<li><em>학급 규모</em> (size)와 <em>학생 성취</em> (Student Performance)</li>
-</ul></li>
 </ul>
 </section>
 <section id="복습-단순-선형-회귀-분석" class="slide level2">
@@ -233,14 +230,14 @@
 <li>자산의 리스크프리미엄을 어떻게 결정해야하는지에 대한 모형</li>
 <li>포트폴리오 이론에 기반을 둠
 <ul>
-<li>즉 투자자는 분산이 된 시장포트폴리오에 투자하며,</li>
+<li>즉 모든 투자자는 분산이 최대화된 시장포트폴리오에 투자하며,</li>
 <li>개별 자산 고유의 리스크는 제거 될 수 있으므로, 이에 대한 리스크 프리미엄은 0이 됨.</li>
 <li>제거되지 못하는 체계적 위험에 대해서만 리스크 프리미엄이 존재함.</li>
 <li>자산의 체계적 위험은 자산과 시장포트폴리오 간의 공분산으로 측정됨.</li>
 <li>’베타’는 이러한 체계적 위험의 크기를 측정: <span class="math inline">\(E(R_i) = R_f + \beta_i (E(R_m) - R_f)\)</span></li>
 </ul></li>
-<li>CAPM은 “리스크 프리미엄을 베타 하나로 설명하는” <strong>벤차미크</strong></li>
-<li>CAPM을 <strong>완전한 진리</strong>라기보다, <strong>공통 언어/출발점</strong>으로 많이 사용</li>
+<li>CAPM은 “리스크 프리미엄을 베타 하나로 설명하는” <strong>벤치미크</strong></li>
+<li>CAPM을 <strong>완전한 진리</strong>라기보다, <strong>출발점</strong>으로 사용</li>
 </ul>
 </section>
 <section id="capm의-활용" class="slide level2">
@@ -262,15 +259,15 @@
 <section id="베타의-추정" class="slide level2">
 <h2>베타의 추정</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="co"># (설치되지 않은 경우 주석 해제하여 설치)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="co"># (설치되지 않은 경우 주석 해제하여 설치)</span></span>
 <span id="cb1-2"><a href=""></a><span class="co"># install.packages("tidyquant")</span></span>
 <span id="cb1-3"><a href=""></a><span class="co"># install.packages("tidyr")</span></span>
 <span id="cb1-4"><a href=""></a><span class="co"># install.packages("dplyr")</span></span>
 <span id="cb1-5"><a href=""></a><span class="fu">library</span>(tidyquant)</span>
-<span id="cb1-6"><a href=""></a><span class="fu">library</span>(tidyr)  <span class="co"># 데이터 구조 변경을 위한 패키지</span></span>
+<span id="cb1-6"><a href=""></a><span class="fu">library</span>(tidyr)</span>
 <span id="cb1-7"><a href=""></a><span class="fu">library</span>(dplyr)</span>
 <span id="cb1-8"><a href=""></a></span>
-<span id="cb1-9"><a href=""></a>raw_data <span class="ot">&lt;-</span> <span class="fu">tq_get</span>(<span class="fu">c</span>(<span class="st">"^KS200"</span>, <span class="st">"006800.KS"</span>),  <span class="co"># 코스피 200, 미래에셋증권</span></span>
+<span id="cb1-9"><a href=""></a>raw_data <span class="ot">&lt;-</span> <span class="fu">tq_get</span>(<span class="fu">c</span>(<span class="st">"^KS200"</span>, <span class="st">"006800.KS"</span>), </span>
 <span id="cb1-10"><a href=""></a>                   <span class="at">get  =</span> <span class="st">"stock.prices"</span>,</span>
 <span id="cb1-11"><a href=""></a>                   <span class="at">from =</span> <span class="st">"2010-01-01"</span>,</span>
 <span id="cb1-12"><a href=""></a>                   <span class="at">to   =</span> <span class="fu">Sys.Date</span>())</span>
@@ -297,7 +294,7 @@
 <span id="cb1-33"><a href=""></a>beta_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(MiraeAsset <span class="sc">~</span> KOSPI200, <span class="at">data =</span> returns_wide)</span>
 <span id="cb1-34"><a href=""></a></span>
 <span id="cb1-35"><a href=""></a><span class="co"># 회귀분석 결과 요약 출력</span></span>
-<span id="cb1-36"><a href=""></a><span class="fu">summary</span>(beta_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-36"><a href=""></a><span class="fu">summary</span>(beta_model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## 
 ## Call:
@@ -310,7 +307,7 @@
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
 ## (Intercept) 0.001234   0.006322   0.195    0.845    
-## KOSPI200    1.592588   0.113944  13.977   &lt;2e-16 ***
+## KOSPI200    1.592589   0.113944  13.977   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
@@ -323,14 +320,14 @@
 <section id="베타의-추정-그래프" class="slide level2">
 <h2>베타의 추정: 그래프</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">plot</span>(returns_wide<span class="sc">$</span>KOSPI200, returns_wide<span class="sc">$</span>MiraeAsset, </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">plot</span>(returns_wide<span class="sc">$</span>KOSPI200, returns_wide<span class="sc">$</span>MiraeAsset, </span>
 <span id="cb3-2"><a href=""></a>     <span class="at">xlab =</span> <span class="st">"KOSPI 200"</span>, <span class="at">ylab =</span> <span class="st">"Mireae Asset"</span>)</span>
 <span id="cb3-3"><a href=""></a><span class="fu">abline</span>(beta_model, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>) <span class="co"># 회귀선 덧그리기 (빨간색 굵은 선)</span></span>
 <span id="cb3-4"><a href=""></a>eq <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">"y = %.4f * x + %.4f"</span>, <span class="fu">coef</span>(beta_model)[<span class="dv">2</span>], <span class="fu">coef</span>(beta_model)[<span class="dv">1</span>])</span>
-<span id="cb3-5"><a href=""></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend =</span> eq, <span class="at">bty =</span> <span class="st">"n"</span>, <span class="at">text.col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-5"><a href=""></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend =</span> eq, <span class="at">bty =</span> <span class="st">"n"</span>, <span class="at">text.col =</span> <span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 </div>
-<img data-src="chapter_mlr_files/figure-revealjs/unnamed-chunk-1-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<img data-src="chapter_mlr_files/figure-revealjs/unnamed-chunk-2-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
 <section id="다중-회귀-분석-모형" class="slide level2">
 <h2>다중 회귀 분석 모형</h2>
 <ul>
@@ -402,8 +399,125 @@ y_i = b_0 + b_1 x_{1,i} + b_2 x_{2,i}  + b_3 x_{3,i} + \dots + b_k x_{k,i} + e_i
 </ul></li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="fu">lm</span>(<span class="at">formula =</span> dependent variable <span class="sc">~</span>  independent variable <span class="dv">1</span> <span class="sc">+</span> independent variable <span class="dv">2</span> <span class="sc">+</span> ...,</span>
-<span id="cb4-2"><a href=""></a>   <span class="at">data =</span> data.frame containing the data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="fu">lm</span>(<span class="at">formula =</span> dependent variable <span class="sc">~</span>  independent variable <span class="dv">1</span> <span class="sc">+</span> independent variable <span class="dv">2</span> <span class="sc">+</span> ...,</span>
+<span id="cb4-2"><a href=""></a>   <span class="at">data =</span> data.frame containing the data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="다중-회귀-분석-베타-추정" class="slide level2">
+<h2>다중 회귀 분석: 베타 추정</h2>
+<ul>
+<li><p>한국 상장 기업 수익률이 한국 시장 뿐만 아니라 해외 시장에도 영향을 받을 수 있다면</p></li>
+<li><p>한국 시장 수익률 뿐만 아니라, 미국, 중국, 일본 시장 수익률도 포함하여 회귀 분석을 수행할 수 있음.</p></li>
+</ul>
+<p><span class="math inline">\(KOSPI200 = b_0 + b_1 SP500 + b_2 SSE + b_3 N225 + e\)</span></p>
+</section>
+<section id="다중-회귀-분석-베타-추정-1" class="slide level2 scrollable">
+<h2>다중 회귀 분석: 베타 추정</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="fu">library</span>(tidyquant)  <span class="co"># 금융 데이터 수집 및 변환을 위한 패키지</span></span>
+<span id="cb5-2"><a href=""></a><span class="fu">library</span>(tidyr)  <span class="co"># 데이터 구조 변경을 위한 패키지</span></span>
+<span id="cb5-3"><a href=""></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb5-4"><a href=""></a></span>
+<span id="cb5-5"><a href=""></a>raw_data <span class="ot">&lt;-</span> <span class="fu">tq_get</span>(<span class="fu">c</span>(<span class="st">"^KS200"</span>, <span class="st">"006800.KS"</span>, <span class="st">"^SP500TR"</span>, <span class="st">"000001.SS"</span>, <span class="st">"^N225"</span>), </span>
+<span id="cb5-6"><a href=""></a>                   <span class="at">get  =</span> <span class="st">"stock.prices"</span>,</span>
+<span id="cb5-7"><a href=""></a>                   <span class="at">from =</span> <span class="st">"2010-01-01"</span>,</span>
+<span id="cb5-8"><a href=""></a>                   <span class="at">to   =</span> <span class="fu">Sys.Date</span>())</span>
+<span id="cb5-9"><a href=""></a></span>
+<span id="cb5-10"><a href=""></a><span class="co"># 결측치 정리 (NA 제거): 수정주가(adjusted)를 기준으로 결측치가 있는 행을 제거.</span></span>
+<span id="cb5-11"><a href=""></a>clean_data <span class="ot">&lt;-</span> raw_data <span class="sc">%&gt;%</span> <span class="fu">drop_na</span>(adjusted) </span>
+<span id="cb5-12"><a href=""></a></span>
+<span id="cb5-13"><a href=""></a><span class="co"># 월별 수익률 계산: tq_transmute를 사용하여 일별 주가를 월별 수익률로 변환.</span></span>
+<span id="cb5-14"><a href=""></a>monthly_returns <span class="ot">&lt;-</span> clean_data <span class="sc">%&gt;%</span></span>
+<span id="cb5-15"><a href=""></a>  <span class="fu">group_by</span>(symbol) <span class="sc">%&gt;%</span></span>
+<span id="cb5-16"><a href=""></a>  <span class="fu">tq_transmute</span>(<span class="at">select     =</span> adjusted,</span>
+<span id="cb5-17"><a href=""></a>               <span class="at">mutate_fun =</span> periodReturn,</span>
+<span id="cb5-18"><a href=""></a>               <span class="at">period     =</span> <span class="st">"monthly"</span>,</span>
+<span id="cb5-19"><a href=""></a>               <span class="at">col_rename =</span> <span class="st">"monthly_return"</span>)</span>
+<span id="cb5-20"><a href=""></a></span>
+<span id="cb5-21"><a href=""></a><span class="co"># 베타 추정을 위한 데이터 구조 변경 </span></span>
+<span id="cb5-22"><a href=""></a>returns_wide <span class="ot">&lt;-</span> monthly_returns <span class="sc">%&gt;%</span></span>
+<span id="cb5-23"><a href=""></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> symbol, <span class="at">values_from =</span> monthly_return) <span class="sc">%&gt;%</span></span>
+<span id="cb5-24"><a href=""></a>  <span class="fu">rename</span>(<span class="at">KOSPI200 =</span> <span class="st">`</span><span class="at">^KS200</span><span class="st">`</span>, <span class="at">MiraeAsset =</span> <span class="st">`</span><span class="at">006800.KS</span><span class="st">`</span>, <span class="at">SP500 =</span> <span class="st">`</span><span class="at">^SP500TR</span><span class="st">`</span>, <span class="at">SSE =</span> <span class="st">`</span><span class="at">000001.SS</span><span class="st">`</span>, <span class="at">N225 =</span> <span class="st">`</span><span class="at">^N225</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-25"><a href=""></a>  <span class="fu">arrange</span>(date) <span class="sc">%&gt;%</span></span>
+<span id="cb5-26"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">SP500_lag =</span> <span class="fu">lag</span>(SP500), <span class="at">SSE_lag =</span> <span class="fu">lag</span>(SSE)) <span class="sc">%&gt;%</span> <span class="co"># SP500과 SSE, N225의 1개월 지연값 추가</span></span>
+<span id="cb5-27"><a href=""></a>  <span class="fu">drop_na</span>() <span class="co"># 기존 결측치 및 lead/lag 함수 사용으로 인해 첫째 달과 마지막 달에 발생한 NA 제거</span></span>
+<span id="cb5-28"><a href=""></a></span>
+<span id="cb5-29"><a href=""></a><span class="co"># 베타(Beta) 추정 (Lead, Lag 포함)</span></span>
+<span id="cb5-30"><a href=""></a>beta_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(MiraeAsset <span class="sc">~</span> KOSPI200 <span class="sc">+</span> SP500 <span class="sc">+</span> SSE <span class="sc">+</span> N225, <span class="at">data =</span> returns_wide)</span>
+<span id="cb5-31"><a href=""></a><span class="fu">summary</span>(beta_model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## 
+## Call:
+## lm(formula = MiraeAsset ~ KOSPI200 + SP500 + SSE + N225, data = returns_wide)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.21844 -0.05224 -0.00839  0.04516  0.37196 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  0.003925   0.008110   0.484  0.62922    
+## KOSPI200     1.671446   0.173078   9.657  &lt; 2e-16 ***
+## SP500       -0.225726   0.255161  -0.885  0.37790    
+## SSE          0.365207   0.139408   2.620  0.00979 ** 
+## N225        -0.059386   0.203889  -0.291  0.77129    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.08769 on 137 degrees of freedom
+## Multiple R-squared:  0.5425, Adjusted R-squared:  0.5291 
+## F-statistic: 40.61 on 4 and 137 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p><strong><em>Questions</em></strong></p>
+<ol type="1">
+<li>각 회귀 계수(coefficients)는 어떻게 해석할 수 있는가?</li>
+<li>단순 선형 회귀(SLM)와 비교했을 때 KOSPI200 계수는 어떻게 달라졌는가?</li>
+<li>미래에셋 수익률을 S&amp;P500 수익률에 대해 회귀 분석을 수행했을 때, 베타는 어떤가?</li>
+</ol>
+</section>
+<section id="다중공선성perfect-collinearity" class="slide level2">
+<h2>다중공선성(Perfect Collinearity)</h2>
+<ul>
+<li>추가하는 변수는 반드시 <strong>새로운 정보</strong>를 제공해야 함.</li>
+<li>회귀 모형에 추가하는 변수들은 <strong>완전히 선형결합(linear combination)</strong>이 될 수 없음.</li>
+</ul>
+<p><span class="math display">\[
+x_2 \neq a x_1 + b
+\]</span></p>
+<ul>
+<li><p>즉, 하나의 독립 변수를 다른 독립 변수들의 조합으로 완전히 표현할 수 있으면 안 됨.</p></li>
+<li><p><strong>완벽하게 선형 결합된 경우</strong> → 회귀 분석 수행 불가능</p></li>
+<li><p><strong>높은 상관관계를 가지는 경우</strong>: <strong>각 독립 변수의 개별적 효과(계수)를 정확히 분리하기 어려움</strong> → 추정된 계수의 신뢰도가 낮아질 수 있음</p></li>
+<li><p><strong>관측치 수(Observations) &gt; 독립 변수 개수(Independent Variables)</strong>: <strong>즉, 너무 많은 변수를 추가하면 과적합(overfitting) 문제가 발생할 수 있음.</strong> → ✅ <strong>반드시 충족해야 하는 조건!</strong></p></li>
+</ul>
+</section>
+<section id="다중공선성perfect-collinearity-1" class="slide level2">
+<h2>다중공선성(Perfect Collinearity)</h2>
+<ul>
+<li>다중공선성 문제를 확인하는 방법
+<ul>
+<li><strong>분산 팽창 계수(Variance Inflation Factor, VIF)</strong>: 일반적으로 VIF 값이 10을 초과하면 다중공선성 문제가 있다고 간주됨.</li>
+<li><strong>상관 행렬</strong>: 독립 변수들 간의 상관 관계를 시각적으로 확인.</li>
+<li><strong>회귀 계수의 부호 변화</strong>: 다중공선성이 존재할 때, 회귀 계수의 부호가 예상과 다르게 나타날 수 있음.</li>
+<li><strong>회귀 계수의 유의성</strong>: 다중공선성이 존재할 때, 회귀 계수의 유의성이 낮아질 수 있음. 이는 모델의 예측 성능을 저하시킬 수 있음.</li>
+</ul></li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="fu">library</span>(car)  <span class="co"># VIF 계산을 위한 패키지</span></span>
+<span id="cb7-2"><a href=""></a><span class="fu">vif</span>(beta_model)  <span class="co"># VIF 값 계산</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## KOSPI200    SP500      SSE     N225 
+## 1.673725 1.799963 1.175273 1.773004</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">cor</span>(returns_wide[, <span class="fu">c</span>(<span class="st">"KOSPI200"</span>, <span class="st">"SP500"</span>, <span class="st">"SSE"</span>, <span class="st">"N225"</span>)])  <span class="co"># 상관 행렬 계산</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##           KOSPI200     SP500       SSE      N225
+## KOSPI200 1.0000000 0.5647034 0.3015633 0.5611417
+## SP500    0.5647034 1.0000000 0.3448589 0.5933062
+## SSE      0.3015633 0.3448589 1.0000000 0.3278601
+## N225     0.5611417 0.5933062 0.3278601 1.0000000</code></pre>
+</div>
 </div>
 </section>
 <section class="slide level2">
@@ -602,7 +716,7 @@ y_i = b_0 + b_1 x_{1,i} + b_2 x_{2,i}  + b_3 x_{3,i} + \dots + b_k x_{k,i} + e_i
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],
@@ -705,190 +819,173 @@ y_i = b_0 + b_1 x_{1,i} + b_2 x_{2,i}  + b_3 x_{3,i} + \dots + b_k x_{k,i} + e_i
     
 
     <script id="quarto-html-after-body" type="application/javascript">
-    window.document.addEventListener("DOMContentLoaded", function (event) {
-      const toggleBodyColorMode = (bsSheetEl) => {
-        const mode = bsSheetEl.getAttribute("data-mode");
-        const bodyEl = window.document.querySelector("body");
-        if (mode === "dark") {
-          bodyEl.classList.add("quarto-dark");
-          bodyEl.classList.remove("quarto-light");
-        } else {
-          bodyEl.classList.add("quarto-light");
-          bodyEl.classList.remove("quarto-dark");
-        }
-      }
-      const toggleBodyColorPrimary = () => {
-        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-        if (bsSheetEl) {
-          toggleBodyColorMode(bsSheetEl);
-        }
-      }
-      toggleBodyColorPrimary();  
-      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
-      tabsets.forEach(function(tabset) {
-        const tabby = new Tabby('#' + tabset.id);
-      });
-      const isCodeAnnotation = (el) => {
-        for (const clz of el.classList) {
-          if (clz.startsWith('code-annotation-')) {                     
-            return true;
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
           }
+          return false;
         }
-        return false;
-      }
-      const onCopySuccess = function(e) {
-        // button target
-        const button = e.trigger;
-        // don't keep focus
-        button.blur();
-        // flash "checked"
-        button.classList.add('code-copy-button-checked');
-        var currentTitle = button.getAttribute("title");
-        button.setAttribute("title", "Copied!");
-        let tooltip;
-        if (window.bootstrap) {
-          button.setAttribute("data-bs-toggle", "tooltip");
-          button.setAttribute("data-bs-placement", "left");
-          button.setAttribute("data-bs-title", "Copied!");
-          tooltip = new bootstrap.Tooltip(button, 
-            { trigger: "manual", 
-              customClass: "code-copy-button-tooltip",
-              offset: [0, -8]});
-          tooltip.show();    
-        }
-        setTimeout(function() {
-          if (tooltip) {
-            tooltip.hide();
-            button.removeAttribute("data-bs-title");
-            button.removeAttribute("data-bs-toggle");
-            button.removeAttribute("data-bs-placement");
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
           }
-          button.setAttribute("title", currentTitle);
-          button.classList.remove('code-copy-button-checked');
-        }, 1000);
-        // clear code selection
-        e.clearSelection();
-      }
-      const getTextToCopy = function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
           for (const childEl of codeEl.children) {
             if (isCodeAnnotation(childEl)) {
               childEl.remove();
             }
           }
           return codeEl.innerText;
-      }
-      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-        text: getTextToCopy
-      });
-      clipboard.on('success', onCopySuccess);
-      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-          text: getTextToCopy,
-          container: window.document.getElementById('quarto-embedded-source-code-modal')
-        });
-        clipboardModal.on('success', onCopySuccess);
-      }
-        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-        var mailtoRegex = new RegExp(/^mailto:/);
-          var filterRegex = new RegExp('/' + window.location.host + '/');
-        var isInternal = (href) => {
-            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
         }
-        // Inspect non-navigation links and adorn them if external
-     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-        for (var i=0; i<links.length; i++) {
-          const link = links[i];
-          if (!isInternal(link.href)) {
-            // undo the damage that might have been done by quarto-nav.js in the case of
-            // links that we want to consider external
-            if (link.dataset.originalHref !== undefined) {
-              link.href = link.dataset.originalHref;
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
             }
           }
-        }
-      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-        const config = {
-          allowHTML: true,
-          maxWidth: 500,
-          delay: 100,
-          arrow: false,
-          appendTo: function(el) {
-              return el.closest('section.slide') || el.parentElement;
-          },
-          interactive: true,
-          interactiveBorder: 10,
-          theme: 'light-border',
-          placement: 'bottom-start',
-        };
-        if (contentFn) {
-          config.content = contentFn;
-        }
-        if (onTriggerFn) {
-          config.onTrigger = onTriggerFn;
-        }
-        if (onUntriggerFn) {
-          config.onUntrigger = onUntriggerFn;
-        }
-          config['offset'] = [0,0];
-          config['maxWidth'] = 700;
-        window.tippy(el, config); 
-      }
-      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-      for (var i=0; i<noterefs.length; i++) {
-        const ref = noterefs[i];
-        tippyHover(ref, function() {
-          // use id or data attribute instead here
-          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-          try { href = new URL(href).hash; } catch {}
-          const id = href.replace(/^#\/?/, "");
-          const note = window.document.getElementById(id);
-          if (note) {
-            return note.innerHTML;
-          } else {
-            return "";
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
           }
-        });
-      }
-      const findCites = (el) => {
-        const parentEl = el.parentElement;
-        if (parentEl) {
-          const cites = parentEl.dataset.cites;
-          if (cites) {
-            return {
-              el,
-              cites: cites.split(' ')
-            };
-          } else {
-            return findCites(el.parentElement)
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
           }
-        } else {
-          return undefined;
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
         }
-      };
-      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-      for (var i=0; i<bibliorefs.length; i++) {
-        const ref = bibliorefs[i];
-        const citeInfo = findCites(ref);
-        if (citeInfo) {
-          tippyHover(citeInfo.el, function() {
-            var popup = window.document.createElement('div');
-            citeInfo.cites.forEach(function(cite) {
-              var citeDiv = window.document.createElement('div');
-              citeDiv.classList.add('hanging-indent');
-              citeDiv.classList.add('csl-entry');
-              var biblioDiv = window.document.getElementById('ref-' + cite);
-              if (biblioDiv) {
-                citeDiv.innerHTML = biblioDiv.innerHTML;
-              }
-              popup.appendChild(citeDiv);
-            });
-            return popup.innerHTML;
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
           });
         }
-      }
-    });
-    </script>
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
     
 
 </body></html>

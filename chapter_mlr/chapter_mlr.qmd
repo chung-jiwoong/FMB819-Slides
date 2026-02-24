@@ -59,8 +59,6 @@ countdown(
 -   **더미 변수 함정** (Dummy Variable Trap)
 -   **누락 변수 편향** (Omitted Variable Bias)
 -   **조정된** $R^2$ (Adjusted $R^2$)
--   **실증 분석:**
-    -   *학급 규모* (size)와 *학생 성취* (Student Performance)
 
 ------------------------------------------------------------------------
 
@@ -70,14 +68,14 @@ countdown(
 
 -   자산의 리스크프리미엄을 어떻게 결정해야하는지에 대한 모형
 -   포트폴리오 이론에 기반을 둠
-    -   즉 투자자는 분산이 된 시장포트폴리오에 투자하며, 
+    -   즉 모든 투자자는 분산이 최대화된 시장포트폴리오에 투자하며, 
     -   개별 자산 고유의 리스크는 제거 될 수 있으므로, 이에 대한 리스크 프리미엄은 0이 됨.
     -   제거되지 못하는 체계적 위험에 대해서만 리스크 프리미엄이 존재함.
     -   자산의 체계적 위험은 자산과 시장포트폴리오 간의 공분산으로 측정됨.
     -   '베타'는 이러한 체계적 위험의 크기를 측정: $E(R_i) = R_f + \beta_i (E(R_m) - R_f)$
 
-- CAPM은 “리스크 프리미엄을 베타 하나로 설명하는” **벤차미크**
-- CAPM을 **완전한 진리**라기보다, **공통 언어/출발점**으로 많이 사용
+- CAPM은 “리스크 프리미엄을 베타 하나로 설명하는” **벤치미크**
+- CAPM을 **완전한 진리**라기보다, **출발점**으로 사용
 
 ------------------------------------------------------------------------
 
@@ -97,16 +95,17 @@ countdown(
 
 ## 베타의 추정
 
-```{r beta_est, echo = TRUE, eval = TRUE}
+
+```{r, echo = TRUE, eval = TRUE}
 # (설치되지 않은 경우 주석 해제하여 설치)
 # install.packages("tidyquant")
 # install.packages("tidyr")
 # install.packages("dplyr")
 library(tidyquant)
-library(tidyr)  # 데이터 구조 변경을 위한 패키지
+library(tidyr)
 library(dplyr)
 
-raw_data <- tq_get(c("^KS200", "006800.KS"),  # 코스피 200, 미래에셋증권
+raw_data <- tq_get(c("^KS200", "006800.KS"), 
                    get  = "stock.prices",
                    from = "2010-01-01",
                    to   = Sys.Date())
@@ -135,6 +134,9 @@ beta_model <- lm(MiraeAsset ~ KOSPI200, data = returns_wide)
 # 회귀분석 결과 요약 출력
 summary(beta_model)
 ```
+
+
+
 
 ---
 
@@ -232,66 +234,100 @@ lm(formula = dependent variable ~  independent variable 1 + independent variable
 
 ------------------------------------------------------------------------
 
-## 학급 규모와 학생 성취: 다중 회귀 분석
+## 다중 회귀 분석: 베타 추정
 
--   우리는 **학급 규모가 평균 수학 점수에 미치는 효과**를 알고 싶음.
+-   한국 상장 기업 수익률이 한국 시장 뿐만 아니라 해외 시장에도 영향을 받을 수 있다면
 
--   하지만, **불리한 배경을 가진 학생 비율**과 학급 규모 및 평균 수학 점수 간의 **음의 관계**를 고려해야 함.
+-   한국 시장 수익률 뿐만 아니라, 미국, 중국, 일본 시장 수익률도 포함하여 회귀 분석을 수행할 수 있음.
 
--   이를 위해 **`classize`와 `disadvantaged` 변수를 회귀 분석의 독립 변수(regressors)로 포함해야 함**.
-
--   이렇게 하면 **학급 규모가 평균 수학 점수에 미치는 효과를, 불리한 배경 변수의 영향을 제거한(purged) 형태로 추정 가능**.
-
-**추정하려는 회귀 모델** 다중 회귀 분석(Multiple Regression)
-
-$$
- \textrm{avg math}_i = b_0 + b_1 \text{size}_i + b_2 \text{\% disadvantaged}_i + e_i
-$$
+$KOSPI200 = b_0 + b_1 SP500 + b_2 SSE + b_3 N225 + e$
 
 
 
-## 학급 규모와 학생 성취: 다중 회귀 분석
+## 다중 회귀 분석: 베타 추정
 
-```{r, echo = FALSE, eval=TRUE}
-lm(avgmath ~ classize + disadvantaged, grades)
+
+
+```{r, echo = TRUE, eval = TRUE}
+library(tidyquant)  # 금융 데이터 수집 및 변환을 위한 패키지
+library(tidyr)  # 데이터 구조 변경을 위한 패키지
+library(dplyr)
+
+raw_data <- tq_get(c("^KS200", "006800.KS", "^SP500TR", "000001.SS", "^N225"), 
+                   get  = "stock.prices",
+                   from = "2010-01-01",
+                   to   = Sys.Date())
+
+# 결측치 정리 (NA 제거): 수정주가(adjusted)를 기준으로 결측치가 있는 행을 제거.
+clean_data <- raw_data %>% drop_na(adjusted) 
+
+# 월별 수익률 계산: tq_transmute를 사용하여 일별 주가를 월별 수익률로 변환.
+monthly_returns <- clean_data %>%
+  group_by(symbol) %>%
+  tq_transmute(select     = adjusted,
+               mutate_fun = periodReturn,
+               period     = "monthly",
+               col_rename = "monthly_return")
+
+# 베타 추정을 위한 데이터 구조 변경 
+returns_wide <- monthly_returns %>%
+  pivot_wider(names_from = symbol, values_from = monthly_return) %>%
+  rename(KOSPI200 = `^KS200`, MiraeAsset = `006800.KS`, SP500 = `^SP500TR`, SSE = `000001.SS`, N225 = `^N225`) %>%
+  arrange(date) %>%
+  mutate(SP500_lag = lag(SP500), SSE_lag = lag(SSE)) %>% # SP500과 SSE, N225의 1개월 지연값 추가
+  drop_na() # 기존 결측치 및 lead/lag 함수 사용으로 인해 첫째 달과 마지막 달에 발생한 NA 제거
+
+# 베타(Beta) 추정 (Lead, Lag 포함)
+beta_model <- lm(MiraeAsset ~ KOSPI200 + SP500 + SSE + N225, data = returns_wide)
+summary(beta_model)
 ```
 
 ***Questions***
 
 1.  각 회귀 계수(coefficients)는 어떻게 해석할 수 있는가?
-2.  단순 선형 회귀(SLM)와 비교했을 때 classize 계수의 변화는 어떻게 설명할 수 있는가?
+2.  단순 선형 회귀(SLM)와 비교했을 때 KOSPI200 계수는 어떻게 달라졌는가?
+3.  미래에셋 수익률을 S&P500 수익률에 대해 회귀 분석을 수행했을 때, 베타는 어떤가?
+
 
 ------------------------------------------------------------------------
 
-## 학급 규모와 학생 성취: 다중 회귀 분석
+## 다중공선성(Perfect Collinearity)
 
-```{r, echo = FALSE, eval=TRUE}
-lm(avgmath ~ classize + disadvantaged, grades)
-```
+-   추가하는 변수는 반드시 **새로운 정보**를 제공해야 함.
+  - 회귀 모형에 추가하는 변수들은 **완전히 선형결합(linear combination)**이 될 수 없음.
 
-***Answers***
 
-1.  각 회귀 계수의 해석
+$$
+x_2 \neq a x_1 + b
+$$
 
--   $b_0 = 69.94$: 학급 규모 (classize) 와 불리한 배경을 가진 학생 비율 이 모두 0일 때 → 평균 수학 점수(avg math)의 예측값은 69.94
+-   즉, 하나의 독립 변수를 다른 독립 변수들의 조합으로 완전히 표현할 수 있으면 안 됨.
 
--   $b_1 = 0.07$: 불리한 배경을 가진 학생 비율을 일정하게 유지할 경우, 학급 규모가 1명 증가하면 → 평균 수학 점수가 평균적으로 0.07점 증가하는 것과 연관됨(associated).
+-   **완벽하게 선형 결합된 경우** → 회귀 분석 수행 불가능
 
--   $b_2 = -0.34$: 학급 규모를 일정하게 유지할 경우, 불리한 배경을 가진 학생 비율이 1% 증가하면 → 평균 수학 점수가 평균적으로 0.34점 감소하는 것과 연관됨(associated).
+-   **높은 상관관계를 가지는 경우**: **각 독립 변수의 개별적 효과(계수)를 정확히 분리하기 어려움** → 추정된 계수의 신뢰도가 낮아질 수 있음
+
+-   **관측치 수(Observations) \> 독립 변수 개수(Independent Variables)**: **즉, 너무 많은 변수를 추가하면 과적합(overfitting) 문제가 발생할 수 있음.** → ✅ **반드시 충족해야 하는 조건!**
 
 ------------------------------------------------------------------------
 
-## 학급 규모와 학생 성취: 다중 회귀 분석
+## 다중공선성(Perfect Collinearity)
 
-```{r, echo = FALSE, eval=TRUE}
-lm(avgmath ~ classize + disadvantaged, grades)
+- 다중공선성 문제를 확인하는 방법
+  - **분산 팽창 계수(Variance Inflation Factor, VIF)**: 일반적으로 VIF 값이 10을 초과하면 다중공선성 문제가 있다고 간주됨.
+  - **상관 행렬**: 독립 변수들 간의 상관 관계를 시각적으로 확인. 
+  - **회귀 계수의 부호 변화**: 다중공선성이 존재할 때, 회귀 계수의 부호가 예상과 다르게 나타날 수 있음. 
+  - **회귀 계수의 유의성**: 다중공선성이 존재할 때, 회귀 계수의 유의성이 낮아질 수 있음. 이는 모델의 예측 성능을 저하시킬 수 있음.
+
+```{r, echo = TRUE, eval = TRUE}
+library(car)  # VIF 계산을 위한 패키지
+vif(beta_model)  # VIF 값 계산
+cor(returns_wide[, c("KOSPI200", "SP500", "SSE", "N225")])  # 상관 행렬 계산
 ```
 
-***Answers***
 
-2.  단순 선형 회귀(SLM)와 비교했을 때 classize 계수의 변화는 어떻게 설명할 수 있는가?
+------------------------------------------------------------------------
 
--   $b_1$ 값이 감소: disadvantaged 변수를 추가하자 학급 규모(size)의 계수($b_1$)가 감소함. 이는 예상된 결과 → 큰 학급일수록 불리한 배경을 가진 학생 비율이 작아지는 경향이 있었기 때문. 즉, 단순 선형 회귀에서는 학급 규모가 학생 성취에 미치는 "순수한 효과"뿐만 아니라, 불리한 배경을 가진 학생 비율이 적은 영향도 포함하고 있었음.
 
 ------------------------------------------------------------------------
 
@@ -328,309 +364,8 @@ reg_full <- lm(avgverb ~ ., data = grades)
 summary(reg_full)
 ```
 
-------------------------------------------------------------------------
-
-## 연속형 변수와 더미 변수의 회귀 계수 해석
-
--   연속형(numeric, continuous) 변수의 계수 해석 방법은 이미 알고 있음.
-
--   그렇다면, 독립 변수 중 하나가 ***더미 변수(dummy variable)*** 라면?
-
-*예)*: 아래 회귀 모델에서 각 계수의 의미는?
-
-$$
-\text{avg math}_i = b_0 + b_1\text{size}_i + b_2\text{religious}_i +e_i
-$$
-
--   `religious`: **1이면** 해당 학교가 *종교 학교*, **0이면** 해당 학교가 *일반 학교*
-
-```{r}
-lm(avgmath ~ classize + religious, grades)
-```
 
 ------------------------------------------------------------------------
-
-## 연속형 변수와 더미 변수를 포함한 회귀 분석
-
-$$
-\text{avg math}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
-$$
-
--   다음이 성립
-
-\begin{align}
-\mathbb{E}(\text{avg math} | \text{religious} = 0 \text{ & } \text{size} = 0) &= \color{#d96502}{b_0} + \color{#d90502}{b_1} \times 0 + \color{#027D83}{b_2} \times 0 \\
-&= \color{#d96502}{b_0}
-\end{align}
-
-**절편 ($b_0$)**: `religious = 0` (일반 학교)이고, `size = 0`인 경우의 **예측된 평균 수학 점수**
-
--   $\color{#d96502}{b_0}$ 는 학급 규모가 0이고, 학교가 일반 학교일 때의 평균 수학 점수를 의미.
-
-------------------------------------------------------------------------
-
-## 연속형 변수와 더미 변수를 포함한 회귀 분석
-
-$$
-\text{avg math}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
-$$
-
-
--   또한 다음이 성립
-
-\begin{equation}
-\mathbb{E}(\text{avg math} | \text{religious} \in \{0,1\} \text{ & } \color{#d90502}{\text{size} = n_1}) = \color{#d96502}{b_0} + \color{#d90502}{b_1} \times n_1 + \color{#027D83}{b_2} \times \text{religious}
-\end{equation}
-\begin{multline}
-\mathbb{E}(\text{avg math} | \text{religious} \in \{0,1\} \text{ & } \color{#d90502}{\text{size} = n_1+1}) = \\ \color{#d96502}{b_0} + \color{#d90502}{b_1} \times (n_1+1) + \color{#027D83}{b_2} \times \text{religious}
-\end{multline}
-\begin{multline}
-\mathbb{E}(\text{avg math} | \text{religious} \in \{0,1\} \text{ & } \color{#d90502}{\text{size} = n_1+1}) - \\ \mathbb{E}(\text{avg math} | \text{religious} \in \{0,1\} \text{ & } \color{#d90502}{\text{size} = n_1}) \\
-= \color{#d96502}{b_0} + \color{#d90502}{b_1} \times (n_1+1) + \color{#027D83}{b_2} \times \text{religious} - (\color{#d96502}{b_0} + \color{#d90502}{b_1} \times n_1 + \color{#027D83}{b_2} \times \text{religious}) = \color{#d90502}{b_1}
-\end{multline}
-
--   $\color{#d90502}{b_1}$은 학급 규모(size)가 1명 증가할 때, 평균 수학 점수가 평균적으로 변화하는 정도를 나타냄. 단, **학교의 종교적 특성(`religious` 변수)은 일정하게 유지된 상태에서**
-
-------------------------------------------------------------------------
-
-## 연속형 변수와 더미 변수를 포함한 회귀 분석
-
-$$
-\text{avg math}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
-$$
-
-
--   그리고 다음이 성립
-
-\begin{align}
-\mathbb{E}(\text{avg math} | \color{#027D83}{\text{religious} = 1} \text{ & } \text{size} \in \mathbb{N}) &= \color{#d96502}{b_0} + \color{#d90502}{b_1} \times \text{size} + \color{#027D83}{b_2} \times 1 \\
-&= \color{#d96502}{b_0} + \color{#d90502}{b_1} \times \text{size} + \color{#027D83}{b_2}
-\end{align}
-\begin{align}
-\mathbb{E}(\text{avg math} | \color{#027D83}{\text{religious} = 0} \text{ & } \text{size} \in \mathbb{N}) &= \color{#d96502}{b_0} + \color{#d90502}{b_1} \times \text{size} + \color{#027D83}{b_2} \times 0 \\
-&= \color{#d96502}{b_0} + \color{#d90502}{b_1} \times \text{size}
-\end{align}
-\begin{multline}
-\mathbb{E}(\text{avg math} | \color{#027D83}{\text{religious} = 1} \text{ & } \text{size} \in \mathbb{N}) - \\ \mathbb{E}(\text{avg math} | \color{#027D83}{\text{religious} =0} \text{ & } \text{size} \in \mathbb{N}) \\
-= \color{#d96502}{b_0} + \color{#d90502}{b_1} \times \text{size} + \color{#027D83}{b_2}- (\color{#d96502}{b_0} + \color{#d90502}{b_1} \times \text{size}) = \color{#027D83}{b_2}
-\end{multline}
-
-$\rightarrow$ $\color{#027D83}{b_2}$는 학급 규모를 일정하게 유지한 상태에서 **종교계 학교와 비종교계 학교 간 평균 수학 점수의 기대 차이**를 의미
-
-------------------------------------------------------------------------
-
-## 연속형 변수와 더미 변수를 포함한 회귀 분석: 요약
-
-$$
-\text{avg math}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
-$$
-
-\begin{equation}
-\color{#d96502}{b_0} = \mathbb{E}(\text{avg math} | \text{religious} = 0 \text{ & } \text{size} = 0)
-\end{equation}
-\begin{multline}
-\color{#d90502}{b_1} = \mathbb{E}(\text{avg math} | \text{religious} \in \{0,1\} \text{ & } \color{#d90502}{\text{size} = n_1+1}) - \\ \mathbb{E}(\text{avg math} | \text{religious} \in \{0,1\} \text{ & } \color{#d90502}{\text{size} = n_1})
-\end{multline}
-\begin{multline}
-\color{#027D83}{b_2} = \mathbb{E}(\text{avg math} | \color{#027D83}{\text{religious} = 1} \text{ & } \text{size} \in \mathbb{N}) - \\ \mathbb{E}(\text{avg math} | \color{#027D83}{\text{religious} =0} \text{ & } \text{size} \in \mathbb{N})
-\end{multline}
-\begin{equation}
-\color{#d96502}{b_0} + \color{#027D83}{b_2} = \mathbb{E}(\text{avg math} | \text{religious} = 1 \text{ & } \text{size} = 0)
-\end{equation}
-
-------------------------------------------------------------------------
-
-## 연속형 변수와 더미 변수를 포함한 회귀 분석: 시각화
-
-$$
-\text{avg math}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
-$$
-
-
-```{r, echo = FALSE, fig.height=5, fig.width = 10}
-base_graph <- grades %>%
-    ggplot(aes(x = classize, y = avgmath, col = factor(religious))) +
-    geom_point(size = 3, alpha = .5) +
-    scale_color_viridis_d(labels = c("FALSE","TRUE")) +
-    scale_x_continuous(lim = c(0,45), expand = c(0,0)) +
-    scale_y_continuous(breaks = seq(30,90,20), minor_breaks = seq(40,80,10)) +
-    labs(x = "size", y = "avg math", col = "Religious school") +
-    theme_bw(base_size = 20) +
-    theme(legend.position = c(0,1),
-          legend.justification = c(0,1),
-          legend.background = element_blank(),
-          legend.key = element_blank(),
-          legend.text = element_text(size = 12),
-          legend.title = element_text(size = 12, face = "italic"))
-base_graph
-```
-
-------------------------------------------------------------------------
-
-## 연속형 변수와 더미 변수를 포함한 회귀 분석: 시각화
-
-$$
-\text{avg math}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
-$$
-
-
-```{r, echo = FALSE, fig.height=5, fig.width = 10}
-library(broom)  
-library(viridis)
-reg_dummy <- augment(lm(avgmath ~ classize + religious, grades))
-
-graph_reg <- base_graph +
-    geom_line(data = reg_dummy %>% filter(religious == 0), aes(x = classize, y = .fitted), color = viridis_pal()(2)[1], size = 2) +
-    geom_line(data = reg_dummy %>% filter(religious == 1), aes(x = classize, y = .fitted), color = viridis_pal()(2)[2], size = 2)
-graph_reg
-```
-
-------------------------------------------------------------------------
-
-## 연속형 변수와 더미 변수를 포함한 회귀 분석: 시각화
-
-$$
-\text{avg math}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
-$$
-
-
-```{r, echo = FALSE, fig.height=5, fig.width = 10}
-library(latex2exp)
-reg_coefs <- lm(avgmath ~ classize + religious, grades)$coefficient
-b0 = reg_coefs[1]
-b1 = reg_coefs[2]
-b2 = reg_coefs[3]
-
-graph_reg_b0 <- graph_reg +
-    geom_segment(aes(x = 0, xend = 10, y = b0, yend = b0 + b1 * 10), size = .5, linetype = 2, colour = viridis_pal()(2)[1]) +
-    scale_y_continuous(breaks = c(30,50,b0,70,90), labels = c("30","50",parse(text = TeX("$b_0$")),"70","90"), minor_breaks = seq(40,80,10)) +
-    theme(axis.text.y = element_text(color = c("grey30", "grey30", "#d96502", "grey30", "grey30")),
-          axis.ticks.y = element_line(color = c("grey30", "grey30", "#d96502", "grey30", "grey30")),
-          panel.grid.minor = element_line(color = c("grey92", "grey92", "grey92", "grey92", "grey92")),
-          panel.grid.major.y = element_line(color = c("grey92", "grey92", NA, "grey92", "grey92")))
-graph_reg_b0
-```
-
-------------------------------------------------------------------------
-
-## 연속형 변수와 더미 변수를 포함한 회귀 분석: 시각화
-
-$$
-\text{avg math}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
-$$
-
-
-```{r, echo = FALSE, fig.height=5, fig.width = 10}
-graph_b0_b1 <- graph_reg_b0 + 
-    annotate("text", x = 3, y = 34, label = "b[1]", color = "#d90502", hjust = 0,  parse = TRUE, size = 6) +
-  annotate("text", x = 4.5, y = 34, label = "is equal to the slope of these slines", hjust = 0, size = 6)
-graph_b0_b1
-```
-
-------------------------------------------------------------------------
-
-## 연속형 변수와 더미 변수를 포함한 회귀 분석: 시각화
-
-$$
-\text{avg math}_i = \color{#d96502}{b_0} + \color{#d90502}{b_1}\text{size}_i + \color{#027D83}{b_2}\text{religious}_i +e_i
-$$
-
-
-```{r, echo = FALSE, fig.height=5, fig.width = 10}
-graph_b0_b1 +
-    geom_segment(aes(x = 2, xend = 10, y = b0 + 2*b1 + b2, yend = b0 + b2 + b1 * 10), size = .5, linetype = 2, colour = viridis_pal()(2)[2]) +
-    geom_segment(aes(x = 2, xend = 2, y = b0 + 2*b1 + b2, yend = b0 + 2*b1), size = .5, linetype = 1, colour = "#027D83", arrow = arrow(length = unit(0.2, "cm"), ends = "both")) +
-    geom_curve(aes(x = 1.65, xend = 3, y = b0 + 1.7*b1 + b2/2, yend = 50), size = .5, color = "#027D83", linetype = 1, colour = "black", arrow = arrow(length = unit(0.3, "cm"), ends = "first")) +
-    annotate("text", x = 3.3, y = 50, hjust = 0, label = "b[2]", parse = TRUE, color = "#027D83", size = 6)
-```
-
-------------------------------------------------------------------------
-
-## 완전 다중공선성(Perfect Collinearity)
-
--   추가하는 변수는 반드시 **새로운 정보**를 제공해야 함.
-  - 회귀 모형에 추가하는 변수들은 **완전히 선형결합(linear combination)**이 될 수 없음.
-
-
-$$
-x_2 \neq ax_1 + b
-$$
-
--   즉, 하나의 독립 변수를 다른 독립 변수들의 조합으로 완전히 표현할 수 있으면 안 됨.
-
--   **완벽하게 선형 결합된 경우** → 회귀 분석 수행 불가능
-
--   **높은 상관관계를 가지는 경우**: **각 독립 변수의 개별적 효과(계수)를 정확히 분리하기 어려움** → 추정된 계수의 신뢰도가 낮아질 수 있음
-
--   **관측치 수(Observations) \> 독립 변수 개수(Independent Variables)**: **즉, 너무 많은 변수를 추가하면 과적합(overfitting) 문제가 발생할 수 있음.** → ✅ **반드시 충족해야 하는 조건!**
-
-------------------------------------------------------------------------
-
-## 완전 다중공선성과 더미 변수 함정 (Dummy Variable Trap)
-
--   **범주형 변수(categorical variables)**란, 특정 개수의 **"레벨(levels)"**을 가지는 변수 (예: 성별, 계절, 인종, 교육 수준 등)
-
--   **🏫 `religious` 변수 예제**: `religious` 변수를 포함한 회귀 분석 수행
-
-```{r, echo = FALSE}
-lm(avgmath ~ classize + religious, grades)
-```
-
-⚠ 더미 변수 함정: 만약 religious 변수를 두 개의 더미 변수(is_religious, is_notreligious)로 변환하여 사용한다면?
-
-```{r, echo=TRUE}
-grades <- grades %>%
-  mutate(is_religious = (religious == 1),
-         is_notreligious = (religious == 0))
-
-lm(avgmath ~ classize + is_religious + is_notreligious, grades)
-```
-
-❓ 왜 하나의 계수만 추정되는가? 완전 다중공선성 발생 → is_religious와 is_notreligious는 항상 1의 합을 가짐. 즉, 한 변수를 다른 변수로 완전히 설명 가능
-
-::::: columns
-::: {.column width="50%"}
-```{r, echo=TRUE, eval = FALSE}
-grades %>% count(is_religious == 1 - is_notreligious)
-```
-:::
-
-::: {.column width="50%"}
-```{r, echo = FALSE}
-grades %>% count(is_religious == 1 - is_notreligious)
-```
-:::
-:::::
-
-------------------------------------------------------------------------
-
-## 완전 다중공선성과 더미 변수 함정 (Dummy Variable Trap)
-
-`R`은 **완전 다중공선성(perfect collinearity)**을 자동으로 감지하고, **한 변수를 자동으로 제거(drop)** 함.
-
-**⚠ 기준(reference) 그룹과 계수 해석**
-
--   ✅ 제거된 변수(omitted category)는 기준 그룹(reference group)이 됨! \
--   💡 모든 계수는 이 **기준 그룹 대비 변화량**을 의미함.
-
-\begin{multline}
-\color{#027D83}{b_2} = \mathbb{E}(\text{avg math} | \color{#027D83}{\text{religious} = 1} \text{ & } \text{size} \in \mathbb{N}) - \\  
-\mathbb{E}(\text{avg math} | \color{#027D83}{\text{religious} =0} \text{ & } \text{size} \in \mathbb{N})
-\end{multline}
-
--   즉, $b_2$는 종교 학교(`religious = 1`)와 일반 학교(`religious = 0`) 간의 평균 수학 점수 차이를 나타냄.
-
-**📌 두 개 이상의 범주(category)가 있는 경우**
-
--   **카테고리가 2개 이상**인 경우, 모든 카테고리에 대해 더미 변수를 만들 필요 없음.\
--   `R`은 `character` 또는 `factor` 형식의 변수들을 자동으로 감지하고, **적절한 더미 변수를 생성**함.
-
-```{r, echo=TRUE}
-grades <- grades %>%
-  mutate(religious = factor(religious)) # 범주형 변수로 변환
-
-lm(avgmath ~ classize + religious, grades) # 자동으로 한 변수 제외
-```
 
 ------------------------------------------------------------------------
 
