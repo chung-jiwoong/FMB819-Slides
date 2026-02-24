@@ -25,3 +25,8 @@ broom
 viridisLite
 viridis
 latex2exp
+tidyquant
+xts
+TTR
+quantmod
+PerformanceAnalytics

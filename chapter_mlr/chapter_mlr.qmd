@@ -14,6 +14,7 @@ revealjs-plugins:
   - revealjs-text-resizer 
 ---
 
+
 ```{r setup, include=FALSE,warning=FALSE,message=FALSE}
 options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(
@@ -31,12 +32,10 @@ knitr::opts_chunk$set(
 om = par("mar")
 lowtop = c(om[1],om[2],0.1,om[4])
 library(magrittr)
-library(plotly)
-library(reshape2)
-library(haven)
-library(tidyverse)
-library(AER)
-library(gtools)
+# library(plotly)
+# library(reshape2)
+# library(haven)
+# library(tidyverse)
 library(countdown)
 
 # countdown style
@@ -65,168 +64,97 @@ countdown(
 
 ------------------------------------------------------------------------
 
-## 학급 규모와 학생 성취
+## 복습: 단순 선형 회귀 분석
 
-**Angrist & Lavy (1999)의 연구 분석**
+**Capital Asset Pricing Model 자산가격결정모형**
 
--   이스라엘 학생들의 성취도에 대한 *학급 규모*의 영향을 분석
--   **단순 선형 회귀**를 사용한 경우 → 학급 규모가 커질수록 수학 및 읽기 점수가 증가하는 ***연관성***이 발견됨
+-   자산의 리스크프리미엄을 어떻게 결정해야하는지에 대한 모형
+-   포트폴리오 이론에 기반을 둠
+    -   즉 투자자는 분산이 된 시장포트폴리오에 투자하며, 
+    -   개별 자산 고유의 리스크는 제거 될 수 있으므로, 이에 대한 리스크 프리미엄은 0이 됨.
+    -   제거되지 못하는 체계적 위험에 대해서만 리스크 프리미엄이 존재함.
+    -   자산의 체계적 위험은 자산과 시장포트폴리오 간의 공분산으로 측정됨.
+    -   '베타'는 이러한 체계적 위험의 크기를 측정: $E(R_i) = R_f + \beta_i (E(R_m) - R_f)$
+
+- CAPM은 “리스크 프리미엄을 베타 하나로 설명하는” **벤차미크**
+- CAPM을 **완전한 진리**라기보다, **공통 언어/출발점**으로 많이 사용
 
 ------------------------------------------------------------------------
 
-## 학급 규모와 학생 성취: 원자료 관계
+## CAPM의 활용
 
-```{r, echo = FALSE, fig.height=4.75, fig.width = 8}
-# 데이터 불러오기
-grades = read_dta(file = "https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/grade5.dta")
+- **기업가치평가(DCF)**: 할인율이 필요함  
+- **프로젝트 투자판단(NPV)**: 프로젝트의 리스크에 맞는 요구수익률이 필요함  
+- **성과평가(알파/샤프/정보비율)**: "시장을 감안하면 잘했나?"를 평가해야 함  
+- **포트폴리오/리스크관리**: "이 자산이 시장과 얼마나 연동되는가?"를 알아야 함 
 
-set.seed(123)
 
-grades %>%
-ggplot(aes(x = classize, y = avgmath)) + 
-  geom_point(size = 2, alpha = 0.5) +
-  xlim(0,45) +
-  ylim(0, 100) +
-  labs(
-    x = "size",
-    y = "Average score",
-    title = "Mathematics") +
-  theme_bw(base_size = 14)
+-   **단순 선형 회귀**를 이용하여 베타를 추정
+    -   자산의 초과 수익률을 종속 변수로, 시장 포트폴리오의 초과 수익률을 독립 변수로 하는 회귀 분석 수행
+       
+
+------------------------------------------------------------------------
+
+## 베타의 추정
+
+```{r beta_est, echo = TRUE, eval = TRUE}
+# (설치되지 않은 경우 주석 해제하여 설치)
+# install.packages("tidyquant")
+# install.packages("tidyr")
+# install.packages("dplyr")
+library(tidyquant)
+library(tidyr)  # 데이터 구조 변경을 위한 패키지
+library(dplyr)
+
+raw_data <- tq_get(c("^KS200", "006800.KS"),  # 코스피 200, 미래에셋증권
+                   get  = "stock.prices",
+                   from = "2010-01-01",
+                   to   = Sys.Date())
+
+# 결측치 정리 (NA 제거): 수정주가(adjusted)를 기준으로 결측치가 있는 행을 제거.
+clean_data <- raw_data %>% drop_na(adjusted) 
+
+# 월별 수익률 계산: tq_transmute를 사용하여 일별 주가를 월별 수익률로 변환.
+monthly_returns <- clean_data %>%
+  group_by(symbol) %>%
+  tq_transmute(select     = adjusted,
+               mutate_fun = periodReturn,
+               period     = "monthly",
+               col_rename = "monthly_return")
+
+# 베타 추정을 위한 데이터 구조 변경 (Wide format)
+# 선형 회귀(lm) 함수에 넣기 쉽게 두 자산의 수익률을 각각의 열로 배치.
+returns_wide <- monthly_returns %>%
+  pivot_wider(names_from = symbol, values_from = monthly_return) %>%
+  rename(KOSPI200 = `^KS200`, MiraeAsset = `006800.KS`) %>%
+  drop_na() # 두 지표 모두 데이터가 존재하는 월만 남김
+
+# 베타(Beta) 추정
+beta_model <- lm(MiraeAsset ~ KOSPI200, data = returns_wide)
+
+# 회귀분석 결과 요약 출력
+summary(beta_model)
 ```
 
-------------------------------------------------------------------------
+---
 
-## 학급 규모와 학생 성취: 단순 선형 회귀 포함
+## 베타의 추정: 그래프 
 
-```{r, echo=FALSE, fig.height=4.75, fig.width = 8}
-set.seed(123)
 
-grades %>%
-ggplot(aes(x = classize, y = avgmath)) + 
-  geom_point(size = 2, alpha = 0.5) +
-  xlim(0,45) +
-  ylim(0, 100) +
-  labs(
-    x = "size",
-    y = "Average score",
-    title = "Mathematics") +
-  theme_bw(base_size = 14) +
-  geom_smooth(se = FALSE, method = "lm", colour = "#d90502") # 회귀선 추가
+```{r, echo = TRUE, eval = TRUE, fig.width = 10, fig.height = 10}
+plot(returns_wide$KOSPI200, returns_wide$MiraeAsset, 
+     xlab = "KOSPI 200", ylab = "Mireae Asset")
+abline(beta_model, col = "red", lwd = 2) # 회귀선 덧그리기 (빨간색 굵은 선)
+eq <- sprintf("y = %.4f * x + %.4f", coef(beta_model)[2], coef(beta_model)[1])
+legend("topleft", legend = eq, bty = "n", text.col = "red")
 ```
 
-------------------------------------------------------------------------
 
-## 학급 규모와 학생 성취: 단순 선형 회귀 포함
-
-::::: columns
-::: {.column width="50%"}
-```{r, echo=FALSE, fig.height=6}
-set.seed(123)
-
-grades %>%
-ggplot(aes(x = classize, y = avgmath)) + 
-  geom_point(size = 2, alpha = 0.5, position = "jitter") +
-  xlim(0,45) +
-  ylim(0, 100) +
-  labs(
-    x = "size",
-    y = "Average score",
-    title = "Mathematics") +
-  theme_bw(base_size = 20) +
-  geom_smooth(se = FALSE, method = "lm", colour = "#d90502")
-```
-:::
-
-::: {.column width="50%"}
-```{r}
-lm(avgmath ~ classize, grades)
-```
-:::
-:::::
-
-------------------------------------------------------------------------
-
-## 학급 규모와 학생 성취
-
--   **단순 선형 회귀** (Simple Linear Regression) 결과에 따르면, *학급 규모가 학생들의 수학 및 읽기 점수와 양의 상관관계를 가짐* (**positively associated**).
-
--   이는 **직관적으로 예상되지 않는 결과**이며, *STAR* 무작위 실험 결과와도 대조적임.
-
--   **그렇다면, 학급 규모와 학생 성취 모두와 관련된 다른 변수가 있을까?**
-
--   특히, **지역(location) 효과**가 존재할 가능성이 있음.
-
-    -   *대규모 학급*은 부유한 대도시에서 더 흔할 수 있음.\
-    -   *소규모 학급*은 경제적으로 어려운 농촌 지역에서 더 많을 수 있음.
-
--   **이 가설을 검증해보자.**
-
-------------------------------------------------------------------------
-
-## 학급 규모와 학생 성취: 교란 변수(Confounders)
-
-::::: columns
-::: {.column width="50%"}
-**학급 규모와 불리한 배경을 가진 학생 비율 간의 관계**
-
-```{r, echo = FALSE, fig.height=4.75, fig.width = 8}
-ggplot(grades, aes(x = disadvantaged, y = classize)) + 
-  geom_point(size = 2, alpha = 0.4, position = "jitter") +
-  xlim(0,100) +
-  ylim(0,45) +
-  labs(
-    x = "% class coming from disadvantaged backgrounds",
-    y = "size",
-    title = "Relationship with size") +
-  theme_bw(base_size = 20) +
-  geom_smooth(se = FALSE, method = "lm", colour = "#d90502")
-```
-
-➡ 평균적으로, 불리한 배경을 가진 학생 비율이 높은 학급일수록 학급 규모가 작음.
-:::
-
-::: {.column width="50%"}
-**평균 수학 점수와 불리한 배경을 가진 학생 비율 간의 관계**
-
-```{r, echo = FALSE, fig.height=4.75, fig.width = 8}
-ggplot(grades, aes(x = disadvantaged, y = avgmath)) + 
-  geom_point(size = 2, alpha = 0.4, position = "jitter") +
-  xlim(0,100) +
-  ylim(0,100) +
-  labs(
-    x = "% class coming from disadvantaged backgrounds",
-    y = "avg math",
-    title = "Relationship with avg math") +
-  theme_bw(base_size = 20) +
-  geom_smooth(se = FALSE, method = "lm", colour = "#d90502")
-```
-
-➡ 평균적으로, 불리한 배경을 가진 학생 비율이 높을수록 평균 수학 점수가 낮아짐.
-:::
-:::::
-
-------------------------------------------------------------------------
-
-## 학급 규모와 학생 성취: 다중 회귀 분석
-
--   우리는 **학급 규모가 평균 수학 점수에 미치는 효과**를 알고 싶음.
-
--   하지만, **불리한 배경을 가진 학생 비율**과 학급 규모 및 평균 수학 점수 간의 **음의 관계**를 고려해야 함.
-
--   이를 위해 **`classize`와 `disadvantaged` 변수를 회귀 분석의 독립 변수(regressors)로 포함해야 함**.
-
--   이렇게 하면 **학급 규모가 평균 수학 점수에 미치는 효과를, 불리한 배경 변수의 영향을 제거한(purged) 형태로 추정 가능**.
-
-**추정하려는 회귀 모델** 다중 회귀 분석(Multiple Regression)
-
-$$
- \textrm{avg math}_i = b_0 + b_1 \text{size}_i + b_2 \text{\% disadvantaged}_i + e_i
-$$
 
 
 ------------------------------------------------------------------------
 
-## 다중 회귀 분석의 목적
+## 다중 회귀 분석 모형
 
 -   **단순 선형 회귀 모델(Simple Linear Model)** 은 다음과 같이 표현됨:
 
@@ -275,8 +203,6 @@ $$
 
 ## 다중 회귀 분석: 해석
 
--   **가정** : 종속 변수 $(y_i)$ 와 독립 변수 $(x_k)$ 모두 **연속형 변수(numeric variables)** 라고 가정.
-
 -   **절편 (**$b_0$): $x_1, x_2, x_3, ...$ 모든 독립 변수가 0일 때, 예측된 $y$ 값 $\widehat{y}$
 
 -   **기울기 (**$b_k$): $x_k$가 1 단위 증가할 때, $y$ 값이 평균적으로 어떻게 변하는지 예측... 단, 다른 모든 독립 변수들은 일정하게 유지!
@@ -285,7 +211,7 @@ $$
 
 -   즉, $x_k$가 $y$에 미치는 개별적인 효과를 고립시켜 분석하는 것.
 
--   **인과 추론(Causal Inference)과의 연결**
+-   **인과 추론(Causal Inference)을 유의해야 하는 점**
 
     -   다중 회귀 분석에서는 **모델에 포함된 변수들만 일정하게 유지**됨.\
     -   하지만, **모델에 포함되지 않은 변수들은 여전히 변할 수 있어, 추정값에 편향을 일으킬 가능성이 있음.**
@@ -302,13 +228,27 @@ lm(formula = dependent variable ~  independent variable 1 + independent variable
    data = data.frame containing the data)
 ```
 
--   학급 규모와 학생 성취: 다중 회귀 분석: $\textrm{avg math}_i = b_0 + b_1 \textrm{size}_i + b_2 \textrm{ \% disadvantaged}_i + e_i$
 
-```{r}
-lm(avgmath ~ classize + disadvantaged, grades)
-```
 
 ------------------------------------------------------------------------
+
+## 학급 규모와 학생 성취: 다중 회귀 분석
+
+-   우리는 **학급 규모가 평균 수학 점수에 미치는 효과**를 알고 싶음.
+
+-   하지만, **불리한 배경을 가진 학생 비율**과 학급 규모 및 평균 수학 점수 간의 **음의 관계**를 고려해야 함.
+
+-   이를 위해 **`classize`와 `disadvantaged` 변수를 회귀 분석의 독립 변수(regressors)로 포함해야 함**.
+
+-   이렇게 하면 **학급 규모가 평균 수학 점수에 미치는 효과를, 불리한 배경 변수의 영향을 제거한(purged) 형태로 추정 가능**.
+
+**추정하려는 회귀 모델** 다중 회귀 분석(Multiple Regression)
+
+$$
+ \textrm{avg math}_i = b_0 + b_1 \text{size}_i + b_2 \text{\% disadvantaged}_i + e_i
+$$
+
+
 
 ## 학급 규모와 학생 성취: 다중 회귀 분석
 
