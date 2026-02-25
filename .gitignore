@@ -4,5 +4,12 @@
 **/*.quarto_ipynb
 
 # Keep chapter task solutions local only
-chapter_*/tasks/*_solution.qmd
-chapter_*/tasks/*_solution.html
+chapter_causality/tasks/causality_solution.qmd
+chapter_causality/tasks/causality_solution.html
+chapter_mlr/tasks/mlr_solution.qmd
+chapter_mlr/tasks/mlr_solution.html
+chapter_sampling/tasks/sampling_solution.qmd
+chapter_slr/tasks/slr_solution.qmd
+chapter_slr/tasks/slr_solution.html
+chapter_tidy/tasks/tidy_solution.qmd
+chapter_tidy/tasks/tidy_solution.html
