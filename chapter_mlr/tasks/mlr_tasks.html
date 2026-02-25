@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="홍길동 (2025012345)">
+<meta name="dcterms.date" content="2026-02-25">
 
-<title>Multiple Linear Regressionn</title>
+<title>수업 과제</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -74,14 +110,26 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Multiple Linear Regressionn</h1>
+<h1 class="title">수업 과제</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>홍길동 (2025012345) </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 25, 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -91,44 +139,32 @@ window.Quarto = {
 </header>
 
 
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">echo =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <section id="task-1" class="level2">
 <h2 class="anchored" data-anchor-id="task-1">Task 1</h2>
+<p><code>grades</code> 데이터:</p>
 <ul>
-<li><strong>읽기(Reading) 점수를 종속 변수(Dependent Variable)</strong> 로 설정하여 회귀 분석을 수행</li>
+<li><p>학생들의 학업 성취도에 영향을 미치는 요인들을 분석하기 위한 데이터셋</p></li>
+<li><p>학생들의 읽기 점수(avgverb), 수학 점수(avgmath), 학급 규모(classize), 그리고 사회경제적 불리함(disadvantaged) 등의 변수를 포함</p></li>
+<li><p><strong>읽기(Reading) 점수를 종속 변수(Dependent Variable)</strong> 로 설정하여 회귀 분석을 수행</p></li>
 </ul>
 <ol type="1">
 <li><p><code>haven</code> 패키지의 <code>read_dta()</code> 함수를 사용하여 데이터를 불러오기. 데이터를 <code>grades</code>라는 객체에 저장</p></li>
-<li><p>avgverb (읽기 점수)를 종속 변수로, classize와 disadvantaged를 독립 변수로 사용하여 회귀분석. 결과를 reg 객체에 저장. 각 계수(coefficient)의 의미는 무엇인가? 단순 선형 회귀(Simple Linear Regression)와 비교했을 때 계수는 어떻게 달라졌는가? 수학 점수 회귀 분석(Math Score Regression)과 비교했을 때 계수의 차이점은 무엇인가?</p></li>
+<li><p>avgverb (읽기 점수)를 종속 변수로, classize와 disadvantaged를 독립 변수로 사용하여 회귀분석. 결과를 reg 객체에 저장. 각 계수(coefficient)의 의미는 무엇인가? 단순 선형 회귀와 비교했을 때 계수는 어떻게 달라졌는가? 수학 점수 회귀 분석과 비교했을 때 계수의 차이점은 무엇인가?</p></li>
 </ol>
-<p>(Optional) 데이터셋에서 추가 가능한 변수를 확인하고 회귀 분석을 확장하시오. 모든 변수를 포함한 회귀 분석을 수행하고 reg_full 객체에 저장.</p>
-<ul>
-<li>추가된 변수들의 계수(sign &amp; magnitude)를 해석하시오.</li>
-<li>추가된 변수가 포함됨으로 인해 classize 및 disadvantaged의 계수는 어떻게 변했는가?</li>
-<li>전체 모델의 설명력이 증가했는가? (R^2 값 확인)</li>
-</ul>
 </section>
 <section id="task-2" class="level2">
 <h2 class="anchored" data-anchor-id="task-2">Task 2</h2>
-<ol type="1">
-<li><p><strong>STAR 데이터</strong>를 다운로드 <a href="https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/star_data.csv">링크</a>. <code>read.csv()</code>를 사용하여 <code>star_df</code> 객체에 저장. <code>NA</code> 값이 있는 행을 제거: <code>star_df &lt;- star_df[complete.cases(star_df),]</code></p></li>
-<li><p>세 개의 더미 변수를 생성 (<em>힌트</em>: <code>dummy = (variable=="value")</code>):</p></li>
-</ol>
+<p><strong>STAR 데이터</strong></p>
 <ul>
-<li><code>small</code>: 학생이 소규모 학급에 배정되었으면 TRUE, 아니면 FALSE</li>
-<li><code>regular</code>: 학생이 일반 학급에 배정되었으면 TRUE, 아니면 FALSE</li>
-<li><code>regular_plus</code>: 학생이 보조 교사가 있는 일반 학급에 배정되었으면 TRUE, 아니면 FALSE</li>
-<li>또한, sum 변수를 만들어 위 세 개 변수의 합을 확인. 무엇을 뜻하는가?</li>
+<li>STAR(Student Teacher Achievement Ratio) 데이터는 1985년부터 1989년까지 미국 테네시 주에서 진행된 무작위 실험의 결과를 담고 있음.</li>
+<li>학생들을 소규모 학급(small), 일반 학급(regular), 보조 교사가 있는 일반 학급(regular+aide)으로 무작위 배정하여, 학급 규모가 학생들의 학업 성취도에 미치는 영향을 분석하기 위한 데이터셋.</li>
 </ul>
-<ol start="3" type="1">
-<li><p><code>math</code>를 <code>regular_plus</code>로 회귀 분석. regular+aide 반에 있는 학생의 평균 <code>math</code> 점수는?</p></li>
-<li><p><code>math</code>를 <code>small</code>, <code>regular</code>, <code>regular_plus</code>로 회귀 분석. 어느 범주가 사라졌나?</p></li>
-<li><p><code>math</code>를 <code>star</code> 변수로 회귀 분석. 어느 범주가 사라졌나? 계수를 해석하시오.</p></li>
-</ol>
-</section>
-<section id="task-3" class="level2">
-<h2 class="anchored" data-anchor-id="task-3">Task 3</h2>
 <ol type="1">
-<li><p>Task 2에서 필터링한 <em>STAR</em> 데이터를 사용하여 <code>math</code>를 <code>school</code> 변수에 대해 회귀 분석하시오. <code>school</code> 변수가 포함하는 값들을 먼저 확인. 회귀 계수를 해석하시오. 누락된 범주 (category)는? 결과가 예상과 일치하는가? 만약 다르다면 왜 그런가? 누락된 변수가 존재할 가능성이 있는가?</p></li>
+<li><p><strong>STAR 데이터</strong>를 다운로드 <a href="https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_causality/data/star_data.csv">링크</a>. 데이터를 <code>star_df</code>라는 객체에 저장. NA 값이 있는 행은 제거하시오. <code>grades</code>가 “2”인 학생들만 선택하시오.</p></li>
+<li><p><code>math</code>를 <code>school</code> 변수에 대해 회귀 분석하시오. <code>school</code> 변수가 포함하는 값들을 먼저 확인. 회귀 계수를 해석하시오. 누락된 범주 (category)는? 결과가 예상과 일치하는가? 만약 다르다면 왜 그런가? 누락된 변수가 존재할 가능성이 있는가?</p></li>
 <li><p><code>lunch</code> 변수가 <code>"free"</code>인 학생들의 비율을 <strong>학교 위치(school) 별로 계산</strong>하시오. 결과를 보고, <strong>무료 점심 자격 여부(<code>free</code>) 변수를 추가하여 이전 회귀 분석을 다시 수행</strong>하시오. <code>free</code> 변수를 추가했을 때 회귀 계수는 어떻게 변화하는가?</p></li>
 <li><p><code>math</code>를 <code>star</code> 변수에 대해 회귀 분석하시오. 다음의 모든 변수를 포함하여 다중 회귀 분석을 수행하시오:<br>
 <code>math ~ star + gender + ethnicity + lunch + degree + experience + school</code>. 무작위 실험이 <strong>잘 수행되었다고 판단할 수 있는가?</strong></p></li>

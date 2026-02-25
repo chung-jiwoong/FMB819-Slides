@@ -6,8 +6,8 @@
 <script src="chapter_mlr_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="chapter_mlr_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="chapter_mlr_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="chapter_mlr_files/libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.8.27">
+<link href="chapter_mlr_files/libs/quarto-html/quarto-syntax-highlighting-48ffa3e5b9d089919c6712c39e5b00f2.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.41">
 
   <meta name="author" content="고려대학교 경영대학 정지웅">
   <title>Multiple Regression</title>
@@ -29,9 +29,8 @@
       vertical-align: middle;
     }
     /* CSS for syntax highlighting */
-    html { -webkit-text-size-adjust: 100%; }
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span { line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -42,7 +41,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -95,7 +94,7 @@
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="chapter_mlr_files/libs/revealjs/dist/theme/quarto-0fde88a82f0356838740f155f1088782.css">
+  <link rel="stylesheet" href="chapter_mlr_files/libs/revealjs/dist/theme/quarto-8f3eebe07241f08526c91a7e9cbef8fd.css">
   <link rel="stylesheet" href="../styles/styles.css">
   <link href="chapter_mlr_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="chapter_mlr_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -217,8 +216,6 @@
 <h2>Today’s Agenda</h2>
 <ul>
 <li><strong>다중 독립 변수</strong></li>
-<li><strong>연속 변수와 더미 변수 해석</strong></li>
-<li><strong>더미 변수 함정</strong> (Dummy Variable Trap)</li>
 <li><strong>누락 변수 편향</strong> (Omitted Variable Bias)</li>
 <li><strong>조정된</strong> <span class="math inline">\(R^2\)</span> (Adjusted <span class="math inline">\(R^2\)</span>)</li>
 </ul>
@@ -236,7 +233,7 @@
 <li>자산의 체계적 위험은 자산과 시장포트폴리오 간의 공분산으로 측정됨.</li>
 <li>’베타’는 이러한 체계적 위험의 크기를 측정: <span class="math inline">\(E(R_i) = R_f + \beta_i (E(R_m) - R_f)\)</span></li>
 </ul></li>
-<li>CAPM은 “리스크 프리미엄을 베타 하나로 설명하는” <strong>벤치미크</strong></li>
+<li>CAPM은 “리스크 프리미엄을 베타 하나로 설명하는” <strong>벤치마크</strong></li>
 <li>CAPM을 <strong>완전한 진리</strong>라기보다, <strong>출발점</strong>으로 사용</li>
 </ul>
 </section>
@@ -259,7 +256,7 @@
 <section id="베타의-추정" class="slide level2">
 <h2>베타의 추정</h2>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="co"># (설치되지 않은 경우 주석 해제하여 설치)</span></span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="co"># (설치되지 않은 경우 주석 해제하여 설치)</span></span>
 <span id="cb1-2"><a href=""></a><span class="co"># install.packages("tidyquant")</span></span>
 <span id="cb1-3"><a href=""></a><span class="co"># install.packages("tidyr")</span></span>
 <span id="cb1-4"><a href=""></a><span class="co"># install.packages("dplyr")</span></span>
@@ -294,7 +291,7 @@
 <span id="cb1-33"><a href=""></a>beta_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(MiraeAsset <span class="sc">~</span> KOSPI200, <span class="at">data =</span> returns_wide)</span>
 <span id="cb1-34"><a href=""></a></span>
 <span id="cb1-35"><a href=""></a><span class="co"># 회귀분석 결과 요약 출력</span></span>
-<span id="cb1-36"><a href=""></a><span class="fu">summary</span>(beta_model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-36"><a href=""></a><span class="fu">summary</span>(beta_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## 
 ## Call:
@@ -302,32 +299,32 @@
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.20345 -0.04679 -0.00543  0.03270  0.40272 
+## -0.20659 -0.04599 -0.00887  0.03356  0.42980 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) 0.001234   0.006322   0.195    0.845    
-## KOSPI200    1.592589   0.113944  13.977   &lt;2e-16 ***
+## (Intercept) 0.001376   0.006513   0.211    0.833    
+## KOSPI200    1.644476   0.116360  14.133   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 0.08673 on 191 degrees of freedom
-## Multiple R-squared:  0.5056, Adjusted R-squared:  0.503 
-## F-statistic: 195.4 on 1 and 191 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 0.08933 on 191 degrees of freedom
+## Multiple R-squared:  0.5112, Adjusted R-squared:  0.5086 
+## F-statistic: 199.7 on 1 and 191 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </section>
 <section id="베타의-추정-그래프" class="slide level2">
 <h2>베타의 추정: 그래프</h2>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">plot</span>(returns_wide<span class="sc">$</span>KOSPI200, returns_wide<span class="sc">$</span>MiraeAsset, </span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">plot</span>(returns_wide<span class="sc">$</span>KOSPI200, returns_wide<span class="sc">$</span>MiraeAsset, </span>
 <span id="cb3-2"><a href=""></a>     <span class="at">xlab =</span> <span class="st">"KOSPI 200"</span>, <span class="at">ylab =</span> <span class="st">"Mireae Asset"</span>)</span>
 <span id="cb3-3"><a href=""></a><span class="fu">abline</span>(beta_model, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>) <span class="co"># 회귀선 덧그리기 (빨간색 굵은 선)</span></span>
 <span id="cb3-4"><a href=""></a>eq <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">"y = %.4f * x + %.4f"</span>, <span class="fu">coef</span>(beta_model)[<span class="dv">2</span>], <span class="fu">coef</span>(beta_model)[<span class="dv">1</span>])</span>
-<span id="cb3-5"><a href=""></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend =</span> eq, <span class="at">bty =</span> <span class="st">"n"</span>, <span class="at">text.col =</span> <span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-5"><a href=""></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend =</span> eq, <span class="at">bty =</span> <span class="st">"n"</span>, <span class="at">text.col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="chapter_mlr_files/figure-revealjs/unnamed-chunk-2-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<img data-src="chapter_mlr_files/figure-revealjs/beta1_plot-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
 <section id="다중-회귀-분석-모형" class="slide level2">
 <h2>다중 회귀 분석 모형</h2>
 <ul>
@@ -398,10 +395,8 @@ y_i = b_0 + b_1 x_{1,i} + b_2 x_{2,i}  + b_3 x_{3,i} + \dots + b_k x_{k,i} + e_i
 <li><code>lm()</code> 함수를 사용하여 다중 회귀 분석 수행 가능.</li>
 </ul></li>
 </ul>
-<div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="fu">lm</span>(<span class="at">formula =</span> dependent variable <span class="sc">~</span>  independent variable <span class="dv">1</span> <span class="sc">+</span> independent variable <span class="dv">2</span> <span class="sc">+</span> ...,</span>
-<span id="cb4-2"><a href=""></a>   <span class="at">data =</span> data.frame containing the data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="fu">lm</span>(<span class="at">formula =</span> dependent variable <span class="sc">~</span>  independent variable <span class="dv">1</span> <span class="sc">+</span> independent variable <span class="dv">2</span> <span class="sc">+</span> ...,</span>
+<span id="cb4-2"><a href=""></a>   <span class="at">data =</span> data.frame containing the data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="다중-회귀-분석-베타-추정" class="slide level2">
 <h2>다중 회귀 분석: 베타 추정</h2>
@@ -414,7 +409,7 @@ y_i = b_0 + b_1 x_{1,i} + b_2 x_{2,i}  + b_3 x_{3,i} + \dots + b_k x_{k,i} + e_i
 <section id="다중-회귀-분석-베타-추정-1" class="slide level2 scrollable">
 <h2>다중 회귀 분석: 베타 추정</h2>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="fu">library</span>(tidyquant)  <span class="co"># 금융 데이터 수집 및 변환을 위한 패키지</span></span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="fu">library</span>(tidyquant)  <span class="co"># 금융 데이터 수집 및 변환을 위한 패키지</span></span>
 <span id="cb5-2"><a href=""></a><span class="fu">library</span>(tidyr)  <span class="co"># 데이터 구조 변경을 위한 패키지</span></span>
 <span id="cb5-3"><a href=""></a><span class="fu">library</span>(dplyr)</span>
 <span id="cb5-4"><a href=""></a></span>
@@ -444,7 +439,7 @@ y_i = b_0 + b_1 x_{1,i} + b_2 x_{2,i}  + b_3 x_{3,i} + \dots + b_k x_{k,i} + e_i
 <span id="cb5-28"><a href=""></a></span>
 <span id="cb5-29"><a href=""></a><span class="co"># 베타(Beta) 추정 (Lead, Lag 포함)</span></span>
 <span id="cb5-30"><a href=""></a>beta_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(MiraeAsset <span class="sc">~</span> KOSPI200 <span class="sc">+</span> SP500 <span class="sc">+</span> SSE <span class="sc">+</span> N225, <span class="at">data =</span> returns_wide)</span>
-<span id="cb5-31"><a href=""></a><span class="fu">summary</span>(beta_model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-31"><a href=""></a><span class="fu">summary</span>(beta_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## 
 ## Call:
@@ -460,7 +455,7 @@ y_i = b_0 + b_1 x_{1,i} + b_2 x_{2,i}  + b_3 x_{3,i} + \dots + b_k x_{k,i} + e_i
 ## KOSPI200     1.671446   0.173078   9.657  &lt; 2e-16 ***
 ## SP500       -0.225726   0.255161  -0.885  0.37790    
 ## SSE          0.365207   0.139408   2.620  0.00979 ** 
-## N225        -0.059386   0.203889  -0.291  0.77129    
+## N225        -0.059385   0.203889  -0.291  0.77129    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
@@ -504,13 +499,13 @@ x_2 \neq a x_1 + b
 </ul></li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="fu">library</span>(car)  <span class="co"># VIF 계산을 위한 패키지</span></span>
-<span id="cb7-2"><a href=""></a><span class="fu">vif</span>(beta_model)  <span class="co"># VIF 값 계산</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="fu">library</span>(car)  <span class="co"># VIF 계산을 위한 패키지</span></span>
+<span id="cb7-2"><a href=""></a><span class="fu">vif</span>(beta_model)  <span class="co"># VIF 값 계산</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## KOSPI200    SP500      SSE     N225 
 ## 1.673725 1.799963 1.175273 1.773004</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">cor</span>(returns_wide[, <span class="fu">c</span>(<span class="st">"KOSPI200"</span>, <span class="st">"SP500"</span>, <span class="st">"SSE"</span>, <span class="st">"N225"</span>)])  <span class="co"># 상관 행렬 계산</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">cor</span>(returns_wide[, <span class="fu">c</span>(<span class="st">"KOSPI200"</span>, <span class="st">"SP500"</span>, <span class="st">"SSE"</span>, <span class="st">"N225"</span>)])  <span class="co"># 상관 행렬 계산</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>##           KOSPI200     SP500       SSE      N225
 ## KOSPI200 1.0000000 0.5647034 0.3015633 0.5611417
@@ -520,8 +515,171 @@ x_2 \neq a x_1 + b
 </div>
 </div>
 </section>
-<section class="slide level2">
-
+<section id="task-1" class="slide level2 scrollable" data-background-color="#ffebf0">
+<h2>Task 1</h2>
+<p><countdown-timer class="countdown" id="timer_968133a5" minutes="5" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
+<p><code>grades</code> 데이터:</p>
+<ul>
+<li><p>학생들의 학업 성취도에 영향을 미치는 요인들을 분석하기 위한 데이터셋</p></li>
+<li><p>학생들의 읽기 점수(avgverb), 수학 점수(avgmath), 학급 규모(classize), 그리고 사회경제적 불리함(disadvantaged) 등의 변수를 포함</p></li>
+<li><p><strong>읽기(Reading) 점수를 종속 변수(Dependent Variable)</strong> 로 설정하여 회귀 분석을 수행</p></li>
+</ul>
+<ol type="1">
+<li><code>haven</code> 패키지의 <code>read_dta()</code> 함수를 사용하여 데이터를 불러오기. 데이터를 <code>grades</code>라는 객체에 저장</li>
+</ol>
+<ol start="2" type="1">
+<li>avgverb (읽기 점수)를 종속 변수로, classize와 disadvantaged를 독립 변수로 사용하여 회귀분석. 결과를 reg 객체에 저장. 각 계수(coefficient)의 의미는 무엇인가? 단순 선형 회귀와 비교했을 때 계수는 어떻게 달라졌는가? 수학 점수 회귀 분석과 비교했을 때 계수의 차이점은 무엇인가?</li>
+</ol>
+</section>
+<section id="누락변수-편의-omitted-variable-bias-ovb" class="slide level2">
+<h2>누락변수 편의 (Omitted Variable Bias, OVB)</h2>
+<ul>
+<li><p><strong><em>OVB</em></strong> 이란, 회귀 분석에서 중요한 <strong>통제 변수(control variable)</strong> 를 제외함으로써 발생하는 <strong>편의(bias)</strong> 을 의미.</p></li>
+<li><p>이로 인해 관심 있는 독립 변수의 계수를 <strong>신뢰할 수 없고, 왜곡될 수 있음.</strong></p></li>
+</ul>
+<p><span class="math inline">\(y\)</span>: 종속변수, <span class="math inline">\(x\)</span>: 독립변수, <span class="math inline">\(z\)</span>: 누락변수인 경우 다음 회귀분석이 가능</p>
+<p><strong>1️⃣ 단순 선형 회귀 모델 (Simple Linear Model)</strong></p>
+<p><span class="math display">\[
+y = b_0 + b_1x + e
+\]</span></p>
+<ul>
+<li>이 경우, <span class="math inline">\(x\)</span>와 <span class="math inline">\(z\)</span>가 동시에 <span class="math inline">\(y\)</span>에 영향을 미친다면, <span class="math inline">\(z\)</span>를 제외하면 <span class="math inline">\(b_1\)</span>이 편향될 수 있음.</li>
+</ul>
+<p><strong>2️⃣ 다중 선형 회귀 모델 (Multiple Linear Model)</strong>: 만약 <span class="math inline">\(z\)</span> 변수를 포함한다면?</p>
+<p><span class="math display">\[
+y = c_0 + c_1x + \color{#d90502}{c_2}z + e
+\]</span></p>
+<ul>
+<li>이 모델에서는 <span class="math inline">\(x\)</span>뿐만 아니라 누락된 변수 <span class="math inline">\(z\)</span>도 <span class="math inline">\(y\)</span>에 영향을 미침. 즉, <span class="math inline">\(z\)</span>를 포함하면, <span class="math inline">\(c_1\)</span>이 더 정확한 값을 가질 수 있음.</li>
+</ul>
+</section>
+<section id="누락변수-편의-omitted-variable-bias-ovb-1" class="slide level2">
+<h2>누락변수 편의 (Omitted Variable Bias, OVB)</h2>
+<p><strong>3️⃣ 누락된 변수와</strong> <span class="math inline">\(x\)</span>의 관계 (Omitted Variable on Regressor)</p>
+<p><span class="math display">\[
+z = d_0 + \color{#d96502}{d_1}x + e
+\]</span></p>
+<ul>
+<li>이 모델은 <span class="math inline">\(x\)</span>와 생략된 변수 <span class="math inline">\(z\)</span>가 서로 상관관계가 있을 경우를 나타냄.</li>
+<li>즉, <span class="math inline">\(x\)</span>가 <span class="math inline">\(z\)</span>에 영향을 미친다면, 단순 회귀 분석에서 <span class="math inline">\(b_1\)</span>의 추정치는 신뢰할 수 없게 됨.</li>
+</ul>
+<p><strong>📌 OVB 공식</strong></p>
+<p><span class="math display">\[
+\text{OVB} = \color{#d90502}{c_2} \times \color{#d96502}{d_1}
+\]</span></p>
+<p>즉,</p>
+<p><span class="math display">\[
+b_1 = c_1 + OVB
+\]</span></p>
+<p>💡 <strong>결론:</strong><br>
+만약 <span class="math inline">\(z\)</span>를 생략하면, <span class="math inline">\(b_1\)</span>은 <span class="math inline">\(c_1\)</span>에 OVB가 더해진 값이 되어, 실제 값과 차이가 날 수 있음.</p>
+</section>
+<section id="누락변수-편의-omitted-variable-bias-ovb-2" class="slide level2 scrollable">
+<h2>누락변수 편의 (Omitted Variable Bias, OVB)</h2>
+<p><span class="math display">\[
+\text{OVB} = \underbrace{\text{다중 회귀에서 생략된 변수의 계수}}_{\color{#d90502}{c_2}} \times \underbrace{\frac{Cov(x,z)}{Var(x)}}_{\color{#d96502}{d_1}}
+\]</span></p>
+<p><strong>OVB의 의미</strong></p>
+<ol type="1">
+<li>OVB의 크기(magnitude)
+<ul>
+<li><span class="math inline">\(z\)</span> 변수가 관측되는 경우, OVB의 크기를 직접 계산할 수 있음.</li>
+</ul></li>
+<li>OVB의 부호(sign) (양수/음수 여부)
+<ul>
+<li>현실적으로는 <span class="math inline">\(z\)</span> 변수를 관측할 수 없는 경우가 많기 때문에, <strong>OVB의 부호가 더 중요한 분석 요소</strong>가 됨.</li>
+<li>OVB가 <strong>양수(+)인지 음수(-)인지</strong>를 판단하면, <span class="math inline">\(x\)</span>의 계수가 과대(+) 또는 과소(-) 추정되는지 예측할 수 있음.</li>
+</ul></li>
+</ol>
+<div class="callout callout-none no-icon callout-style-simple">
+<div class="callout-body">
+<div class="callout-content">
+<p>소득(income)과 교육연수(years of education) 사이의 관계를 분석할 때,</p>
+<ol type="1">
+<li>단순 회귀 분석에서 소득을 교육연수에 회귀(regression) 시키면 신뢰할 수 없는 추정치가 나올 가능성이 있다. 왜 그럴까?</li>
+<li>어떤 변수가 누락된 변수(omitted variable)일 수 있을까?<br>
+</li>
+<li>OVB의 부호(+) 또는 (-)는 어떻게 예상할 수 있을까?</li>
+</ol>
+</div>
+</div>
+</div>
+</section>
+<section id="누락변수-편의-omitted-variable-bias-ovb-예제" class="slide level2">
+<h2>누락변수 편의 (Omitted Variable Bias, OVB): 예제</h2>
+<ul>
+<li>학급 규모(<code>classize</code>)가 학생들의 평균 수학 점수(<code>avgmath</code>)에 미치는 영향</li>
+</ul>
+<p><span class="math display">\[
+\text{avg math} = b_0 + b_1\text{size} + e
+\]</span></p>
+<p><strong><em>단순회귀모형:</em></strong> <span class="math inline">\(\text{avg math} = b_0 + b_1\text{size} + e\)</span></p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>## (Intercept)    classize 
+##  57.7939158   0.3174906</code></pre>
+</div>
+</div>
+<p><strong><em>다중회귀모형:</em></strong> <span class="math inline">\(\text{avg math} = c_0 + c_1\text{size} + \color{#d90502}{c_2}\text{ \% disadvantaged} + e\)</span></p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>##   (Intercept)      classize disadvantaged 
+##   69.94438332    0.07167819   -0.33957877</code></pre>
+</div>
+</div>
+<p><strong><em>누락변수와 독립변수</em></strong>: <span class="math inline">\(\text{\% disadvantaged} = d_0 + \color{#d96502}{d_1}\text{size} + e\)</span></p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>## (Intercept)    classize 
+##  35.7809990  -0.7238744</code></pre>
+</div>
+</div>
+<p>따라서: <span class="math display">\[b_1 = 0.317 = \underbrace{0.072}_{c_1} + \underbrace{(-0.34)}_{\color{#d90502}{c_2}} \times \underbrace{(-0.724)}_{\color{#d96502}{d_1}} = c_1 + OVB\]</span></p>
+</section>
+<section id="수정된-결정-계수-adjusted-r2" class="slide level2">
+<h2>수정된 결정 계수 (Adjusted <span class="math inline">\(R^2\)</span>)</h2>
+<ul>
+<li><p><span class="math inline">\(R^2\)</span> (결정 계수) 는 회귀 모델이 <strong>종속 변수(</strong><span class="math inline">\(y\)</span>)의 변동을 얼마나 설명하는지 나타내는 지표.</p></li>
+<li><p>하지만, <strong>새로운 변수를 추가할 때마다</strong> <span class="math inline">\(R^2\)</span> 값은 항상 증가.</p>
+<ul>
+<li>심지어 <strong>의미 없는 변수라도 추가하면</strong> <span class="math inline">\(R^2\)</span>이 증가할 수 있음!</li>
+</ul></li>
+<li><p>이를 보완하기 위해 <strong>수정된</strong> <span class="math inline">\(R^2\)</span> (Adjusted <span class="math inline">\(R^2\)</span>) 개념이 도입</p>
+<ul>
+<li><strong>불필요한 변수를 추가하는 것을 방지하기 위해 패널티(penalty)를 부과</strong><br>
+</li>
+<li>하지만, 대부분의 경우 <span class="math inline">\(R^2\)</span>와 수정된 <span class="math inline">\(R^2\)</span>는 큰 차이가 없음</li>
+</ul></li>
+</ul>
+</section>
+<section id="task-2" class="slide level2 scrollable" data-background-color="#ffebf0">
+<h2>Task 2</h2>
+<p><countdown-timer class="countdown" id="timer_953c6327" minutes="15" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;--countdown-color-border:blue;"></countdown-timer></p>
+<p><strong>STAR 데이터</strong></p>
+<ul>
+<li>STAR(Student Teacher Achievement Ratio) 데이터는 1985년부터 1989년까지 미국 테네시 주에서 진행된 무작위 실험의 결과를 담고 있음.</li>
+<li>학생들을 소규모 학급(small), 일반 학급(regular), 보조 교사가 있는 일반 학급(regular+aide)으로 무작위 배정하여, 학급 규모가 학생들의 학업 성취도에 미치는 영향을 분석하기 위한 데이터셋.</li>
+</ul>
+<ol type="1">
+<li><strong>STAR 데이터</strong>를 다운로드 <a href="https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_causality/data/star_data.csv">링크</a>. 데이터를 <code>star_df</code>라는 객체에 저장. NA 값이 있는 행은 제거하시오. <code>grades</code>가 “2”인 학생들만 선택하시오.</li>
+</ol>
+<ol start="2" type="1">
+<li><code>math</code>를 <code>school</code> 변수에 대해 회귀 분석하시오. <code>school</code> 변수가 포함하는 값들을 먼저 확인. 회귀 계수를 해석하시오. 누락된 범주 (category)는? 결과가 예상과 일치하는가? 만약 다르다면 왜 그런가? 누락된 변수가 존재할 가능성이 있는가?</li>
+</ol>
+<ol start="3" type="1">
+<li><code>lunch</code> 변수가 <code>"free"</code>인 학생들의 비율을 <strong>학교 위치(school) 별로 계산</strong>하시오. 결과를 보고, <strong>무료 점심 자격 여부(<code>free</code>) 변수를 추가하여 이전 회귀 분석을 다시 수행</strong>하시오. <code>free</code> 변수를 추가했을 때 회귀 계수는 어떻게 변화하는가?</li>
+</ol>
+<ol start="4" type="1">
+<li><code>math</code>를 <code>star</code> 변수에 대해 회귀 분석하시오. 다음의 모든 변수를 포함하여 다중 회귀 분석을 수행하시오:<br>
+<code>math ~ star + gender + ethnicity + lunch + degree + experience + school</code>. 무작위 실험이 <strong>잘 수행되었다고 판단할 수 있는가?</strong></li>
+</ol>
+<ol start="5" type="1">
+<li><p><strong>다중 회귀 분석</strong>에서 얻은 <strong>수정된</strong> <span class="math inline">\(R^2\)</span> 값을 확인하시오. 수정된 <span class="math inline">\(R^2\)</span> 값이 의미하는 바는 무엇인가? 관측 가능한 개별 학생, 교사, 학교 특성이 학업 성취도에 미치는 중요성에 대해 어떤 결론을 내릴 수 있는가?</p></li>
+<li><p>(Optional) <code>math</code>를 <code>gender</code>와 <code>experience</code> 변수에 대해 회귀 분석하시오. 회귀 계수를 어떻게 해석할 수 있는가? 이러한 회귀 분석 결과를 시각적으로 표현한다면 어떻게 보일 것인가?</p></li>
+</ol>
+</section>
+<section id="the-end" class="title-slide slide level1 center">
+<h1>THE END!</h1>
 
 </section>
     </div>
@@ -716,7 +874,7 @@ x_2 \neq a x_1 + b
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],
@@ -819,173 +977,190 @@ x_2 \neq a x_1 + b
     
 
     <script id="quarto-html-after-body" type="application/javascript">
-      window.document.addEventListener("DOMContentLoaded", function (event) {
-        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
-        tabsets.forEach(function(tabset) {
-          const tabby = new Tabby('#' + tabset.id);
-        });
-        const isCodeAnnotation = (el) => {
-          for (const clz of el.classList) {
-            if (clz.startsWith('code-annotation-')) {                     
-              return true;
-            }
-          }
-          return false;
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
         }
-        const onCopySuccess = function(e) {
-          // button target
-          const button = e.trigger;
-          // don't keep focus
-          button.blur();
-          // flash "checked"
-          button.classList.add('code-copy-button-checked');
-          var currentTitle = button.getAttribute("title");
-          button.setAttribute("title", "Copied!");
-          let tooltip;
-          if (window.bootstrap) {
-            button.setAttribute("data-bs-toggle", "tooltip");
-            button.setAttribute("data-bs-placement", "left");
-            button.setAttribute("data-bs-title", "Copied!");
-            tooltip = new bootstrap.Tooltip(button, 
-              { trigger: "manual", 
-                customClass: "code-copy-button-tooltip",
-                offset: [0, -8]});
-            tooltip.show();    
-          }
-          setTimeout(function() {
-            if (tooltip) {
-              tooltip.hide();
-              button.removeAttribute("data-bs-title");
-              button.removeAttribute("data-bs-toggle");
-              button.removeAttribute("data-bs-placement");
-            }
-            button.setAttribute("title", currentTitle);
-            button.classList.remove('code-copy-button-checked');
-          }, 1000);
-          // clear code selection
-          e.clearSelection();
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
         }
-        const getTextToCopy = function(trigger) {
-          const outerScaffold = trigger.parentElement.cloneNode(true);
-          const codeEl = outerScaffold.querySelector('code');
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
           for (const childEl of codeEl.children) {
             if (isCodeAnnotation(childEl)) {
               childEl.remove();
             }
           }
           return codeEl.innerText;
-        }
-        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-          text: getTextToCopy
-        });
-        clipboard.on('success', onCopySuccess);
-        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-            text: getTextToCopy,
-            container: window.document.getElementById('quarto-embedded-source-code-modal')
-          });
-          clipboardModal.on('success', onCopySuccess);
-        }
-          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-          var mailtoRegex = new RegExp(/^mailto:/);
-            var filterRegex = new RegExp('/' + window.location.host + '/');
-          var isInternal = (href) => {
-              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-          }
-          // Inspect non-navigation links and adorn them if external
-         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-          for (var i=0; i<links.length; i++) {
-            const link = links[i];
-            if (!isInternal(link.href)) {
-              // undo the damage that might have been done by quarto-nav.js in the case of
-              // links that we want to consider external
-              if (link.dataset.originalHref !== undefined) {
-                link.href = link.dataset.originalHref;
-              }
-            }
-          }
-        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-          const config = {
-            allowHTML: true,
-            maxWidth: 500,
-            delay: 100,
-            arrow: false,
-            appendTo: function(el) {
-                return el.closest('section.slide') || el.parentElement;
-            },
-            interactive: true,
-            interactiveBorder: 10,
-            theme: 'light-border',
-            placement: 'bottom-start',
-          };
-          if (contentFn) {
-            config.content = contentFn;
-          }
-          if (onTriggerFn) {
-            config.onTrigger = onTriggerFn;
-          }
-          if (onUntriggerFn) {
-            config.onUntrigger = onUntriggerFn;
-          }
-            config['offset'] = [0,0];
-            config['maxWidth'] = 700;
-          window.tippy(el, config); 
-        }
-        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-        for (var i=0; i<noterefs.length; i++) {
-          const ref = noterefs[i];
-          tippyHover(ref, function() {
-            // use id or data attribute instead here
-            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-            try { href = new URL(href).hash; } catch {}
-            const id = href.replace(/^#\/?/, "");
-            const note = window.document.getElementById(id);
-            if (note) {
-              return note.innerHTML;
-            } else {
-              return "";
-            }
-          });
-        }
-        const findCites = (el) => {
-          const parentEl = el.parentElement;
-          if (parentEl) {
-            const cites = parentEl.dataset.cites;
-            if (cites) {
-              return {
-                el,
-                cites: cites.split(' ')
-              };
-            } else {
-              return findCites(el.parentElement)
-            }
-          } else {
-            return undefined;
-          }
-        };
-        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-        for (var i=0; i<bibliorefs.length; i++) {
-          const ref = bibliorefs[i];
-          const citeInfo = findCites(ref);
-          if (citeInfo) {
-            tippyHover(citeInfo.el, function() {
-              var popup = window.document.createElement('div');
-              citeInfo.cites.forEach(function(cite) {
-                var citeDiv = window.document.createElement('div');
-                citeDiv.classList.add('hanging-indent');
-                citeDiv.classList.add('csl-entry');
-                var biblioDiv = window.document.getElementById('ref-' + cite);
-                if (biblioDiv) {
-                  citeDiv.innerHTML = biblioDiv.innerHTML;
-                }
-                popup.appendChild(citeDiv);
-              });
-              return popup.innerHTML;
-            });
-          }
-        }
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
       });
-      </script>
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
     
 
 </body></html>

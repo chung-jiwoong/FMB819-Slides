@@ -2,3 +2,7 @@
 /.quarto/
 
 **/*.quarto_ipynb
+
+# Keep chapter task solutions local only
+chapter_*/tasks/*_solution.qmd
+chapter_*/tasks/*_solution.html

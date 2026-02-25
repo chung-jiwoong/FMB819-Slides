@@ -55,8 +55,6 @@ countdown(
 ## Today's Agenda
 
 -   **다중 독립 변수** 
--   **연속 변수와 더미 변수 해석** 
--   **더미 변수 함정** (Dummy Variable Trap)
 -   **누락 변수 편향** (Omitted Variable Bias)
 -   **조정된** $R^2$ (Adjusted $R^2$)
 
@@ -74,7 +72,7 @@ countdown(
     -   자산의 체계적 위험은 자산과 시장포트폴리오 간의 공분산으로 측정됨.
     -   '베타'는 이러한 체계적 위험의 크기를 측정: $E(R_i) = R_f + \beta_i (E(R_m) - R_f)$
 
-- CAPM은 “리스크 프리미엄을 베타 하나로 설명하는” **벤치미크**
+- CAPM은 “리스크 프리미엄을 베타 하나로 설명하는” **벤치마크**
 - CAPM을 **완전한 진리**라기보다, **출발점**으로 사용
 
 ------------------------------------------------------------------------
@@ -96,7 +94,7 @@ countdown(
 ## 베타의 추정
 
 
-```{r, echo = TRUE, eval = TRUE}
+```{r beta1, echo = TRUE, eval = TRUE}
 # (설치되지 않은 경우 주석 해제하여 설치)
 # install.packages("tidyquant")
 # install.packages("tidyr")
@@ -143,7 +141,7 @@ summary(beta_model)
 ## 베타의 추정: 그래프 
 
 
-```{r, echo = TRUE, eval = TRUE, fig.width = 10, fig.height = 10}
+```{r beta1_plot, echo = TRUE, eval = TRUE, fig.width = 10, fig.height = 10}
 plot(returns_wide$KOSPI200, returns_wide$MiraeAsset, 
      xlab = "KOSPI 200", ylab = "Mireae Asset")
 abline(beta_model, col = "red", lwd = 2) # 회귀선 덧그리기 (빨간색 굵은 선)
@@ -225,7 +223,7 @@ $$
 -   단순 선형 회귀와 매우 유사함.
     -   `lm()` 함수를 사용하여 다중 회귀 분석 수행 가능.
 
-```{r, echo = TRUE, eval = FALSE}
+```r
 lm(formula = dependent variable ~  independent variable 1 + independent variable 2 + ...,
    data = data.frame containing the data)
 ```
@@ -248,7 +246,7 @@ $KOSPI200 = b_0 + b_1 SP500 + b_2 SSE + b_3 N225 + e$
 
 
 
-```{r, echo = TRUE, eval = TRUE}
+```{r beta2, echo = TRUE, eval = TRUE}
 library(tidyquant)  # 금융 데이터 수집 및 변환을 위한 패키지
 library(tidyr)  # 데이터 구조 변경을 위한 패키지
 library(dplyr)
@@ -319,97 +317,46 @@ $$
   - **회귀 계수의 부호 변화**: 다중공선성이 존재할 때, 회귀 계수의 부호가 예상과 다르게 나타날 수 있음. 
   - **회귀 계수의 유의성**: 다중공선성이 존재할 때, 회귀 계수의 유의성이 낮아질 수 있음. 이는 모델의 예측 성능을 저하시킬 수 있음.
 
-```{r, echo = TRUE, eval = TRUE}
+```{r vif, echo = TRUE, eval = TRUE}
 library(car)  # VIF 계산을 위한 패키지
 vif(beta_model)  # VIF 값 계산
 cor(returns_wide[, c("KOSPI200", "SP500", "SSE", "N225")])  # 상관 행렬 계산
 ```
 
 
-------------------------------------------------------------------------
 
 
 ------------------------------------------------------------------------
 
 ## Task 1 {background-color="#ffebf0"}
 
-::: {style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;"}
-`r countdown(minutes = 10, top = 0)`
-:::
+`r countdown(minutes = 5, top = "20px", right = "10px", font_size = "0.8em", color_border = "blue")`
+
+`grades` 데이터: 
+
+-  학생들의 학업 성취도에 영향을 미치는 요인들을 분석하기 위한 데이터셋
+-  학생들의 읽기 점수(avgverb), 수학 점수(avgmath), 학급 규모(classize), 그리고 사회경제적 불리함(disadvantaged) 등의 변수를 포함
+
 
 -   **읽기(Reading) 점수를 종속 변수(Dependent Variable)** 로 설정하여 회귀 분석을 수행
 
 1.  `haven` 패키지의 `read_dta()` 함수를 사용하여 데이터를 불러오기. 데이터를 `grades`라는 객체에 저장
 
-```{r, echo=FALSE, eval=FALSE}
+```{r task1_1, echo=FALSE, eval=FALSE}
 library(haven)
-grades <- read_dta("https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/grade5.dta")
+grades <- read_dta("https://raw.githack.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/data/grade5.dta")
 ```
 
-2.  avgverb (읽기 점수)를 종속 변수로, classize와 disadvantaged를 독립 변수로 사용하여 회귀분석. 결과를 reg 객체에 저장. 각 계수(coefficient)의 의미는 무엇인가? 단순 선형 회귀(Simple Linear Regression)와 비교했을 때 계수는 어떻게 달라졌는가? 수학 점수 회귀 분석(Math Score Regression)과 비교했을 때 계수의 차이점은 무엇인가?
 
-```{r, echo=FALSE, eval=FALSE}
+2.  avgverb (읽기 점수)를 종속 변수로, classize와 disadvantaged를 독립 변수로 사용하여 회귀분석. 결과를 reg 객체에 저장. 각 계수(coefficient)의 의미는 무엇인가? 단순 선형 회귀와 비교했을 때 계수는 어떻게 달라졌는가? 수학 점수 회귀 분석과 비교했을 때 계수의 차이점은 무엇인가?
+
+```{r task1_2, echo=FALSE, eval=FALSE}
 reg <- lm(avgverb ~ classize + disadvantaged, data = grades)
 summary(reg)
 ```
 
-(Optional) 데이터셋에서 추가 가능한 변수를 확인하고 회귀 분석을 확장하시오. 모든 변수를 포함한 회귀 분석을 수행하고 reg_full 객체에 저장.
-
--   추가된 변수들의 계수(sign & magnitude)를 해석하시오.
--   추가된 변수가 포함됨으로 인해 classize 및 disadvantaged의 계수는 어떻게 변했는가?
--   전체 모델의 설명력이 증가했는가? ($R^2$ 값 확인)
-
-```{r, echo=FALSE, eval=FALSE}
-reg_full <- lm(avgverb ~ ., data = grades)
-summary(reg_full)
-```
 
 
-------------------------------------------------------------------------
-
-------------------------------------------------------------------------
-
-## Task 2 {background-color="#ffebf0"}
-
-::: {style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;"}
-`r countdown(minutes = 10, top = 0)`
-:::
-
-1.  **STAR 데이터**를 다운로드 [링크](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/star_data.csv). `read.csv()`를 사용하여 `star_df` 객체에 저장. `NA` 값이 있는 행을 제거: `star_df <- star_df[complete.cases(star_df),]`
-
-```{r, echo=FALSE}
-# 데이터 불러오기
-star_df <- read.csv("https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/star_data.csv")
-
-# NA 값이 있는 행 제거
-star_df <- star_df[complete.cases(star_df),]
-```
-
-2.  세 개의 더미 변수를 생성 (*힌트*: `dummy = (variable=="value")`):
-
--   `small`: 학생이 소규모 학급에 배정되었으면 TRUE, 아니면 FALSE
--   `regular`: 학생이 일반 학급에 배정되었으면 TRUE, 아니면 FALSE
--   `regular_plus`: 학생이 보조 교사가 있는 일반 학급에 배정되었으면 TRUE, 아니면 FALSE
--   또한, sum 변수를 만들어 위 세 개 변수의 합을 확인. 무엇을 뜻하는가?
-
-```{r, echo=FALSE}
-star_df <- star_df %>%
-  mutate(
-    small = (star == "small"),
-    regular = (star == "regular"),
-    regular_plus = (star == "regular+aide"),
-    sum = small + regular + regular_plus
-  )
-
-# sum 변수 값 확인
-# unique(star_df$sum)
-```
-
-3.  `math`를 `regular_plus`로 회귀 분석. regular+aide 반에 있는 학생의 평균 `math` 점수는?
-
-4.  `math`를 `small`, `regular`, `regular_plus`로 회귀 분석. 어느 범주가 사라졌나?
-
-5.  `math`를 `star` 변수로 회귀 분석. 어느 범주가 사라졌나? 계수를 해석하시오.
 
 ------------------------------------------------------------------------
 
@@ -504,6 +451,11 @@ $$
 
 ***단순회귀모형:*** $\text{avg math} = b_0 + b_1\text{size} + e$
 
+```{r, echo = FALSE, eval=TRUE}
+grades <- read_dta("https://raw.githack.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/data/grade5.dta")
+```
+
+
 ```{r, echo = FALSE}
 reg1 <- lm(avgmath ~ classize, grades)
 reg1$coefficients
@@ -542,22 +494,63 @@ reg3$coefficients
 
 ------------------------------------------------------------------------
 
-## Task 3 {background-color="#ffebf0"}
 
-::: {style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;"}
-`r countdown(minutes = 10, top = 0)`
-:::
+## Task 2 {background-color="#ffebf0"}
 
-1.  Task 2에서 필터링한 *STAR* 데이터를 사용하여 `math`를 `school` 변수에 대해 회귀 분석하시오. `school` 변수가 포함하는 값들을 먼저 확인. 회귀 계수를 해석하시오. 누락된 범주 (category)는? 결과가 예상과 일치하는가? 만약 다르다면 왜 그런가? 누락된 변수가 존재할 가능성이 있는가?
+`r countdown(minutes = 15, top = "20px", right = "10px", font_size = "0.8em", color_border = "blue")`
 
-2.  `lunch` 변수가 `"free"`인 학생들의 비율을 **학교 위치(school) 별로 계산**하시오. 결과를 보고, **무료 점심 자격 여부(`free`) 변수를 추가하여 이전 회귀 분석을 다시 수행**하시오. `free` 변수를 추가했을 때 회귀 계수는 어떻게 변화하는가?
+**STAR 데이터**
 
-3.  `math`를 `star` 변수에 대해 회귀 분석하시오. 다음의 모든 변수를 포함하여 다중 회귀 분석을 수행하시오:\
+-  STAR(Student Teacher Achievement Ratio) 데이터는 1985년부터 1989년까지 미국 테네시 주에서 진행된 무작위 실험의 결과를 담고 있음.
+-  학생들을 소규모 학급(small), 일반 학급(regular), 보조 교사가 있는 일반 학급(regular+aide)으로 무작위 배정하여, 학급 규모가 학생들의 학업 성취도에 미치는 영향을 분석하기 위한 데이터셋.
+
+1.  **STAR 데이터**를 다운로드 [링크](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_causality/data/star_data.csv). 데이터를 `star_df`라는 객체에 저장. NA 값이 있는 행은 제거하시오. `grades`가 "2"인 학생들만 선택하시오.
+
+```{r, echo=FALSE, eval=FALSE}
+library(dplyr)
+# 데이터 불러오기
+star_df <- read.csv("https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_causality/data/star_data.csv")
+
+# NA 값이 있는 행 제거
+star_df <- star_df %>% filter(complete.cases(.)) %>% filter(grade == "2")
+#star_df <- star_df %>% filter(na.omit(.))
+#star_df <- star_df %>% filter(!is.na(.))
+```
+
+
+2.  `math`를 `school` 변수에 대해 회귀 분석하시오. `school` 변수가 포함하는 값들을 먼저 확인. 회귀 계수를 해석하시오. 누락된 범주 (category)는? 결과가 예상과 일치하는가? 만약 다르다면 왜 그런가? 누락된 변수가 존재할 가능성이 있는가?
+```{r, echo=FALSE, eval=FALSE}
+# school 변수의 값 확인
+unique(star_df$school)
+# math를 school 변수에 대해 회귀 분석
+reg_school <- lm(math ~ school, data = star_df)
+summary(reg_school)
+```
+
+3.  `lunch` 변수가 `"free"`인 학생들의 비율을 **학교 위치(school) 별로 계산**하시오. 결과를 보고, **무료 점심 자격 여부(`free`) 변수를 추가하여 이전 회귀 분석을 다시 수행**하시오. `free` 변수를 추가했을 때 회귀 계수는 어떻게 변화하는가?
+
+```{r, echo=FALSE, eval=FALSE}
+# 학교 위치별로 lunch가 "free"인 학생들의 비율 계산
+star_df %>%
+  group_by(school) %>%
+  summarise(free_ratio = mean(lunch == "free"))
+
+# free 변수를 추가하여 회귀 분석 수행
+reg_school_free <- lm(math ~ school + (lunch == "free"), data = star_df)
+summary(reg_school_free)
+```
+
+4.  `math`를 `star` 변수에 대해 회귀 분석하시오. 다음의 모든 변수를 포함하여 다중 회귀 분석을 수행하시오:\
     `math ~ star + gender + ethnicity + lunch + degree + experience + school`. 무작위 실험이 **잘 수행되었다고 판단할 수 있는가?**
+```{r, echo=FALSE, eval=FALSE}
+reg_full <- lm(math ~ star + gender + ethnicity + lunch + degree + experience + school, data = star_df)
+summary(reg_full)
+```
 
-4.  **다중 회귀 분석**에서 얻은 **수정된** $R^2$ 값을 확인하시오. 수정된 $R^2$ 값이 의미하는 바는 무엇인가? 관측 가능한 개별 학생, 교사, 학교 특성이 학업 성취도에 미치는 중요성에 대해 어떤 결론을 내릴 수 있는가?
 
-5.  (Optional) `math`를 `gender`와 `experience` 변수에 대해 회귀 분석하시오. 회귀 계수를 어떻게 해석할 수 있는가? 이러한 회귀 분석 결과를 시각적으로 표현한다면 어떻게 보일 것인가?
+5.  **다중 회귀 분석**에서 얻은 **수정된** $R^2$ 값을 확인하시오. 수정된 $R^2$ 값이 의미하는 바는 무엇인가? 관측 가능한 개별 학생, 교사, 학교 특성이 학업 성취도에 미치는 중요성에 대해 어떤 결론을 내릴 수 있는가?
+
+6.  (Optional) `math`를 `gender`와 `experience` 변수에 대해 회귀 분석하시오. 회귀 계수를 어떻게 해석할 수 있는가? 이러한 회귀 분석 결과를 시각적으로 표현한다면 어떻게 보일 것인가?
 
 
 

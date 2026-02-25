@@ -1,70 +1,57 @@
 ---
-title: "Multiple Linear Regressionn"
-format: html
+title: "수업 과제"
+author: "홍길동 (2025012345)"       #이름과 학번을 넣으세요
+date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
+format: 
+  html:
+    toc: false
+    theme: default
+echo: true  
+include: true 
 ---
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(
-    echo = TRUE,
-    message = FALSE,
-    warning = FALSE,
-    comment = "##")
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-## Task 1
+
+## Task 1 
+
+`grades` 데이터: 
+
+-  학생들의 학업 성취도에 영향을 미치는 요인들을 분석하기 위한 데이터셋
+-  학생들의 읽기 점수(avgverb), 수학 점수(avgmath), 학급 규모(classize), 그리고 사회경제적 불리함(disadvantaged) 등의 변수를 포함
+
 
 -   **읽기(Reading) 점수를 종속 변수(Dependent Variable)** 로 설정하여 회귀 분석을 수행
 
 1.  `haven` 패키지의 `read_dta()` 함수를 사용하여 데이터를 불러오기. 데이터를 `grades`라는 객체에 저장
 
-2.  avgverb (읽기 점수)를 종속 변수로, classize와 disadvantaged를 독립 변수로 사용하여 회귀분석. 결과를 reg 객체에 저장. 각 계수(coefficient)의 의미는 무엇인가? 단순 선형 회귀(Simple Linear Regression)와 비교했을 때 계수는 어떻게 달라졌는가? 수학 점수 회귀 분석(Math Score Regression)과 비교했을 때 계수의 차이점은 무엇인가?
-
-
-(Optional) 데이터셋에서 추가 가능한 변수를 확인하고 회귀 분석을 확장하시오. 모든 변수를 포함한 회귀 분석을 수행하고 reg_full 객체에 저장.
-
--   추가된 변수들의 계수(sign & magnitude)를 해석하시오.
--   추가된 변수가 포함됨으로 인해 classize 및 disadvantaged의 계수는 어떻게 변했는가?
--   전체 모델의 설명력이 증가했는가? (R\^2 값 확인)
-  
-
-
-## Task 2
-
-1.  **STAR 데이터**를 다운로드 [링크](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/star_data.csv). `read.csv()`를 사용하여 `star_df` 객체에 저장. `NA` 값이 있는 행을 제거: `star_df <- star_df[complete.cases(star_df),]`
+2.  avgverb (읽기 점수)를 종속 변수로, classize와 disadvantaged를 독립 변수로 사용하여 회귀분석. 결과를 reg 객체에 저장. 각 계수(coefficient)의 의미는 무엇인가? 단순 선형 회귀와 비교했을 때 계수는 어떻게 달라졌는가? 수학 점수 회귀 분석과 비교했을 때 계수의 차이점은 무엇인가?
 
 
 
-2.  세 개의 더미 변수를 생성 (*힌트*: `dummy = (variable=="value")`):
+## Task 2 
 
--   `small`: 학생이 소규모 학급에 배정되었으면 TRUE, 아니면 FALSE
--   `regular`: 학생이 일반 학급에 배정되었으면 TRUE, 아니면 FALSE
--   `regular_plus`: 학생이 보조 교사가 있는 일반 학급에 배정되었으면 TRUE, 아니면 FALSE
--   또한, sum 변수를 만들어 위 세 개 변수의 합을 확인. 무엇을 뜻하는가?
+**STAR 데이터**
 
+-  STAR(Student Teacher Achievement Ratio) 데이터는 1985년부터 1989년까지 미국 테네시 주에서 진행된 무작위 실험의 결과를 담고 있음.
+-  학생들을 소규모 학급(small), 일반 학급(regular), 보조 교사가 있는 일반 학급(regular+aide)으로 무작위 배정하여, 학급 규모가 학생들의 학업 성취도에 미치는 영향을 분석하기 위한 데이터셋.
 
-
-
-3.  `math`를 `regular_plus`로 회귀 분석. regular+aide 반에 있는 학생의 평균 `math` 점수는?
+1.  **STAR 데이터**를 다운로드 [링크](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_causality/data/star_data.csv). 데이터를 `star_df`라는 객체에 저장. NA 값이 있는 행은 제거하시오. `grades`가 "2"인 학생들만 선택하시오.
 
 
-
-4.  `math`를 `small`, `regular`, `regular_plus`로 회귀 분석. 어느 범주가 사라졌나?
-
+2.  `math`를 `school` 변수에 대해 회귀 분석하시오. `school` 변수가 포함하는 값들을 먼저 확인. 회귀 계수를 해석하시오. 누락된 범주 (category)는? 결과가 예상과 일치하는가? 만약 다르다면 왜 그런가? 누락된 변수가 존재할 가능성이 있는가?
 
 
-5.  `math`를 `star` 변수로 회귀 분석. 어느 범주가 사라졌나? 계수를 해석하시오.
+3.  `lunch` 변수가 `"free"`인 학생들의 비율을 **학교 위치(school) 별로 계산**하시오. 결과를 보고, **무료 점심 자격 여부(`free`) 변수를 추가하여 이전 회귀 분석을 다시 수행**하시오. `free` 변수를 추가했을 때 회귀 계수는 어떻게 변화하는가?
 
 
-
-## Task 3 
-
-1.  Task 2에서 필터링한 *STAR* 데이터를 사용하여 `math`를 `school` 변수에 대해 회귀 분석하시오. `school` 변수가 포함하는 값들을 먼저 확인. 회귀 계수를 해석하시오. 누락된 범주 (category)는? 결과가 예상과 일치하는가? 만약 다르다면 왜 그런가? 누락된 변수가 존재할 가능성이 있는가?
-
-2.  `lunch` 변수가 `"free"`인 학생들의 비율을 **학교 위치(school) 별로 계산**하시오. 결과를 보고, **무료 점심 자격 여부(`free`) 변수를 추가하여 이전 회귀 분석을 다시 수행**하시오. `free` 변수를 추가했을 때 회귀 계수는 어떻게 변화하는가?
-
-3.  `math`를 `star` 변수에 대해 회귀 분석하시오. 다음의 모든 변수를 포함하여 다중 회귀 분석을 수행하시오:\
+4.  `math`를 `star` 변수에 대해 회귀 분석하시오. 다음의 모든 변수를 포함하여 다중 회귀 분석을 수행하시오:\
     `math ~ star + gender + ethnicity + lunch + degree + experience + school`. 무작위 실험이 **잘 수행되었다고 판단할 수 있는가?**
 
-4.  **다중 회귀 분석**에서 얻은 **수정된** $R^2$ 값을 확인하시오. 수정된 $R^2$ 값이 의미하는 바는 무엇인가? 관측 가능한 개별 학생, 교사, 학교 특성이 학업 성취도에 미치는 중요성에 대해 어떤 결론을 내릴 수 있는가?
 
-5.  (Optional) `math`를 `gender`와 `experience` 변수에 대해 회귀 분석하시오. 회귀 계수를 어떻게 해석할 수 있는가? 이러한 회귀 분석 결과를 시각적으로 표현한다면 어떻게 보일 것인가?
+5.  **다중 회귀 분석**에서 얻은 **수정된** $R^2$ 값을 확인하시오. 수정된 $R^2$ 값이 의미하는 바는 무엇인가? 관측 가능한 개별 학생, 교사, 학교 특성이 학업 성취도에 미치는 중요성에 대해 어떤 결론을 내릴 수 있는가?
+
+6.  (Optional) `math`를 `gender`와 `experience` 변수에 대해 회귀 분석하시오. 회귀 계수를 어떻게 해석할 수 있는가? 이러한 회귀 분석 결과를 시각적으로 표현한다면 어떻게 보일 것인가?
