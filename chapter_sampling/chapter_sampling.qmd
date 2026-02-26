@@ -161,9 +161,13 @@ knitr::include_graphics("../img/photos/pasta/pasta_bowl.JPG")
 :::
 :::::
 
+
+
 ------------------------------------------------------------------------
 
 ## Task 1 {background-color="#ffebf0"}
+
+`r countdown(minutes = 5, top = "20px", right = "10px", font_size = "0.8em", color_border = "blue")`
 
 ::: {style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;"}
 `r countdown(minutes = 5, top = 0)`
@@ -260,7 +264,7 @@ pasta_samples %>%
 ::::: columns
 ::: {.column width="50%"}
 -   볼 안의 녹색, 빨간색, 노란색 파스타 개수를 정확히 셈.
--   볼 안의 모든 파스타 데이터는 [여기]("https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_sampling/data/pasta.csv") CSV 파일에 저장됨.
+-   볼 안의 모든 파스타 데이터는 [여기]("https://raw.githack.com/chung-jiwoong/FMB819/refs/heads/main/chapter_sampling/data/pasta.csv") CSV 파일에 저장됨.
 
 ```{r, echo = TRUE}
 bowl <- read.csv("https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_sampling/data/pasta.csv")
@@ -424,13 +428,11 @@ ggplot(virtual_prop_green, aes(x = prop_green)) +
 
 ## Task 2 {background-color="#ffebf0"}
 
-::: {style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;"}
-`r countdown(minutes = 5, top = 0)`
-:::
+`r countdown(minutes = 5, top = "20px", right = "10px", font_size = "0.8em", color_border = "blue")`
 
 33개의 표본만 추출하는 대신, 이번에는 ***1000개***를 추출해보자!
 
-1.  데이터 [링크](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_sampling/data/pasta.csv)를 불러와 `pasta` 객체에 저장하라.
+1.  데이터 [링크](https://raw.githack.com/chung-jiwoong/FMB819/refs/heads/main/chapter_sampling/data/pasta.csv)를 불러와 `pasta` 객체에 저장하라.
 
 2.  `moderndive` 패키지의 `rep_sample_n()` 함수를 사용하여 크기 50인 표본을 1000개 생성하라.
 
@@ -762,31 +764,8 @@ df %>%
 </iframe>
 ::: -->
 
-------------------------------------------------------------------------
-
-## 🔍 인과 관계를 찾아가는 길
-
-✅ 데이터를 어떻게 다룰까?: 읽기(Read), 정리(Tidy), 시각화(Visualize)...
-
-✅ 변수간 관계를 어떻게 요약할까? 단순 / 다중 선형 회귀...비선형회귀, 교차변수...
-
-✅ 인과 관계(Causality)란 무엇인가?
-
-✅ ***전체 모집단을 관측하지 못하면 어떻게 할까?***  Sampling!
-
-❌ 우리의 연구 결과가 단순한 무작위(Randomness) 때문일 수도 있을까?
-
-❌ 실제로 외생성을 어떻게 찾아낼 수 있을까?
-
-------------------------------------------------------------------------
 
 
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 
-::: {style="display: flex; justify-content: center; align-items: center; height: 70vh;"}
-<h2 style="color: #ff6666; text-align: center; font-family: &#39;Pacifico&#39;, cursive; font-size: 50px;">
 
-THE END!
-
-</h2>
-:::
+# THE END!
