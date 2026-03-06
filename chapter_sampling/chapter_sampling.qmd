@@ -71,7 +71,7 @@ set.seed(1234)
 ## 초록색 파스타의 비율은 얼마일까?
 
 ```{r, echo = FALSE, out.width = "500px"}
-knitr::include_graphics("../img/photos/pasta/pasta_bowl.JPG")
+knitr::include_graphics("img/photos/pasta/pasta_bowl.JPG")
 ```
 
 -   모든 초록색 파스타를 세는 것은 너무 힘듦! 😩 다른 방법은?
@@ -98,7 +98,7 @@ knitr::include_graphics("../img/photos/pasta/pasta_bowl.JPG")
 :::
 
 ::: {.column width="50%"}
-![](../img/photos/pasta/sample1.JPG)
+![](img/photos/pasta/sample1.JPG)
 :::
 :::::
 
@@ -122,8 +122,8 @@ knitr::include_graphics("../img/photos/pasta/pasta_bowl.JPG")
 
 |   |   |   |   |   |   |
 |:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|
-| <img src="../img/photos/pasta/sample7.JPG" width="120"> | <img src="../img/photos/pasta/sample8.JPG" width="120"> | <img src="../img/photos/pasta/sample9.JPG" width="120"> | <img src="../img/photos/pasta/sample10.JPG" width="120"> | <img src="../img/photos/pasta/sample11.JPG" width="120"> | <img src="../img/photos/pasta/sample12.JPG" width="120"> |
-| <img src="../img/photos/pasta/sample13.JPG" width="120"> | <img src="../img/photos/pasta/sample14.JPG" width="120"> | <img src="../img/photos/pasta/sample15.JPG" width="120"> | <img src="../img/photos/pasta/sample16.JPG" width="120"> | <img src="../img/photos/pasta/sample17.JPG" width="120"> | <img src="../img/photos/pasta/sample18.JPG" width="120"> |
+| <img src="img/photos/pasta/sample7.JPG" width="120"> | <img src="img/photos/pasta/sample8.JPG" width="120"> | <img src="img/photos/pasta/sample9.JPG" width="120"> | <img src="img/photos/pasta/sample10.JPG" width="120"> | <img src="img/photos/pasta/sample11.JPG" width="120"> | <img src="img/photos/pasta/sample12.JPG" width="120"> |
+| <img src="img/photos/pasta/sample13.JPG" width="120"> | <img src="img/photos/pasta/sample14.JPG" width="120"> | <img src="img/photos/pasta/sample15.JPG" width="120"> | <img src="img/photos/pasta/sample16.JPG" width="120"> | <img src="img/photos/pasta/sample17.JPG" width="120"> | <img src="img/photos/pasta/sample18.JPG" width="120"> |
 
 
 
