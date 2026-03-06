@@ -1,0 +1,17 @@
+tidyverse
+ggplot2
+tibble
+tidyr
+readr
+purrr
+dplyr
+stringr
+forcats
+lubridate
+kableExtra
+gridExtra
+haven
+ggpubr
+huxtable
+countdown
+latex2exp

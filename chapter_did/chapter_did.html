@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="chapter_did_files/libs/clipboard/clipboard.min.js"></script>
+<script src="chapter_did_files/libs/quarto-html/tabby.min.js"></script>
+<script src="chapter_did_files/libs/quarto-html/popper.min.js"></script>
+<script src="chapter_did_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="chapter_did_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="chapter_did_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="chapter_did_files/libs/quarto-html/quarto-syntax-highlighting-48ffa3e5b9d089919c6712c39e5b00f2.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.41">
+
+  <title>FMB819: R을 이용한 데이터분석</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="chapter_did_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="chapter_did_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="chapter_did_files/libs/revealjs/dist/theme/quarto-2f366650f320edcfcf53d73c80250a32.css">
+  <link rel="stylesheet" href="default">
+  <link rel="stylesheet" href="../css/kubs.css">
+  <link rel="stylesheet" href="../css/kubs-fonts.css">
+  <link href="chapter_did_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="chapter_did_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="chapter_did_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="chapter_did_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="chapter_did_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="chapter_did_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <link href="chapter_did_files/libs/countdown/countdown.css" rel="stylesheet">
+
+  <script src="chapter_did_files/libs/countdown/countdown.js"></script>
+
+  <script src="chapter_did_files/libs/kePrint/kePrint.js"></script>
+
+  <link href="chapter_did_files/libs/lightable/lightable.css" rel="stylesheet">
+
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">FMB819: R을 이용한 데이터분석</h1>
+  <p class="subtitle"><span style="font-size:1.5em; color:#a01616;">Difference-in-Differences</span></p>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="todays-agenda" class="slide level2">
+<h2>Today’s Agenda</h2>
+<p><strong><em>이중차분법 (Differences-in-Differences)</em></strong></p>
+<ul>
+<li>시간에 따른 정책 변화가 모든 사람에게 동일하게 영향을 미치지 않는 점을 활용함.</li>
+<li>적절한 대조군(control group)을 찾아야 하거나 구성해야 함.</li>
+<li><em>핵심 가정:</em> 평행 추세 가정 (Parallel Trends Assumption)</li>
+<li><em>실증적 적용:</em> <strong><em>최저임금</em></strong>이 <strong><em>고용</em></strong>에 미치는 영향 분석</li>
+</ul>
+</section>
+<section id="evaluation-methods" class="slide level2">
+<h2>Evaluation methods</h2>
+<ul>
+<li><p>다중 회귀 분석은 종종 <strong><em>관찰되지 않은 요인에 의한 선택(selection on unobservables)</em></strong> 때문에 인과적 추정치를 제공하지 못함.</p></li>
+<li><p>RCT(무작위 대조 실험)는 이러한 문제를 해결하는 한 가지 방법이지만, 현실적으로 시행이 불가능한 경우가 많음.</p></li>
+<li><p>경제학에서 널리 사용되는 네 가지 주요 인과적 평가 방법:</p>
+<ul>
+<li><strong><em>도구변수법 (Instrumental Variables, IV)</em></strong>,</li>
+<li><strong><em>성향 점수 매칭 (Propensity-Score Matching)</em></strong>,</li>
+<li><strong><em>이중차분법 (Differences-in-Differences, DiD)</em></strong>, 및</li>
+<li><strong><em>회귀 불연속 설계 (Regression Discontinuity Designs, RDD)</em></strong>.</li>
+</ul></li>
+<li><p>이러한 방법들은 <strong>처치(treatment)</strong>와 <strong>결과(outcome)</strong> 간의 __인과 관계__를 식별하는 데 사용됨.</p></li>
+<li><p>이번 강의에서는 널리 사용되며 엄격한 프로그램 평가 방법인 __이중차분법(Differences-in-Differences)__을 다룰 것임.</p></li>
+</ul>
+</section>
+<section id="differences-in-differences-did" class="slide level2">
+<h2>Differences-in-Differences (DiD)</h2>
+<p><strong><em>DiD의 요구사항</em></strong></p>
+<ul>
+<li><p><strong>두 개의 시점:</strong> 처치 전과 처치 후.</p></li>
+<li><p><strong>두 개의 그룹:</strong></p>
+<ul>
+<li><strong><em>대조군(Control group):</em></strong> 처치를 전혀 받지 않는 집단.</li>
+<li><strong><em>처치군(Treatment group):</em></strong> 초기에는 처치를 받지 않다가 이후 완전히 처치를 받는 집단.</li>
+</ul></li>
+<li><p>특정 가정하에서, 대조군을 처치군의 반사실적(counterfactual) 비교 대상으로 사용할 수 있음.</p></li>
+</ul>
+</section>
+<section id="예제-최저임금과-고용" class="slide level2">
+<h2>예제: 최저임금과 고용</h2>
+<ul>
+<li><p>최저임금 인상이 (실업을 포함한) 고용에 미치는 <strong>인과적</strong> 영향을 평가하고자 한다고 가정하자.</p></li>
+<li><p>하지만 이는 단순하지 않음. 적절한 대조군은 무엇이어야 할까?</p></li>
+<li><p>노동경제학자 데이비드 카드(David Card)와 앨런 크루거(Alan Krueger)의 1994년 대표 논문 <a href="http://davidcard.berkeley.edu/papers/njmin-aer.pdf">(링크)</a></p>
+<ul>
+<li>논문 제목: “최저임금과 고용: 뉴저지와 펜실베이니아 패스트푸드 산업 사례 연구”</li>
+</ul></li>
+<li><p>이 연구는 최저임금 인상이 패스트푸드 산업의 고용률에 미치는 영향을 추정함. 왜 하필 이 산업을 선택했을까?</p></li>
+</ul>
+</section>
+<section id="제도적-배경" class="slide level2">
+<h2>제도적 배경</h2>
+<ul>
+<li><p>미국에는 연방 최저임금이 있지만, 각 주는 이를 다르게 설정할 수 있음.</p></li>
+<li><p><strong>1992년 4월 1일:</strong> 뉴저지의 최저임금이 시간당 $4.25에서 $5.05로 인상됨.</p></li>
+<li><p>반면, 인접한 펜실베이니아는 최저임금을 변경하지 않음.</p></li>
+</ul>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../img/photos/nj_penn_map.png" class="quarto-figure quarto-figure-center" width="600"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<p><br> <br> 펜실베이니아와 뉴저지는 <strong><em>매우 유사함</em></strong>: 제도, 생활습관, 소비자, 소득 수준, 기후 등 많은 면에서 비슷함.</p>
+</div></div>
+</section>
+<section id="card-and-krueger-1994-방법론" class="slide level2">
+<h2>Card and Krueger (1994): 방법론</h2>
+<ul>
+<li><p>뉴저지(NJ)와 동부 펜실베이니아의 패스트푸드점 410곳을 조사함.</p></li>
+<li><p><strong>조사 시점:</strong></p>
+<ul>
+<li>뉴저지 최저임금 인상 전 조사: 1992년 2~3월</li>
+<li>뉴저지 최저임금 인상 후 조사: 1992년 11~12월</li>
+</ul></li>
+<li><p>연구자들은 어떤 비교를 수행했을까?</p></li>
+</ul>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>좀 더 자세히 데이터를 살펴보자</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="co"># 패키지 설치 및 데이터 로드</span></span>
+<span id="cb1-2"><a href=""></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"b-rodrigues/diffindiff"</span>)</span>
+<span id="cb1-3"><a href=""></a><span class="fu">library</span>(diffindiff)</span>
+<span id="cb1-4"><a href=""></a>ck1994 <span class="ot">&lt;-</span> njmin</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 6
+  sheet chain  state        observation   empft emppt
+  &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;        &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt;
+1 46    bk     Pennsylvania February 1992  30    15  
+2 49    kfc    Pennsylvania February 1992   6.5   6.5
+3 506   kfc    Pennsylvania February 1992   3     7  
+4 56    wendys Pennsylvania February 1992  20    20  
+5 61    wendys Pennsylvania February 1992   6    26  
+6 62    wendys Pennsylvania February 1992   0    31  </code></pre>
+</div>
+</div>
+</div></div>
+</section>
+<section id="task-1" class="slide level2 scrollable" data-background-color="#ffebf0">
+<h2>Task 1</h2>
+<div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
+<p></p><div class="countdown" id="timer_54071e93" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+</div>
+<ol type="1">
+<li>데이터셋을 살펴보고 변수 목록을 확인하라. 변수 정의는 <code>?njmin</code>을 사용하여 확인하라.</li>
+</ol>
+<ol type="1">
+<li><p><code>state</code> 및 설문조사 시점(<code>observation</code>)별로 매장의 개수를 표로 정리하라. 해당 결과가 <a href="http://davidcard.berkeley.edu/papers/njmin-aer.pdf">논문</a>의 <em>표 1</em>과 일치하는지 확인하라.</p></li>
+<li><p>카드와 크루거(1994)의 방식에 따라, 정규직 상당(full-time equivalent, FTE) 고용 변수를 생성하라. <code>empfte</code> 변수를 정의하고 다음 식을 사용하라:</p>
+<pre><code>empfte = empft + 0.5 * emppt + nmgrs</code></pre>
+<p>여기서 <code>empft</code>는 정규직 직원 수, <code>emppt</code>는 시간제 직원 수, <code>nmgrs</code>는 매니저 수를 의미함.</p></li>
+<li><p><code>state</code> 및 설문조사 시점(<code>observation</code>)별로 다음 지표들의 평균을 계산하라.</p>
+<ul>
+<li>FTE 고용 인원 수</li>
+<li>정규직 직원 비율(FTE 직원 대비 정규직 비율)</li>
+<li>평균 초봉(<code>wage_st</code>) 계산한 결과를 논문의 <em>표 2</em>와 비교하라.</li>
+</ul></li>
+<li><p>최저임금 인상 전, 뉴저지와 펜실베이니아의 패스트푸드점에는 어떤 차이가 있었는가?</p></li>
+</ol>
+</section>
+<section id="card-and-krueger-did-결과" class="slide level2">
+<h2>Card and Krueger DiD: 결과</h2>
+<p><strong>뉴저지 최저임금 인상 전후 평균 고용</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<table class="table table-striped caption-top" data-quarto-postprocess="true" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Variables</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Pennsylvania</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">New Jersey</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">FTE employment before</td>
+<td style="text-align: left;"><span style="     text-align: c;">23.33</span></td>
+<td style="text-align: left;"><span style="     text-align: c;">20.44</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">FTE employment after</td>
+<td style="text-align: left;"><span style="     text-align: c;">21.17</span></td>
+<td style="text-align: left;"><span style="     text-align: c;">21.03</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Change in mean FTE employment</td>
+<td style="text-align: left;"><span style=" font-weight: bold;    color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: rgba(253, 231, 37, 255) !important;text-align: c;">-2.17</span></td>
+<td style="text-align: left;"><span style=" font-weight: bold;    color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: rgba(68, 1, 84, 255) !important;text-align: center;">0.59</span></td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<p><strong><em>DiD 추정치</em></strong></p>
+<ul>
+<li><p>이중차분(DiD) 인과 추정치: <span class="math inline">\(0.59 - (-2.17) = 2.76\)</span></p></li>
+<li><p><strong>해석:</strong> 최저임금 인상은 매장당 평균 <strong>FTE 고용 증가</strong>를 2.76명 초래함.</p></li>
+<li><p>이중차분(DiD)의 핵심 개념은 이처럼 간단함! 😃</p></li>
+<li><p>이제 이러한 결과를 그래픽으로 살펴보자.</p></li>
+</ul>
+</section>
+<section id="did-그래프로-표현" class="slide level2">
+<h2>DiD 그래프로 표현</h2>
+
+<img data-src="chapter_did_files/figure-revealjs/unnamed-chunk-7-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section id="did-그래프로-표현-1" class="slide level2">
+<h2>DiD 그래프로 표현</h2>
+
+<img data-src="chapter_did_files/figure-revealjs/unnamed-chunk-8-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section id="did-그래프로-표현-2" class="slide level2">
+<h2>DiD 그래프로 표현</h2>
+
+<img data-src="chapter_did_files/figure-revealjs/unnamed-chunk-9-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section id="did-그래프로-표현-3" class="slide level2">
+<h2>DiD 그래프로 표현</h2>
+
+<img data-src="chapter_did_files/figure-revealjs/unnamed-chunk-10-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section id="did-그래프로-표현-4" class="slide level2">
+<h2>DiD 그래프로 표현</h2>
+
+<img data-src="chapter_did_files/figure-revealjs/unnamed-chunk-11-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section id="did-그래프로-표현-5" class="slide level2">
+<h2>DiD 그래프로 표현</h2>
+
+<img data-src="chapter_did_files/figure-revealjs/unnamed-chunk-12-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section id="만약-단순한-사후사전-비교를-했다면-어떻게-되었을까" class="slide level2">
+<h2>만약 단순한 사후/사전 비교를 했다면 어떻게 되었을까?</h2>
+
+<img data-src="chapter_did_files/figure-revealjs/unnamed-chunk-13-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section id="만약-단순한-사후사전-비교를-했다면-어떻게-되었을까-1" class="slide level2">
+<h2>만약 단순한 사후/사전 비교를 했다면 어떻게 되었을까?</h2>
+
+<img data-src="chapter_did_files/figure-revealjs/unnamed-chunk-14-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section id="만약-단순한-사후사전-비교를-했다면-어떻게-되었을까-2" class="slide level2">
+<h2>만약 단순한 사후/사전 비교를 했다면 어떻게 되었을까?</h2>
+
+<img data-src="chapter_did_files/figure-revealjs/unnamed-chunk-15-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section id="만약-단순한-사후사전-비교를-했다면-어떻게-되었을까-3" class="slide level2">
+<h2>만약 단순한 사후/사전 비교를 했다면 어떻게 되었을까?</h2>
+
+<img data-src="chapter_did_files/figure-revealjs/unnamed-chunk-16-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section>
+<section id="estimation" class="title-slide slide level1 center">
+<h1>Estimation</h1>
+
+</section>
+<section id="회귀-분석을-통한-did" class="slide level2 scrollable">
+<h2>회귀 분석을 통한 DiD</h2>
+<ul>
+<li><p>실제 분석에서는, DiD는 보통 단 2개의 시점(4개의 관측치)보다 더 많은 기간을 포함하여 추정됨.</p></li>
+<li><p>정책 변화 전후로 더 많은 데이터가 존재하는 경우가 많음.</p></li>
+</ul>
+<p><strong><em>DiD 회귀 분석의 3가지 핵심 요소</em></strong></p>
+<ol type="1">
+<li><p><strong>처치 더미 변수 (Treatment Dummy Variable)</strong>: <span class="math inline">\(TREAT_s\)</span> (첨자 <span class="math inline">\(s\)</span>는 처치가 주(state) 수준에서 이루어짐을 나타냄)</p></li>
+<li><p><strong>정책 시행 이후 기간을 나타내는 더미 변수 (Post-Treatment Periods Dummy Variable)</strong>: <span class="math inline">\(POST_t\)</span> (첨자 <span class="math inline">\(t\)</span>는 이 변수가 시간에 따라 변화함을 나타냄)</p></li>
+<li><p><strong>두 변수의 상호작용항 (Interaction Term)</strong>: <span class="math inline">\(TREAT_s \times POST_t\)</span> 👉 <strong><em>이 항의 계수가 바로 DiD 인과 효과를 의미함!</em></strong></p></li>
+</ol>
+</section>
+<section id="회귀-분석을-통한-did-1" class="slide level2 scrollable">
+<h2>회귀 분석을 통한 DiD</h2>
+<ol type="1">
+<li><p><strong>처치 더미 변수 (Treatment Dummy Variable)</strong>: <span class="math display">\[
+TREAT_s = \begin{cases}
+0 \quad \text{if } s = \text{Pennsylvania} \\
+1 \quad \text{if } s = \text{New Jersey}
+\end{cases}
+\]</span></p></li>
+<li><p><strong>정책 시행 이후 기간을 나타내는 더미 변수 (Post-Treatment Periods Dummy Variable)</strong>: <span class="math display">\[
+POST_t = \begin{cases}
+0 \quad \text{if } t &lt; \text{April 1, 1992} \\
+1 \quad \text{if } t \geq \text{April 1, 1992}
+\end{cases}
+\]</span></p></li>
+<li><p><strong>두 변수의 상호작용항 (Interaction Term)</strong>: <span class="math inline">\(TREAT_s \times POST_t\)</span> 👉 <strong><em>이 항의 계수가 바로 DiD 인과 효과를 의미함!</em></strong></p></li>
+</ol>
+<p><strong><em>어떤 관측치에서 <span class="math inline">\(TREAT_s \times POST_t = 1\)</span>이 되는가?</em></strong></p>
+<ul>
+<li><p>위 요소들을 모두 결합하면 다음과 같은 DiD 회귀식을 얻음: <span class="math display">\[
+EMP_{st} = \alpha + \beta TREAT_s + \gamma POST_t + \delta(TREAT_s \times POST_t) + \varepsilon_{st}
+\]</span></p></li>
+<li><p><span class="math inline">\(\delta\)</span>: 최저임금 인상이 고용에 미치는 인과적 효과</p></li>
+</ul>
+</section>
+<section id="회귀-분석-이해하기" class="slide level2">
+<h2>회귀 분석 이해하기</h2>
+<p><span class="math display">\[EMP_{st} = \color{#d96502}\alpha + \color{#027D83}\beta TREAT_s + \color{#02AB0D}\gamma POST_t + \color{#d90502}\delta(TREAT_s \times POST_t) + \varepsilon_{st}\]</span></p>
+<p><strong><em>주어진 조건에서 기대값:</em></strong></p>
+<ul>
+<li><p><span class="math inline">\(\mathbb{E}(EMP_{st} \; | \; TREAT_s = 0, POST_t = 0) = \color{#d96502}\alpha\)</span></p></li>
+<li><p><span class="math inline">\(\mathbb{E}(EMP_{st} \; | \; TREAT_s = 0, POST_t = 1) = \color{#d96502}\alpha + \color{#02AB0D}\gamma\)</span></p></li>
+<li><p><span class="math inline">\(\mathbb{E}(EMP_{st} \; | \; TREAT_s = 1, POST_t = 0) = \color{#d96502}\alpha + \color{#027D83}\beta\)</span></p></li>
+<li><p><span class="math inline">\(\mathbb{E}(EMP_{st} \; | \; TREAT_s = 1, POST_t = 1) = \color{#d96502}\alpha + \color{#027D83}\beta + \color{#02AB0D}\gamma + \color{#d90502}\delta\)</span></p></li>
+</ul>
+<p><strong><em>DiD 계산 과정</em></strong></p>
+<p><span class="math display">\[[\mathbb{E}(EMP_{st} \; | \; TREAT_s = 1, POST_t = 1)-\mathbb{E}(EMP_{st} \; | \; TREAT_s = 1, POST_t = 0)] - \\
+[\mathbb{E}(EMP_{st} \; | \; TREAT_s = 0, POST_t = 1)-\mathbb{E}(EMP_{st} \; | \; TREAT_s = 0, POST_t = 0)] = \color{#d90502}\delta\]</span></p>
+</section>
+<section id="회귀-분석-이해하기-1" class="slide level2">
+<h2>회귀 분석 이해하기</h2>
+<p><span class="math display">\[EMP_{st} = \color{#d96502}\alpha + \color{#027D83}\beta TREAT_s + \color{#02AB0D}\gamma POST_t + \color{#d90502}\delta(TREAT_s \times POST_t) + \varepsilon_{st}\]</span></p>
+<p><strong><em>표 형식으로 정리:</em></strong></p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 26%">
+<col style="width: 26%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"></th>
+<th style="text-align: center;">사전 평균</th>
+<th style="text-align: center;">사후 평균</th>
+<th style="text-align: center;">변화 (사후 - 사전)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">펜실베이니아 (PA)</td>
+<td style="text-align: center;"><span class="math inline">\(\color{#d96502}\alpha\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\color{#d96502}\alpha + \color{#02AB0D}\gamma\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\color{#02AB0D}\gamma\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">뉴저지 (NJ)</td>
+<td style="text-align: center;"><span class="math inline">\(\color{#d96502}\alpha + \color{#027D83}\beta\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\color{#d96502}\alpha + \color{#027D83}\beta + \color{#02AB0D}\gamma + \color{#d90502}\delta\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\color{#02AB0D}\gamma + \color{#d90502}\delta\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">변화 (NJ - PA)</td>
+<td style="text-align: center;"><span class="math inline">\(\color{#027D83}\beta\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\color{#027D83}\beta + \color{#d90502}\delta\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\color{#d90502}\delta\)</span></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>이 표는 <em>펜실베이니아</em>를 <em>대조군(Control)</em>으로, <em>뉴저지</em>를 <em>처치군(Treatment)</em>으로 대체하여 일반적인 설정으로 확장할 수 있음.</li>
+</ul>
+</section>
+<section id="task-2" class="slide level2 scrollable" data-background-color="#ffebf0">
+<h2>Task 2</h2>
+<div style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;">
+<p></p><div class="countdown" id="timer_dabf76c5" data-update-every="1" tabindex="0" style="top:0;right:0;"> <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div> <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code> </div><p></p>
+</div>
+<ol type="1">
+<li><p>더미 변수 <code>treat</code>를 생성하라. <code>state</code>가 펜실베이니아이면 <code>FALSE</code>, 뉴저지이면 <code>TRUE</code>로 설정하라.</p></li>
+<li><p>더미 변수 <code>post</code>를 생성하라. <code>observation</code>이 1992년 2월이면 <code>FALSE</code>, 그 외의 경우 <code>TRUE</code>로 설정하라.</p></li>
+<li><p>다음 회귀 모형을 추정하라. 슬라이드 9의 결과와 동일한 결과를 얻는가?</p>
+<p><span class="math display">\[empfte_{st} = \alpha + \beta treat_s + \gamma post_t + \delta(treat_s \times post_t) + \varepsilon_{st}\]</span></p></li>
+</ol>
+</section></section>
+<section>
+<section id="identifying-assumptions" class="title-slide slide level1 center">
+<h1>Identifying Assumptions</h1>
+
+</section>
+<section id="did의-핵심-가정-평행-추세-parallel-trends" class="slide level2">
+<h2>DiD의 핵심 가정: 평행 추세 (Parallel Trends)</h2>
+<blockquote>
+<p><strong>공통 또는 평행 추세 가정</strong>: 최저임금이 인상되지 않았다면, 펜실베이니아의 패스트푸드 고용 추세는 뉴저지에서 기대할 수 있었던 추세와 같아야 함.</p>
+</blockquote>
+<ul>
+<li><p>이 가정은 1992년 2월부터 11월까지 펜실베이니아의 패스트푸드 고용 추세가 뉴저지의 반사실적(counterfactual) 고용 추세를 신뢰할 수 있는 기준으로 제공해야 함을 의미함.</p></li>
+<li><p>이 가정을 완전히 검증하거나 기각하는 것은 불가능함.</p></li>
+<li><p><strong><em>직관적인 확인 방법:</em></strong> 정책 변화 이전의 추세를 비교해보고, 중기적 효과가 없을 것으로 예상될 경우 정책 변화 이후의 추세도 비교해볼 수 있음.</p></li>
+</ul>
+</section>
+<section id="평행-추세-눈으로-확인" class="slide level2">
+<h2>평행 추세: 눈으로 확인</h2>
+
+<img data-src="chapter_did_files/figure-revealjs/unnamed-chunk-17-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section id="평행-추세-가정을-확인하는-방법" class="slide level2">
+<h2>평행 추세 가정을 확인하는 방법</h2>
+
+<img data-src="chapter_did_files/figure-revealjs/unnamed-chunk-18-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section id="평행-추세-가정을-확인하는-방법-1" class="slide level2">
+<h2>평행 추세 가정을 확인하는 방법</h2>
+
+<img data-src="chapter_did_files/figure-revealjs/unnamed-chunk-19-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section id="평행-추세-가정-검증됨" class="slide level2">
+<h2>평행 추세 가정 ⟶ 검증됨 ✅</h2>
+
+<img data-src="chapter_did_files/figure-revealjs/unnamed-chunk-20-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section id="평행-추세-가정-검증됨-1" class="slide level2">
+<h2>평행 추세 가정 ⟶ 검증됨 ✅</h2>
+
+<img data-src="chapter_did_files/figure-revealjs/unnamed-chunk-21-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section id="평행-추세-가정-검증되지-않음" class="slide level2">
+<h2>평행 추세 가정 ⟶ 검증되지 않음 ❌</h2>
+
+<img data-src="chapter_did_files/figure-revealjs/unnamed-chunk-22-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section id="평행-추세-가정-검증되지-않음-1" class="slide level2">
+<h2>평행 추세 가정 ⟶ 검증되지 않음 ❌</h2>
+
+<img data-src="chapter_did_files/figure-revealjs/unnamed-chunk-23-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section id="평행-추세-가정-card-and-krueger-2000" class="slide level2">
+<h2>평행 추세 가정: <a href="https://inequality.stanford.edu/sites/default/files/media/_media/pdf/Reference%20Media/Card%20and%20Krueger_2000_Policy.pdf">Card and Krueger (2000)</a></h2>
+<p>펜실베이니아와 뉴저지의 실제 고용 추세를 살펴보자.</p>
+
+<img data-src="../img/photos/min_wage_parallel_trends.png" class="quarto-figure quarto-figure-center r-stretch" width="600"><ul>
+<li>공통 추세 가정이 검증될 가능성이 높은가?</li>
+</ul>
+</section>
+<section id="평행-추세-가정-공식적-정의" class="slide level2 scrollable">
+<h2>평행 추세 가정: 공식적 정의</h2>
+<p>다음과 같이 정의하자:</p>
+<ul>
+<li><p><span class="math inline">\(Y_{ist}^1\)</span>: 시점 <span class="math inline">\(t\)</span>에서 주(state) <span class="math inline">\(s\)</span>의 식당 <span class="math inline">\(i\)</span>에서 높은 최저임금이 적용될 경우 패스트푸드 고용 수준</p></li>
+<li><p><span class="math inline">\(Y_{ist}^0\)</span>: 시점 <span class="math inline">\(t\)</span>에서 주(state) <span class="math inline">\(s\)</span>의 식당 <span class="math inline">\(i\)</span>에서 낮은 최저임금이 적용될 경우 패스트푸드 고용 수준</p></li>
+</ul>
+<p>이는 <strong>잠재적 결과(Potential Outcomes)</strong>이며, 두 개 중 하나만 관찰할 수 있음.</p>
+<p>DiD 추정의 핵심 가정은, 처치(treatment)가 없을 경우 식당 <span class="math inline">\(i\)</span>의 결과가 다음과 같이 주어진다는 것임:</p>
+<p><span class="math display">\[\mathbb{E}[Y_{ist}^0|s,t] = \gamma_s + \lambda_t\]</span></p>
+<p>이 가정은 두 가지 암묵적 가정을 포함함:</p>
+<ol type="1">
+<li><strong><em>선택 편향 (Selection Bias)</em></strong>: 고정된 주(state) 특성 <span class="math inline">\((\gamma)\)</span>과 관련됨.</li>
+<li><strong><em>시간 추세 (Time Trend)</em></strong>: 처치군과 대조군이 동일한 시간 추세 <span class="math inline">\((\lambda)\)</span>를 가짐.</li>
+</ol>
+</section>
+<section id="평행-추세-가정-공식적-정의-1" class="slide level2">
+<h2>평행 추세 가정: 공식적 정의</h2>
+<p>비교 그룹에서의 결과:</p>
+<p><span class="math display">\[\mathbb{E}[Y_{ist}| s = \text{Pennsylvania},t = \text{Feb}] = \gamma_{PA} + \lambda_{Feb}\]</span></p>
+<p><span class="math display">\[\mathbb{E}[Y_{ist}|s = \text{Pennsylvania},t = \text{Nov}] = \gamma_{PA} + \lambda_{Nov}\]</span></p>
+<p><span class="math display">\[
+\begin{align}
+\mathbb{E}[Y_{ist}&amp;|s = \text{Pennsylvania},t = \text{Nov}] - \mathbb{E}[Y_{ist}| s = \text{Pennsylvania},t = \text{Feb}] \\
+&amp;= \gamma_{PA} + \lambda_{Nov} - (\gamma_{PA} + \lambda_{Feb}) \\
+&amp;= \lambda_{Nov} - \lambda_{Feb}
+\end{align}
+\]</span></p>
+</section>
+<section id="평행-추세-가정-공식적-정의-2" class="slide level2">
+<h2>평행 추세 가정: 공식적 정의</h2>
+<p>비교 그룹에서의 결과:</p>
+<p><span class="math display">\[\mathbb{E}[Y_{ist}| s = \text{Pennsylvania},t = \text{Feb}] = \gamma_{PA} + \lambda_{Feb}\]</span></p>
+<p><span class="math display">\[\mathbb{E}[Y_{ist}|s = \text{Pennsylvania},t = \text{Nov}] = \gamma_{PA} + \lambda_{Nov}\]</span></p>
+<p><span class="math display">\[
+\begin{align}
+\mathbb{E}[Y_{ist}&amp;|s = \text{Pennsylvania},t = \text{Nov}] - \mathbb{E}[Y_{ist}| s = \text{Pennsylvania},t = \text{Feb}] \\
+&amp;= \gamma_{PA} + \lambda_{Nov} - (\gamma_{PA} + \lambda_{Feb}) \\
+&amp;= \underbrace{\lambda_{Nov} - \lambda_{Feb}}_{\text{시간 추세 (time trend)}}
+\end{align}
+\]</span></p>
+<p><span class="math inline">\(\rightarrow\)</span> 비교 그룹을 이용하여 <strong><em>시간 추세 (time trend)</em></strong>를 추정할 수 있음.</p>
+</section>
+<section id="평행-추세-가정-공식적-정의-3" class="slide level2">
+<h2>평행 추세 가정: 공식적 정의</h2>
+<p>비교 그룹에서의 결과:</p>
+<p><span class="math display">\[\mathbb{E}[Y_{ist}| s = \text{Pennsylvania},t = \text{Feb}] = \gamma_{PA} + \lambda_{Feb}\]</span></p>
+<p><span class="math display">\[\mathbb{E}[Y_{ist}|s = \text{Pennsylvania},t = \text{Nov}] = \gamma_{PA} + \lambda_{Nov}\]</span></p>
+<p><span class="math display">\[
+\begin{align}
+\mathbb{E}[Y_{ist}&amp;|s = \text{Pennsylvania},t = \text{Nov}] - \mathbb{E}[Y_{ist}| s = \text{Pennsylvania},t = \text{Feb}] \\
+&amp;= \gamma_{PA} + \lambda_{Nov} - (\gamma_{PA} + \lambda_{Feb}) \\
+&amp;= \underbrace{\lambda_{Nov} - \lambda_{Feb}}_{\text{시간 추세 (time trend)}}
+\end{align}
+\]</span></p>
+<p><span class="math inline">\(\rightarrow\)</span> 비교 그룹을 이용하여 <strong><em>시간 추세 (time trend)</em></strong>를 추정할 수 있음.</p>
+</section>
+<section id="평행-추세-가정-처치군의-결과" class="slide level2">
+<h2>평행 추세 가정: 처치군의 결과</h2>
+<p>최저임금 인상의 <strong>진짜 효과(true impact)</strong>를 <span class="math inline">\(\delta\)</span>라고 하자:</p>
+<p><span class="math display">\[\mathbb{E}[Y_{ist}^1 - Y_{ist}^0|s,t] = \delta\]</span></p>
+<p>처치군에서의 결과:</p>
+<p><span class="math display">\[\mathbb{E}[Y_{ist}|s = \text{New Jersey}, t = \text{Feb}] = \gamma_{NJ} + \lambda_{Feb}\]</span></p>
+<p><span class="math display">\[\mathbb{E}[Y_{ist}|s = \text{New Jersey}, t = \text{Nov}] = \gamma_{NJ} + \delta + \lambda_{Nov}\]</span></p>
+<p><span class="math display">\[
+\begin{align}
+\mathbb{E}[Y_{ist}&amp;|s = \text{New Jersey}, t = \text{Nov}] - \mathbb{E}[Y_{ist}|s = \text{New Jersey}, t = \text{Feb}] \\
+&amp;= \gamma_{NJ} + \delta + \lambda_{Nov} - (\gamma_{NJ} + \lambda_{Feb}) \\
+&amp;= \delta + \underbrace{\lambda_{Nov} - \lambda_{Feb}}_{\text{시간 추세 (time trend)}}
+\end{align}
+\]</span></p>
+</section>
+<section id="평행-추세-가정-최종-도출" class="slide level2">
+<h2>평행 추세 가정: 최종 도출</h2>
+<p>결과적으로:</p>
+<p><span class="math display">\[
+\begin{align}
+\mathbb{E}[Y_{ist}&amp;|s = \text{PA},t = \text{Nov}] - \mathbb{E}[Y_{ist}| s = \text{PA},t = \text{Feb}] = \underbrace{\lambda_{Nov} - \lambda_{Feb}}_{\text{시간 추세 (time trend)}}
+\end{align}
+\]</span></p>
+<p><span class="math display">\[
+\begin{align}
+\mathbb{E}[Y_{ist}&amp;|s = \text{NJ},t = \text{Nov}] - \mathbb{E}[Y_{ist}| s = \text{NJ},t = \text{Feb}] = \delta + \underbrace{\lambda_{Nov} - \lambda_{Feb}}_{\text{시간 추세 (time trend)}}
+\end{align}
+\]</span></p>
+<p><span class="math display">\[
+\begin{align}
+DD &amp;= \mathbb{E}[Y_{ist}|s = \text{NJ}, t = \text{Nov}] - \mathbb{E}[Y_{ist}|s = \text{NJ}, t = \text{Feb}] \\
+&amp; \qquad \qquad - \Big(\mathbb{E}[Y_{ist}|s = \text{PA},t = \text{Nov}] - \mathbb{E}[Y_{ist}| s = \text{PA},t = \text{Feb}]\Big) \\
+&amp;= \delta + \lambda_{Nov} - \lambda_{Feb} - (\lambda_{Nov} - \lambda_{Feb}) \\
+&amp;= \delta
+\end{align}
+\]</span></p>
+</section>
+<section id="인과-관계를-찾아가는-길" class="slide level2">
+<h2>🔍 인과 관계를 찾아가는 길</h2>
+<p>✅ 데이터를 어떻게 다룰까?: 읽기(Read), 정리(Tidy), 시각화(Visualize)…</p>
+<p>✅ 변수간 관계를 어떻게 요약할까? 단순 / 다중 선형 회귀…비선형회귀, 교차변수…</p>
+<p>✅ 인과 관계(Causality)란 무엇인가?</p>
+<p>✅ 전체 모집단을 관측하지 못하면 어떻게 할까? Sampling!</p>
+<p>✅ 우리의 연구 결과가 단순한 무작위(Randomness) 때문일 수도 있을까? 신뢰구간과 가설검정. 통계적 추론</p>
+<p>🚧 <strong><em>실제로 외생성을 어떻게 찾아낼 수 있을까?</em></strong>: 이중 차분</p>
+</section>
+<section class="slide level2">
+
+<p><link href="https://fonts.googleapis.com/css2?family=Pacifico&amp;display=swap" rel="stylesheet"></p>
+<div style="display: flex; justify-content: center; align-items: center; height: 70vh;">
+<h2 style="color: #ff6666; text-align: center; font-family: 'Pacifico', cursive; font-size: 50px;">
+<p>THE END!</p>
+</h2>
+</div>
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="chapter_did_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="chapter_did_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="chapter_did_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="chapter_did_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="chapter_did_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="chapter_did_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="chapter_did_files/libs/revealjs/plugin/reveal-text-resizer/revealjs-text-resizer.js"></script>
+  <script src="chapter_did_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="chapter_did_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="chapter_did_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="chapter_did_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="chapter_did_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'fast',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, RevealTextResizer, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+
+    <script>
+
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
+      // slide changes (different for each slide format).
+
+      (function () {
+
+        // dispatch for htmlwidgets
+
+        function fireSlideEnter() {
+
+          const event = window.document.createEvent("Event");
+
+          event.initEvent("slideenter", true, true);
+
+          window.document.dispatchEvent(event);
+
+        }
+
+    
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          fireSlideEnter();
+
+    
+
+          // dispatch for shiny
+
+          if (window.jQuery) {
+
+            if (previousSlide) {
+
+              window.jQuery(previousSlide).trigger("hidden");
+
+            }
+
+            if (currentSlide) {
+
+              window.jQuery(currentSlide).trigger("shown");
+
+            }
+
+          }
+
+        }
+
+    
+
+        // hookup for slidy
+
+        if (window.w3c_slidy) {
+
+          window.w3c_slidy.add_observer(function (slide_num) {
+
+            // slide_num starts at position 1
+
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
+          });
+
+        }
+
+    
+
+      })();
+
+    </script>
+
+    
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>

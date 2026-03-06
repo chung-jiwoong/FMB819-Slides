@@ -1,0 +1,131 @@
+---
+title: "Simple Linear Regression"
+format: html
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+    echo = TRUE,
+    message = FALSE,
+    warning = FALSE,
+    comment = "##")
+```
+
+
+## Task 1: SDO, ATE and Randomization
+
+
+📂 **1. 데이터 불러오기 및 변수 생성**
+
+-   데이터 다운로드 [링크](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/toy_data_2.csv). `read.csv()`를 사용하여 데이터를 불러오기.
+
+-   **변수 설명**
+
+    -   `group_dummy`: 처치를 받았는지 여부 (`1 = 처치군`, `0 = 통제군`).\
+    -   `Y0`: 처치를 받지 않았을 경우의 잠재적 결과 $(Y_i^0)$.\
+    -   `Y1`: 처치를 받았을 경우의 잠재적 결과 $(Y_i^1)$.
+
+-   **다음 변수들을 생성하시오.**
+
+    -   **관측된 결과** $Y_i = D_i \times Y_i^1 + (1 - D_i) \times Y_i^0$
+    -   **개별 처치 효과** $\delta_i = Y_i^1 - Y_i^0$
+
+
+
+📊 **2. ATE 및 SDO 계산**
+
+-   **ATE (Average Treatment Effect) 계산하시오.**
+-   **SDO (Simple Difference in Mean Outcomes) 계산하시오.**
+-   *Bias가 존재하는가? 크기는 얼마나 큰가?*
+
+
+
+
+
+🔀 **3. 무작위 배정된 데이터에서 SDO 계산**
+
+-   새로운 데이터 다운로드 [링크](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/toy_data_random.csv).  이 데이터에서는 동일한 개인을 **임의로 무작위 배정(random assignment)**하였음.
+
+-   $Y_i$ 재계산 하시오. 새로운 처치 배정에 맞춰 다시 계산해야 함.
+
+-   **무작위 배정에서 SDO 계산**
+
+    -   편향이 **거의 0**에 가까워야 함.\
+    -   하지만 정확히 0이 되지 않는 이유는 무엇일까?
+
+
+
+
+📌 **4. (Optional) 편향 요소 확인**
+
+1.  **선택 편향(Selection Bias) 계산하시오.**\
+2.  **이질적 처치 효과 편향(Heterogeneous Treatment Effect Bias) 계산하시오.**\
+3.  아래 식이 성립하는지 확인: 
+    $$
+    SDO = ATE + \text{Selection Bias} + \text{Heterogeneous Treatment Effect Bias}
+    $$
+
+
+
+
+
+
+
+## Task 2: STAR data
+
+
+📂 1. **데이터 불러오기**: 데이터 다운로드 [링크](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/star_data.csv)\
+- 데이터를 `star_df` 객체에 저장. 변수 설명 [**도움말 확인**](https://rdrr.io/cran/AER/man/STAR.html).\
+(📌**데이터가 재구성(reshaped)되어, 변수명 끝의 "k", "1" 등의 숫자는 무시.**)
+
+
+🔍 2. **데이터의 기본 정보 확인**
+
+-   **관찰 단위(Unit of observation)**는 무엇인가?
+
+
+
+-   (i) 랜덤 학급 배정(random class assignment): `star`, (ii) 학생의 학년(class grade): `grade`, (iii) 결과 변수(outcomes of interest): `read` & `math`
+
+
+
+📊 3. **데이터 크기 및 결측값(NA) 분석**
+
+-   총 관측치 수는 몇 개인가? 원래에는 학생별로 관측단위였는데, 학년-학생 단위로 데이터를 재구조화하였기 때문에 NA 값이 많음. 또한 `NA`는 여러 가지 이유로 실험을 떠나게 된 학생들임.
+
+
+🚀 4. **결측값 처리 (NA 제거)**
+
+-   다음 코드 실행하여 결측값이 없는 경우만 유지:
+
+```{r, echo=TRUE, eval=FALSE}
+star_df <- star_df[complete.cases(star_df),] # 또는
+star_df <- na.omit(star_df)
+```
+
+
+
+
+📈 5. **무작위 배정 확인 (Balancing Checks)**
+
+-   랜덤 배정이 잘 이루어졌는지 확인하기 위해, 그룹별 기초 통계량을 계산.
+-   다음 항목별 평균 비율(%)을 학년별(grade) 및 처치군별(treatment class)로 비교: 1️⃣ 여학생 비율 (percentage of girls), 2️⃣ 아프리카계 미국인 비율 (percentage of African Americans), 3️⃣ 무료 급식 대상 비율 (percentage of free lunch qualifiers)을 살펴보자.
+
+(📌 힌트: 다음 코드로 여학생 비율 계산 가능 (dplyr 활용 필요): `share_female = mean(gender == "female") * 100`.)
+
+
+
+## Task 3
+
+
+📌 1. 아래 코드를 실행하여 **1학년(grade == "1")이며, 일반 학급(regular) 또는 소규모 학급(small)에 속한 학생들만 선택**.
+
+
+📊 2. 두 그룹의 평균 수학 점수 및 차이 계산 (Base R 사용)
+
+🔄 3. 더미 변수 생성: 소규모 학급(small) = 1 (TRUE), 일반 학급(regular) = 0 (FALSE) **힌트**: `treatment = (star == "small")`.
+
+
+📈 4. 회귀 분석 실행
+
+
+❓ 5. 결과 해석: 회귀 분석 결과가 2번 질문에서 구한 평균 차이와 일치하는가?

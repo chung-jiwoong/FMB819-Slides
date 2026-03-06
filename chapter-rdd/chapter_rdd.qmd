@@ -1,0 +1,992 @@
+---
+title: "FMB819: R을 이용한 데이터분석"
+subtitle: "<span style='font-size:1.5em; color:#a01616;'>Regression Discontinuity Design</span>"
+# date: "`r Sys.Date()`"
+format:
+  revealjs:
+    slide-number: true
+    # smaller: true
+    scrollable: true
+    chalkboard: true
+    transition: fade
+    transition-speed: fast
+    #incremental: true
+    #lib_dir: libs
+    css: [default, "../css/kubs.css", "../css/kubs-fonts.css"]
+    #nature:
+      # beforeInit: ["../js/ru_xaringan.js"]
+      #highlightStyle: github
+      #highlightLines: true
+      #countIncrementalSlides: false
+    #  ratio: "16:9"
+    # includes:
+    #   in_header: "../libs/partials/header.html"
+revealjs-plugins:
+  - revealjs-text-resizer
+---
+
+```{r setup, include=FALSE,warning=FALSE,message=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  dev = "svg",
+  cache = TRUE,
+  fig.align = "center"
+  #fig.width = 11,
+  #fig.height = 5
+)
+
+# library(emo)
+library(tidyverse)
+library(ggplot2)
+library(kableExtra)
+library(zoo)
+library(scales)
+library(grid)
+library(pBrackets)
+library(formattable)
+
+
+library(countdown)
+
+# countdown style
+countdown(
+  color_border              = "#d90502",
+  color_text                = "black",
+  color_running_background  = "#d90502",
+  color_running_text        = "white",
+  color_finished_background = "white",
+  color_finished_text       = "#d90502",
+  color_finished_border     = "#d90502"
+)
+
+  # set seed
+set.seed(1234)
+```
+
+------------------------------------------------------------------------
+
+## Today's Agenda
+
+***회귀 불연속 설계 (Regression Discontinuity Design)***
+
+-   현실에서는 특정 기준에 따라 처치가 할당되는 무작위 규칙이 많음.
+
+-   이러한 **할당 규칙**에 대한 정보를 활용하여 인과 효과를 추정할 수 있음.
+
+-   ***핵심 가정:*** 처치를 결정하는 변수는 개인이 조작할 수 없어야 함.
+
+-   *실증적 적용:* 알코올 소비가 사망률에 미치는 효과 분석.
+
+------------------------------------------------------------------------
+
+## 회귀 불연속 설계 (Regression Discontinuity Design)
+
+-   응용 연구에서 널리 사용되는 연구 설계로, 신뢰할 수 있는 인과 추정치를 제공함.
+
+-   ***출발점:*** 처치는 무작위로 할당되지 않음 ⚠️
+
+-   특정 규칙에 따라 처치가 결정되는 경우 RDD를 적용할 수 있음.
+
+-   \_\_RDD\_\_는 처치 할당에 대한 구체적인 정보를 활용하여 인과 효과를 추정함!
+
+------------------------------------------------------------------------
+
+## 불연속성은 어디에나 존재함
+
+삶에는 처치를 결정하는 많은 임의적인 규칙이 존재함:
+
+-   노스캐롤라이나에서는, 해당 연도의 **10월 16일까지 5세가 되어야** 유치원 입학이 가능했음 [(Cook and Kang, 2016)](https://pubs.aeaweb.org/doi/pdfplus/10.1257/app.20140323).
+
+-   미국에서는 **출생 체중이 1,500g 미만인 신생아**가 "매우 저체중(Very Low Birth Weight)"으로 간주되어 추가 치료를 받음 [(Almond et al., 2010)](https://academic.oup.com/qje/article/125/2/591/1882183).
+
+-   주요 주립대(flagship universities)는 특정 **SAT 점수 기준**을 사용하여 학생을 선발함 [(Hoekstra, 2009)](https://cdn.theatlantic.com/static/mt/assets/business/Hoekstra_Flagship.pdf).
+
+-   이탈리아에서는 **불법 이민자의 거주 허가 쿼터**가 선착순으로 할당되며, 정원이 차면 마감됨 [(Pinotti, 2017)](https://pubs.aeaweb.org/doi/pdfplus/10.1257/aer.20150355).
+
+이번 분석에서는 다음과 같은 불연속성에 초점을 맞출 것임:
+
+-   미국에서 **법적 음주 가능 연령은 21세**임 [(Carpenter and Dobkin, 2009)](http://masteringmetrics.com/wp-content/uploads/2015/01/Carpenter-and-Dobkin-2009.pdf).
+
+------------------------------------------------------------------------
+
+## 예제: 알코올 소비와 사망률
+
+-   젊은 성인의 **알코올 소비가 사망률에 미치는 인과적 효과**를 평가하고자 한다고 가정하자.
+
+-   하지만 이는 단순한 문제가 아님. 단순히 **알코올 소비를 사망 연령 및 사망 원인에 대한 회귀 분석**으로 추정할 수 없는 이유는?
+
+    -   알코올 소비 여부에 따라 선택 편향(selection bias)이 존재할 수 있으며, 이는 사망률의 결정 요인일 가능성이 있음.
+
+-   미국에서는 **21세 미만의 알코올 소비가 법적으로 금지됨**.
+
+-   일부에서는 **법적 음주 가능 연령(MLDA, Minimum Legal Drinking Age)**을 18세로 낮추자는 논쟁이 존재함 (베트남 전쟁 시대와 유사한 조치).
+
+------------------------------------------------------------------------
+
+## 핵심 개념 및 직관
+
+> ***연속 변수 (Running Variable):*** 처치 할당을 결정하는 변수.
+
+$\rightarrow a = \text{나이}$
+
+> ***절단값 (Cutoff Level):*** 처치를 받을 수 있는 기준이 되는 변수의 값.
+
+$\rightarrow c = 21$ (21세 생일)
+
+***인과적 직관:***
+
+-   **21세 생일 직전과 직후**의 개인들은 법적 음주 가능 여부 외에 얼마나 다른가?
+
+-   절단값 근처에서는 처치 할당이 **무작위와 같음**.
+
+-   👉 ***회귀 불연속 설계(RDD)***는 이러한 처치 할당을 활용하여 인과 효과를 추정함!
+
+------------------------------------------------------------------------
+
+## Carpenter와 Dobkin의 데이터 {#carpenter}
+
+-   이 연구에서 사용된 데이터를 살펴보자.
+
+::::: columns
+::: {.column width="50%"}
+```{r, echo = TRUE, eval = TRUE}
+# 데이터 포함된 패키지 설치
+devtools::install_github("jrnold/masteringmetrics",
+                         subdir = "masteringmetrics")
+
+# 패키지 로드
+library(masteringmetrics)
+# 데이터 로드
+data("mlda", package = "masteringmetrics")
+```
+:::
+
+::: {.column width="50%"}
+```{r, echo = FALSE}
+mlda %>%
+  select(agecell, all, internal, external,
+         alcohol, homicide, suicide) %>%
+  head()
+```
+:::
+:::::
+
+-   이 데이터셋은 **19\~23세 연령 그룹(`agecell`)**에 대한 **총 사망률**과 **사망 원인별 사망률**을 포함함.
+
+------------------------------------------------------------------------
+
+## 절단점에서의 급격한 불연속성
+
+```{r, echo = FALSE, eval = TRUE, fig.height = 4.75, fig.width = 10}
+mlda <- mlda %>%
+  mutate(over21 = (agecell >= 21))
+
+rdd_run <- mlda %>%
+  ggplot(aes(x = agecell, y = over21, color = over21)) +
+  geom_point(size = 4, alpha = 0.8) +
+  geom_vline(xintercept = 21, linetype = "longdash") +
+  labs(x = "나이", y = "법적 음주 가능 여부") +
+  scale_color_viridis_d() +
+  theme_bw(base_size = 14) + theme(legend.position="none")
+rdd_run
+```
+
+-   절단점에서 **처치 확률이 0에서 1로 급격히 증가**함.
+
+------------------------------------------------------------------------
+
+## 절단점에서의 시각적 강조
+
+```{r, echo = FALSE, eval = TRUE, fig.height = 4.75, fig.width = 10}
+rdd_run +
+  annotate("rect", xmin = 20.5, xmax = 21.5, ymin = -Inf, ymax = Inf, alpha = .2) +
+  annotate("rect", xmin = 21 - 1/12, xmax = 21 + 1/12, ymin = -Inf, ymax = Inf, alpha = .4) +
+  geom_point(size = 4, alpha = 0.8) +
+  geom_vline(xintercept = 21, linetype = "longdash")
+```
+
+------------------------------------------------------------------------
+
+## 절단점에서의 시각적 강조
+
+```{r, echo = FALSE, eval = TRUE, fig.height = 4.75, fig.width = 10}
+rdd_run +
+  annotate("rect", xmin = 20.5, xmax = 21.5, ymin = -Inf, ymax = Inf, alpha = .2) +
+  annotate("rect", xmin = 21 - 1/12, xmax = 21 + 1/12, ymin = -Inf, ymax = Inf, alpha = .4) +
+  geom_point(size = 4, alpha = 0.8) +
+  geom_vline(xintercept = 21, linetype = "longdash") +
+  scale_x_continuous(breaks = c(21 - 6/12, 21 - 3/12, 21, 21 + 3/12, 21 + 6/12),
+                     labels = c("- 6개월", "- 3개월", "21", "+ 3개월", "+ 6개월"),
+                     minor_breaks = seq(from = 21 - 7/12, to = 21 + 7/12, by = 1/12),
+                     lim = c(21 - 7/12, 21 + 7/12))
+```
+
+------------------------------------------------------------------------
+
+## RDD 프레임워크
+
+-   ***처치 변수 (Treatment Variable)***: $D_a$
+
+    -   $D_a = 1$ (개인이 21세 이상이면 처치)
+
+    -   $D_a = 0$ (개인이 21세 미만이면 처치 없음)
+
+    -   $D_a$는 개인의 나이 $a$의 함수이며, 이는 ***연속 변수 (Running Variable)***임.
+
+-   ***절단값 (Cutoff)***: 법적 음주 가능 연령인 21세가 처치를 받을 수 있는 기준을 결정함. $$
+    D_a = \begin{cases}
+    1 \quad \text{if } a \geq 21 \\
+    0 \quad \text{if } a < 21
+    \end{cases}
+    $$
+
+***RD 설계의 핵심 특징***
+
+1.  처치 상태는 **결정론적(deterministic)** 함수이며, 처치 할당 규칙을 알고 있음.
+2.  처치 상태는 **불연속적(discontinuous)** 함수이며, 특정 절단값이 존재함.
+
+------------------------------------------------------------------------
+
+## Task 1 {background-color="#ffebf0"}
+
+::: {style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;"}
+`r countdown(minutes = 10, top = 0)`
+:::
+
+1.  [Carpenter와 Dobkin의 데이터]의 코드를 따라 데이터셋을 불러오라. 연령 셀(age cell)의 개수는 몇 개인가?
+
+2.  21세 이상인 개인을 위한 더미 변수(dummy variable)를 생성하라.
+
+3.  전체 사망률(`all`)을 나이(`agecell`)의 함수로 나타내는 그래프를 그리고, 21세 이상과 미만을 다른 색으로 구분하라. 눈에 띄는 특징이 있는가?
+
+4.  그래프에 회귀선을 추가하라. 어떤 패턴이 관찰되는가?
+
+5.  동일한 방법을 사용하여 자동차 사고 관련(`mva`) 및 알코올 관련(`alcohol`) 사망률을 나이의 함수로 나타내라.
+
+
+
+---
+
+## 시각적 분석: 전체 사망률
+
+```{r, echo = FALSE, eval = TRUE, fig.height = 5, fig.width = 10}
+rdd_plot <- mlda %>%
+  ggplot(aes(x = agecell, y = all, color = over21)) +
+  geom_point(size = 4) +
+  geom_vline(xintercept = 21, linetype = "longdash") +
+  labs(x = "Age",
+       y = "Death rate from all causes (per 100,000)",
+       color = NULL) +
+  scale_colour_viridis_d(aesthetics = c("colour", "fill"), labels = c("FALSE" = "Control", "TRUE" = "Treatment")) +
+  theme_bw(base_size = 14) +
+  theme(legend.position="none")
+rdd_plot
+```
+
+---
+
+## 시각적 분석: 전체 사망률
+
+```{r, echo = FALSE, eval = TRUE, fig.height = 5, fig.width = 10}
+library(broom)
+all_fit <- augment(lm(all ~ agecell + over21, mlda))
+
+rdd_plot_line <- rdd_plot +
+  geom_line(data = all_fit %>% filter(agecell < 21), aes(x = agecell, y = .fitted), color = viridis_pal()(2)[1], size = 2) +
+  geom_line(data = all_fit %>% filter(agecell >= 21), aes(x = agecell, y = .fitted), color = viridis_pal()(2)[2], size = 2) +
+labs(fill = NULL)
+rdd_plot_line
+```
+
+---
+
+## 시각적 분석: 전체 사망률
+
+```{r, echo = FALSE, eval = TRUE, fig.height = 5, fig.width = 10}
+bracketsGrob <- function(...){
+l <- list(...)
+e <- new.env()
+e$l <- l
+  grid:::recordGrob(  {
+    do.call(grid.brackets, l)
+  }, e)
+}
+
+b1 <- bracketsGrob(21, all_fit$.fitted[all_fit$agecell < 21 & all_fit$agecell > 20.9], 21, all_fit$.fitted[all_fit$agecell > 21 & all_fit$agecell <= 21.1],
+                   h = 0.75, lwd=1.5, col="black")
+
+rdd_plot_line_brack <- rdd_plot_line +
+  annotation_custom(b1,xmin= 0, xmax=1, ymin=0, ymax=1) +
+  annotate("text", x = 20.65, y = 96, label = "Treatment\nEffect", colour = "black", size = 5)
+rdd_plot_line_brack
+```
+
+---
+
+## 시각적 분석: 전체 사망률
+
+```{r, echo = FALSE, eval = TRUE, fig.height = 5, fig.width = 10}
+bracketsGrob <- function(...){
+l <- list(...)
+e <- new.env()
+e$l <- l
+  grid:::recordGrob(  {
+    do.call(grid.brackets, l)
+  }, e)
+}
+
+all_fit_2 <- augment(lm(all ~ agecell + over21, mlda %>% filter(agecell >= 20.4 & agecell <= 21.6)))
+
+b1 <- bracketsGrob(21, all_fit_2$.fitted[all_fit_2$agecell < 21 & all_fit_2$agecell > 20.9], 21, all_fit_2$.fitted[all_fit_2$agecell > 21 & all_fit_2$agecell <= 21.1],
+                   h = 0.75, lwd=1.5, col="black")
+
+rdd_plot +
+  geom_line(data = all_fit_2 %>% filter(agecell < 21), aes(x = agecell, y = .fitted), color = viridis_pal()(2)[1], size = 2) +
+  geom_line(data = all_fit_2 %>% filter(agecell >= 21), aes(x = agecell, y = .fitted), color = viridis_pal()(2)[2], size = 2) +
+  labs(fill = NULL) +
+  annotation_custom(b1,xmin= 0, xmax=1, ymin=0, ymax=1) +
+  annotate("text", x = 20.9, y = 97.2, label = "Treatment\nEffect", colour = "black", size = 5) +
+  scale_x_continuous(breaks = c(21 - 6/12, 21 - 3/12, 21, 21 + 3/12, 21 + 6/12),
+                     labels = c("- 6 months", "- 3 months", "21", "+ 3 montsh", "+ 6 months"),
+                     minor_breaks = seq(from = 21 - 7/12, to = 21 + 7/12, by = 1/12),
+                     lim = c(21 - 7/12, 21 + 7/12))
+```
+
+---
+
+
+## RDD의 국소 평균 처치 효과 (Local Average Treatment Effect, LATE)
+
+- RD 추정량은 **국소 평균 처치 효과(LATE)**임.
+
+- 이는 연속 변수의 **절단값 주변에서만** 처치 $D$가 결과 변수 $Y$에 미치는 영향을 보여줌.
+
+- ***외적 타당성(external validity) 제한*** $\rightarrow$ 전체 모집단에 대한 결과를 일반화할 수 없음.
+
+- 21세 음주 제한 연령을 활용한 RDD 분석은 **이 제한이 사망률에 미치는 효과**만 측정할 수 있으며, 일반적인 알코올 소비의 효과를 추정할 수 없음.
+
+- 양적 실증 분석에서 도출되는 모든 결과는 본질적으로 국소적인 성격을 가진다고 주장할 수 있음.
+
+
+
+# Estimation
+
+---
+
+## 추정 (Estimation)
+
+- **목적:** 절단값에서 ***두 회귀선 사이의 차이(gap)***를 측정하는 것.
+
+- 가장 간단한 형태의 회귀 모형은 다음과 같음:
+  $$
+  DEATHRATE_a = \alpha + \delta D_a + \beta a + \varepsilon_i,
+  $$
+  여기서 $DEATHRATE_a$는 연령 $a$에서의 사망률, $D_a$는 처치 더미 변수, $a$는 나이(21세 생일부터의 개월 수)임.
+
+  - $\delta$는 **21세 이상과 미만 사이의 사망률 차이**를 나타냄.
+
+- RDD 추정량은 $a = 21$에서 조건부 기댓값 함수의 불연속성을 이용함:
+  $$
+  \underbrace{\lim_{c \to 21^+} \mathbb{E}[DEATHRATE_a|a = c]}_{\alpha + \delta} - \underbrace{\lim_{c \to 21^-} \mathbb{E}[DEATHRATE_a|a = c]}_{\alpha} = \delta
+  $$
+
+---
+
+## Task 2 {background-color="#ffebf0"}
+
+::: {style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;"}
+`r countdown(minutes = 5, top = 0)`
+:::
+
+
+1. 모든 사망 원인에 대해 다음 회귀 모형을 추정하라.
+   $$
+   DEATHRATE_a = \alpha + \delta D_a + \beta a + \varepsilon_i,
+   $$
+   - RDD 추정 계수가 그래프적 분석과 일치하는가?
+
+2. 각 계수를 어떻게 해석할 수 있는가?
+
+3. 법적 음주 접근이 사망률에 미치는 인과적 효과는 무엇인가?
+
+
+---
+
+
+## Estimation #1: 단순 선형 모형을 이용한 추정
+
+$$DEATHRATE_a = \alpha + \delta D_a + \beta a + \varepsilon_a,$$
+
+:::: columns
+
+::: {.column width="50%"}
+```{r, eval = FALSE}
+mlda <- mlda %>%
+  mutate(over21 = (agecell >= 21),
+         agecell_21 = agecell - 21)
+rdd <- lm(all ~ agecell_21 + over21, mlda)
+
+library(broom)
+tidy(rdd)
+```
+:::
+
+::: {.column width="50%"}
+```{r, echo = FALSE}
+mlda <- mlda %>%
+  mutate(over21 = (agecell >= 21),
+         agecell_21 = agecell - 21)
+rdd <- lm(all ~ agecell_21 + over21, mlda)
+
+library(broom)
+tidy(rdd)
+```
+:::
+
+::::
+
+***해석 (Interpretation):***
+
+- 평균적으로, 법적 음주 가능 연령(MLDA)은 전체 사망률을 **7.66 퍼센트포인트 증가**시킴.
+
+- 이는 상당한 효과이며, 19세부터 22세까지 개인의 평균 사망률은 다음과 같음:
+
+```{r}
+mean(mlda$all, na.rm = TRUE)
+```
+
+---
+
+
+## 추정 상 이슈
+
+- ***함수 형태 (Functional Form)***의 선택이 매우 중요함!
+
+  - $\Rightarrow$ 지나치게 단순한 모형은 **비선형성(nonlinearity)을 처치 효과로 오인할 위험**이 있음.
+  
+  - $\Rightarrow$ 반대로, 너무 복잡한 모형은 **정확성을 떨어뜨리고(overfitting) 과적합(overfitting) 위험**을 초래할 수 있음.
+
+
+---
+
+## 시뮬레이션 - 선형 관계와 명확한 불연속성
+
+```{r, echo = FALSE, fig.height = 4.5, fig.width = 10}
+set.seed(1234)
+
+  # parameters
+cutoff = 0.5
+alpha = 0.2 # intercept
+delta = 0.4 # jump at cutoff
+beta = 2 # slope
+nsim = 150 # number of simulated observations
+
+  # running variable
+x = runif(n = nsim,
+          min = 0,
+          max = 1)
+
+  # treatment variable
+D = if_else(x > cutoff, TRUE, FALSE)
+
+  # error term
+u = rnorm(n = nsim, mean = 0, sd = .1)
+
+  # outcome variable
+Y = alpha + beta * x + D*delta + u
+
+  # create tibble
+rdd_sim = tibble(running = x,
+                 treatment_dum = D,
+                 outcome = Y)
+  
+  # plot
+rdd_lin <- ggplot(rdd_sim,
+       aes(x = running, y = outcome, color = treatment_dum)) +
+  geom_point(size = 3, alpha = 0.75) +
+  stat_smooth(method = "lm", se = FALSE) +
+  ylim(0,3) +
+  labs(x = "Running variable",
+       y = "Outcome variable",
+       colour = NULL) +
+  scale_colour_viridis_d(breaks=c("FALSE", "TRUE"), labels = c("Not Treated", "Treated")) +
+  theme_bw(base_size = 14) + theme(legend.position="top")
+rdd_lin
+```
+
+
+$$outcome_i = \alpha + \delta treatment_i + \beta running_i + e_i,$$
+
+---
+
+## 시뮬레이션 - 선형 관계와 명확한 불연속성
+
+```{r, echo = FALSE, fig.height = 4.5, fig.width = 10}
+bracketsGrob <- function(...){
+l <- list(...)
+e <- new.env()
+e$l <- l
+  grid:::recordGrob(  {
+    do.call(grid.brackets, l)
+  }, e)
+}
+
+b1 <- bracketsGrob(0.50, 1.20, 0.50, 1.63, h = 0.2, lwd=1.5, col="black")
+
+rdd_lin +
+  annotation_custom(b1,xmin= 0, xmax=1, ymin=0, ymax=1) +
+  annotate("text", x = 0.46, y = 1.45, label = "delta", colour = "#d90502", parse = T, size = 8)
+```
+
+$$outcome_i = \alpha + \color{#d90502}\delta treatment_i + \beta running_i + e_i,$$
+
+---
+
+## 시뮬레이션 - 비선형 관계와 명확한 불연속성
+
+```{r, echo = FALSE, fig.height = 4.5, fig.width = 10}
+set.seed(1234)
+
+  # parameters
+cutoff = 0.5
+alpha = 1.5 # intercept
+delta = 0.4 # jump at cutoff
+beta = -8 # slope
+beta_2 = 25
+beta_3 = -17
+nsim = 150 # number of simulated observations
+
+  # running variable
+x = runif(n = nsim,
+          min = 0,
+          max = 1)
+
+  # treatment variable
+D = if_else(x > cutoff, TRUE, FALSE)
+
+  # error term
+u = rnorm(n = nsim, mean = 0, sd = .1)
+
+  # outcome variable
+Y = alpha + beta * x + beta_2 * x^2 + beta_3 * x^3 + D*delta + u
+
+  # create tibble
+rdd_sim = tibble(running = x,
+                 treatment_dum = D,
+                 outcome = Y)
+
+  # plot
+rdd_quad <- ggplot(rdd_sim,
+       aes(x = running, y = outcome, color = treatment_dum)) +
+  geom_point(size = 3, alpha = 0.75) +
+  stat_smooth(method = "lm",
+              formula = y ~ x + I(x^2),
+              se = FALSE) +
+  geom_vline(xintercept = 0.5, linetype = "longdash") +
+  ylim(0,3) +
+  labs(x = "Running variable", y = "Outcome variable", colour = "") +
+  scale_colour_viridis_d(breaks=c("FALSE", "TRUE"), labels = c("Not Treated", "Treated")) +
+  theme_bw(base_size = 14) + theme(legend.position="top")
+rdd_quad
+```
+
+$$outcome_i = \alpha + \delta treatment_i + \beta_1 running_i + \color{#d90502}{\beta_2 running_i^2} + e_i,$$
+
+---
+
+## 시뮬레이션 - 비선형 관계와 명확한 불연속성
+
+```{r, echo = FALSE, fig.height = 4.5, , fig.width = 10}
+bracketsGrob <- function(...){
+l <- list(...)
+e <- new.env()
+e$l <- l
+  grid:::recordGrob(  {
+    do.call(grid.brackets, l)
+  }, e)
+}
+
+b1 <- bracketsGrob(0.50, 1.68, 0.50, 2.05, h = 0.2, lwd=1.5, col="black")
+
+rdd_quad +
+  annotation_custom(b1,xmin= 0, xmax=1, ymin=0, ymax=1) +
+  annotate("text", x = 0.46, y = 1.865, label = "delta", colour = "#d90502", parse = T, size = 8)
+```
+
+$$outcome_i = \alpha + \color{#d90502}\delta treatment_i + \beta_1 running_i + \beta_2 running_i^2 + e_i,$$
+
+---
+
+## 시뮬레이션 - 선형 관계와 ***불명확한*** 불연속성
+
+```{r, echo = FALSE, fig.height = 4.5, fig.width = 10}
+set.seed(123)
+
+  # parameters
+cutoff = 0.5
+alpha = 2.5 # intercept
+beta_1 = 2.5 # slope
+beta_2 = 0.5 # slope 2
+power = 7
+nsim = 150 # number of simulated observations
+
+  # running variable
+x = runif(n = nsim,
+          min = 0,
+          max = 1)
+
+  # treatment variable
+D = if_else(x > cutoff, TRUE, FALSE)
+
+  # error term
+u = rnorm(n = nsim, mean = 0, sd = .1)
+
+  # outcome variable
+Y = alpha + (1 - alpha) / (1 + (x/beta_2)^power) + u
+
+  # without error term
+Y_true = alpha + (1 - alpha) / (1 + (x/beta_2)^power)
+
+  # create tibble
+rdd_sim = tibble(running = x,
+                 treatment_dum = D,
+                 outcome = Y,
+                 true = Y_true)
+
+  # plot
+rdd_nodisc <- ggplot(rdd_sim,
+       aes(x = running, y = outcome, color = treatment_dum)) +
+  geom_point(size = 3, alpha = 0.75) +
+  geom_line(aes(x = running, y = true), colour = "black", linetype = "dotted") +
+  stat_smooth(method = "lm",
+              formula = y ~ x,
+              se = FALSE) +
+  geom_vline(xintercept = 0.5, linetype = "longdash") +
+  ylim(0,3) +
+  labs(x = "Running variable", y = "Outcome variable", colour = "") +
+  scale_colour_viridis_d(breaks=c("FALSE", "TRUE"), labels = c("Not Treated", "Treated")) +
+  theme_bw(base_size = 14) + theme(legend.position="top")
+rdd_nodisc
+```
+
+---
+
+## 시뮬레이션 - 다른 기울기
+
+```{r, echo = FALSE, fig.height = 4.5, fig.width = 10}
+set.seed(1234)
+
+  # parameters
+cutoff = 0.5
+alpha = 1 # intercept
+delta = 0.4 # jump at cutoff
+beta = -1 # slope
+gamma = 4
+nsim = 150 # number of simulated observations
+
+  # running variable
+x = runif(n = nsim,
+          min = 0,
+          max = 1)
+
+  # treatment variable
+D = if_else(x > cutoff, TRUE, FALSE)
+
+  # error term
+u = rnorm(n = nsim, mean = 0, sd = .1)
+
+  # outcome variable
+Y = alpha + beta * (x - cutoff) + D*delta + gamma * D * (x - cutoff) + u
+
+  # create tibble
+rdd_sim = tibble(running = x,
+                 treatment_dum = D,
+                 outcome = Y)
+
+  # plot
+rdd_diffslope <- ggplot(rdd_sim,
+       aes(x = running, y = outcome, color = treatment_dum)) +
+  geom_point(size = 3, alpha = 0.75) +
+  stat_smooth(method = "lm",
+              formula = y ~ x,
+              se = FALSE) +
+  geom_vline(xintercept = 0.5, linetype = "longdash") +
+  ylim(0,3) +
+  labs(x = "Running variable", y = "Outcome variable", colour = "") +
+  scale_colour_viridis_d(breaks=c("FALSE", "TRUE"), labels = c("Not Treated", "Treated")) +
+  theme_bw(base_size = 14) + theme(legend.position="top")
+rdd_diffslope
+```
+
+
+$$outcome_i = \alpha + \delta treatment_i + \beta (running_i - cutoff) + \\ \color{#d90502}{\gamma treatment_i * (running_i - cutoff)} + e_i,$$
+
+---
+
+## 시뮬레이션 - 다른 기울기
+
+```{r, echo = FALSE, fig.height = 4.5, fig.width = 10}
+bracketsGrob <- function(...){
+l <- list(...)
+e <- new.env()
+e$l <- l
+  grid:::recordGrob(  {
+    do.call(grid.brackets, l)
+  }, e)
+}
+
+b1 <- bracketsGrob(0.50, 0.99, 0.50, 1.46, h = 0.2, lwd=1.5, col="black")
+
+rdd_diffslope +
+  annotation_custom(b1,xmin= 0, xmax=1, ymin=0, ymax=1) +
+  annotate("text", x = 0.46, y = 1.225, label = "delta", colour = "#d90502", parse = T, size = 8)
+```
+
+$$outcome_i = \alpha + \color{#d90502}\delta treatment_i + \beta (running_i - cutoff) + \\ \gamma treatment_i * (running_i - cutoff) + e_i,$$
+
+---
+
+## 적절한 함수 형태 선택 방법
+
+- 데이터를 ***시각화(visualize)***하는 것이 필수적임!
+
+- 다양한 모형에서 추정된 계수 값이 크게 변하지 않아야 함.
+
+- 결과 변수와 연속 변수 간의 관계가 비선형일 것으로 예상되는가? 절단값 근처에서 관계가 달라질 것으로 예상되는가?
+
+- [Gelman and Imbens (2019)](https://www.tandfonline.com/doi/abs/10.1080/07350015.2017.1366909), "Why High-Order Polynomials Should Not Be Used in Regression Discontinuity Designs":  
+  *"연구자들이 지역 선형(local linear) 또는 이차 다항식(quadratic polynomials) 또는 다른 부드러운 함수(smooth functions)를 기반으로 한 추정량을 사용할 것을 권장함."*
+
+---
+
+## 예제로 돌아가기: 비선형성 / 다른 기울기
+
+```{r, echo = FALSE, eval = TRUE, fig.height = 4.5, fig.width = 10}
+all_nonlin_fit <- augment(lm(all ~ agecell_21*over21 + I(agecell_21^2)*over21, mlda))
+
+rdd_plot
+```
+
+---
+
+## 예제로 돌아가기: 비선형성 / 다른 기울기
+
+```{r, echo = FALSE, eval = TRUE, fig.height = 4.5, fig.width = 10}
+all_nonlin_fit <- augment(lm(all ~ agecell_21*over21 + I(agecell_21^2)*over21, mlda))
+
+rdd_plot_line +
+  geom_line(data = all_nonlin_fit %>% filter(agecell_21 < 0), aes(x = agecell_21 + 21, y = .fitted), color = viridis_pal()(2)[1], linetype = "dashed", size = 1.25) +
+  geom_line(data = all_nonlin_fit %>% filter(agecell_21 >= 0), aes(x = agecell_21 + 21, y = .fitted), color = viridis_pal()(2)[2], linetype = "dashed", size = 1.25)
+```
+
+- 두 모형에서 선 간의 차이는 대략적으로 동일함.
+
+
+---
+
+## Task 3 {background-color="#ffebf0"}
+
+::: {style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;"}
+`r countdown(minutes = 15, top = 0)`
+:::
+
+1. 모든 사망 원인에 대해 다음 **이차(quadratic) 회귀 모형**을 추정하라. RDD 계수가 선형 모형과 다른가?
+   $$
+   DEATHRATE_a = \alpha + \delta D_a + \beta a + \beta a^2 + \varepsilon_a,
+   $$
+
+2. 절단점 양쪽에서 기울기가 다를 수 있도록 허용하는 회귀 모형은 다음과 같음:
+   $$
+   DEATHRATE_a = \alpha + \delta D_a + \beta (a - 21) + \gamma D_a * (a - 21) + \varepsilon_a,
+   $$
+   - 왜 `cutoff`에서 `running_i`를 빼야 하는가? (힌트: $\mathbb{E}(DEATHRATE_a|a=21)$을 계산해보라.)
+   - 사망률과 연령 간의 관계가 21세에서 변화할 것으로 예상되는가?
+   - 이 모형을 추정하라. 다른 모형에서 추정한 RDD 계수와 얼마나 다른가?
+
+3. 다음 사망 원인에 대해 위의 모형들(선형, 이차, 기울기 차이 모형)을 다시 실행하라:
+   - 자동차 사고 (`mva`)
+   - 알코올 관련 (`alcohol`)
+   - 내부적 원인 (`internal`)
+
+
+---
+
+## 회귀분석 결과 그래프로 표현
+
+```{r, echo = FALSE, eval = TRUE, fig.height = 5, fig.width = 10}
+mlda_long <- mlda %>%
+    select(-contains("fitted")) %>%        # drop "fitted" variables
+    pivot_longer(cols = -c(agecell,over21),          # column to not reshape
+                 names_to = "death_cause", # new variable containing death causes
+                 values_to = "death_rate") %>% # new variable containing death rates by cause
+  filter(death_cause %in% c("all","mva","internal"))
+
+rdd_plot <- mlda_long %>%
+  ggplot(aes(x = agecell, y = death_rate, color = over21)) + geom_point() +
+    geom_smooth(mapping = aes(group = over21), se = FALSE, method = "lm",
+              formula = y ~ x) +
+  geom_vline(xintercept = 21, linetype = "longdash") +
+  labs(x = "Age", y = "Death rate (per 100,000)") +
+  scale_colour_viridis_d() +
+  theme_bw(base_size = 16) + theme(legend.position="none") +
+  facet_grid(rows = vars(death_cause), scales = "free_y")
+rdd_plot
+```
+
+---
+
+## 비모수적 추정 (Nonparametric Estimation)
+
+- 절단값(cutoff) 근처의 관측치에 더 많은 가중치를 부여함.
+
+***두 가지 설정:***
+
+1. 얼마나 더 많은 가중치를 부여할 것인가?
+   - $\Rightarrow$ 선택한 ***커널(kernel)***에 따라 달라짐.
+
+2. 절단값에서 얼마나 떨어진 관측치를 제외할 것인가?
+   - $\Rightarrow$ 선택한 ***대역폭(bandwidth)***에 따라 달라짐.
+
+
+- 다행히도 `R`에는 이러한 설정을 최적화해주는 패키지가 존재함: `rdrobust`.
+
+---
+
+
+# Identifying Assumptions
+
+---
+
+## RDD 가정 (RDD Assumptions)
+
+> ***핵심 가정(Key Assumption)***: ***잠재적 결과(Potential Outcomes)는 절단값에서 매끄러워야 함.***
+
+$\Rightarrow$ 처치 할당 변수(assignment variable)는 조작될 수 없어야 함!
+
+- 공식적으로:
+  $$
+  \lim_{r \to c+} \mathbb{E}[Y_i^d|r] = \lim_{r \to c-} \mathbb{E}[Y_i^d|r], d \in \{0,1\}
+  $$
+
+- 절단값 바로 아래와 바로 위의 모집단은 불연속적으로 달라서는 안 됨.
+
+- 만약 개인이 절단값을 알고 있고, 이를 조작할 수 있다면 이 가정이 위배됨.
+
+  - 단순히 절단값을 아는 것 자체는 문제되지 않으며, **연속 변수를 조작할 수 있는 능력**이 가정을 위배하는 요소임.
+
+---
+
+## RDD 가정 (RDD Assumptions)
+
+> ***핵심 가정(Key Assumption)***: ***잠재적 결과는 절단값에서 매끄러워야 함.***
+
+이 가정이 충족되면 다음과 같음:
+
+$$
+\begin{align}
+&\lim_{r \to c^+} \mathbb{E}[Y_i | R_i = r] - \lim_{r \to c^-} \mathbb{E}[Y_i | R_i = r] \\
+= &\lim_{r \to c^+} \mathbb{E}[Y_i^1 | R_i = r] - \lim_{r \to c^-} \mathbb{E}[Y_i^0 | R_i = r] \\
+= &\mathbb{E}[Y_i^1 | R_i = c] - \mathbb{E}[Y_i^0 | R_i = c] \\
+= &\mathbb{E}[Y_i^1 - Y_i^0 | R_i = c] \\
+\end{align}
+$$
+
+---
+
+## RDD 가정 (RDD Assumptions)
+
+> ***핵심 가정(Key Assumption)***: ***잠재적 결과는 절단값에서 매끄러워야 함.***
+
+이 가정이 충족되면 다음과 같음:
+
+$$
+\begin{align}
+&\lim_{c \to 21^+} \mathbb{E}[Y_i | a_i = c] - \lim_{a \to 21^-} \mathbb{E}[Y_i | a_i = c] \\
+= &\lim_{c \to 21^+} \mathbb{E}[Y_i^1 | a_i = c] - \lim_{c \to 21^-} \mathbb{E}[Y_i^0 | a_i = c] \\
+= &\mathbb{E}[Y_i^1 | a_i = 21] - \mathbb{E}[Y_i^0 | a_i = 21] \\
+= &\underbrace{\mathbb{E}[Y_i^1 - Y_i^0}_{\text{ATE}} | a_i = 21] \\
+\end{align}
+$$
+
+---
+
+
+## 예제: 조작의 가능성
+
+[Camacho and Conover (2011)](https://pubs.aeaweb.org/doi/pdfplus/10.1257/pol.3.2.41)의 연구에서 사회 보조 프로그램의 자격 기준이 알려지면 어떻게 되는가?
+
+:::: columns
+
+::: {.column width="50%"}
+```{r, echo = FALSE, out.width = "700px"}
+knitr::include_graphics("../img/photos/manip_1.png")
+```
+:::
+
+::: {.column width="50%"}
+```{r, echo = FALSE, out.width = "700px"}
+knitr::include_graphics("../img/photos/manip_2.png")
+```
+:::
+
+::::
+
+---
+
+## 비순응 (Noncompliance)
+
+연속 변수가 처치 할당을 **완전히** 결정하지 않는다면?
+
+$\rightarrow$ ***퍼지 RDD(Fuzzy RDD)***
+
+- 처치 조건을 만족하는 모든 관측치가 실제로 처치를 받지 않더라도, 처치를 받을 확률에는 여전히 불연속성이 존재함.
+
+- 처치 할당이 불완전하게 결정되는 문제도 해결 가능함.
+
+---
+
+## 실전 RDD 분석을 위한 5단계
+
+단계 1: ***처치 할당이 규칙에 의해 결정되는가?***
+
+단계 2: ***Sharp RDD인가, Fuzzy RDD인가?***
+
+단계 3: ***연속 변수(running variable)에서 절단점에 불연속성이 존재하는가?***
+
+단계 4: ***결과 변수에서 연속 변수의 절단점에서 불연속성이 존재하는가?***
+
+단계 5: ***불연속성의 크기는 어느 정도인가?***
+
+
+
+
+------------------------------------------------------------------------
+
+## 🔍 인과 관계를 찾아가는 길
+
+✅ 데이터를 어떻게 다룰까?: 읽기(Read), 정리(Tidy), 시각화(Visualize)...
+
+✅ 변수간 관계를 어떻게 요약할까? 단순 / 다중 선형 회귀...비선형회귀, 교차변수...
+
+✅ 인과 관계(Causality)란 무엇인가?
+
+✅ 전체 모집단을 관측하지 못하면 어떻게 할까? Sampling!
+
+✅ 우리의 연구 결과가 단순한 무작위(Randomness) 때문일 수도 있을까? 신뢰구간과 가설검정. 통계적 추론
+
+🚧 ***실제로 외생성을 어떻게 찾아낼 수 있을까?***: 이중 차분, 회귀 불연속 설계
+
+------------------------------------------------------------------------
+
+
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+::: {style="display: flex; justify-content: center; align-items: center; height: 70vh;"}
+<h2 style="color: #ff6666; text-align: center; font-family: &#39;Pacifico&#39;, cursive; font-size: 50px;">
+
+THE END!
+
+</h2>
+:::

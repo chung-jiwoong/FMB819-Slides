@@ -1,0 +1,557 @@
+---
+title: "Multiple Regression"
+subtitle: "FMB819: R을 이용한 데이터분석"
+author: "고려대학교 경영대학 정지웅"
+format: 
+  revealjs:
+    theme: simple
+    transition: fade
+    transition-speed: fast
+    scrollable: true
+    chalkboard: true
+    slide-number: true
+revealjs-plugins:
+  - revealjs-text-resizer 
+---
+
+
+```{r setup, include=FALSE,warning=FALSE,message=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  dev = "svg",
+  cache = TRUE,
+  fig.align = "center",
+  comment = "##"
+  #fig.width = 11,
+  #fig.height = 5
+)
+
+# define vars
+om = par("mar")
+lowtop = c(om[1],om[2],0.1,om[4])
+library(magrittr)
+# library(plotly)
+# library(reshape2)
+# library(haven)
+# library(tidyverse)
+library(countdown)
+
+# countdown style
+countdown(
+  color_border              = "#d90502",
+  color_text                = "black",
+  color_running_background  = "#d90502",
+  color_running_text        = "white",
+  color_finished_background = "white",
+  color_finished_text       = "#d90502",
+  color_finished_border     = "#d90502"
+)
+```
+
+------------------------------------------------------------------------
+
+## Today's Agenda
+
+-   **다중 독립 변수** 
+-   **누락 변수 편향** (Omitted Variable Bias)
+-   **조정된** $R^2$ (Adjusted $R^2$)
+
+------------------------------------------------------------------------
+
+## 복습: 단순 선형 회귀 분석
+
+**Capital Asset Pricing Model 자산가격결정모형**
+
+-   자산의 리스크프리미엄을 어떻게 결정해야하는지에 대한 모형
+-   포트폴리오 이론에 기반을 둠
+    -   즉 모든 투자자는 분산이 최대화된 시장포트폴리오에 투자하며, 
+    -   개별 자산 고유의 리스크는 제거 될 수 있으므로, 이에 대한 리스크 프리미엄은 0이 됨.
+    -   제거되지 못하는 체계적 위험에 대해서만 리스크 프리미엄이 존재함.
+    -   자산의 체계적 위험은 자산과 시장포트폴리오 간의 공분산으로 측정됨.
+    -   '베타'는 이러한 체계적 위험의 크기를 측정: $E(R_i) = R_f + \beta_i (E(R_m) - R_f)$
+
+- CAPM은 “리스크 프리미엄을 베타 하나로 설명하는” **벤치마크**
+- CAPM을 **완전한 진리**라기보다, **출발점**으로 사용
+
+------------------------------------------------------------------------
+
+## CAPM의 활용
+
+- **기업가치평가(DCF)**: 할인율이 필요함  
+- **프로젝트 투자판단(NPV)**: 프로젝트의 리스크에 맞는 요구수익률이 필요함  
+- **성과평가(알파/샤프/정보비율)**: "시장을 감안하면 잘했나?"를 평가해야 함  
+- **포트폴리오/리스크관리**: "이 자산이 시장과 얼마나 연동되는가?"를 알아야 함 
+
+
+-   **단순 선형 회귀**를 이용하여 베타를 추정
+    -   자산의 초과 수익률을 종속 변수로, 시장 포트폴리오의 초과 수익률을 독립 변수로 하는 회귀 분석 수행
+       
+
+------------------------------------------------------------------------
+
+## 베타의 추정
+
+
+```{r beta1, echo = TRUE, eval = TRUE}
+# (설치되지 않은 경우 주석 해제하여 설치)
+# install.packages("tidyquant")
+# install.packages("tidyr")
+# install.packages("dplyr")
+library(tidyquant)
+library(tidyr)
+library(dplyr)
+
+raw_data <- tq_get(c("^KS200", "006800.KS"), 
+                   get  = "stock.prices",
+                   from = "2010-01-01",
+                   to   = Sys.Date())
+
+# 결측치 정리 (NA 제거): 수정주가(adjusted)를 기준으로 결측치가 있는 행을 제거.
+clean_data <- raw_data %>% drop_na(adjusted) 
+
+# 월별 수익률 계산: tq_transmute를 사용하여 일별 주가를 월별 수익률로 변환.
+monthly_returns <- clean_data %>%
+  group_by(symbol) %>%
+  tq_transmute(select     = adjusted,
+               mutate_fun = periodReturn,
+               period     = "monthly",
+               col_rename = "monthly_return")
+
+# 베타 추정을 위한 데이터 구조 변경 (Wide format)
+# 선형 회귀(lm) 함수에 넣기 쉽게 두 자산의 수익률을 각각의 열로 배치.
+returns_wide <- monthly_returns %>%
+  pivot_wider(names_from = symbol, values_from = monthly_return) %>%
+  rename(KOSPI200 = `^KS200`, MiraeAsset = `006800.KS`) %>%
+  drop_na() # 두 지표 모두 데이터가 존재하는 월만 남김
+
+# 베타(Beta) 추정
+beta_model <- lm(MiraeAsset ~ KOSPI200, data = returns_wide)
+
+# 회귀분석 결과 요약 출력
+summary(beta_model)
+```
+
+
+
+
+---
+
+## 베타의 추정: 그래프 
+
+
+```{r beta1_plot, echo = TRUE, eval = TRUE, fig.width = 10, fig.height = 10}
+plot(returns_wide$KOSPI200, returns_wide$MiraeAsset, 
+     xlab = "KOSPI 200", ylab = "Mireae Asset")
+abline(beta_model, col = "red", lwd = 2) # 회귀선 덧그리기 (빨간색 굵은 선)
+eq <- sprintf("y = %.4f * x + %.4f", coef(beta_model)[2], coef(beta_model)[1])
+legend("topleft", legend = eq, bty = "n", text.col = "red")
+```
+
+
+
+
+------------------------------------------------------------------------
+
+## 다중 회귀 분석 모형
+
+-   **단순 선형 회귀 모델(Simple Linear Model)** 은 다음과 같이 표현됨:
+
+$$
+y_i = b_0 + b_1 x_i + e_i
+$$
+
+-   `X`가 `Y`를 **인과적으로(causally) 결정한다고 주장**하려면,
+
+    -   **`X`의 값을 변경했을 때(`X`를 조작), 다른 모든 요인은 동일하게 유지(ceteris paribus)되면서 `Y`가 변화해야 함**.
+
+-   ⚠️ 만약 $y_i$에 영향을 주는 다른 모든 요인이 $x_i$와 상관관계가 있다면,\
+    → $b_1$은 인과적 효과(Causal Effect)로 해석될 수 없음.
+
+-   이를 해결하기 위해, **모델을 확장하고($y_i$를 동시에 설명하는 다른 요인을 포함)**\
+    → $y_i$와 $x_i$ 모두와 관련된 변수들을 고려해야 함.
+
+------------------------------------------------------------------------
+
+## 다중 회귀 분석 모델
+
+확장된 회귀 모델은 다음과 같이 표현됨:
+
+$$
+y_i = b_0 + b_1 x_{1,i} + b_2 x_{2,i}  + b_3 x_{3,i} + \dots + b_k x_{k,i} + e_i
+$$
+
+-   여기서 $x_1$, $x_2$, ..., $x_k$ 는 $k$개의 독립 변수(regressors)\
+-   $b_1$, $b_2$, ..., $b_k$ 는 **각 독립 변수에 대응하는 회귀 계수(coefficients)**
+
+**추정(Estimation)**
+
+-   $(b_0, b_1, b_2, ..., b_k)$ 값은 **최소자승법(OLS, Ordinary Least Squares)** 을 사용하여 추정됨.\
+-   즉, 다음을 **최소화하는 값**을 찾음:
+
+$$
+\begin{align}
+\sum_{i}{e_i^2} &= \sum_{i}{(y_i - \hat{y_i})^2} \\
+&= \sum_{i}{[y_i - (b_0 + b_1 x_{1,i} + b_2 x_{2,i}  + b_3 x_{3,i} + \dots + b_k x_{k,i})]^2}
+\end{align}
+$$
+
+-   **OLS는 잔차 제곱합(Sum of Squared Residuals, SSR)** 을 최소화하는 방식으로 최적의 계수를 찾음.
+
+------------------------------------------------------------------------
+
+## 다중 회귀 분석: 해석
+
+-   **절편 (**$b_0$): $x_1, x_2, x_3, ...$ 모든 독립 변수가 0일 때, 예측된 $y$ 값 $\widehat{y}$
+
+-   **기울기 (**$b_k$): $x_k$가 1 단위 증가할 때, $y$ 값이 평균적으로 어떻게 변하는지 예측... 단, 다른 모든 독립 변수들은 일정하게 유지!
+
+-   **다른 모든 변수들을 일정하게 유지한다는 점**이 **단순 선형 회귀(SLM)와 다른 점**.\
+
+-   즉, $x_k$가 $y$에 미치는 개별적인 효과를 고립시켜 분석하는 것.
+
+-   **인과 추론(Causal Inference)을 유의해야 하는 점**
+
+    -   다중 회귀 분석에서는 **모델에 포함된 변수들만 일정하게 유지**됨.\
+    -   하지만, **모델에 포함되지 않은 변수들은 여전히 변할 수 있어, 추정값에 편향을 일으킬 가능성이 있음.**
+
+------------------------------------------------------------------------
+
+## `R`을 사용한 다중 회귀 분석
+
+-   단순 선형 회귀와 매우 유사함.
+    -   `lm()` 함수를 사용하여 다중 회귀 분석 수행 가능.
+
+```r
+lm(formula = dependent variable ~  independent variable 1 + independent variable 2 + ...,
+   data = data.frame containing the data)
+```
+
+
+
+------------------------------------------------------------------------
+
+## 다중 회귀 분석: 베타 추정
+
+-   한국 상장 기업 수익률이 한국 시장 뿐만 아니라 해외 시장에도 영향을 받을 수 있다면
+
+-   한국 시장 수익률 뿐만 아니라, 미국, 중국, 일본 시장 수익률도 포함하여 회귀 분석을 수행할 수 있음.
+
+$KOSPI200 = b_0 + b_1 SP500 + b_2 SSE + b_3 N225 + e$
+
+
+
+## 다중 회귀 분석: 베타 추정
+
+
+
+```{r beta2, echo = TRUE, eval = TRUE}
+library(tidyquant)  # 금융 데이터 수집 및 변환을 위한 패키지
+library(tidyr)  # 데이터 구조 변경을 위한 패키지
+library(dplyr)
+
+raw_data <- tq_get(c("^KS200", "006800.KS", "^SP500TR", "000001.SS", "^N225"), 
+                   get  = "stock.prices",
+                   from = "2010-01-01",
+                   to   = Sys.Date())
+
+# 결측치 정리 (NA 제거): 수정주가(adjusted)를 기준으로 결측치가 있는 행을 제거.
+clean_data <- raw_data %>% drop_na(adjusted) 
+
+# 월별 수익률 계산: tq_transmute를 사용하여 일별 주가를 월별 수익률로 변환.
+monthly_returns <- clean_data %>%
+  group_by(symbol) %>%
+  tq_transmute(select     = adjusted,
+               mutate_fun = periodReturn,
+               period     = "monthly",
+               col_rename = "monthly_return")
+
+# 베타 추정을 위한 데이터 구조 변경 
+returns_wide <- monthly_returns %>%
+  pivot_wider(names_from = symbol, values_from = monthly_return) %>%
+  rename(KOSPI200 = `^KS200`, MiraeAsset = `006800.KS`, SP500 = `^SP500TR`, SSE = `000001.SS`, N225 = `^N225`) %>%
+  arrange(date) %>%
+  mutate(SP500_lag = lag(SP500), SSE_lag = lag(SSE)) %>% # SP500과 SSE, N225의 1개월 지연값 추가
+  drop_na() # 기존 결측치 및 lead/lag 함수 사용으로 인해 첫째 달과 마지막 달에 발생한 NA 제거
+
+# 베타(Beta) 추정 (Lead, Lag 포함)
+beta_model <- lm(MiraeAsset ~ KOSPI200 + SP500 + SSE + N225, data = returns_wide)
+summary(beta_model)
+```
+
+***Questions***
+
+1.  각 회귀 계수(coefficients)는 어떻게 해석할 수 있는가?
+2.  단순 선형 회귀(SLM)와 비교했을 때 KOSPI200 계수는 어떻게 달라졌는가?
+3.  미래에셋 수익률을 S&P500 수익률에 대해 회귀 분석을 수행했을 때, 베타는 어떤가?
+
+
+------------------------------------------------------------------------
+
+## 다중공선성(Perfect Collinearity)
+
+-   추가하는 변수는 반드시 **새로운 정보**를 제공해야 함.
+  - 회귀 모형에 추가하는 변수들은 **완전히 선형결합(linear combination)**이 될 수 없음.
+
+
+$$
+x_2 \neq a x_1 + b
+$$
+
+-   즉, 하나의 독립 변수를 다른 독립 변수들의 조합으로 완전히 표현할 수 있으면 안 됨.
+
+-   **완벽하게 선형 결합된 경우** → 회귀 분석 수행 불가능
+
+-   **높은 상관관계를 가지는 경우**: **각 독립 변수의 개별적 효과(계수)를 정확히 분리하기 어려움** → 추정된 계수의 신뢰도가 낮아질 수 있음
+
+-   **관측치 수(Observations) \> 독립 변수 개수(Independent Variables)**: **즉, 너무 많은 변수를 추가하면 과적합(overfitting) 문제가 발생할 수 있음.** → ✅ **반드시 충족해야 하는 조건!**
+
+------------------------------------------------------------------------
+
+## 다중공선성(Perfect Collinearity)
+
+- 다중공선성 문제를 확인하는 방법
+  - **분산 팽창 계수(Variance Inflation Factor, VIF)**: 일반적으로 VIF 값이 10을 초과하면 다중공선성 문제가 있다고 간주됨.
+  - **상관 행렬**: 독립 변수들 간의 상관 관계를 시각적으로 확인. 
+  - **회귀 계수의 부호 변화**: 다중공선성이 존재할 때, 회귀 계수의 부호가 예상과 다르게 나타날 수 있음. 
+  - **회귀 계수의 유의성**: 다중공선성이 존재할 때, 회귀 계수의 유의성이 낮아질 수 있음. 이는 모델의 예측 성능을 저하시킬 수 있음.
+
+```{r vif, echo = TRUE, eval = TRUE}
+library(car)  # VIF 계산을 위한 패키지
+vif(beta_model)  # VIF 값 계산
+cor(returns_wide[, c("KOSPI200", "SP500", "SSE", "N225")])  # 상관 행렬 계산
+```
+
+
+
+
+------------------------------------------------------------------------
+
+## Task 1 {background-color="#ffebf0"}
+
+`r countdown(minutes = 5, top = "20px", right = "10px", font_size = "0.8em", color_border = "blue")`
+
+`grades` 데이터: 
+
+-  학생들의 학업 성취도에 영향을 미치는 요인들을 분석하기 위한 데이터셋
+-  학생들의 읽기 점수(avgverb), 수학 점수(avgmath), 학급 규모(classize), 그리고 사회경제적 불리함(disadvantaged) 등의 변수를 포함
+
+
+-   **읽기(Reading) 점수를 종속 변수(Dependent Variable)** 로 설정하여 회귀 분석을 수행
+
+1.  `haven` 패키지의 `read_dta()` 함수를 사용하여 데이터를 불러오기. 데이터를 `grades`라는 객체에 저장
+
+```{r task1_1, echo=FALSE, eval=FALSE}
+library(haven)
+grades <- read_dta("https://raw.githack.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/data/grade5.dta")
+```
+
+
+2.  avgverb (읽기 점수)를 종속 변수로, classize와 disadvantaged를 독립 변수로 사용하여 회귀분석. 결과를 reg 객체에 저장. 각 계수(coefficient)의 의미는 무엇인가? 단순 선형 회귀와 비교했을 때 계수는 어떻게 달라졌는가? 수학 점수 회귀 분석과 비교했을 때 계수의 차이점은 무엇인가?
+
+```{r task1_2, echo=FALSE, eval=FALSE}
+reg <- lm(avgverb ~ classize + disadvantaged, data = grades)
+summary(reg)
+```
+
+
+
+
+------------------------------------------------------------------------
+
+## 누락변수 편의 (Omitted Variable Bias, OVB)
+
+-   ***OVB*** 이란, 회귀 분석에서 중요한 **통제 변수(control variable)** 를 제외함으로써 발생하는 **편의(bias)** 을 의미.
+
+-   이로 인해 관심 있는 독립 변수의 계수를 **신뢰할 수 없고, 왜곡될 수 있음.**
+
+$y$: 종속변수, $x$: 독립변수, $z$: 누락변수인 경우 다음 회귀분석이 가능
+
+**1️⃣ 단순 선형 회귀 모델 (Simple Linear Model)**
+
+$$
+y = b_0 + b_1x + e
+$$
+
+-   이 경우, $x$와 $z$가 동시에 $y$에 영향을 미친다면, $z$를 제외하면 $b_1$이 편향될 수 있음.
+
+**2️⃣ 다중 선형 회귀 모델 (Multiple Linear Model)**: 만약 $z$ 변수를 포함한다면?
+
+$$
+y = c_0 + c_1x + \color{#d90502}{c_2}z + e
+$$
+
+-   이 모델에서는 $x$뿐만 아니라 누락된 변수 $z$도 $y$에 영향을 미침. 즉, $z$를 포함하면, $c_1$이 더 정확한 값을 가질 수 있음.
+
+
+------------------------------------------------------------------------
+
+## 누락변수 편의 (Omitted Variable Bias, OVB)
+
+**3️⃣ 누락된 변수와** $x$의 관계 (Omitted Variable on Regressor)
+
+$$
+z = d_0 + \color{#d96502}{d_1}x + e
+$$
+
+-   이 모델은 $x$와 생략된 변수 $z$가 서로 상관관계가 있을 경우를 나타냄.
+-   즉, $x$가 $z$에 영향을 미친다면, 단순 회귀 분석에서 $b_1$의 추정치는 신뢰할 수 없게 됨.
+
+**📌 OVB 공식**
+
+$$
+\text{OVB} = \color{#d90502}{c_2} \times \color{#d96502}{d_1}
+$$
+
+즉,
+
+$$
+b_1 = c_1 + OVB
+$$
+
+💡 **결론:**\
+만약 $z$를 생략하면, $b_1$은 $c_1$에 OVB가 더해진 값이 되어, 실제 값과 차이가 날 수 있음.
+
+
+
+------------------------------------------------------------------------
+
+## 누락변수 편의 (Omitted Variable Bias, OVB)
+
+$$
+\text{OVB} = \underbrace{\text{다중 회귀에서 생략된 변수의 계수}}_{\color{#d90502}{c_2}} \times \underbrace{\frac{Cov(x,z)}{Var(x)}}_{\color{#d96502}{d_1}}
+$$
+
+**OVB의 의미**
+
+1.  OVB의 크기(magnitude)
+    -   $z$ 변수가 관측되는 경우, OVB의 크기를 직접 계산할 수 있음.
+2.  OVB의 부호(sign) (양수/음수 여부)
+    -   현실적으로는 $z$ 변수를 관측할 수 없는 경우가 많기 때문에, **OVB의 부호가 더 중요한 분석 요소**가 됨.
+    -   OVB가 **양수(+)인지 음수(-)인지**를 판단하면, $x$의 계수가 과대(+) 또는 과소(-) 추정되는지 예측할 수 있음.
+
+::: callout
+소득(income)과 교육연수(years of education) 사이의 관계를 분석할 때,
+
+1.  단순 회귀 분석에서 소득을 교육연수에 회귀(regression) 시키면 신뢰할 수 없는 추정치가 나올 가능성이 있다. 왜 그럴까?
+2.  어떤 변수가 누락된 변수(omitted variable)일 수 있을까?\
+3.  OVB의 부호(+) 또는 (-)는 어떻게 예상할 수 있을까?
+:::
+
+------------------------------------------------------------------------
+
+## 누락변수 편의 (Omitted Variable Bias, OVB): 예제
+
+-   학급 규모(`classize`)가 학생들의 평균 수학 점수(`avgmath`)에 미치는 영향
+
+$$
+\text{avg math} = b_0 + b_1\text{size} + e
+$$
+
+***단순회귀모형:*** $\text{avg math} = b_0 + b_1\text{size} + e$
+
+```{r, echo = FALSE, eval=TRUE}
+grades <- read_dta("https://raw.githack.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/data/grade5.dta")
+```
+
+
+```{r, echo = FALSE}
+reg1 <- lm(avgmath ~ classize, grades)
+reg1$coefficients
+```
+
+***다중회귀모형:*** $\text{avg math} = c_0 + c_1\text{size} + \color{#d90502}{c_2}\text{ \% disadvantaged} + e$
+
+```{r, echo = FALSE}
+reg2 <- lm(avgmath ~ classize + disadvantaged, grades)
+reg2$coefficients
+```
+
+***누락변수와 독립변수***: $\text{\% disadvantaged} = d_0 + \color{#d96502}{d_1}\text{size} + e$
+
+```{r, echo = FALSE}
+reg3 <- lm(disadvantaged ~ classize, grades)
+reg3$coefficients
+```
+
+따라서: $$b_1 = `r round(reg1$coefficients[2],3)` = \underbrace{`r round(reg2$coefficients[2],3)`}_{c_1} + \underbrace{(`r round(reg2$coefficients[3],3)`)}_{\color{#d90502}{c_2}} \times \underbrace{(`r round(reg3$coefficients[2],3)`)}_{\color{#d96502}{d_1}} = c_1 + OVB$$
+
+------------------------------------------------------------------------
+
+## 수정된 결정 계수 (Adjusted $R^2$)
+
+-   $R^2$ (결정 계수) 는 회귀 모델이 **종속 변수(**$y$)의 변동을 얼마나 설명하는지 나타내는 지표.
+
+-   하지만, **새로운 변수를 추가할 때마다** $R^2$ 값은 항상 증가.
+
+    -   심지어 **의미 없는 변수라도 추가하면** $R^2$이 증가할 수 있음!
+
+-   이를 보완하기 위해 **수정된** $R^2$ (Adjusted $R^2$) 개념이 도입
+
+    -   **불필요한 변수를 추가하는 것을 방지하기 위해 패널티(penalty)를 부과**\
+    -   하지만, 대부분의 경우 $R^2$와 수정된 $R^2$는 큰 차이가 없음
+
+------------------------------------------------------------------------
+
+
+## Task 2 {background-color="#ffebf0"}
+
+`r countdown(minutes = 15, top = "20px", right = "10px", font_size = "0.8em", color_border = "blue")`
+
+**STAR 데이터**
+
+-  STAR(Student Teacher Achievement Ratio) 데이터는 1985년부터 1989년까지 미국 테네시 주에서 진행된 무작위 실험의 결과를 담고 있음.
+-  학생들을 소규모 학급(small), 일반 학급(regular), 보조 교사가 있는 일반 학급(regular+aide)으로 무작위 배정하여, 학급 규모가 학생들의 학업 성취도에 미치는 영향을 분석하기 위한 데이터셋.
+
+1.  **STAR 데이터**를 다운로드 [링크](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_causality/data/star_data.csv). 데이터를 `star_df`라는 객체에 저장. NA 값이 있는 행은 제거하시오. `grades`가 "2"인 학생들만 선택하시오.
+
+```{r, echo=FALSE, eval=FALSE}
+library(dplyr)
+# 데이터 불러오기
+star_df <- read.csv("https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_causality/data/star_data.csv")
+
+# NA 값이 있는 행 제거
+star_df <- star_df %>% filter(complete.cases(.)) %>% filter(grade == "2")
+#star_df <- star_df %>% filter(na.omit(.))
+#star_df <- star_df %>% filter(!is.na(.))
+```
+
+
+2.  `math`를 `school` 변수에 대해 회귀 분석하시오. `school` 변수가 포함하는 값들을 먼저 확인. 회귀 계수를 해석하시오. 누락된 범주 (category)는? 결과가 예상과 일치하는가? 만약 다르다면 왜 그런가? 누락된 변수가 존재할 가능성이 있는가?
+```{r, echo=FALSE, eval=FALSE}
+# school 변수의 값 확인
+unique(star_df$school)
+# math를 school 변수에 대해 회귀 분석
+reg_school <- lm(math ~ school, data = star_df)
+summary(reg_school)
+```
+
+3.  `lunch` 변수가 `"free"`인 학생들의 비율을 **학교 위치(school) 별로 계산**하시오. 결과를 보고, **무료 점심 자격 여부(`free`) 변수를 추가하여 이전 회귀 분석을 다시 수행**하시오. `free` 변수를 추가했을 때 회귀 계수는 어떻게 변화하는가?
+
+```{r, echo=FALSE, eval=FALSE}
+# 학교 위치별로 lunch가 "free"인 학생들의 비율 계산
+star_df %>%
+  group_by(school) %>%
+  summarise(free_ratio = mean(lunch == "free"))
+
+# free 변수를 추가하여 회귀 분석 수행
+reg_school_free <- lm(math ~ school + (lunch == "free"), data = star_df)
+summary(reg_school_free)
+```
+
+4.  `math`를 `star` 변수에 대해 회귀 분석하시오. 다음의 모든 변수를 포함하여 다중 회귀 분석을 수행하시오:\
+    `math ~ star + gender + ethnicity + lunch + degree + experience + school`. 무작위 실험이 **잘 수행되었다고 판단할 수 있는가?**
+```{r, echo=FALSE, eval=FALSE}
+reg_full <- lm(math ~ star + gender + ethnicity + lunch + degree + experience + school, data = star_df)
+summary(reg_full)
+```
+
+
+5.  **다중 회귀 분석**에서 얻은 **수정된** $R^2$ 값을 확인하시오. 수정된 $R^2$ 값이 의미하는 바는 무엇인가? 관측 가능한 개별 학생, 교사, 학교 특성이 학업 성취도에 미치는 중요성에 대해 어떤 결론을 내릴 수 있는가?
+
+6.  (Optional) `math`를 `gender`와 `experience` 변수에 대해 회귀 분석하시오. 회귀 계수를 어떻게 해석할 수 있는가? 이러한 회귀 분석 결과를 시각적으로 표현한다면 어떻게 보일 것인가?
+
+
+
+# THE END!

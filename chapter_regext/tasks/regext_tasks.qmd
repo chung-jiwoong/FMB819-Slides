@@ -1,0 +1,78 @@
+---
+title: "Linear Regression Extensions"
+format: html
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+    echo = TRUE,
+    message = FALSE,
+    warning = FALSE,
+    comment = "##")
+```
+
+
+## Task 1: Non-linear relationships
+
+1.  데이터를 [여기](https://www.dropbox.com/s/2v5mb04nzw2u7bd/college_tuition_income.csv?dl=1)에서 다운로드. 이 데이터셋은 미국 대학의 등록금과 졸업생의 예상 소득 정보를 포함. 데이터에 대한 자세한 설명은 [여기](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-03-10/readme.md).
+
+
+
+2.  예상 중간 경력 소득(`mid_career_pay`)을 종속 변수(𝑦축)로 하고, 주 외 등록금(`out_of_state_tuition`)을 독립 변수(𝑥축)로 하는 산점도를 생성하시오. 관계가 대체로 선형적이라고 볼 수 있는가, 아니면 비선형적인가? 선형 회귀선과 2차 다항 회귀선을 함께 적합하기 위해 `geom_smooth(method = "lm", se = F) + geom_smooth(method = "lm", se = F, formula = y ~ poly(x, 2, raw= T))`을 사용하시오. 어느 모델이 더 적절한가?
+
+
+
+3.  주 외 등록금을 1000으로 나눈 새로운 변수를 생성하시오. 이를 이용하여 예상 중간 경력 소득을 회귀 분석하시오. 회귀 계수를 해석하시오.
+
+
+4.  예상 중간 경력 소득을 주 외 등록금/1000과 그 제곱 항을 포함하여 회귀 분석하시오. *힌트:* `poly(x, 2, raw = T)` 또는 `x + I(x^2)`를 사용할 수 있음. 제곱 항의 계수가 양수라는 것은 무엇을 의미하는가?
+
+---
+
+## Task 2: Wages, education and gender in 1985
+
+
+1.  `AER` 패키지에서 `CPS1985` 데이터를 불러오시오.
+
+
+2.  변수의 정의를 확인하기 위해 도움말을 참조하시오: `?CPS1985`
+
+3.  `wage` 변수의 자연 로그 값을 저장하는 `log_wage` 변수를 생성하시오.
+
+4.  `log_wage`를 `gender`와 `education`에 대해 회귀 분석을 수행하고 이를 `reg1`으로 저장하시오. 각 계수를 해석하시오.
+
+
+5.  `log_wage`를 `gender`, `education` 및 `gender*education`로 회귀 분석을 수행하고 이를 `reg2`로 저장하시오. 각 계수를 해석하시오. **성별 임금 격차가 교육 수준이 증가할수록 줄어드는가?**
+
+
+6.  해당 교차 효과를 시각적으로 나타내는 그래프를 생성하시오. (*힌트:* `aes`에서 `color = gender`를 사용하고, `geom_smooth(method = "lm", se = F)`를 활용하여 성별별 회귀선을 그리시오.)
+
+
+
+---
+
+## Task 3: Standardized regression
+
+[grade5.dta](https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/grade5.dta) 다운로드 `haven` 패키지의 `read_dta()` 함수를 사용. 
+
+아래는 평균 수학 시험 점수를 전체 독립 변수 세트에 대해 회귀 분석한 결과:
+
+```{r}
+grades = read_dta(file = "https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/grade5.dta")
+
+reg_full <- lm(avgverb ~ classize + disadvantaged + school_enrollment + female + religious, grades)
+reg_full$coefficients
+```
+
+1.  표준화된 수학 점수 변수 생성: `avgmath_stand`라는 새로운 변수를 만들어 표준화된 수학 점수를 저장하시오. scale() 함수를 (mutate와 함께) 사용하거나, 기본 R을 사용하여 직접 계산할 수 있음.
+
+
+
+2.  표준화된 수학 점수를 종속 변수로 회귀 분석: 표준화된 수학 점수를 종속 변수로 사용하여 전체 회귀 분석을 수행하시오. 각 계수의 크기와 의미를 해석하시오.
+
+
+3.  연속형 독립 변수 표준화: 각 연속형 독립 변수에 대해 `변수명_stand` 형태의 표준화된 변수를 만드시오. `religious` 변수를 표준화하는 것이 적절한가?
+
+
+4.  표준화된 독립 변수로 회귀 분석: `avgmath_stand`를 종속 변수로 하고, 표준화된 모든 독립 변수 및 `religious`를 포함하여 회귀 분석을 수행하시오. 각 독립 변수가 상대적으로 얼마나 중요한지 논의하시오.
+
+

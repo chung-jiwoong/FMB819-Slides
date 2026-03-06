@@ -1,0 +1,1904 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="chapter_intro_files/libs/clipboard/clipboard.min.js"></script>
+<script src="chapter_intro_files/libs/quarto-html/tabby.min.js"></script>
+<script src="chapter_intro_files/libs/quarto-html/popper.min.js"></script>
+<script src="chapter_intro_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="chapter_intro_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="chapter_intro_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="chapter_intro_files/libs/quarto-html/quarto-syntax-highlighting-dfa48a90d809c806c7ea2d5aecd9fc66.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.29">
+
+  <meta name="author" content="고려대학교 경영대학 정지웅">
+  <title>Introduction</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="chapter_intro_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="chapter_intro_files/libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="chapter_intro_files/libs/revealjs/dist/theme/quarto-0427d8d92a431aa6a6430e53ec02a470.css">
+  <link href="chapter_intro_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="chapter_intro_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="chapter_intro_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="chapter_intro_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="chapter_intro_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="chapter_intro_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Introduction</h1>
+  <p class="subtitle">FMB819: R을 이용한 데이터분석</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+고려대학교 경영대학 정지웅 
+</div>
+</div>
+</div>
+
+</section>
+<section id="welcome-to-fmb-819" class="slide level2 scrollable">
+<h2>Welcome to FMB 819!</h2>
+<ul>
+<li><p>수업의 목표</p>
+<ol type="1">
+<li>통계 소프트웨어 R과 친숙해지고,</li>
+<li>데이터를 수집, 가공, 표현할 수 있으며</li>
+<li>기본적 통계 개념 이해하여</li>
+<li>데이터 분석의 결과를 해석할 수 있다.</li>
+</ol></li>
+</ul>
+</section>
+<section id="데이터-분석의-목표" class="slide level2 scrollable">
+<h2>데이터 분석의 목표</h2>
+<ol type="1">
+<li><strong>기술 요약(Description)</strong>: 현상을 설명</li>
+<li><strong>예측(Prediction)</strong>: 관측되지 않는 값을 예측</li>
+<li><strong>인과 관계(Causality)</strong>: 한 변수가 다른 변수에 미치는 영향 분석</li>
+</ol>
+<ul>
+<li>많은 경우 의사 결정을 위해서 기술/예측/인과 관계를 조합적으로 파악할 필요</li>
+</ul>
+</section>
+<section>
+<section id="r이란" class="title-slide slide level1 center">
+<h1><code>R</code>이란?</h1>
+
+</section>
+<section id="r이란-1" class="slide level2 scrollable">
+<h2><code>R</code>이란?</h2>
+<ul>
+<li><p><code>R</code>은 강력한 통계 및 그래픽 기능을 갖춘 <strong>프로그래밍 언어</strong>.</p>
+<ol type="1">
+<li>오픈소스(open source)</li>
+<li>데이터 정리, 시각화, 기계학습 등 거의 모든 분석 가능.</li>
+<li><a href="https://stackoverflow.com/questions/tagged/r">활발한 온라인 커뮤니티</a>, 대부분의 문제에 대한 해결책 존재.</li>
+</ol></li>
+<li><p><code>R</code>의 많은 기능들 중 우리가 주로 사용할 기능</p>
+<ul>
+<li><strong>데이터 수집</strong>: 웹에서 데이터 직접 불러오기</li>
+<li><strong>데이터 가공</strong>: 데이터 정리, 변환, 요약</li>
+<li><strong>데이터 시각화</strong>: 고급 그래프와 차트 생성</li>
+<li><h2 id="통계-분석-회귀분석-가설검정-등-다양한-통계-기법-적용"><strong>통계 분석</strong>: 회귀분석, 가설검정 등 다양한 통계 기법 적용</h2></li>
+</ul></li>
+</ul>
+</section>
+<section id="금융-데이터의-현실" class="slide level2">
+<h2>금융 데이터의 현실</h2>
+<ul>
+<li><strong>데이터의 폭발적 증가:</strong> 틱(Tick) 데이터, 대체 데이터(Alternative Data), 비정형 뉴스 텍스트 등 엑셀로 처리하기 힘듬.</li>
+<li><strong>엑셀의 치명적 한계:</strong>
+<ul>
+<li><strong>인적 오류:</strong> 복잡한 수식과 매크로는 추적이 어려움.</li>
+<li><strong>재현성(Reproducibility) 부족:</strong> 데이터 업데이트 시 매번 수작업으로 복사/붙여넣기를 반복.</li>
+</ul></li>
+<li>강력한 통계 엔진과 프로그래밍이 결합된 <strong>R</strong>이 유용.</li>
+</ul>
+</section>
+<section id="재현성과-업무-자동화" class="slide level2">
+<h2>1. 재현성과 업무 자동화</h2>
+<ul>
+<li>R은 “데이터 수집 → 전처리 → 분석 → 시각화 → 보고서 작성”의 전 과정을 <strong>하나의 코드 파이프라인</strong>으로 통합.</li>
+<li><strong>자동화된 보고서 생성:</strong> R Markdown과 Quarto를 이용해 매주/매월 자동으로 업데이트되는 보고서 작성 가능.</li>
+<li><strong>알고리즘 트레이딩:</strong> R로 작성한 트레이딩 알고리즘을 API와 연동하여 실시간으로 거래 실행 가능.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">library</span>(tidyquant)</span>
+<span id="cb1-2"><a href=""></a><span class="co"># 1. 삼성전자(005930.KS) 최근 1년 주가 수집</span></span>
+<span id="cb1-3"><a href=""></a>samsung <span class="ot">&lt;-</span> <span class="fu">tq_get</span>(<span class="st">"005930.KS"</span>, <span class="at">from =</span> <span class="fu">Sys.Date</span>() <span class="sc">-</span> <span class="dv">365</span>)</span>
+<span id="cb1-4"><a href=""></a><span class="co"># 2. ggplot을 이용한 시각화 (autoplot 대신 사용)</span></span>
+<span id="cb1-5"><a href=""></a>samsung <span class="sc">%&gt;%</span></span>
+<span id="cb1-6"><a href=""></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> close)) <span class="sc">+</span></span>
+<span id="cb1-7"><a href=""></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"darkblue"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb1-8"><a href=""></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Samsung (recent 1 year)"</span>, </span>
+<span id="cb1-9"><a href=""></a>       <span class="at">x =</span> <span class="st">"Date"</span>, </span>
+<span id="cb1-10"><a href=""></a>       <span class="at">y =</span> <span class="st">"Close Price (KRW)"</span>) <span class="sc">+</span></span>
+<span id="cb1-11"><a href=""></a>  <span class="fu">theme_tq</span>() <span class="co"># 금융 데이터에 어울리는 깔끔한 테마</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="chapter_intro_files/figure-revealjs/unnamed-chunk-1-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="1344"></section>
+<section id="금융에-적합한-생태계" class="slide level2">
+<h2>2. 금융에 적합한 생태계</h2>
+<p>파이썬(Python)이 범용 프로그래밍 언어라면, <strong>R은 통계와 데이터 분석을 위해 만든 ‘데이터를 위한 언어’</strong></p>
+<ul>
+<li>퀀트 투자, 리스크 관리, 알고리즘 트레이딩 분야에서 광범위하게 사용.</li>
+<li><strong>금융 생태계:</strong> 수백 개의 전용 패키지 존재.
+<ul>
+<li>시계열 분석 (<code>xts</code>, <code>zoo</code>)</li>
+<li>재무 데이터 처리 (<code>tidyquant</code>, <code>quantmod</code>)</li>
+<li>포트폴리오 최적화 (<code>PortfolioAnalytics</code>) 등</li>
+<li>기타 금융 관련 패키지들 <a href="https://cran.r-project.org/web/views/Finance.html" class="uri">https://cran.r-project.org/web/views/Finance.html</a></li>
+</ul></li>
+<li>시스템 개발이나 거대한 AI 모델 구축이 목적이 아니라면, <strong>주어진 금융 데이터를 빠르게 탐색하고, 통계적으로 엄밀하게 분석하며, 설득력 있는 보고서를 만드는 데는 R이 유용.</strong></li>
+</ul>
+</section>
+<section id="시각화-및-커뮤니케이션" class="slide level2">
+<h2>3. 시각화 및 커뮤니케이션</h2>
+<ul>
+<li><strong>ggplot2</strong> R의 시각화 생태계는 글로벌 언론사(NYT, BBC 등)와 헤지펀드에서 사용할 만큼 유연하고 미려함.</li>
+<li><strong>Quarto</strong> 분석한 결과를 클릭 한 번으로 PDF, HTML, PPT 보고서로 변환 (지금 보는 이 슬라이드처럼).</li>
+<li><strong>Shiny</strong>를 통해 직접 조작해볼 수 있는 ‘인터랙티브 웹 대시보드’ 구축.</li>
+</ul>
+</section>
+<section id="finance-mba가-r을-무기로-삼아야-하는-이유" class="slide level2 scrollable">
+<h2>Finance MBA가 R을 무기로 삼아야 하는 이유</h2>
+<ol type="1">
+<li>단순 엑셀 모델러를 넘어, 대용량 데이터를 다루는 역량.</li>
+<li>수작업 리포팅에 낭비되는 시간을 줄이고, 중요한 문제에 시간을 쏟을 수 있음.</li>
+<li>최신 통계 및 기계학습 모델을 금융 데이터에 즉각적으로 적용 가능.</li>
+</ol>
+</section></section>
+<section>
+<section id="r-설치" class="title-slide slide level1 center">
+<h1>R 설치</h1>
+
+</section>
+<section id="r-rstudio-설치-시-주의사항-한글-경로-이슈" class="slide level2">
+<h2>R / RStudio 설치 시 주의사항 (한글 경로 이슈)</h2>
+<h3 id="사용자-폴더-경로에-한글특수문자non-ascii-들어가면-rrstudio-패키지-설치-과정에서-이유-모를-오류-뜨는-경우-있음"><strong>사용자 폴더 경로에 한글/특수문자(non-ASCII) 들어가면</strong> R/RStudio 패키지 설치 과정에서 이유 모를 오류 뜨는 경우 있음</h3>
+<ul>
+<li>예: <code>C:\Users\홍길동\...</code> 처럼 <strong>프로필 경로에 한글</strong> 들어간 케이스</li>
+</ul>
+<h3 id="제일-안전한-예방책-영문-사용자-계정으로-설치사용">제일 안전한 예방책: 영문 사용자 계정으로 설치/사용</h3>
+<ul>
+<li>설치 전에 <strong>Windows 사용자 폴더 경로</strong> 확인
+<ul>
+<li><code>C:\Users\사용자이름\...</code></li>
+</ul></li>
+<li>사용자 이름(프로필 폴더명)에 한글 들어가 있으면
+<ul>
+<li><strong>영문 이름 새 계정(가능하면 관리자 권한)</strong> 하나 만들고</li>
+<li>그 계정으로 R/RStudio 설치·사용</li>
+</ul></li>
+<li>주의할 점 있음: Windows에서 “표시 이름”만 바꿔도 실제 <strong>프로필 폴더명은 그대로</strong>인 경우 많음<br>
+→ 그래서 <strong>새 계정 생성</strong>이 더 확실함</li>
+<li>프로젝트/과제 폴더를 영문 경로에 두는 게 안전
+<ul>
+<li>예: ~/projects/finance_mba/ (폴더명 영문/숫자/언더스코어)</li>
+</ul></li>
+</ul>
+</section>
+<section id="posit-cloud-온라인" class="slide level2 scrollable">
+<h2>Posit Cloud (온라인)</h2>
+<ul>
+<li>Posit Cloud는 RStudio의 온라인 버전으로, 브라우저에서 바로 R을 실행할 수 있음.</li>
+</ul>
+<ol type="1">
+<li><a href="https://posit.cloud/">Posit Cloud</a>에 접속 후 회원가입/로그인</li>
+<li><code>New RStudio Project</code>를 눌러 새 프로젝트 생성</li>
+<li>좌측 <code>Files</code>/<code>Console</code>/<code>Terminal</code>을 이용해 로컬 RStudio처럼 실습 진행</li>
+</ol>
+</section>
+<section id="r-설치-방법-windows-macos" class="slide level2 scrollable">
+<h2><code>R</code> 설치 방법 (Windows / macOS)</h2>
+<ul>
+<li><p><strong>Windows: 공식 웹사이트에서 다운로드하여 설치</strong></p>
+<ol type="1">
+<li><a href="https://posit.co/download/rstudio-desktop/">CRAN 공식 웹사이트</a>에 접속</li>
+<li>“Download R for Windows” 클릭</li>
+<li>“base” 패키지를 선택하고 최신 버전을 다운로드</li>
+<li><code>.exe</code>파일 실행 후 기본 설정으로 설치</li>
+</ol></li>
+<li><p><strong>macOS: 공식 웹사이트에서 다운로드하여 설치</strong></p>
+<ol type="1">
+<li><a href="https://posit.co/download/rstudio-desktop/">CRAN 공식 웹사이트</a>에 접속</li>
+<li>“Download R for macOS” 클릭</li>
+<li>본인 칩셋(Apple Silicon / Intel)에 맞는 설치 파일 다운로드</li>
+<li><code>.pkg</code> 파일 실행 후 기본 설정으로 설치</li>
+</ol></li>
+</ul>
+</section>
+<section id="rstudio-설치-방법-windows-macos" class="slide level2 scrollable">
+<h2><code>RStudio</code> 설치 방법 (Windows / macOS)</h2>
+<p>R 프로그래밍 언어를 위한 통합 개발 환경(IDE, Integrated Development Environment)</p>
+<ul>
+<li><p><strong>공식 웹사이트에서 다운로드하여 설치 (Windows/macOS 공통)</strong></p>
+<ol type="1">
+<li><a href="https://posit.co/download/rstudio-desktop/">CRAN 공식 웹사이트</a> 접속</li>
+<li>“RStudio Desktop”의 선택하여 다운로드</li>
+<li>다운로드한 설치 파일 실행 후 기본 설정으로 설치</li>
+<li>설치 완료 후 RStudio 실행하여 정상 작동하는지 확인</li>
+</ol></li>
+</ul>
+</section>
+<section id="설치-확인" class="slide level2 scrollable">
+<h2>설치 확인</h2>
+<p>설치가 정상적으로 완료되었는지 확인하기 위해 R과 RStudio 실행.</p>
+<ol type="1">
+<li><p><strong>RStudio 실행</strong></p>
+<ul>
+<li>Windows는 검색창, macOS는 Spotlight(<code>Command + Space</code>)에서 “RStudio” 검색 후 실행.</li>
+<li>콘솔에서 <code>version</code> 입력하여 설치된 R 버전 확인.</li>
+</ul></li>
+<li><p><strong>R에서 간단한 코드 실행</strong></p>
+<ul>
+<li>다음 코드를 console에서 실행하여 정상 동작하는지 확인.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="fu">print</span>(<span class="st">"R과 RStudio 설치 완료!"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] "R과 RStudio 설치 완료!"</code></pre>
+</div>
+</div></li>
+</ol>
+</section>
+<section id="r-및-rstudio-업데이트-방법" class="slide level2">
+<h2>R 및 RStudio 업데이트 방법</h2>
+<ul>
+<li>R 엔진(코어)과 RStudio(편집기)는 별개 프로그램이므로 각각 따로 업데이트해야 함.</li>
+</ul>
+<p><strong>1. R 엔진 업데이트</strong></p>
+<ul>
+<li><p><strong>Windows:</strong> <code>installr</code> 패키지 활용 (오류 방지를 위해 RStudio가 아닌 기본 R GUI에서 실행하는 것을 권장)</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="fu">install.packages</span>(<span class="st">"installr"</span>)</span>
+<span id="cb4-2"><a href=""></a>installr<span class="sc">::</span><span class="fu">updateR</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p><strong>Mac:</strong> <a href="https://cran.r-project.org/">CRAN 홈페이지</a>에 접속해서 최신 <code>.pkg</code> 버전을 다운로드하고 그대로 덮어씌워서 설치함.</p></li>
+</ul>
+</section>
+<section id="r-및-rstudio-업데이트-방법-1" class="slide level2">
+<h2>R 및 RStudio 업데이트 방법</h2>
+<p><strong>2. RStudio 업데이트</strong></p>
+<ul>
+<li>RStudio 상단 메뉴: <strong>Help</strong> -&gt; <strong>Check for Updates</strong> 클릭함.</li>
+<li>업데이트 팝업창이 뜨면 안내에 따라 최신 버전 다운로드 및 설치 진행함.</li>
+</ul>
+<p><strong>3. 패키지 일괄 업데이트 (중요 포인트)</strong></p>
+<ul>
+<li><p>R 버전을 올리고 나면 기존 설치한 패키지들도 버전에 맞게 새로고침 해줘야 함.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="fu">update.packages</span>(<span class="at">ask =</span> <span class="cn">FALSE</span>, <span class="at">checkBuilt =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+</ul>
+</section>
+<section id="rstudio-화면-구조" class="slide level2">
+<h2><code>RStudio</code> 화면 구조</h2>
+<!-- ```{r, echo = F, out.width = "300px"}
+knitr::include_graphics("chapter_intro_files/figure-html/rstudio.png")
+``` -->
+
+<img data-src="https://docs.posit.co/ide/user/ide/get-started/images/rstudio-panes-labeled.jpeg" class="quarto-figure quarto-figure-center r-stretch" style="width:85.0%"></section>
+<section id="rstudio-환경" class="slide level2">
+<h2><code>RStudio</code> 환경</h2>
+<p>RStudio를 실행하면 여러 창(윈도우)으로 구성되어 있음.</p>
+<ul>
+<li><p><strong>콘솔(Console)</strong>: 명령어를 입력하고 실행하는 창. <code>&gt;</code> 프롬프트에서 R 코드 입력 후 실행</p></li>
+<li><p><strong>스크립트 편집기 (Source Editor)</strong>: <code>.R</code> 파일을 열거나 작성. 여러 줄의 코드를 작성/실행 가능</p></li>
+<li><p><strong>환경 창 (Environment)</strong>: 현재 사용 중인 변수와 데이터 프레임을 확인. 데이터 구조를 파악</p></li>
+<li><p><strong>파일 및 플롯 창 (Files, Plots, Packages, Help)</strong></p>
+<ul>
+<li><strong>Files</strong>: 작업 디렉터리 내 파일 목록 확인</li>
+<li><strong>Plots</strong>: 생성된 그래프 확인</li>
+<li><strong>Packages</strong>: 설치된 패키지 목록 및 관리</li>
+<li><strong>Help</strong>: R 함수 및 패키지 도움말 검색 가능</li>
+</ul></li>
+</ul>
+</section>
+<section id="콘솔과-프롬프트" class="slide level2">
+<h2>콘솔과 프롬프트</h2>
+<ul>
+<li><p>기본적인 실행 방법</p>
+<ul>
+<li><code>&gt;</code> 뒤에 명령어 입력 후 <code>Enter</code>를 누르면 실행.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span> </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 4</code></pre>
+</div>
+</div></li>
+<li><p>R 콘솔 사용 팁</p>
+<ul>
+<li><p><strong>이전 명령어 불러오기</strong>: 위쪽 화살표(<code>↑</code>) 키를 사용하면 이전에 입력한 명령어를 불러옴</p></li>
+<li><p><strong>명령어 자동 완성</strong>: Tab 키를 사용하여 변수 및 함수 자동 완성 가능.</p></li>
+<li><p><strong>여러 줄 입력</strong>:</p>
+<ul>
+<li>긴 명령어 입력 시 자동으로 다음 줄로 넘어감 (<code>+</code> 기호 표시됨).</li>
+<li><code>Shift + Enter</code>를 누르면 줄바꿈만 하고 실행되지 않음.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a>x <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="sc">+</span>       <span class="co"># Shift + Enter </span></span>
+<span id="cb8-2"><a href=""></a>       <span class="dv">20</span> <span class="sc">+</span>     <span class="co"># Shift + Enter </span></span>
+<span id="cb8-3"><a href=""></a>       <span class="dv">30</span>       <span class="co"># Shift + Enter</span></span>
+<span id="cb8-4"><a href=""></a><span class="fu">print</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 60</code></pre>
+</div>
+</div></li>
+</ul></li>
+</ul>
+</section>
+<section id="r-스크립트-script" class="slide level2">
+<h2><code>R</code> 스크립트 (Script)</h2>
+<ul>
+<li><strong>새로운 R 스크립트 생성</strong>: <code>File &gt; New File &gt; R Script</code> 선택.</li>
+<li><strong>스크립트에서 코드 실행</strong>:
+<ul>
+<li><code>Ctrl + Enter</code>: 현재 줄 실행.</li>
+<li><code>Ctrl + Alt + R</code>: 전체 스크립트 실행.</li>
+</ul></li>
+<li><strong>주석 작성</strong>: <code>#</code> 을 사용하여 코드 설명 추가 가능.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="co"># 변수 선언</span></span>
+<span id="cb10-2"><a href=""></a>a <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb10-3"><a href=""></a>b <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb10-4"><a href=""></a></span>
+<span id="cb10-5"><a href=""></a><span class="co"># 변수 더하기</span></span>
+<span id="cb10-6"><a href=""></a>c <span class="ot">&lt;-</span> a <span class="sc">+</span> b</span>
+<span id="cb10-7"><a href=""></a><span class="fu">print</span>(c)  <span class="co"># 결과: 15</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 15</code></pre>
+</div>
+</div>
+</section>
+<section id="몇-가지-유용한-설정" class="slide level2">
+<h2>몇 가지 유용한 설정</h2>
+<h3 id="배경-및-글자-색상-변경">배경 및 글자 색상 변경</h3>
+<ul>
+<li>R 스튜디오는 기본적으로 흰색 바탕에 검은색 글씨. 어두운 화면으로 설정을 변경 가능
+<ul>
+<li>RStudio 상단 메뉴: <strong>Tools</strong> -&gt; <strong>Global Options</strong> -&gt; <strong>Appearance</strong> 탭에서 테마 선택 가능 (예: “Tomorrow Night Bright” 등 어두운 테마)</li>
+</ul></li>
+</ul>
+<h3 id="스크림트-한글-깨짐-방지">스크림트 한글 깨짐 방지</h3>
+<ul>
+<li>스크립트 내용 중 한글이 깨지는 것을 방지하기 위해 인코딩 방식을 설정
+<ul>
+<li>RStudio 상단 메뉴: <strong>Tools</strong> -&gt; <strong>Global Options</strong> -&gt; <strong>Code</strong> 탭에서 “Saving” 섹션의 “Default text encoding”을 “UTF-8”로 설정</li>
+<li>한글 깨짐이 해결되지 않는 경우, [File → Reopen with Encoding] 메뉴에서 [UTF-8] 항목을 선택</li>
+<li>[Set as default encoding for source files] 항목을 선택한 후 [OK]. UTF-8로 인코딩이 설정된 후 파일을 다시 열림</li>
+</ul></li>
+</ul>
+</section>
+<section id="몇-가지-유용한-설정-1" class="slide level2">
+<h2>몇 가지 유용한 설정</h2>
+<h3 id="프로젝트-만들기">프로젝트 만들기</h3>
+<ul>
+<li>코딩 전에 <strong>Project 만들면</strong> 해당 과제/분석에 쓰는 코드·이미지·문서 파일을 <strong>한 폴더 체계로 관리</strong> 가능
+<ul>
+<li>RStudio 상단 <strong>육각형(Project) 버튼</strong> 누르거나 <code>File → New Project</code> 클릭함
+<ul>
+<li><code>Create Project</code>에서 <code>New Directory</code> 선택함<br>
+</li>
+<li><code>Project Type</code>에서 <code>New Project</code> 클릭함</li>
+<li><code>Directory name</code>에 프로젝트 이름 입력함</li>
+<li><code>Create project as subdirectory of</code>에서 프로젝트 폴더 만들 위치 선택함 (<code>Browse</code>로 고르면 됨)</li>
+<li>아래 <code>Create Project</code> 클릭하면 RStudio가 재시작되면서 프로젝트 이름이 우측 상단에 표시되고, 파일 창도 프로젝트 폴더로 이동됨. 폴더 안에 <code>*.Rproj</code> 파일도 생성됨 (예: <code>fmb819.Rproj</code>). 이후 스크립트/데이터/이미지 전부 프로젝트 폴더에 저장하면서 작업하면 됨.</li>
+<li>프로젝트 이름/폴더 경로에 한글 들어가면 오류 날 수 있으니 영문 추천</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="task-1" class="slide level2 scrollable" data-background-color="#ffebf0">
+<h2>Task 1</h2>
+<ol type="1">
+<li><p>새로운 R 스크립트를 생성하시오 (<code>File &gt; New File &gt; R Script</code>) 파일을 <code>lecture_intro.R</code>로 저장하시오.</p></li>
+<li><p>다음 코드를 스크립트에 입력하고 실행하시오. 코드를 실행하려면 <code>Ctrl</code> + <code>Enter</code> (코드를 강조 표시하거나 커서를 코드 줄 끝에 놓으면 실행).</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a><span class="dv">4</span> <span class="sc">*</span> <span class="dv">8</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>첫 번째 줄만 실행하면 무슨 일이 일어나는지 확인하시오. (객체 생성)</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a>x <span class="ot">=</span> <span class="dv">5</span> <span class="co"># 또는 x &lt;- 5</span></span>
+<span id="cb13-2"><a href=""></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p><code>x</code>의 세제곱을 할당하는 <code>x_3</code>이라는 새로운 객체를 만드시오. 할당할 때 <code>=</code> 또는 <code>&lt;-</code>를 사용.</p></li>
+</ol>
+</section>
+<section id="도움말-찾는-방법" class="slide level2">
+<h2>도움말 찾는 방법</h2>
+<p><code>R</code> built-in <code>help</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a>?lm  <span class="co"># 함수 앞에 ?를 붙이면 해당 함수의 도움말(설명서)을 확인할 수 있음</span></span>
+<span id="cb14-2"><a href=""></a></span>
+<span id="cb14-3"><a href=""></a><span class="fu">help</span>(lm)   <span class="co"># help() 함수도 동일한 역할을 하며, 특정 함수의 도움말을 출력함</span></span>
+<span id="cb14-4"><a href=""></a></span>
+<span id="cb14-5"><a href=""></a><span class="fu">args</span>(lm)  <span class="co"># lm 함수의 인자(argument) 목록을 출력함</span></span>
+<span id="cb14-6"><a href=""></a></span>
+<span id="cb14-7"><a href=""></a><span class="fu">example</span>(lm)  <span class="co"># lm 함수의 사용 예제(example)를 실행하여 출력함</span></span>
+<span id="cb14-8"><a href=""></a></span>
+<span id="cb14-9"><a href=""></a>??lm  <span class="co"># "lm"과 관련된 모든 도움말 문서를 검색하여 표시함</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<!-- ![](chapter_intro_files/figure-html/learning_path.png){width="60%"} -->
+</section>
+<section id="패키지-packages" class="slide level2">
+<h2>패키지 (Packages)</h2>
+<ul>
+<li><p><code>R</code> 패키지는 특정 기능을 제공하는 코드와 데이터를 포함한 소프트웨어 패키지</p></li>
+<li><p>패키지 설치는 간단. <code>install.packages</code> 함수를 사용:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>패키지의 내용을 사용하려면, Library에서 불러와야 함. 이를 위해 <code>library</code> 함수를 사용:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a><span class="fu">library</span>(ggplot2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>업데이트 하려면</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a><span class="fu">update.packages</span>(ggplot2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+</ul>
+</section></section>
+<section>
+<section id="데이터-유형-data-type" class="title-slide slide level1 center">
+<h1>데이터 유형 (Data Type)</h1>
+
+</section>
+<section id="데이터-유형-data-type-1" class="slide level2">
+<h2>데이터 유형 (Data Type)</h2>
+<ul>
+<li>R에서 데이터를 원활하게 다루기 위해 가장 먼저 알아야 할 것은 데이터의 유형(Type)임.</li>
+<li>금융 데이터 분석에서는 주로 숫자, 문자열, 날짜 유형를 다룸.</li>
+</ul>
+</section>
+<section id="숫자-유형" class="slide level2">
+<h2>숫자 유형</h2>
+<ul>
+<li>R에서 기본적으로 다루는 숫자 데이터는 실수(Double) 유형임.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a>dbl_var <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">2.5</span>, <span class="fl">4.5</span>)</span>
+<span id="cb18-2"><a href=""></a><span class="fu">typeof</span>(dbl_var)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a>int_var <span class="ot">=</span> <span class="fu">as.integer</span>(dbl_var) <span class="co"># dbl_var을 정수형으로 변환</span></span>
+<span id="cb19-2"><a href=""></a><span class="fu">typeof</span>(int_var)</span>
+<span id="cb19-3"><a href=""></a>int_var <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>L, <span class="dv">6</span>L, <span class="dv">5</span>L) <span class="co"># 숫자 뒤에 L을 붙이면, 정수형으로 변환</span></span>
+<span id="cb19-4"><a href=""></a><span class="fu">typeof</span>(int_var)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>수열 (<em>range</em>) 생성</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a><span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb20-2"><a href=""></a><span class="dv">10</span><span class="sc">:</span><span class="dv">1</span></span>
+<span id="cb20-3"><a href=""></a><span class="fu">seq</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>)   <span class="co"># 0부터 10까지 1씩 증가하는 수열 생성</span></span>
+<span id="cb20-4"><a href=""></a><span class="fu">seq</span>(<span class="at">from=</span><span class="dv">0</span>, <span class="at">to=</span><span class="dv">10</span>, <span class="at">by=</span><span class="fl">2.5</span>)  <span class="co"># 0부터 10까지 2.5씩 증가하는 수열 생성 </span></span>
+<span id="cb20-5"><a href=""></a><span class="fu">seq</span>(<span class="at">from=</span><span class="dv">0</span>, <span class="at">to=</span><span class="dv">10</span>, <span class="at">length=</span><span class="dv">5</span>)    <span class="co"># 0부터 10까지 5개의 숫자를 균등하게 생성</span></span>
+<span id="cb20-6"><a href=""></a><span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">each=</span><span class="dv">1</span>)    <span class="co"># 1부터 5까지 각 숫자를 1번씩 반복하여 생성</span></span>
+<span id="cb20-7"><a href=""></a><span class="fu">rep</span>(<span class="dv">1</span>,<span class="dv">5</span>)    <span class="co"># 숫자 1을 5번 반복하여 생성</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="문자열-유형" class="slide level2">
+<h2>문자열 유형</h2>
+<ul>
+<li>일반적인 글자 혹은 텍스트를 문자열(Character Strings)이라고 부름. paste() 함수를 이용해 문자를 하나로 붙일 수 있음.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a>a <span class="ot">=</span> <span class="st">"Hello"</span></span>
+<span id="cb21-2"><a href=""></a>b <span class="ot">=</span> <span class="st">"World"</span></span>
+<span id="cb21-3"><a href=""></a><span class="fu">paste</span>(a, b, <span class="at">collapse =</span> <span class="st">" "</span>)  <span class="co"># 공백으로 구분하여 문자열 결합</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] "Hello World"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a><span class="fu">paste</span>(a, b, <span class="at">sep=</span><span class="st">','</span>)  <span class="co"># 쉼표로 구분하여 문자열 결합</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] "Hello,World"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a><span class="fu">paste</span>(<span class="st">"The answer is"</span>, <span class="dv">42</span>)  <span class="co"># 문자열과 숫자 결합</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] "The answer is 42"</code></pre>
+</div>
+</div>
+</section>
+<section id="날짜-유형" class="slide level2">
+<h2>날짜 유형</h2>
+<ul>
+<li>R에서 날짜는 <code>Date</code> 클래스의 객체로 표현됨. <code>as.Date()</code> 함수를 사용하여 문자열을 날짜로 변환할 수 있음.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>date_str <span class="ot">=</span> <span class="st">"2024-01-01"</span></span>
+<span id="cb27-2"><a href=""></a>date_obj <span class="ot">=</span> <span class="fu">as.Date</span>(date_str)</span>
+<span id="cb27-3"><a href=""></a>date_obj</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li><code>lubridate</code> 패키지를 이용하면 날짜 유형 변경과 정보 추출을 직관적이고 쉽게 할 수 있음.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb28-2"><a href=""></a>date_str <span class="ot">=</span> <span class="st">"2024-12-31"</span></span>
+<span id="cb28-3"><a href=""></a>date_obj <span class="ot">=</span> <span class="fu">ymd</span>(date_str)  <span class="co"># "year-month-day" 형식의 문자열을 날짜로 변환</span></span>
+<span id="cb28-4"><a href=""></a>date_obj</span>
+<span id="cb28-5"><a href=""></a><span class="fu">year</span>(date_obj)  <span class="co"># 날짜에서 연도 추출</span></span>
+<span id="cb28-6"><a href=""></a><span class="fu">month</span>(date_obj) <span class="co"># 날짜에서 월 추출</span></span>
+<span id="cb28-7"><a href=""></a><span class="fu">week</span>(date_obj)  <span class="co"># 날짜에서 주 추출</span></span>
+<span id="cb28-8"><a href=""></a><span class="fu">day</span>(date_obj)   <span class="co"># 날짜에서 일 추출</span></span>
+<span id="cb28-9"><a href=""></a><span class="fu">yday</span>(date_obj)  <span class="co"># 날짜에서 연중 일수 추출</span></span>
+<span id="cb28-10"><a href=""></a><span class="fu">mday</span>(date_obj)  <span class="co"># 날짜에서 월 중 일수 추출</span></span>
+<span id="cb28-11"><a href=""></a><span class="fu">wday</span>(date_obj, <span class="at">label=</span><span class="cn">TRUE</span>)  <span class="co"># 날짜에서 요일 추출 (라벨로 표시)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="날짜-유형-1" class="slide level2">
+<h2>날짜 유형</h2>
+<ul>
+<li>날짜 객체를 다루면 더하기, 빼기 등의 직관적인 연산을 손쉽게 처리할 수 있음.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a>date1 <span class="ot">=</span> <span class="fu">as.Date</span>(<span class="st">"2024-01-01"</span>)</span>
+<span id="cb29-2"><a href=""></a>date2 <span class="ot">=</span> <span class="fu">as.Date</span>(<span class="st">"2024-12-31"</span>)</span>
+<span id="cb29-3"><a href=""></a>date_diff <span class="ot">=</span> date2 <span class="sc">-</span> date1  <span class="co"># 날짜 간의 차이 계산</span></span>
+<span id="cb29-4"><a href=""></a>date_diff</span>
+<span id="cb29-5"><a href=""></a>date1 <span class="sc">+</span> <span class="dv">30</span>  <span class="co"># date1에서 30일 더하기</span></span>
+<span id="cb29-6"><a href=""></a>date2 <span class="sc">-</span> <span class="dv">7</span>   <span class="co"># date2에서 7일 빼기</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>숫자와 마찬가지로 seq() 함수를 이용해 일정한 패턴을 가진 날짜 벡터를 생성할 수 있음.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a>start_date <span class="ot">=</span> <span class="fu">as.Date</span>(<span class="st">"2024-01-01"</span>)</span>
+<span id="cb30-2"><a href=""></a>end_date <span class="ot">=</span> <span class="fu">as.Date</span>(<span class="st">"2024-12-31"</span>)</span>
+<span id="cb30-3"><a href=""></a>date_seq <span class="ot">=</span> <span class="fu">seq</span>(<span class="at">from =</span> start_date, <span class="at">to =</span> end_date, <span class="at">by =</span> <span class="st">"1 month"</span>)  <span class="co"># 1개월 간격으로 날짜 생성</span></span>
+<span id="cb30-4"><a href=""></a>date_seq</span>
+<span id="cb30-5"><a href=""></a>date_seq <span class="ot">=</span> <span class="fu">seq</span>(<span class="at">from =</span> start_date, <span class="at">to =</span> end_date, <span class="at">by =</span> <span class="st">"1 week"</span>)  <span class="co"># 1주 간격으로 날짜 생성</span></span>
+<span id="cb30-6"><a href=""></a>date_seq</span>
+<span id="cb30-7"><a href=""></a>date_seq <span class="ot">=</span> <span class="fu">seq</span>(<span class="at">from =</span> start_date, <span class="at">to =</span> end_date, <span class="at">by =</span> <span class="st">"1 day"</span>)  <span class="co"># 1일 간격으로 날짜 생성</span></span>
+<span id="cb30-8"><a href=""></a>date_seq</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section></section>
+<section>
+<section id="데이터-구조-data-structures" class="title-slide slide level1 center">
+<h1>데이터 구조 (Data Structures)</h1>
+
+</section>
+<section id="데이터-구조-data-structures-1" class="slide level2">
+<h2>데이터 구조 (Data Structures)</h2>
+<p>R에서 사용되는 데이터 구조는 벡터(Vector), 행렬(Matrix), 리스트(List), 배열(Array), 데이터프레임(Dataframe)임.</p>
+<ul>
+<li>벡터는 동일한 유형의 데이터를 저장하는 1차원 구조</li>
+<li>행렬은 동일한 유형의 데이터를 저장하는 2차원 구조</li>
+<li>리스트는 서로 다른 유형의 데이터를 저장할 수 있는 1차원 구조</li>
+<li>배열은 동일한 유형의 데이터를 저장하는 다차원 구조</li>
+<li>데이터프레임은 서로 다른 유형의 데이터를 저장할 수 있는 2차원 구조로, 표 형식으로 데이터를 다루는 데 적합</li>
+</ul>
+
+<img data-src="https://cdn.discuss.boardinfinity.com/original/2X/6/6b76e2d2ac9172e93fe2023a22c9e499ad8e71e4.jpeg" class="quarto-figure quarto-figure-center r-stretch" style="width:80.0%"></section>
+<section id="벡터-vectors" class="slide level2">
+<h2>벡터 (Vectors)</h2>
+<ul>
+<li>벡터는 R의 가장 기본적인 1차원 데이터 구조임. <code>c()</code> 함수나 콜론(<code>:</code>)을 이용해 생성할 수 있음.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a>vec_integer <span class="ot">=</span> <span class="dv">8</span><span class="sc">:</span><span class="dv">17</span></span>
+<span id="cb31-2"><a href=""></a>vec_double <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.6</span>, <span class="fl">0.2</span>)</span>
+<span id="cb31-3"><a href=""></a>vec_char <span class="ot">=</span> <span class="fu">c</span>(<span class="st">'a'</span>, <span class="st">'b'</span>, <span class="st">'c'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>서로 다른 유형의 데이터가 하나의 벡터로 묶이면, 범용성이 넓은 유형로 강제 변환됨. (문자 &gt; 숫자 &gt; 논리값)</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a><span class="fu">c</span>(<span class="st">'a'</span>, <span class="st">'b'</span>, <span class="st">'c'</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)  <span class="co"># 문자가 포함되면 모두 문자로 변환됨</span></span>
+<span id="cb32-2"><a href=""></a><span class="fu">c</span>(<span class="st">'a'</span>, <span class="st">'b'</span>, <span class="st">'c'</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>)   </span>
+<span id="cb32-3"><a href=""></a><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>)  <span class="co"># 숫자와 논리값이 묶이면 TRUE=1, FALSE=0 숫자로 변환됨</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>생성된 벡터의 특정 위치나 조건에 맞는 데이터를 대괄호([])를 사용해 추출할 수 있음.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a>v1 <span class="ot">=</span> <span class="dv">8</span><span class="sc">:</span><span class="dv">17</span></span>
+<span id="cb33-2"><a href=""></a>v1[<span class="dv">2</span>]   <span class="co"># 특정 위치 데이터 추출</span></span>
+<span id="cb33-3"><a href=""></a>v1[<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>)]</span>
+<span id="cb33-4"><a href=""></a>v1[<span class="sc">-</span><span class="dv">1</span>]  <span class="co"># 마이너스(-) 기호로 특정 위치 제외</span></span>
+<span id="cb33-5"><a href=""></a>v1[v1 <span class="sc">&lt;</span> <span class="dv">12</span>] <span class="co"># 조건을 이용한 추출</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="리스트-lists" class="slide level2">
+<h2>리스트 (Lists)</h2>
+<ul>
+<li>리스트는 원소 간의 데이터 타입이나 길이가 달라도 하나의 객체로 묶을 수 있는 구조. 리스트 안에 또 다른 리스트를 넣는 것도 가능함.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a>l <span class="ot">=</span> <span class="fu">list</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="st">'a'</span>, <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>), <span class="fu">c</span>(<span class="fl">2.5</span>, <span class="fl">4.2</span>))</span>
+<span id="cb34-2"><a href=""></a><span class="fu">str</span>(l)</span>
+<span id="cb34-3"><a href=""></a>l[[<span class="dv">1</span>]]  <span class="co"># 첫 번째 원소 (숫자 벡터)</span></span>
+<span id="cb34-4"><a href=""></a>l[[<span class="dv">2</span>]]  <span class="co"># 두 번째 원소 (문자 벡터)</span></span>
+<span id="cb34-5"><a href=""></a>l[[<span class="dv">3</span>]]  <span class="co"># 세 번째 원소 (논리 벡터)</span></span>
+<span id="cb34-6"><a href=""></a>l[[<span class="dv">4</span>]]  <span class="co"># 네 번째 원소 (숫자 벡터)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>리스트에 새로운 항목을 추가할 때는 append() 함수나 달러($) 기호를 사용</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a>l3 <span class="ot">=</span> <span class="fu">list</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="st">'a'</span>, <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>))</span>
+<span id="cb35-2"><a href=""></a>l4 <span class="ot">=</span> <span class="fu">append</span>(l3, <span class="fu">list</span>(<span class="fu">c</span>(<span class="fl">2.5</span>, <span class="fl">4.2</span>)))</span>
+<span id="cb35-3"><a href=""></a>l4<span class="sc">$</span>item5 <span class="ot">=</span> <span class="st">'new list item'</span>  <span class="co"># 달러($) 기호로 이름이 부여된 새로운 항목 추가</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="리스트-lists-1" class="slide level2">
+<h2>리스트 (Lists)</h2>
+<ul>
+<li>리스트 안의 값을 추출할 때는 대괄호([])와 이중 대괄호([[]])의 차이.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href=""></a>l4[<span class="dv">1</span>]   </span>
+<span id="cb36-2"><a href=""></a><span class="fu">str</span>(l4[<span class="dv">1</span>])  <span class="co"># 대괄호 한 번은 "리스트" 유형로 반환</span></span>
+<span id="cb36-3"><a href=""></a></span>
+<span id="cb36-4"><a href=""></a>l4[[<span class="dv">1</span>]] </span>
+<span id="cb36-5"><a href=""></a><span class="fu">str</span>(l4[[<span class="dv">1</span>]]) <span class="co"># 이중 대괄호는 원소 자체의 유형로 반환</span></span>
+<span id="cb36-6"><a href=""></a></span>
+<span id="cb36-7"><a href=""></a>l4[[<span class="dv">1</span>]][<span class="dv">3</span>]  <span class="co"># 첫 번째 원소(숫자 벡터)에서 세 번째 항목 추출</span></span>
+<span id="cb36-8"><a href=""></a></span>
+<span id="cb36-9"><a href=""></a>l4<span class="sc">$</span>item5    <span class="co"># 달러($) 기호로 이름이 부여된 항목 추출</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="행렬-matrix" class="slide level2">
+<h2>행렬 (Matrix)</h2>
+<ul>
+<li>행렬은 동일한 유형의 데이터를 저장하는 2차원 구조. <code>matrix()</code> 함수를 사용하여 생성할 수 있음.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a>m <span class="ot">=</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">nrow=</span><span class="dv">2</span>, <span class="at">ncol=</span><span class="dv">3</span>)  <span class="co"># 2행 3열의 행렬 생성</span></span>
+<span id="cb37-2"><a href=""></a>m</span>
+<span id="cb37-3"><a href=""></a>m[<span class="dv">1</span>, <span class="dv">2</span>]  <span class="co"># 첫 번째 행, 두 번째 열의 원소 추출</span></span>
+<span id="cb37-4"><a href=""></a>m[<span class="dv">2</span>, ]   <span class="co"># 두 번째 행 전체 추출</span></span>
+<span id="cb37-5"><a href=""></a>m[, <span class="dv">3</span>]   <span class="co"># 세 번째 열 전체 추출</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="배열-array" class="slide level2">
+<h2>배열 (Array)</h2>
+<ul>
+<li>배열은 동일한 유형의 데이터를 저장하는 다차원 구조. <code>array()</code> 함수를 사용하여 생성할 수 있음.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href=""></a>a <span class="ot">=</span> <span class="fu">array</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">24</span>, <span class="at">dim=</span><span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>))  <span class="co"># 2행 3열 4면의 3차원 배열 생성</span></span>
+<span id="cb38-2"><a href=""></a>a</span>
+<span id="cb38-3"><a href=""></a>a[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]  <span class="co"># 첫 번째 행, 두 번째 열, 세 번째 면의 원소 추출</span></span>
+<span id="cb38-4"><a href=""></a>a[, , <span class="dv">2</span>]   <span class="co"># 두 번째 면 전체 추출</span></span>
+<span id="cb38-5"><a href=""></a>a[<span class="dv">1</span>, , ]   <span class="co"># 첫 번째 행 전체 추출</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="데이터-프레임-data.frame" class="slide level2">
+<h2>데이터 프레임 (<code>data.frame</code>)</h2>
+<ul>
+<li>데이터프레임은 엑셀과 비슷한 2차원(행렬) 구조로, 각 열(Column)마다 다른 데이터 타입을 가질 수 있어 R에서 가장 널리 쓰임.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href=""></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
+<span id="cb39-2"><a href=""></a>  <span class="at">col1 =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, </span>
+<span id="cb39-3"><a href=""></a>  <span class="at">col2 =</span> <span class="fu">c</span>(<span class="st">"this"</span>, <span class="st">"is"</span>, <span class="st">"text"</span>), </span>
+<span id="cb39-4"><a href=""></a>  <span class="at">col3 =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>), </span>
+<span id="cb39-5"><a href=""></a>  <span class="at">col4 =</span> <span class="fu">c</span>(<span class="fl">2.5</span>, <span class="fl">4.2</span>, pi)</span>
+<span id="cb39-6"><a href=""></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>대괄호([행, 열])를 사용해 데이터프레임의 특정 데이터를 추출.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href=""></a>df[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, ]   <span class="co"># 2행과 3행 전체 선택</span></span>
+<span id="cb40-2"><a href=""></a>df[, <span class="fu">c</span>(<span class="st">'col2'</span>, <span class="st">'col4'</span>)] <span class="co"># 'col2'와 'col4' 열 전체 선택</span></span>
+<span id="cb40-3"><a href=""></a>df[, <span class="dv">2</span>, drop <span class="ot">=</span> <span class="cn">FALSE</span>] <span class="co"># drop=FALSE 옵션을 사용하여 단일 열도 데이터프레임 유형로 유지</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>실제로는 <code>data.frame</code>을 직접 생성하기보다는, 데이터를 포함하는 파일을 <code>R</code>로 불러오는 방식이 일반적.</li>
+</ul>
+</section>
+<section id="데이터-프레임-data.frame-1" class="slide level2">
+<h2>데이터 프레임 (<code>data.frame</code>)</h2>
+<ul>
+<li>데이터프레임을 설명하는 데 유용한 함수</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href=""></a><span class="fu">str</span>(df) <span class="co"># 데이터프레임의 구조를 보여줌 (각 열의 이름, 데이터 유형 등)</span></span>
+<span id="cb41-2"><a href=""></a><span class="fu">names</span>(df) <span class="co"># 데이터프레임의 열 이름을 벡터 유형로 반환</span></span>
+<span id="cb41-3"><a href=""></a><span class="fu">nrow</span>(df) <span class="co"># number of rows</span></span>
+<span id="cb41-4"><a href=""></a><span class="fu">ncol</span>(df) <span class="co"># number of columns</span></span>
+<span id="cb41-5"><a href=""></a><span class="fu">summary</span>(murders)    <span class="co"># 각 열의 요약 통계량을 보여줌 (숫자형은 최소값, 1사분위수, 중앙값, 평균, 3사분위수, 최대값; 문자형은 빈도수 등)</span></span>
+<span id="cb41-6"><a href=""></a><span class="fu">head</span>(murders)   <span class="co"># `head` 함수: 데이터프레임의 처음 몇 행을 보여줌</span></span>
+<span id="cb41-7"><a href=""></a><span class="fu">tail</span>(murders)   <span class="co"># `tail` 함수: 데이터프레임의 마지막 몇 행을 보여줌</span></span>
+<span id="cb41-8"><a href=""></a><span class="fu">class</span>(df) <span class="co"># 데이터프레임의 클래스(유형)를 보여줌</span></span>
+<span id="cb41-9"><a href=""></a><span class="fu">typeof</span>(df) <span class="co"># 데이터프레임이 내부적으로 어떻게 저장되는지 보여줌 (예: "list")</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li><strong>typeof()는 R이 데이터를 내부적으로 어떻게 저장하는지(메모리 구조)</strong>를 보여주고, <strong>class()는 R이 해당 데이터를 어떤 객체로 취급하고 다룰 것인지(객체 지향적 관점)</strong>를 보여줌</li>
+</ul>
+</section>
+<section id="task-2" class="slide level2 scrollable" data-background-color="#ffebf0">
+<h2>Task 2</h2>
+<ol type="1">
+<li><p><code>help(read.csv)</code> 또는 웹서치를 통해 R에서 <code>.csv</code> 파일을 가져오는 방법을 찾아보시오. 단, “Import Dataset” 버튼을 사용하거나 패키지를 설치하지 마시오.</p></li>
+<li><p><a href="https://raw.githubusercontent.com/chung-jiwoong/FMB819-Slides/main/data/gun_murders.csv">gun_murders.csv</a> 파일을 새로운 객체 <code>murders</code>에 저장하시오. 이 파일은 2010년 미국 주별 총기 살인 사건 데이터를 포함. (힌트: 객체는 <code>=</code> 또는 <code>&lt;-</code>를 사용하여 생성)</p></li>
+<li><p><code>murders</code>가 <code>data.frame</code> 형식인지 확인하시오: <code>class(murders)</code></p></li>
+<li><p><code>murders</code>에 포함된 변수를 확인하시오.</p></li>
+<li><p>작업 공간에서 <code>murders</code>를 클릭하여 내용을 확인하시오 <code>total</code> 변수는 무엇을 의미하는 것일까?</p></li>
+</ol>
+</section>
+<section id="데이터프레임-열-column-추출하기" class="slide level2">
+<h2>데이터프레임 열 (column) 추출하기</h2>
+<ul>
+<li>한 개의 열을 <strong>벡터 유형로 추출</strong>하려면 <code>$</code> 연산자 (<code>murders$state</code>) 또는 대괄호 연산자 <code>[]</code>를 이름이나 위치 인덱스와 함께 사용:</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href=""></a>first5 <span class="ot">&lt;-</span> murders[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ]  <span class="co"># 처음 5개 주만 선택</span></span>
+<span id="cb42-2"><a href=""></a>first5<span class="sc">$</span>state  <span class="co"># $ 연산자로 추출</span></span>
+<span id="cb42-3"><a href=""></a>first5[ ,<span class="st">"state"</span>]  <span class="co"># 열 이름으로 추출</span></span>
+<span id="cb42-4"><a href=""></a>first5[ ,<span class="dv">1</span>] <span class="co"># 첫 번째 열 가져오기</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="데이터프레임-subset" class="slide level2">
+<h2>데이터프레임 subset</h2>
+<ul>
+<li>데이터프레임에서 특정 부분을 선택하려면 <code>murders[행 조건, 열 번호]</code> 또는 <code>murders[행 조건, "열 이름"]</code>을 사용.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href=""></a><span class="co"># 총기 살인 사건이 500건 이상인 주만 선택하고 "state"와 "total" 변수만 유지</span></span>
+<span id="cb43-2"><a href=""></a>murders[murders<span class="sc">$</span>total <span class="sc">&gt;</span> <span class="dv">500</span>, <span class="fu">c</span>(<span class="st">"state"</span>, <span class="st">"total"</span>)]</span>
+<span id="cb43-3"><a href=""></a>    </span>
+<span id="cb43-4"><a href=""></a><span class="co"># 캘리포니아와 텍사스만 선택하고 "state"와 "total" 변수만 유지</span></span>
+<span id="cb43-5"><a href=""></a>murders[murders<span class="sc">$</span>state <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"California"</span>, <span class="st">"Texas"</span>), <span class="fu">c</span>(<span class="st">"state"</span>, <span class="st">"total"</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li><code>subset</code> 명령어 사용 가능 (종종 더 직관적)</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href=""></a><span class="fu">subset</span>(murders, total <span class="sc">&gt;</span> <span class="dv">500</span>, <span class="at">select =</span> <span class="fu">c</span>(state, total))</span>
+<span id="cb44-2"><a href=""></a><span class="fu">subset</span>(murders, state <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"California"</span>, <span class="st">"Texas"</span>), <span class="at">select =</span> <span class="fu">c</span>(state, total))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="task-3" class="slide level2 scrollable" data-background-color="#ffebf0">
+<h2>Task 3</h2>
+<ol type="1">
+<li><p><code>murders</code> 데이터프레임에는 몇 개의 관측값(observations)이 있는가?</p></li>
+<li><p>몇 개의 변수? 각 변수의 데이터 유형(data type)는 무엇인가?</p></li>
+<li><p>“<code>:</code>” 연산자는 <code>1:10</code>처럼 사용하면 <em>1부터 10까지의 연속된 숫자 생성</em>을 의미함. 이를 활용하여 <code>murders</code>의 10번부터 25번 행을 포함하는 새로운 객체 <code>murders_2</code>를 만드시오.</p></li>
+<li><p><code>state</code>와 <code>total</code> 열만 포함하는 <code>murders_3</code> 객체를 만드시오. (<code>c</code> 함수가 벡터를 생성함)</p></li>
+<li><p>아래 코드를 실행하여 10,000명당 살인 사건 수를 나타내는 <code>total_percap</code> 변수를 생성하시오.</p></li>
+</ol>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href=""></a>murders<span class="sc">$</span>total_percap <span class="ot">=</span> (murders<span class="sc">$</span>total <span class="sc">/</span> murders<span class="sc">$</span>population) <span class="sc">*</span> <span class="dv">10000</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>murders</code> 객체를 클릭하여 새 변수를 확인해 보시오.</p>
+</section>
+<section id="기타-유용한-명령어함수" class="slide level2">
+<h2>기타 유용한 명령어/함수</h2>
+<ul>
+<li>변수 목록보기/삭제하기</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href=""></a><span class="fu">ls</span>()</span>
+<span id="cb46-2"><a href=""></a><span class="fu">rm</span>()</span>
+<span id="cb46-3"><a href=""></a><span class="fu">rm</span>(<span class="at">list=</span><span class="fu">ls</span>())  <span class="co"># 모든 객체 삭제</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>함수 만들기</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href=""></a>add <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
+<span id="cb47-2"><a href=""></a>  <span class="fu">return</span>(x <span class="sc">+</span> y)</span>
+<span id="cb47-3"><a href=""></a>}</span>
+<span id="cb47-4"><a href=""></a><span class="fu">add</span>(<span class="dv">3</span>, <span class="dv">5</span>)  <span class="co"># 결과: 8</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>엑셀 파일 불러오기</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href=""></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"readxl"</span>,<span class="st">"writexl"</span>))</span>
+<span id="cb48-2"><a href=""></a><span class="fu">library</span>(readxl)</span>
+<span id="cb48-3"><a href=""></a><span class="fu">library</span>(writexl)</span>
+<span id="cb48-4"><a href=""></a>data <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"path/to/your/file.xlsx"</span>)  <span class="co"># Excel 파일 불러오기</span></span>
+<span id="cb48-5"><a href=""></a><span class="fu">write_xlsx</span>(data, <span class="st">"path/to/save/file.xlsx"</span>)  <span class="co"># Excel로 저장</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="기타-유용한-명령어함수-1" class="slide level2">
+<h2>기타 유용한 명령어/함수</h2>
+<ul>
+<li>If 구문</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href=""></a>x <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb49-2"><a href=""></a><span class="cf">if</span> (x <span class="sc">&gt;</span> <span class="dv">5</span>) {</span>
+<span id="cb49-3"><a href=""></a>  <span class="fu">print</span>(<span class="st">"x는 5보다 큽니다."</span>)</span>
+<span id="cb49-4"><a href=""></a>} <span class="cf">else</span> {</span>
+<span id="cb49-5"><a href=""></a>  <span class="fu">print</span>(<span class="st">"x는 5보다 작거나 같습니다."</span>)</span>
+<span id="cb49-6"><a href=""></a>}</span>
+<span id="cb49-7"><a href=""></a></span>
+<span id="cb49-8"><a href=""></a><span class="fu">ifelse</span>(x <span class="sc">&gt;</span> <span class="dv">5</span>, <span class="st">"x는 5보다 큽니다."</span>, <span class="st">"x는 5보다 작거나 같습니다."</span>)  <span class="co"># ifelse 함수로 간단히 표현</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>for loop 구문</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href=""></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) {</span>
+<span id="cb50-2"><a href=""></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"현재 숫자:"</span>, i))</span>
+<span id="cb50-3"><a href=""></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>while loop 구문</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href=""></a>count <span class="ot">&lt;-</span> <span class="dv">1</span> </span>
+<span id="cb51-2"><a href=""></a><span class="cf">while</span> (count <span class="sc">&lt;=</span> <span class="dv">5</span>) {</span>
+<span id="cb51-3"><a href=""></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"현재 카운트:"</span>, count))</span>
+<span id="cb51-4"><a href=""></a>  count <span class="ot">&lt;-</span> count <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb51-5"><a href=""></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>함수 안에서 조건문과 반복문을 함께 사용하기</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href=""></a>my_function <span class="ot">&lt;-</span> <span class="cf">function</span>(n) {</span>
+<span id="cb52-2"><a href=""></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
+<span id="cb52-3"><a href=""></a>    <span class="cf">if</span> (i <span class="sc">%%</span> <span class="dv">2</span> <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb52-4"><a href=""></a>      <span class="fu">print</span>(<span class="fu">paste</span>(i, <span class="st">"는 짝수입니다."</span>))</span>
+<span id="cb52-5"><a href=""></a>    } <span class="cf">else</span> {</span>
+<span id="cb52-6"><a href=""></a>      <span class="fu">print</span>(<span class="fu">paste</span>(i, <span class="st">"는 홀수입니다."</span>))</span>
+<span id="cb52-7"><a href=""></a>    }</span>
+<span id="cb52-8"><a href=""></a>  }</span>
+<span id="cb52-9"><a href=""></a>}</span>
+<span id="cb52-10"><a href=""></a><span class="fu">my_function</span>(<span class="dv">10</span>)  <span class="co"># 1부터 10까지 숫자에 대해 짝수/홀수 판별</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>apply 계열 함수 (반복문 대체)</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href=""></a>my_matrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>, <span class="at">nrow=</span><span class="dv">3</span>)</span>
+<span id="cb53-2"><a href=""></a><span class="fu">apply</span>(my_matrix, <span class="dv">1</span>, sum)  <span class="co"># 행별 합계 계산</span></span>
+<span id="cb53-3"><a href=""></a><span class="fu">apply</span>(my_matrix, <span class="dv">2</span>, mean) <span class="co"># 열별 평균 계산</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>lapply 계열 함수 (리스트에 적용)</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href=""></a>my_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">a =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">b =</span> <span class="dv">6</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb54-2"><a href=""></a><span class="fu">lapply</span>(my_list, sum)  <span class="co"># 리스트의 각 원소에 대해 합계 계산</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="비교-논리-연산" class="slide level2">
+<h2>비교 논리 연산</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href=""></a>x <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb55-2"><a href=""></a>x <span class="sc">&lt;</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href=""></a>x<span class="sc">/</span><span class="dv">0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] Inf</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href=""></a><span class="sc">-</span>x<span class="sc">/</span><span class="dv">0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] -Inf</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href=""></a><span class="dv">0</span><span class="sc">/</span><span class="dv">0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] NaN</code></pre>
+</div>
+</div>
+<p><strong>Scalar vs.&nbsp;Scalar 비교</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href=""></a>a <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb63-2"><a href=""></a>a <span class="sc">==</span> pi</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] FALSE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href=""></a>a <span class="sc">!=</span> pi</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href=""></a>a <span class="sc">&gt;</span> pi</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] FALSE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href=""></a>a <span class="sc">&lt;=</span> pi</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] TRUE</code></pre>
+</div>
+</div>
+<p><strong>Vector vs.&nbsp;Vector 비교</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href=""></a>v <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, pi, <span class="dv">4</span>)</span>
+<span id="cb71-2"><a href=""></a>w <span class="ot">&lt;-</span> <span class="fu">rep</span>(pi, <span class="dv">3</span>)</span>
+<span id="cb71-3"><a href=""></a>v <span class="sc">==</span> w</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] FALSE  TRUE FALSE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href=""></a>v <span class="sc">!=</span> w</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1]  TRUE FALSE  TRUE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb75"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href=""></a>v <span class="sc">&lt;</span> w</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1]  TRUE FALSE FALSE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href=""></a>v <span class="sc">&gt;=</span> w</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] FALSE  TRUE  TRUE</code></pre>
+</div>
+</div>
+<p><strong>Scalar vs.&nbsp;Vector 비교</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href=""></a>v <span class="sc">==</span> pi</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] FALSE  TRUE FALSE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb81"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href=""></a>v <span class="sc">&gt;</span> pi</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] FALSE FALSE  TRUE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb83"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href=""></a><span class="fu">any</span>(v <span class="sc">==</span> pi)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href=""></a><span class="fu">all</span>(v <span class="sc">==</span> <span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] FALSE</code></pre>
+</div>
+</div>
+</section>
+<section id="비교-논리-연산-1" class="slide level2">
+<h2>비교 논리 연산</h2>
+<p>**is.*() 함수 : 개체의 속성을 묻는 함수**</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href=""></a>u <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, pi, <span class="cn">Inf</span>, <span class="cn">NULL</span>, <span class="cn">NaN</span>, <span class="cn">NA</span>)</span>
+<span id="cb87-2"><a href=""></a></span>
+<span id="cb87-3"><a href=""></a><span class="fu">is.finite</span>(u)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1]  TRUE  TRUE FALSE FALSE FALSE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb89"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href=""></a><span class="fu">is.infinite</span>(u)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] FALSE FALSE  TRUE FALSE FALSE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb91"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href=""></a><span class="fu">is.na</span>(u)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] FALSE FALSE FALSE  TRUE  TRUE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb93"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href=""></a><span class="fu">is.nan</span>(u)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] FALSE FALSE FALSE  TRUE FALSE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb95"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href=""></a><span class="fu">is.null</span>(u)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] FALSE</code></pre>
+</div>
+</div>
+<ul>
+<li><p><code>NULL</code>은 완전히 비어 있는 값으로, 벡터에 포함될 경우 자동으로 삭제됨.</p></li>
+<li><p><code>na</code>는 not available, <code>nan</code>는 not a number (예, 0/0, sqrt(-1)).</p></li>
+<li><p><code>nan</code>은 숫자형 결측값, <code>na</code>는 모든 종류의 결측값이라 생각하면 됨.</p></li>
+</ul>
+</section>
+<section id="결측치-처리하기" class="slide level2">
+<h2>결측치 처리하기</h2>
+<ul>
+<li><code>is.na()</code> 함수를 사용하여 결측값이 있는지 확인할 수 있음.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb97"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href=""></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="cn">NA</span>, <span class="dv">4</span>)</span>
+<span id="cb97-2"><a href=""></a><span class="fu">is.na</span>(x)  <span class="co"># 각 원소가 NA인지 여부를 TRUE/FALSE로 반환</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] FALSE FALSE  TRUE FALSE</code></pre>
+</div>
+</div>
+<ul>
+<li>데이터프레임에 결측치가 있으면 평균 등 계산이 불가능해져 에러가 발생함.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb99"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href=""></a><span class="fu">mean</span>(x)  <span class="co"># NA가 포함된 벡터의 평균 계산 시 NA 반환</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] NA</code></pre>
+</div>
+</div>
+<ul>
+<li><code>na.rm = TRUE</code> 옵션을 사용하여 결측치를 무시하고 계산할 수 있음.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb101"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href=""></a><span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)  <span class="co"># NA를 제거하고 평균 계산</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## [1] 2.333333</code></pre>
+</div>
+</div>
+</section>
+<section id="r-연산자-정리" class="slide level2">
+<h2>R 연산자 정리</h2>
+<p><strong>1. 기초 연산자 (Arithmetic Operators)</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>연산자</th>
+<th>설명</th>
+<th>예제</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>+</code></td>
+<td>덧셈</td>
+<td><code>5 + 3</code></td>
+<td><code>8</code></td>
+</tr>
+<tr class="even">
+<td><code>-</code></td>
+<td>뺄셈</td>
+<td><code>5 - 3</code></td>
+<td><code>2</code></td>
+</tr>
+<tr class="odd">
+<td><code>*</code></td>
+<td>곱셈</td>
+<td><code>5 * 3</code></td>
+<td><code>15</code></td>
+</tr>
+<tr class="even">
+<td><code>/</code></td>
+<td>나눗셈</td>
+<td><code>5 / 3</code></td>
+<td><code>1.6667</code></td>
+</tr>
+<tr class="odd">
+<td><code>^</code> 또는 <code>**</code></td>
+<td>거듭제곱</td>
+<td><code>5^3</code></td>
+<td><code>125</code></td>
+</tr>
+<tr class="even">
+<td><code>%%</code></td>
+<td>나머지</td>
+<td><code>5 %% 3</code></td>
+<td><code>2</code></td>
+</tr>
+<tr class="odd">
+<td><code>%/%</code></td>
+<td>정수 나눗셈</td>
+<td><code>5 %/% 3</code></td>
+<td><code>1</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>2. 관계 연산자 (Comparison Operators)</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>연산자</th>
+<th>설명</th>
+<th>예제</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>==</code></td>
+<td>같음</td>
+<td><code>5 == 3</code></td>
+<td><code>FALSE</code></td>
+</tr>
+<tr class="even">
+<td><code>!=</code></td>
+<td>다름</td>
+<td><code>5 != 3</code></td>
+<td><code>TRUE</code></td>
+</tr>
+<tr class="odd">
+<td><code>&gt;</code></td>
+<td>초과</td>
+<td><code>5 &gt; 3</code></td>
+<td><code>TRUE</code></td>
+</tr>
+<tr class="even">
+<td><code>&lt;</code></td>
+<td>미만</td>
+<td><code>5 &lt; 3</code></td>
+<td><code>FALSE</code></td>
+</tr>
+<tr class="odd">
+<td><code>&gt;=</code></td>
+<td>이상</td>
+<td><code>5 &gt;= 3</code></td>
+<td><code>TRUE</code></td>
+</tr>
+<tr class="even">
+<td><code>&lt;=</code></td>
+<td>이하</td>
+<td><code>5 &lt;= 3</code></td>
+<td><code>FALSE</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>3. 논리 연산자 (Logical Operators)</strong></p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 29%">
+<col style="width: 23%">
+<col style="width: 23%">
+<col style="width: 23%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>연산자</th>
+<th>설명</th>
+<th>예제</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>&amp;</code></td>
+<td>AND (벡터 연산)</td>
+<td><code>c(TRUE, FALSE) &amp; c(TRUE, TRUE)</code></td>
+<td><code>TRUE FALSE</code></td>
+</tr>
+<tr class="even">
+<td><code>|</code></td>
+<td>OR (벡터 연산)</td>
+<td><code>c(TRUE, FALSE) | c(FALSE, FALSE)</code></td>
+<td><code>TRUE FALSE</code></td>
+</tr>
+<tr class="odd">
+<td><code>!</code></td>
+<td>NOT</td>
+<td><code>!TRUE</code></td>
+<td><code>FALSE</code></td>
+</tr>
+<tr class="even">
+<td><code>&amp;&amp;</code></td>
+<td>AND (단일 값 연산)</td>
+<td><code>TRUE &amp;&amp; FALSE</code></td>
+<td><code>FALSE</code></td>
+</tr>
+<tr class="odd">
+<td><code>||</code></td>
+<td>OR (단일 값 연산)</td>
+<td><code>TRUE || FALSE</code></td>
+<td><code>TRUE</code></td>
+</tr>
+</tbody>
+</table>
+<!--
+& 둘 다 TRUE이면 TRUE
+| 하나라도 TRUE이면 TRUE
+-->
+</section></section>
+<section>
+<section id="강의-관련-정보" class="title-slide slide level1 center">
+<h1>강의 관련 정보</h1>
+
+</section>
+<section id="성적-산출" class="slide level2 scrollable">
+<h2>성적 산출</h2>
+<ol type="1">
+<li><p>수업에서 <strong>in-class assignment (<code>task</code>)</strong> 를 완성해서 제출 <span class="math inline">\(\rightarrow\)</span> 30%: 과제당 점수: 30/과제 개수</p></li>
+<li><p><strong>기말 시험</strong> <span class="math inline">\(\rightarrow\)</span> 70%</p></li>
+<li><p>출석은 확인하지 않음.</p></li>
+<li><p>보통 A는 30%이내 (A+는 아주 뛰어난 경우), C는 총점 50점 미만의 경우, D/F 는 아주 저조한 경우</p></li>
+</ol>
+</section>
+<section id="수업-정책" class="slide level2">
+<h2>수업 정책</h2>
+<p style="text-align: center; font-weight: bold; font-size: 1.5em;">
+</p><p>Be nice. Be honest. Don’t cheat.</p>
+<p></p>
+<p><br></p>
+<ul>
+<li><p><strong>숙제는 늦게 제출하면 안됨</strong>: 수업 당일 저녁 11시까지 LMS에 제출</p></li>
+<li><p><strong>부정행위 및 타인의 과제 무단 활용 금지</strong>: C나 F 중 불리한 등급 받게 됨</p></li>
+<li><p><strong>그룹으로 협력</strong>: 협력 장려, 다만 개인이 작성하여 제출</p></li>
+</ul>
+</section>
+<section id="과제-제출-방법" class="slide level2">
+<h2>과제 제출 방법</h2>
+<p>Quarto Document로 작성 LMS에 제출.</p>
+<h4 id="새-quarto-문서-생성">1. 새 Quarto 문서 생성</h4>
+<ul>
+<li>RStudio에서 <strong>File → New File → Quarto Document…</strong> 선택</li>
+<li>title과 포맷(HTML) 선택 후 <strong>Create</strong> 버튼 클릭</li>
+<li>생성된 <code>.qmd</code> 파일에서 문서를 작성.</li>
+</ul>
+<h4 id="과제-템플릿-예시">2. 과제 템플릿 예시</h4>
+<ul>
+<li><p>다음 양식을 이용하여 과제 제출: <a href="https://github.com/chung-jiwoong/FMB819-Slides/blob/main/chapter_intro/tasks/intro_tasks.qmd">과제 양식 링크</a></p></li>
+<li><p>과제 작성 후 적당한 곳에 저장, 예: <code>C:\Users\user\Documents\assignment\assign1.qmd</code></p></li>
+</ul>
+<h4 id="quarto-문서-렌더링">3. Quarto 문서 렌더링</h4>
+<ul>
+<li><p>RStudio에서 <strong>Render 버튼</strong> 클릭</p></li>
+<li><p>HTML 문서가 생성됨 (<code>홍길동.html</code> 생성됨)</p></li>
+</ul>
+<h4 id="과제-제출">4. 과제 제출</h4>
+<ul>
+<li>Quarto 문서와 함께 출력된 HTML 문서를 LSM시스템에 업로드</li>
+</ul>
+</section></section>
+<section>
+<section id="quarto-기초" class="title-slide slide level1 center">
+<h1>Quarto 기초</h1>
+
+</section>
+<section id="quarto란-무엇인가" class="slide level2">
+<h2>Quarto란 무엇인가?</h2>
+<ul>
+<li>데이터를 분석하는 코드와 그 결과를 설명하는 <strong>텍스트를 하나의 문서에 통합</strong>하여 작성할 수 있는 퍼블리싱 시스템.</li>
+<li>과거의 <code>R Markdown</code>을 더욱 발전시킨 형태로, RStudio에서 작성한 문서를 클릭 한 번으로 HTML, PDF, Word, PPT(Revealjs) 슬라이드로 변환 가능.</li>
+<li><strong>재현 가능한 연구(Reproducible Research):</strong> 데이터가 변경되어도 코드만 다시 실행(Render)하면 보고서의 숫자와 그래프가 자동으로 업데이트됨.</li>
+</ul>
+</section>
+<section id="quarto-기본-구조" class="slide level2 scrollable">
+<h2>Quarto 기본 구조</h2>
+<p>Quarto 문서(<code>.qmd</code>)는 크게 세 가지 요소로 구성됨.</p>
+<ol type="1">
+<li><strong>YAML 헤더:</strong> 문서 맨 위에 <code>---</code>로 둘러싸인 부분. 문서의 제목, 저자, 출력 형식(HTML, PDF 등)을 결정함.</li>
+<li><strong>마크다운(Markdown) 텍스트:</strong> 일반적인 설명, 제목, 글머리 기호 등을 작성하는 텍스트 영역.</li>
+<li><strong>코드 청크(Code Chunk):</strong> 실제 R 코드가 실행되는 공간.</li>
+</ol>
+</section>
+<section id="필수-마크다운markdown-문법" class="slide level2">
+<h2>필수 마크다운(Markdown) 문법</h2>
+<p>워드 프로세서 없이 텍스트에 간단한 기호를 붙여 서식을 지정함.</p>
+<p><strong>1. 제목 (Headers)</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb103"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb103-1"><a href=""></a><span class="fu"># 1단계 제목 (가장 큼)</span></span>
+<span id="cb103-2"><a href=""></a><span class="fu">## 2단계 제목</span></span>
+<span id="cb103-3"><a href=""></a><span class="fu">### 3단계 제목</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>2. 텍스트 강조</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb104"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb104-1"><a href=""></a>**굵은 글씨(Bold)**</span>
+<span id="cb104-2"><a href=""></a>*기울임꼴(Italic)*</span>
+<span id="cb104-3"><a href=""></a><span class="in">`코드 형태의 텍스트`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>3. 목록 (Lists)</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb105"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb105-1"><a href=""></a><span class="ss">* </span>순서가 없는 목록 1</span>
+<span id="cb105-2"><a href=""></a><span class="ss">* </span>순서가 없는 목록 2</span>
+<span id="cb105-3"><a href=""></a><span class="ss">  * </span>하위 목록 (띄어쓰기 2번 또는 4번 후 작성)</span>
+<span id="cb105-4"><a href=""></a></span>
+<span id="cb105-5"><a href=""></a><span class="ss">1. </span>순서가 있는 목록 1</span>
+<span id="cb105-6"><a href=""></a><span class="ss">2. </span>순서가 있는 목록 2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="코드-청크code-chunk의-이해" class="slide level2">
+<h2>코드 청크(Code Chunk)의 이해</h2>
+<ul>
+<li>문서 내에 R 코드를 삽입하고 실행 결과를 보여주려면 <strong>코드 청크</strong>를 만들어야 함.</li>
+<li>단축키 <strong><code>Ctrl + Alt + I</code></strong> (Mac: <code>Cmd + Option + I</code>)를 누르면 회색 박스가 생성됨.</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb106"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb106-1"><a href=""></a><span class="in">```r</span></span>
+<span id="cb106-2"><a href=""></a><span class="co"># 이 안에 R 코드를 작성합니다.</span></span>
+<span id="cb106-3"><a href=""></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)</span>
+<span id="cb106-4"><a href=""></a><span class="fu">mean</span>(x)</span>
+<span id="cb106-5"><a href=""></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>주요 청크 옵션 (Chunk Options)</strong> 코드 청크 상단에 <code>#|</code> 기호를 사용하여 코드와 결과의 출력 방식을 제어할 수 있음.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb107"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb107-1"><a href=""></a><span class="in">```r</span></span>
+<span id="cb107-2"><a href=""></a><span class="co">#| echo: true    # 코드를 문서에 보여줄지 여부 (false면 결과만 출력)</span></span>
+<span id="cb107-3"><a href=""></a><span class="co">#| eval: true    # 코드를 실제로 실행할지 여부</span></span>
+<span id="cb107-4"><a href=""></a><span class="co">#| warning: false # 실행 시 발생하는 경고 메시지를 숨김</span></span>
+<span id="cb107-5"><a href=""></a><span class="fu">mean</span>(x)</span>
+<span id="cb107-6"><a href=""></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section></section>
+<section id="the-end" class="title-slide slide level1 center">
+<h1>THE END</h1>
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="chapter_intro_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="chapter_intro_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="chapter_intro_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="chapter_intro_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="chapter_intro_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="chapter_intro_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="chapter_intro_files/libs/revealjs/plugin/reveal-text-resizer/revealjs-text-resizer.js"></script>
+  <script src="chapter_intro_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="chapter_intro_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="chapter_intro_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="chapter_intro_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="chapter_intro_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'fast',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, RevealTextResizer, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+
+    <script>
+
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
+      // slide changes (different for each slide format).
+
+      (function () {
+
+        // dispatch for htmlwidgets
+
+        function fireSlideEnter() {
+
+          const event = window.document.createEvent("Event");
+
+          event.initEvent("slideenter", true, true);
+
+          window.document.dispatchEvent(event);
+
+        }
+
+    
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          fireSlideEnter();
+
+    
+
+          // dispatch for shiny
+
+          if (window.jQuery) {
+
+            if (previousSlide) {
+
+              window.jQuery(previousSlide).trigger("hidden");
+
+            }
+
+            if (currentSlide) {
+
+              window.jQuery(currentSlide).trigger("shown");
+
+            }
+
+          }
+
+        }
+
+    
+
+        // hookup for slidy
+
+        if (window.w3c_slidy) {
+
+          window.w3c_slidy.add_observer(function (slide_num) {
+
+            // slide_num starts at position 1
+
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
+          });
+
+        }
+
+    
+
+      })();
+
+    </script>
+
+    
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
