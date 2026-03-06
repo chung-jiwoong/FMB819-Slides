@@ -15,6 +15,7 @@ revealjs-plugins:
 ---
 
 
+
 ```{r setup, include=FALSE,warning=FALSE,message=FALSE}
 options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(
@@ -342,6 +343,7 @@ cor(returns_wide[, c("KOSPI200", "SP500", "SSE", "N225")])  # 상관 행렬 계�
 
 1.  `haven` 패키지의 `read_dta()` 함수를 사용하여 데이터를 불러오기. 데이터를 `grades`라는 객체에 저장
 
+
 ```{r task1_1, echo=FALSE, eval=FALSE}
 library(haven)
 grades <- read_dta("https://raw.githack.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/data/grade5.dta")
@@ -452,6 +454,7 @@ $$
 ***단순회귀모형:*** $\text{avg math} = b_0 + b_1\text{size} + e$
 
 ```{r, echo = FALSE, eval=TRUE}
+library(haven)
 grades <- read_dta("https://raw.githack.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/data/grade5.dta")
 ```
 
