@@ -186,14 +186,14 @@ samsung %>%
 
 -   **Windows: 공식 웹사이트에서 다운로드하여 설치**
 
-    1.  [CRAN 공식 웹사이트](https://posit.co/download/rstudio-desktop/)에 접속
+    1.  [CRAN 공식 웹사이트](https://cran.r-project.org/)에 접속
     2.  "Download R for Windows" 클릭
     3.  "base" 패키지를 선택하고 최신 버전을 다운로드
     4.  `.exe`파일 실행 후 기본 설정으로 설치
 
 -   **macOS: 공식 웹사이트에서 다운로드하여 설치**
 
-    1.  [CRAN 공식 웹사이트](https://posit.co/download/rstudio-desktop/)에 접속
+    1.  [CRAN 공식 웹사이트](https://cran.r-project.org/)에 접속
     2.  "Download R for macOS" 클릭
     3.  본인 칩셋(Apple Silicon / Intel)에 맞는 설치 파일 다운로드
     4.  `.pkg` 파일 실행 후 기본 설정으로 설치
