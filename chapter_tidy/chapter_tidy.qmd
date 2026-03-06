@@ -145,6 +145,7 @@ polls_us_election_2016 %>%
 
 
 ------------------------------------------------------------------------
+
 ## `dplyr`: `filter()` 와 `%in%`
 
 -   `%in%` 연산자: `x`가 `y` 벡터 안에 포함되어 있는지 확인
@@ -429,6 +430,7 @@ x == y
 ```
 
 -   `NA == NA`는 `TRUE`가 아니라 `NA`를 반환하는데, 이는 두 값이 같은지 여부를 판단할 수 없기 때문임.
+
 :::
 :::::
 
@@ -436,9 +438,8 @@ x == y
 
 ## Task 1 {background-color="#ffebf0"}
 
-::: {style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;"}
-`r countdown(minutes = 10, top = 0)`
-:::
+`r countdown(minutes = 10, top = "20px", right = "10px", font_size = "0.8em", color_border = "blue")`
+
 
 다음 코드를 실행하여 데이터를 로드합니다.
 
@@ -513,9 +514,7 @@ tail(gapminder, n = 2) # 데이터의 마지막 2행 출력
 
 ## Task 2 {background-color="#ffebf0"}
 
-::: {style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;"}
-`r countdown(minutes = 5, top = 0)`
-:::
+`r countdown(minutes = 5, top = "20px", right = "10px", font_size = "0.8em", color_border = "blue")`
 
 다음 코드를 실행하여 데이터를 로드.
 
@@ -566,6 +565,7 @@ ggplot(data)
     -   시각화에서 어떤 정보를 사용할 것인가?
 
     -   해당 데이터가 하나의 열 또는 행에 포함되어 있는가?
+
 :::
 :::::
 
@@ -727,6 +727,7 @@ Geoms
 | 수직/수평선 |     `geom_{vh}line()`      |
 |  개수 세기  |       `geom_count()`       |
 | 밀도 그래프 |      `geom_density()`      |
+
 :::
 :::::
 
@@ -1073,6 +1074,7 @@ Scales
 -   연속형 변수에서 포인트 크기 조정 <br>`scale_size_continuous()`
 -   y축을 로그 스케일로 변환 <br>`scale_y_log10()`
 -   색상 세팅 변환 <br>`scale_fill_discrete()`<br>`scale_color_manual()`
+
 :::
 :::::
 
@@ -1177,9 +1179,7 @@ g + scale_x_continuous(breaks = seq(1950, 2020, 10))
 
 ## Task 3 {background-color="#ffebf0"}
 
-::: {style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;"}
-`r countdown(minutes = 10, top = 0)`
-:::
+`r countdown(minutes = 10, top = "20px", right = "10px", font_size = "0.8em", color_border = "blue")`
 
 `gapminder` 데이터를 사용하여 다음의 그래프를 `ggplot2`로 생성하시오
 
@@ -1282,6 +1282,7 @@ median(x, echo=T)  # 중앙값 계산
 $$Var(X) = \frac{1}{N} \sum_{i=1}^N(x_i-\bar{x})^2$$
 
 평균이 0인 두 개의 `정규 분포`를 비교해 보자.
+
 :::
 
 ::: {.column width="55%"}
@@ -1427,9 +1428,7 @@ knitr::include_graphics("chapter_tidy_files/figure-html/correlation.svg")
 
 ## Task 4 {background-color="#ffebf0"}
 
-::: {style="position: absolute; top: -30px; right: 10px; font-size: 0.8em;"}
-`r countdown(minutes = 10, top = 0)`
-:::
+`r countdown(minutes = 10, top = "20px", right = "10px", font_size = "0.8em", color_border = "blue")`
 
 1.  2011년 GDP의 평균을 계산하고 mean이라는 객체에 할당하시오. 결측값은 제외. **힌트**: `mean` 함수의 도움말을 읽고 `NA`를 제거하는 방법을 확인
 
