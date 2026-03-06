@@ -76,7 +76,7 @@ class(murders)
 names(murders)
 ```
 
-5.  작업 공간에서 `murders`를 클릭하여 내용을 확인하시오 `total` 변수는 무엇을 의미하는가?
+5.  환경 창에서 `murders`를 클릭하여 내용을 확인하시오 `total` 변수는 무엇을 의미하는가?
 
 ```{r}
 View(murders)
@@ -101,6 +101,7 @@ nrow(murders)
 ```{r}
 str(murders)
 ```
+
 
 3.  "`:`" 연산자는 `1:10`처럼 사용하면 *1부터 10까지의 연속된 숫자 생성*을 의미함. 이를 활용하여 `murders`의 10번부터 25번 행을 포함하는 새로운 객체 `murders_2`를 만드시오.
 
