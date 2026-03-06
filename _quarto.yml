@@ -1,3 +1,9 @@
 project:
   type: default
 
+format:
+  html:
+    embed-resources: true
+  revealjs:
+    embed-resources: false
+

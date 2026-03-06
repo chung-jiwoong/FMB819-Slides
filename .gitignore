@@ -5,7 +5,6 @@
 **/*_files/
 
 # Keep chapter task solutions local only
-archives/
 chapter_causality/tasks/causality_solution.qmd
 chapter_causality/tasks/causality_solution.html
 chapter_mlr/tasks/mlr_solution.qmd

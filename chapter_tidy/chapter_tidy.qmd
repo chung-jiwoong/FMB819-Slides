@@ -751,7 +751,8 @@ Geoms
 ::: {.column width="60%"}
 `RStudio`에서 `geom_`을 입력하면 자동 완성 기능을 통해 사용할 수 있는 모든 옵션 확인 가능
 
-<img src="chapter_tidy_files/figure-html/geom.gif" width="300px" style="float: center;"/>
+<img src="../img/photos/geom.gif" width="300px" style="float: center;"/>
+
 :::
 :::::
 
@@ -1418,8 +1419,10 @@ cor(gapminder_new$fertility,gapminder_new$infant_mortality, use = "complete.obs"
 -   상관계수는 항상 -1과 1 사이의 값을 가짐
 
 ```{r, echo = F, out.width = "100%"}
-knitr::include_graphics("chapter_tidy_files/figure-html/correlation.svg")
+knitr::include_graphics("../img/photos/correlation-examples.svg")
 ```
+
+
 
 \[ *Source: [mathisfun](https://www.mathsisfun.com/data/correlation.html)*\]
 
