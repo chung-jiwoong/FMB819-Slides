@@ -1,8 +1,8 @@
-﻿/.quarto/
+/.quarto/
 
-**/*.quarto_ipynb
-**/*_cache/
-**/*_files/
+# **/*.quarto_ipynb
+# **/*_cache/
+# **/*_files/
 
 # Keep chapter task solutions local only
 chapter_causality/tasks/causality_solution.qmd
@@ -16,3 +16,5 @@ chapter_slr/tasks/slr_solution_old.qmd
 chapter_slr/tasks/slr_tasks_old.qmd
 chapter_tidy/tasks/tidy_solution.qmd
 chapter_tidy/tasks/tidy_solution.html
+
+**/*.quarto_ipynb
