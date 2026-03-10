@@ -98,6 +98,7 @@ library(xaringanExtra)
 
 ```{r eval=TRUE, echo=TRUE, fig.width=30, fig.height=20, fig.align="center"}
 library(tidyquant)
+library(ggplot2)
 # 1. 삼성전자(005930.KS) 최근 1년 주가 수집
 samsung <- tq_get("005930.KS", from = Sys.Date() - 365)
 # 2. ggplot을 이용한 시각화 (autoplot 대신 사용)
