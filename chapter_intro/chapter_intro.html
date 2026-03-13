@@ -250,9 +250,9 @@
 </ol></li>
 <li><p><code>R</code>의 많은 기능들 중 우리가 주로 사용할 기능</p>
 <ul>
-<li><strong>데이터 수집</strong>: 웹에서 데이터 직접 불러오기</li>
-<li><strong>데이터 가공</strong>: 데이터 정리, 변환, 요약</li>
-<li><strong>데이터 시각화</strong>: 고급 그래프와 차트 생성</li>
+<li><p><strong>데이터 수집</strong>: 웹에서 데이터 직접 불러오기</p></li>
+<li><p><strong>데이터 가공</strong>: 데이터 정리, 변환, 요약</p></li>
+<li><p><strong>데이터 시각화</strong>: 고급 그래프와 차트 생성</p></li>
 <li><h2 id="통계-분석-회귀분석-가설검정-등-다양한-통계-기법-적용"><strong>통계 분석</strong>: 회귀분석, 가설검정 등 다양한 통계 기법 적용</h2></li>
 </ul></li>
 </ul>
@@ -278,16 +278,17 @@
 </ul>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">library</span>(tidyquant)</span>
-<span id="cb1-2"><a href=""></a><span class="co"># 1. 삼성전자(005930.KS) 최근 1년 주가 수집</span></span>
-<span id="cb1-3"><a href=""></a>samsung <span class="ot">&lt;-</span> <span class="fu">tq_get</span>(<span class="st">"005930.KS"</span>, <span class="at">from =</span> <span class="fu">Sys.Date</span>() <span class="sc">-</span> <span class="dv">365</span>)</span>
-<span id="cb1-4"><a href=""></a><span class="co"># 2. ggplot을 이용한 시각화 (autoplot 대신 사용)</span></span>
-<span id="cb1-5"><a href=""></a>samsung <span class="sc">%&gt;%</span></span>
-<span id="cb1-6"><a href=""></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> close)) <span class="sc">+</span></span>
-<span id="cb1-7"><a href=""></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"darkblue"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb1-8"><a href=""></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Samsung (recent 1 year)"</span>, </span>
-<span id="cb1-9"><a href=""></a>       <span class="at">x =</span> <span class="st">"Date"</span>, </span>
-<span id="cb1-10"><a href=""></a>       <span class="at">y =</span> <span class="st">"Close Price (KRW)"</span>) <span class="sc">+</span></span>
-<span id="cb1-11"><a href=""></a>  <span class="fu">theme_tq</span>() <span class="co"># 금융 데이터에 어울리는 깔끔한 테마</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-2"><a href=""></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href=""></a><span class="co"># 1. 삼성전자(005930.KS) 최근 1년 주가 수집</span></span>
+<span id="cb1-4"><a href=""></a>samsung <span class="ot">&lt;-</span> <span class="fu">tq_get</span>(<span class="st">"005930.KS"</span>, <span class="at">from =</span> <span class="fu">Sys.Date</span>() <span class="sc">-</span> <span class="dv">365</span>)</span>
+<span id="cb1-5"><a href=""></a><span class="co"># 2. ggplot을 이용한 시각화 (autoplot 대신 사용)</span></span>
+<span id="cb1-6"><a href=""></a>samsung <span class="sc">%&gt;%</span></span>
+<span id="cb1-7"><a href=""></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> close)) <span class="sc">+</span></span>
+<span id="cb1-8"><a href=""></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"darkblue"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb1-9"><a href=""></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Samsung (recent 1 year)"</span>, </span>
+<span id="cb1-10"><a href=""></a>       <span class="at">x =</span> <span class="st">"Date"</span>, </span>
+<span id="cb1-11"><a href=""></a>       <span class="at">y =</span> <span class="st">"Close Price (KRW)"</span>) <span class="sc">+</span></span>
+<span id="cb1-12"><a href=""></a>  <span class="fu">theme_tq</span>() <span class="co"># 금융 데이터에 어울리는 깔끔한 테마</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 </div>
 <img data-src="chapter_intro_files/figure-revealjs/unnamed-chunk-1-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="2880"></section>
@@ -1284,12 +1285,12 @@ knitr::include_graphics("chapter_intro_files/figure-html/rstudio.png")
 </tbody>
 </table>
 <p><strong>3. 논리 연산자 (Logical Operators)</strong></p>
-<table class="caption-top">
+<table class="caption-top" style="width:100%;">
 <colgroup>
-<col style="width: 29%">
-<col style="width: 23%">
-<col style="width: 23%">
-<col style="width: 23%">
+<col style="width: 10%">
+<col style="width: 22%">
+<col style="width: 48%">
+<col style="width: 18%">
 </colgroup>
 <thead>
 <tr class="header">
