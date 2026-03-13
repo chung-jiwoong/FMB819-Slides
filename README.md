@@ -17,7 +17,7 @@
 
 | 주제 | 슬라이드(HTML) | 소스(QMD) |
 |---|---|---|
-| Dart Open API 이용 | [보기](https://chung-jiwoong.github.io/FMB819/chapter_dart/chapter_dart.html) | [소스](https://github.com/chung-jiwoong/FMB819/blob/main/chapter_dart/chapter_dart.qmd) |
+| Dart Open API 이용 | [보기](https://chung-jiwoong.github.io/FMB819/chapter_others/chapter_dart.html) | [소스](https://github.com/chung-jiwoong/FMB819/blob/main/chapter_others/chapter_dart.qmd) |
 
 
 <!-- 
