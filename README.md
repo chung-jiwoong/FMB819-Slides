@@ -12,7 +12,13 @@
 | 4. Multiple Linear Regression | [보기](https://chung-jiwoong.github.io/FMB819/chapter_mlr/chapter_mlr.html) | [소스](https://github.com/chung-jiwoong/FMB819/blob/main/chapter_mlr/chapter_mlr.qmd) | [과제](https://chung-jiwoong.github.io/FMB819/chapter_mlr/tasks/mlr_tasks.qmd) | |
 | 5. Sampling | [보기](https://chung-jiwoong.github.io/FMB819/chapter_sampling/chapter_sampling.html) | [소스](https://github.com/chung-jiwoong/FMB819/blob/main/chapter_sampling/chapter_sampling.qmd) | [과제](https://chung-jiwoong.github.io/FMB819/chapter_sampling/tasks/sampling_tasks.qmd) | |
 
-testing
+
+## 기타 주제
+
+| 주제 | 슬라이드(HTML) | 소스(QMD) |
+|---|---|---|
+| Dart Open API 이용 | [보기](https://chung-jiwoong.github.io/FMB819/chapter_dart/chapter_dart.html) | [소스](https://github.com/chung-jiwoong/FMB819/blob/main/chapter_dart/chapter_dart.qmd) |
+
 
 <!-- 
 | 4. Introduction to Causality | [보기](https://chung-jiwoong.github.io/FMB819/chapter_causality/chapter_causality.html) | [소스](https://github.com/chung-jiwoong/FMB819/blob/main/chapter_causality/chapter_causality.qmd) | [과제](https://chung-jiwoong.github.io/FMB819/chapter_causality/tasks/causality_tasks.qmd) | |
