@@ -9,11 +9,8 @@ format:
 echo: true  
 include: true 
 warning: false
+embed-resources: true
 ---
-
-```{r}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
 ## Task 1 
 
