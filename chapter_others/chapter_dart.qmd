@@ -93,10 +93,10 @@ dart_api_key <- Sys.getenv("DART_API_KEY")
 
 # 필요한 R 패키지 로드
 library(httr)
-library(rvest)
 library(jsonlite)
 library(xml2)
 library(stringr)
+library(dplyr)
 
 # API 인증키 설정
 dart_api_key <- Sys.getenv("DART_API_KEY")
@@ -113,19 +113,15 @@ dart_api_key <- Sys.getenv("DART_API_KEY")
     - R과 DART 서버 사이의 통신을 담당.
     - "이 URL로 데이터를 보내줘"라고 요청하는 GET() 함수를 제공. 브라우저 주소창에 주소를 치고 엔터를 누르는 행위를 코드로 대신해 주는 도구.
 
-2. `library(rvest)`: 데이터 추출 (Scraping/Harvesting)
+2. `library(xml2)`: 데이터 추출 (Scraping/Harvesting)
     - 웹페이지나 XML 문서에서 필요한 정보만 골라내기 위해 사용.
-    - DART에서 받은 XML 파일 안에는 수많은 태그들이 섞여 있음. 이 중 우리가 원하는 corp_code나 stock_code 같은 특정 항목만 집어낼 때(html_nodes, html_text) 필수적.
+    - DART에서 받은 XML 파일 안에는 수많은 태그들이 섞여 있음. 이 중 우리가 원하는 corp_code나 stock_code 같은 특정 항목만 집어낼 때(xml_find_all, xml_text) 필수적.
 
 3. `library(jsonlite)`: 데이터 해석 (JSON Parsing)
     - 서버로부터 받은 JSON 형식의 텍스트를 R 객체로 변환.
     - 최근 대부분의 현대적 API(DART 포함)는 데이터를 JSON 형태로 응답. `fromJSON()` 함수 한 줄이면 복잡한 텍스트 뭉치를 R에서 바로 분석 가능한 **데이터프레임**으로 바꿔줌.
 
-4. `library(xml2)`: XML 문서 처리
-    - XML 구조의 데이터를 읽고 다루는 기초 엔진.
-    - DART의 기업 고유번호 데이터는 XML 파일로 제공. `read_xml()`을 통해 이 거대한 기업 명부를 `R` 메모리에 올리고 구조를 파악할 때 사용. (`rvest`가 이 패키지 위에서 작동.)
-
-5. `library(stringr)`: 데이터 정제 (String Manipulation)
+4. `library(stringr)`: 데이터 정제 (String Manipulation)
     - 텍스트 데이터의 가공과 수정을 담당.
     - 금융 데이터 분석에서 가장 빈번한 오류 중 하나가 0으로 시작하는 종목코드 처리. (예: 삼성전자 '005930'이 '5930'으로 읽히는 경우). `str_pad()` 함수 등을 사용하여 자릿수를 맞추거나, URL 주소 문자열을 깔끔하게 조립할 때 매우 유용.
 
@@ -151,16 +147,23 @@ codezip_url <- paste0('https://opendart.fss.or.kr/api/corpCode.xml?crtfc_key=', 
 # 2. 데이터 다운로드
 response <- GET(codezip_url)
 
-# 3. 데이터 수령-> 저장 -> 압축 해제 -> 내용 판독
+# 3. 데이터 수령 -> 저장 -> 압축 해제 -> 내용 판독
 tf <- tempfile(fileext = '.zip')
 writeBin(content(response, as = "raw"), tf)
-nm <- unzip(tf, list = TRUE)
-code_data <- read_xml(unzip(tf, nm$Name))
 
-# 4. 데이터프레임 변환 
-corp_code <- code_data %>% html_nodes('corp_code') %>% html_text()
-corp_name <- code_data %>% html_nodes('corp_name') %>% html_text()
-stock_code <- code_data %>% html_nodes('stock_code') %>% html_text()
+# 압축 파일 내의 파일 목록 확인
+nm <- unzip(tf, list = TRUE)
+
+# 임시 폴더(tempdir)에 압축 해제하여 작업 공간 오염 방지
+extracted_file <- unzip(tf, files = nm$Name[1], exdir = tempdir())
+
+# XML 읽기
+code_data <- read_xml(extracted_file)
+
+# 4. 데이터프레임 변환
+corp_code <- code_data %>% xml_find_all('//corp_code') %>% xml_text()
+corp_name <- code_data %>% xml_find_all('//corp_name') %>% xml_text()
+stock_code <- code_data %>% xml_find_all('//stock_code') %>% xml_text()
 
 corp_list <- data.frame(
   code = corp_code,
@@ -169,8 +172,14 @@ corp_list <- data.frame(
   stringsAsFactors = FALSE
 )
 
-# 상장사(stock_code가 있는 기업)만 필터링
-corp_list_listed <- subset(corp_list, nchar(stock) == 6)
+# 상장사(stock_code가 6자리인 기업)만 필터링 (공백 문자가 들어올 수 있으므로 trimws())
+corp_list_listed <- subset(corp_list, nchar(trimws(stock)) == 6)
+
+# 5. 메모리 정리 (임시 파일 삭제)
+unlink(tf)
+unlink(extracted_file)
+
+# 6. 결과 확인
 head(corp_list_listed)
 ```
 
@@ -191,20 +200,20 @@ head(corp_list_listed)
     - 압축 파일 내부 명단(송장) 확인
     - 압축을 실제로 풀기 전에, 그 안에 어떤 파일들이 들어있는지 목록만 확인. DART 고유번호 ZIP 파일 안에는 보통 CORPCODE.xml이라는 파일이 들어있는데, 이 파일의 이름을 정확히 알아내기 위해 사용.
 
-4. `code_data <- read_xml(unzip(tf, nm$Name))`
+4. `code_data <- read_xml(unzip(tf, nm$Name, exdir = tempdir()))`
     - 내용물 꺼내서 읽기
-    - `unzip(tf, nm$Name)`: 상자 안에서 실제 데이터 파일(CORPCODE.xml)만 압축을 풀어 꺼냄.
+    - `unzip(tf, nm$Name, exdir = tempdir())`: 상자 안에서 실제 데이터 파일(CORPCODE.xml)만 압축을 풀어 꺼냄. 임시폴더에 저장
     - `read_xml(...)`: 꺼낸 XML 파일을 R이 읽을 수 있는 구조화된 데이터 객체로 변환.
 
 ---
 
 ## 명령어 의미 {background-color="#ebf8ff"}
 
-1. `html_nodes('태그이름')`:
+1. `xml_find_all('태그이름')`:
     - 수많은 데이터 중 특정 이름표(태그)가 붙은 것들만 하이라이트.
     - 거대한 엑셀 시트에서 특정 열(Column) 전체를 마우스로 드래그하는 것과 같음.
 
-2. `html_text()`:
+2. `xml_text()`:
     - 하이라이트 된 부분에서 `<tag>...</tag>` 같은 XML 문법 기호는 버리고, 그 안의 순수한 글자만 추출.
     - 귤 껍질(태그)을 까서 알맹이(텍스트)만 남기는 과정.
     

@@ -266,10 +266,10 @@
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="co"># 필요한 R 패키지 로드</span></span>
 <span id="cb3-2"><a href=""></a><span class="fu">library</span>(httr)</span>
-<span id="cb3-3"><a href=""></a><span class="fu">library</span>(rvest)</span>
-<span id="cb3-4"><a href=""></a><span class="fu">library</span>(jsonlite)</span>
-<span id="cb3-5"><a href=""></a><span class="fu">library</span>(xml2)</span>
-<span id="cb3-6"><a href=""></a><span class="fu">library</span>(stringr)</span>
+<span id="cb3-3"><a href=""></a><span class="fu">library</span>(jsonlite)</span>
+<span id="cb3-4"><a href=""></a><span class="fu">library</span>(xml2)</span>
+<span id="cb3-5"><a href=""></a><span class="fu">library</span>(stringr)</span>
+<span id="cb3-6"><a href=""></a><span class="fu">library</span>(dplyr)</span>
 <span id="cb3-7"><a href=""></a></span>
 <span id="cb3-8"><a href=""></a><span class="co"># API 인증키 설정</span></span>
 <span id="cb3-9"><a href=""></a>dart_api_key <span class="ot">&lt;-</span> <span class="fu">Sys.getenv</span>(<span class="st">"DART_API_KEY"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -289,20 +289,15 @@
 <li>R과 DART 서버 사이의 통신을 담당.</li>
 <li>“이 URL로 데이터를 보내줘”라고 요청하는 GET() 함수를 제공. 브라우저 주소창에 주소를 치고 엔터를 누르는 행위를 코드로 대신해 주는 도구.</li>
 </ul></li>
-<li><code>library(rvest)</code>: 데이터 추출 (Scraping/Harvesting)
+<li><code>library(xml2)</code>: 데이터 추출 (Scraping/Harvesting)
 <ul>
 <li>웹페이지나 XML 문서에서 필요한 정보만 골라내기 위해 사용.</li>
-<li>DART에서 받은 XML 파일 안에는 수많은 태그들이 섞여 있음. 이 중 우리가 원하는 corp_code나 stock_code 같은 특정 항목만 집어낼 때(html_nodes, html_text) 필수적.</li>
+<li>DART에서 받은 XML 파일 안에는 수많은 태그들이 섞여 있음. 이 중 우리가 원하는 corp_code나 stock_code 같은 특정 항목만 집어낼 때(xml_find_all, xml_text) 필수적.</li>
 </ul></li>
 <li><code>library(jsonlite)</code>: 데이터 해석 (JSON Parsing)
 <ul>
 <li>서버로부터 받은 JSON 형식의 텍스트를 R 객체로 변환.</li>
 <li>최근 대부분의 현대적 API(DART 포함)는 데이터를 JSON 형태로 응답. <code>fromJSON()</code> 함수 한 줄이면 복잡한 텍스트 뭉치를 R에서 바로 분석 가능한 <strong>데이터프레임</strong>으로 바꿔줌.</li>
-</ul></li>
-<li><code>library(xml2)</code>: XML 문서 처리
-<ul>
-<li>XML 구조의 데이터를 읽고 다루는 기초 엔진.</li>
-<li>DART의 기업 고유번호 데이터는 XML 파일로 제공. <code>read_xml()</code>을 통해 이 거대한 기업 명부를 <code>R</code> 메모리에 올리고 구조를 파악할 때 사용. (<code>rvest</code>가 이 패키지 위에서 작동.)</li>
 </ul></li>
 <li><code>library(stringr)</code>: 데이터 정제 (String Manipulation)
 <ul>
@@ -328,27 +323,40 @@
 <span id="cb4-4"><a href=""></a><span class="co"># 2. 데이터 다운로드</span></span>
 <span id="cb4-5"><a href=""></a>response <span class="ot">&lt;-</span> <span class="fu">GET</span>(codezip_url)</span>
 <span id="cb4-6"><a href=""></a></span>
-<span id="cb4-7"><a href=""></a><span class="co"># 3. 데이터 수령-&gt; 저장 -&gt; 압축 해제 -&gt; 내용 판독</span></span>
+<span id="cb4-7"><a href=""></a><span class="co"># 3. 데이터 수령 -&gt; 저장 -&gt; 압축 해제 -&gt; 내용 판독</span></span>
 <span id="cb4-8"><a href=""></a>tf <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">'.zip'</span>)</span>
 <span id="cb4-9"><a href=""></a><span class="fu">writeBin</span>(<span class="fu">content</span>(response, <span class="at">as =</span> <span class="st">"raw"</span>), tf)</span>
-<span id="cb4-10"><a href=""></a>nm <span class="ot">&lt;-</span> <span class="fu">unzip</span>(tf, <span class="at">list =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb4-11"><a href=""></a>code_data <span class="ot">&lt;-</span> <span class="fu">read_xml</span>(<span class="fu">unzip</span>(tf, nm<span class="sc">$</span>Name))</span>
-<span id="cb4-12"><a href=""></a></span>
-<span id="cb4-13"><a href=""></a><span class="co"># 4. 데이터프레임 변환 </span></span>
-<span id="cb4-14"><a href=""></a>corp_code <span class="ot">&lt;-</span> code_data <span class="sc">%&gt;%</span> <span class="fu">html_nodes</span>(<span class="st">'corp_code'</span>) <span class="sc">%&gt;%</span> <span class="fu">html_text</span>()</span>
-<span id="cb4-15"><a href=""></a>corp_name <span class="ot">&lt;-</span> code_data <span class="sc">%&gt;%</span> <span class="fu">html_nodes</span>(<span class="st">'corp_name'</span>) <span class="sc">%&gt;%</span> <span class="fu">html_text</span>()</span>
-<span id="cb4-16"><a href=""></a>stock_code <span class="ot">&lt;-</span> code_data <span class="sc">%&gt;%</span> <span class="fu">html_nodes</span>(<span class="st">'stock_code'</span>) <span class="sc">%&gt;%</span> <span class="fu">html_text</span>()</span>
-<span id="cb4-17"><a href=""></a></span>
-<span id="cb4-18"><a href=""></a>corp_list <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb4-19"><a href=""></a>  <span class="at">code =</span> corp_code,</span>
-<span id="cb4-20"><a href=""></a>  <span class="at">name =</span> corp_name,</span>
-<span id="cb4-21"><a href=""></a>  <span class="at">stock =</span> stock_code,</span>
-<span id="cb4-22"><a href=""></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
-<span id="cb4-23"><a href=""></a>)</span>
+<span id="cb4-10"><a href=""></a></span>
+<span id="cb4-11"><a href=""></a><span class="co"># 압축 파일 내의 파일 목록 확인</span></span>
+<span id="cb4-12"><a href=""></a>nm <span class="ot">&lt;-</span> <span class="fu">unzip</span>(tf, <span class="at">list =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-13"><a href=""></a></span>
+<span id="cb4-14"><a href=""></a><span class="co"># 임시 폴더(tempdir)에 압축 해제하여 작업 공간 오염 방지</span></span>
+<span id="cb4-15"><a href=""></a>extracted_file <span class="ot">&lt;-</span> <span class="fu">unzip</span>(tf, <span class="at">files =</span> nm<span class="sc">$</span>Name[<span class="dv">1</span>], <span class="at">exdir =</span> <span class="fu">tempdir</span>())</span>
+<span id="cb4-16"><a href=""></a></span>
+<span id="cb4-17"><a href=""></a><span class="co"># XML 읽기</span></span>
+<span id="cb4-18"><a href=""></a>code_data <span class="ot">&lt;-</span> <span class="fu">read_xml</span>(extracted_file)</span>
+<span id="cb4-19"><a href=""></a></span>
+<span id="cb4-20"><a href=""></a><span class="co"># 4. 데이터프레임 변환</span></span>
+<span id="cb4-21"><a href=""></a>corp_code <span class="ot">&lt;-</span> code_data <span class="sc">%&gt;%</span> <span class="fu">xml_find_all</span>(<span class="st">'//corp_code'</span>) <span class="sc">%&gt;%</span> <span class="fu">xml_text</span>()</span>
+<span id="cb4-22"><a href=""></a>corp_name <span class="ot">&lt;-</span> code_data <span class="sc">%&gt;%</span> <span class="fu">xml_find_all</span>(<span class="st">'//corp_name'</span>) <span class="sc">%&gt;%</span> <span class="fu">xml_text</span>()</span>
+<span id="cb4-23"><a href=""></a>stock_code <span class="ot">&lt;-</span> code_data <span class="sc">%&gt;%</span> <span class="fu">xml_find_all</span>(<span class="st">'//stock_code'</span>) <span class="sc">%&gt;%</span> <span class="fu">xml_text</span>()</span>
 <span id="cb4-24"><a href=""></a></span>
-<span id="cb4-25"><a href=""></a><span class="co"># 상장사(stock_code가 있는 기업)만 필터링</span></span>
-<span id="cb4-26"><a href=""></a>corp_list_listed <span class="ot">&lt;-</span> <span class="fu">subset</span>(corp_list, <span class="fu">nchar</span>(stock) <span class="sc">==</span> <span class="dv">6</span>)</span>
-<span id="cb4-27"><a href=""></a><span class="fu">head</span>(corp_list_listed)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-25"><a href=""></a>corp_list <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb4-26"><a href=""></a>  <span class="at">code =</span> corp_code,</span>
+<span id="cb4-27"><a href=""></a>  <span class="at">name =</span> corp_name,</span>
+<span id="cb4-28"><a href=""></a>  <span class="at">stock =</span> stock_code,</span>
+<span id="cb4-29"><a href=""></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb4-30"><a href=""></a>)</span>
+<span id="cb4-31"><a href=""></a></span>
+<span id="cb4-32"><a href=""></a><span class="co"># 상장사(stock_code가 6자리인 기업)만 필터링 (공백 문자가 들어올 수 있으므로 trimws())</span></span>
+<span id="cb4-33"><a href=""></a>corp_list_listed <span class="ot">&lt;-</span> <span class="fu">subset</span>(corp_list, <span class="fu">nchar</span>(<span class="fu">trimws</span>(stock)) <span class="sc">==</span> <span class="dv">6</span>)</span>
+<span id="cb4-34"><a href=""></a></span>
+<span id="cb4-35"><a href=""></a><span class="co"># 5. 메모리 정리 (임시 파일 삭제)</span></span>
+<span id="cb4-36"><a href=""></a><span class="fu">unlink</span>(tf)</span>
+<span id="cb4-37"><a href=""></a><span class="fu">unlink</span>(extracted_file)</span>
+<span id="cb4-38"><a href=""></a></span>
+<span id="cb4-39"><a href=""></a><span class="co"># 6. 결과 확인</span></span>
+<span id="cb4-40"><a href=""></a><span class="fu">head</span>(corp_list_listed)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="명령어-의미" class="slide level2 scrollable" data-background-color="#ebf8ff">
@@ -369,10 +377,10 @@
 <li>압축 파일 내부 명단(송장) 확인</li>
 <li>압축을 실제로 풀기 전에, 그 안에 어떤 파일들이 들어있는지 목록만 확인. DART 고유번호 ZIP 파일 안에는 보통 CORPCODE.xml이라는 파일이 들어있는데, 이 파일의 이름을 정확히 알아내기 위해 사용.</li>
 </ul></li>
-<li><code>code_data &lt;- read_xml(unzip(tf, nm$Name))</code>
+<li><code>code_data &lt;- read_xml(unzip(tf, nm$Name, exdir = tempdir()))</code>
 <ul>
 <li>내용물 꺼내서 읽기</li>
-<li><code>unzip(tf, nm$Name)</code>: 상자 안에서 실제 데이터 파일(CORPCODE.xml)만 압축을 풀어 꺼냄.</li>
+<li><code>unzip(tf, nm$Name, exdir = tempdir())</code>: 상자 안에서 실제 데이터 파일(CORPCODE.xml)만 압축을 풀어 꺼냄. 임시폴더에 저장</li>
 <li><code>read_xml(...)</code>: 꺼낸 XML 파일을 R이 읽을 수 있는 구조화된 데이터 객체로 변환.</li>
 </ul></li>
 </ol>
@@ -380,12 +388,12 @@
 <section id="명령어-의미-1" class="slide level2 scrollable" data-background-color="#ebf8ff">
 <h2>명령어 의미</h2>
 <ol type="1">
-<li><code>html_nodes('태그이름')</code>:
+<li><code>xml_find_all('태그이름')</code>:
 <ul>
 <li>수많은 데이터 중 특정 이름표(태그)가 붙은 것들만 하이라이트.</li>
 <li>거대한 엑셀 시트에서 특정 열(Column) 전체를 마우스로 드래그하는 것과 같음.</li>
 </ul></li>
-<li><code>html_text()</code>:
+<li><code>xml_text()</code>:
 <ul>
 <li>하이라이트 된 부분에서 <code>&lt;tag&gt;...&lt;/tag&gt;</code> 같은 XML 문법 기호는 버리고, 그 안의 순수한 글자만 추출.</li>
 <li>귤 껍질(태그)을 까서 알맹이(텍스트)만 남기는 과정.</li>
