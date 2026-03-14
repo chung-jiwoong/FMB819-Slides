@@ -8,6 +8,7 @@ format:
     theme: default
 echo: true  
 include: true 
+warning: false
 ---
 
 ```{r}
