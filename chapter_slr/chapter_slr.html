@@ -6,8 +6,8 @@
 <script src="chapter_slr_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="chapter_slr_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="chapter_slr_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="chapter_slr_files/libs/quarto-html/quarto-syntax-highlighting-dfa48a90d809c806c7ea2d5aecd9fc66.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.9.29">
+<link href="chapter_slr_files/libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.8.27">
 
   <meta name="author" content="고려대학교 경영대학 정지웅">
   <title>Simple Linear Regression</title>
@@ -17,9 +17,6 @@
   <link rel="stylesheet" href="chapter_slr_files/libs/revealjs/dist/reset.css">
   <link rel="stylesheet" href="chapter_slr_files/libs/revealjs/dist/reveal.css">
   <style>
-    /* Default styles provided by pandoc.
-    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-    */
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -98,7 +95,7 @@
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="chapter_slr_files/libs/revealjs/dist/theme/quarto-0427d8d92a431aa6a6430e53ec02a470.css">
+  <link rel="stylesheet" href="chapter_slr_files/libs/revealjs/dist/theme/quarto-0fde88a82f0356838740f155f1088782.css">
   <link href="chapter_slr_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="chapter_slr_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="chapter_slr_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -229,26 +226,29 @@
 <li><p>이번 예시에서는 웹에서 코스피200/ S&amp;P500 일별 종가를 불러와 수익률을 계산함.</p></li>
 <li><p>실습에서는 두 관계를 함께 봄:</p>
 <ol type="1">
-<li><strong>동일일 관계</strong>: <span class="math inline">\(r^{KOSPI200}_t\)</span> vs <span class="math inline">\(r^{SP500}_t\)</span></li>
+<li><strong>당일 관계</strong>: <span class="math inline">\(r^{KOSPI200}_t\)</span> vs <span class="math inline">\(r^{SP500}_t\)</span></li>
 <li><strong>익일 관계</strong>: <span class="math inline">\(r^{KOSPI200}_{t+1}\)</span> vs <span class="math inline">\(r^{SP500}_t\)</span></li>
 </ol></li>
 </ul>
 </section>
 <section id="task-1" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 1</h2>
-<p><countdown-timer class="countdown" id="timer_53dedfa1" minutes="7" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
+<p><countdown-timer class="countdown" id="timer_f74c3f79" minutes="7" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
 <ol type="1">
-<li>코스피200 및 S&amp;P500 일별 종가 데이터를 불러와 날짜를 기준으로 두 지수를 병합한 뒤, <code>merged_px</code> 객체를 생성하시오. 그리고 일별 수익률 변수(<code>ret_sp500</code>, <code>ret_kospi200</code>, <code>ret_kospi200_lead</code>)를 생성하시오.<br>
-</li>
+<li>코스피200 및 S&amp;P500 일별 종가 데이터를 불러와 날짜를 기준으로 두 지수를 병합한 뒤, <code>merged_px</code> 객체를 생성하시오. 그리고 일별 수익률 변수(<code>ret_sp500</code>, <code>ret_kospi200</code>, <code>ret_kospi200_lead</code>)를 생성하시오. (<code>inner_join</code>)</li>
 </ol>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>sp500_px <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/data/%5Espx_d.csv"</span>)</span>
+<span id="cb1-2"><a href=""></a></span>
+<span id="cb1-3"><a href=""></a>ks200_px <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/data/%5Ekospi_d.csv"</span>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="2" type="1">
 <li><p>데이터셋 설명:</p>
 <ul>
-<li>총 몇 개의 관측치가 있는가?<br>
-</li>
-<li>데이터셋을 확인하고 어떤 변수가 있는지 확인하시오.</li>
-<li><code>skimr</code> 패키지의 <code>skim</code> 함수 사용해서 생성한 수익률 변수에 대한 기본적인 요약 통계 확인.<br>
-<strong>힌트</strong>: <code>dplyr</code>의 <code>select</code> 사용해서 변수 선택한 후 <code>%&gt;%</code>로 <code>skim()</code> 적용하면 됨.</li>
+<li><p>총 몇 개의 관측치가 있는가?<br>
+</p></li>
+<li><p>데이터셋을 확인하고 어떤 변수가 있는지 확인하시오.</p></li>
+<li><p><code>skimr</code> 패키지의 <code>skim</code> 함수 사용해서 생성한 수익률 변수에 대한 기본적인 요약 통계 확인.<br>
+</p>
+<p><strong>힌트</strong>: <code>dplyr</code>의 <code>select</code> 사용해서 변수 선택한 후 <code>%&gt;%</code>로 <code>skim()</code> 적용하면 됨.</p></li>
 </ul></li>
 </ol>
 <ol start="3" type="1">
@@ -346,7 +346,7 @@
 <li><p>결과변수 (종속변수, dependent variable): <em>KOSPI200 return</em> <span class="math inline">\((y)\)</span></p></li>
 <li><p>설명변수 (독립변수, independent variable): <em>S&amp;P500 return</em> <span class="math inline">\((x)\)</span></p></li>
 </ul></li>
-<li><p>각 거래일 <span class="math inline">\(i\)</span>에 대해 <span class="math inline">\(x_i\)</span>와 <span class="math inline">\(y_i\)</span>를 관측할 수 있음. 예, S&amp;P500 수익률과 코스피200 수익률의 <em>결합 분포(joint distribution)</em>를 시각화할 수 있음.</p></li>
+<li><p>각 거래일 <span class="math inline">\(i\)</span>에 대해 <span class="math inline">\(x_i\)</span>와 <span class="math inline">\(y_i\)</span>를 관측할 수 있음. 예, S&amp;P500 수익률과 코스피200 수익률의 <em>결합 분포(joint distribution)</em>를 관찰.</p></li>
 <li><p>회귀선은 이 관계를 <strong>선(line)</strong> 하나로 요약하고 있음. 절편 <span class="math inline">\(b_0\)</span>와 기울기 <span class="math inline">\(b_1\)</span>을 갖는 선의 방정식은 다음과 같음: <span class="math display">\[
 \widehat{y}_i = b_0 + b_1 x_i
 \]</span></p></li>
@@ -383,8 +383,8 @@
 <h2>Simple Linear Regression: 잔차(Residual)</h2>
 <ul>
 <li><p>만약 모든 데이터가 직선 위에 있다면, <span class="math inline">\(\widehat{y}_i = y_i\)</span>.</p></li>
-<li><p>대부분의 경우 <em>종속변수</em> <span class="math inline">\((y)\)</span>는 우리가 선택한 <em>독립변수</em> <span class="math inline">\((x)\)</span>들에 의해서만 설명되지 않음, <span class="math inline">\(\widehat{y}_i \neq y_i\)</span>. 실제 값과 예측 값의 차이를 잔차(residual)라 부름.</p></li>
-<li><p><strong>실제 데이터</strong> <span class="math inline">\((x_i, y_i)\)</span>는 따라서 <strong>예측값 + 잔차</strong>로 표현될 수 있음. <span class="math inline">\(e_i\)</span>로 표시.</p>
+<li><p>대부분의 경우 <em>종속변수</em> <span class="math inline">\((y)\)</span>는 우리가 선택한 <em>독립변수</em> <span class="math inline">\((x)\)</span>들에 의해서만 완벽히 설명되지 않음, <span class="math inline">\(\widehat{y}_i \neq y_i\)</span>. 실제 값과 예측 값의 차이를 잔차(residual)라 부름. 즉 <span class="math inline">\(y_i - \widehat y_i = e_i\)</span></p></li>
+<li><p><strong>실제 데이터</strong> <span class="math inline">\((x_i, y_i)\)</span>는 따라서 <strong>예측값 + 잔차</strong>로 표현될 수 있음.</p>
 <p><span class="math display">\[
 y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 \]</span></p></li>
@@ -454,7 +454,7 @@ y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 <li>OLS는 <code>lm</code>함수를 사용하여 추정가능</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">lm</span>(<span class="at">formula =</span> dependent variable <span class="sc">~</span>  independent variable, <span class="at">data =</span> data.frame containing the data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="fu">lm</span>(<span class="at">formula =</span> dependent variable <span class="sc">~</span>  independent variable, <span class="at">data =</span> data.frame containing the data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong><em>코스피200 지수와 S&amp;P500 지수</em></strong></p>
 <ul>
@@ -490,13 +490,13 @@ y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 </section>
 <section id="task-2" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 2</h2>
-<p><countdown-timer class="countdown" id="timer_13eaa89d" minutes="5" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
+<p><countdown-timer class="countdown" id="timer_41e57cc4" minutes="5" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
 <ol type="1">
-<li>익일 코스피200 평균 수익률(<code>ret_kospi200_lead</code>)을 S&amp;P500 수익률 구간(<code>ret_sp500</code>)에 대해 회귀분석 수행. 회귀 계수(coefficients)를 해석하시오.</li>
+<li>익일 코스피200 평균 수익률(<code>ret_kospi200_lead</code>)을 S&amp;P500 수익률에 대해 회귀분석 수행. 회귀 계수(coefficients)를 해석하시오.</li>
 </ol>
 <ol start="2" type="1">
 <li>이 회귀분석에서 OLS 계수 <span class="math inline">\(b_0\)</span> 및 <span class="math inline">\(b_1\)</span>을 직접 계산 (공식 이용).<br>
-<em>힌트</em>: <code>cov</code>, <code>var</code>, <code>mean</code> 함수 사용.</li>
+<strong><em>힌트</em></strong>: <code>cov</code>, <code>var</code>, <code>mean</code> 함수 사용.</li>
 </ol>
 <ol start="3" type="1">
 <li>S&amp;P500 수익률이 0bp일 때, 예측된 익일 코스피200 수익률은 얼마인가?</li>
@@ -591,7 +591,7 @@ y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
 </ul>
 </div><div class="column" style="width:50%;">
 <ul>
-<li>예를 들어, 아래 데이터를 사용해 다중 회귀 모델을 적용할 수 있음:</li>
+<li>예를 들어, 아래 데이터에 다중 회귀 모델을 적용할 수 있음:</li>
 </ul>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -634,28 +634,28 @@ R^2 = \frac{\text{variance explained}}{\text{total variance}} = \frac{SSE}{SST} 
 <ul>
 <li><p><span class="math inline">\(R^2\)</span> 값이 <strong>1에 가까울수록</strong>, 모델의 <strong>설명력</strong>이 <strong><em>높음.</em></strong></p></li>
 <li><p><span class="math inline">\(R^2\)</span> 값이 <strong>0에 가까울수록</strong>, 모델의 <strong>설명력</strong>이 <strong><em>낮음</em></strong>.</p></li>
-<li><p>예를 들어, <span class="math inline">\(R^2 = 0.5\)</span>이면, <strong><span class="math inline">\(x\)</span>의 변화가 <span class="math inline">\(y\)</span>의 변화 중 50%를 설명함</strong>.</p></li>
+<li><p>예를 들어, <span class="math inline">\(R^2 = 0.5\)</span>이면, <span class="math inline">\(x\)</span>의 변화가 <span class="math inline">\(y\)</span>의 변화 중 50%를 설명함.</p></li>
 <li><p>낮은 <span class="math inline">\(R^2\)</span> 값이 무조건 모델이 쓸모없다는 뜻은 아님! <strong>예측(predictive power)</strong>보다는 <strong>인과적 메커니즘(causal mechanisms)</strong>에 더 초점을 맞추는 경우.</p></li>
 <li><p><span class="math inline">\(R^2\)</span> 값은 <strong>인과 관계(causal relationship)를 나타내는 지표가 아님!</strong> 회귀 모델에서 높은 <span class="math inline">\(R^2\)</span> 값이 있다고 해서, <span class="math inline">\(x\)</span>가 <span class="math inline">\(y\)</span>를 인과적으로 설명한다고 볼 수 없음!</p></li>
 </ul>
 </section>
 <section id="task-3" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 3</h2>
-<p><countdown-timer class="countdown" id="timer_ec408327" minutes="10" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
+<p><countdown-timer class="countdown" id="timer_193cbdb5" minutes="10" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
 <ol type="1">
-<li><code>ret_kospi200</code>를 <code>ret_sp500</code>에 대해 회귀(regress)하고 결과를 <code>kospi_reg</code> 객체에 저장.</li>
+<li>코스피200 수익률을 S&amp;P500 수익률에 대해 회귀(regress)하고 결과를 <code>kospi_reg</code> 객체에 저장.</li>
 </ol>
 <ol start="2" type="1">
 <li><p><code>summary(kospi_reg)</code>를 실행하여 <strong>(다중)</strong> <span class="math inline">\(R^2\)</span> 값을 확인함. 이 값의 의미를 해석할 것.</p></li>
-<li><p><code>ret_sp500</code>와 <code>ret_kospi200</code> 간 <strong>상관계수(correlation)</strong>를 제곱하여 계산. 이 값은 <strong>단일 설명변수</strong>(one regressor)를 가진 회귀에서 <span class="math inline">\(R^2\)</span>와 상관계수 간의 관계를 보여줌을 보이시오.</p></li>
+<li><p>코스피200 수익률을 S&amp;P500 수익률 간 <strong>상관계수(correlation)</strong>를 제곱하여 계산. 참고: 이 값은 <strong>단일 설명변수</strong>를 가진 회귀에서 <span class="math inline">\(R^2\)</span>와 상관계수 간의 관계를 보여줌.</p></li>
 </ol>
 <ol start="4" type="1">
-<li>1번과 2번을 <code>ret_kospi200_lead</code>에 대해 반복함.<br>
-동일일 코스피200 수익률과 익일 코스피200 수익률 중 어떤 결과가 S&amp;P500 수익률 변화로 더 많이 설명되는지 비교하시오.</li>
+<li>1번과 2번을 익일 코스피200 수익률에 대해 반복.<br>
+당일 코스피200 수익률과 익일 코스피200 수익률 중 어떤 결과가 S&amp;P500 수익률 변화로 더 많이 설명되는지 비교하시오.</li>
 </ol>
 <ol start="5" type="1">
-<li>(Optional) <code>broom</code> 패키지를 설치 및 로드한 후, <code>kospi_reg</code>를 <code>augment()</code> 함수에 전달하여 새로운 객체에 저장함.<br>
-<code>ret_kospi200_lead</code>의 분산(SST)과 예측값의 분산(SSE)을 사용하여 <span class="math inline">\(R^2\)</span> 값을 직접 계산하시오. (이전 슬라이드의 공식을 참고할 것.)
+<li><p>(Optional) <code>broom</code> 패키지를 설치 및 로드한 후, <code>augment(kospi_reg)</code>를 새로운 객체에 저장.<br>
+<code>ret_kospi200_lead</code>의 분산(SST)과 예측값의 분산(SSE)을 사용하여 <span class="math inline">\(R^2\)</span> 값을 직접 계산하시오. (이전 슬라이드의 공식을 참고할 것.)</p>
 <ul>
 <li><code>broom</code> 패키지의 <code>augment()</code> 함수는 회귀 결과에 예측값과 잔차를 추가하는 데 사용됨.<br>
 </li>

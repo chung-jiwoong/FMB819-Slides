@@ -14,8 +14,6 @@ revealjs-plugins:
   - revealjs-text-resizer # Thanks to https://github.com/gadenbuie/revealjs-text-resizer#readme
 ---
 
-
-
 ```{r setup, include=FALSE,warning=FALSE,message=FALSE}
 options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(
@@ -61,7 +59,6 @@ if (requireNamespace("countdown", quietly = TRUE)) {
 
 -   실증 분석: 코스피200 지수와 S&P500 지수의 관계
 
-
 ------------------------------------------------------------------------
 
 ## 코스피200 지수와 S&P500 지수
@@ -71,9 +68,9 @@ if (requireNamespace("countdown", quietly = TRUE)) {
 -   이번 예시에서는 웹에서 코스피200/ S&P500 일별 종가를 불러와 수익률을 계산함.
 
 -   실습에서는 두 관계를 함께 봄:
-    1) **동일일 관계**: $r^{KOSPI200}_t$ vs $r^{SP500}_t$
-    2) **익일 관계**: $r^{KOSPI200}_{t+1}$ vs $r^{SP500}_t$
 
+    1)  **당일 관계**: $r^{KOSPI200}_t$ vs $r^{SP500}_t$
+    2)  **익일 관계**: $r^{KOSPI200}_{t+1}$ vs $r^{SP500}_t$
 
 ------------------------------------------------------------------------
 
@@ -81,9 +78,13 @@ if (requireNamespace("countdown", quietly = TRUE)) {
 
 `r countdown(minutes = 7, top = "20px", right = "10px", font_size = "0.8em")`
 
+1.  코스피200 및 S&P500 일별 종가 데이터를 불러와 날짜를 기준으로 두 지수를 병합한 뒤, `merged_px` 객체를 생성하시오. 그리고 일별 수익률 변수(`ret_sp500`, `ret_kospi200`, `ret_kospi200_lead`)를 생성하시오. (`inner_join`)
 
-1.  코스피200 및 S&P500 일별 종가 데이터를 불러와 날짜를 기준으로 두 지수를 병합한 뒤, `merged_px` 객체를 생성하시오. 그리고 일별 수익률 변수(`ret_sp500`, `ret_kospi200`, `ret_kospi200_lead`)를 생성하시오.\
+``` r
+sp500_px <- read_csv("https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/data/%5Espx_d.csv")
 
+ks200_px <- read_csv("https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/data/%5Ekospi_d.csv") 
+```
 
 ```{r, echo=FALSE, eval=TRUE}
 library(dplyr)
@@ -106,13 +107,14 @@ merged_px <- inner_join(sp500_px, ks200_px, by = "date") |>
   drop_na()
 ```
 
-
-
 2.  데이터셋 설명:
 
     -   총 몇 개의 관측치가 있는가?\
+
     -   데이터셋을 확인하고 어떤 변수가 있는지 확인하시오.
+
     -   `skimr` 패키지의 `skim` 함수 사용해서 생성한 수익률 변수에 대한 기본적인 요약 통계 확인.\
+
         **힌트**: `dplyr`의 `select` 사용해서 변수 선택한 후 `%>%`로 `skim()` 적용하면 됨.
 
 ```{r, echo=FALSE, eval=FALSE}
@@ -122,18 +124,16 @@ returns_raw <- merged_px %>% select(date, ret_sp500, ret_kospi200, ret_kospi200_
 skim(returns_raw)
 ```
 
-3.  S\&P500 수익률(`ret_sp500`)과 코스피200 수익률(`ret_kospi200`, `ret_kospi200_lead`)의 상관관계는?
+3.  S&P500 수익률(`ret_sp500`)과 코스피200 수익률(`ret_kospi200`, `ret_kospi200_lead`)의 상관관계는?
 
 ```{r, echo=FALSE, eval=FALSE}
 cor(returns_raw$ret_sp500, returns_raw$ret_kospi200)
 cor(returns_raw$ret_sp500, returns_raw$ret_kospi200_lead)
 ```
 
-
 ------------------------------------------------------------------------
 
 ## 코스피200 지수와 S&P500 지수: Scatter plot
-
 
 ::::: columns
 ::: {.column width="50%"}
@@ -169,7 +169,6 @@ g_lead
 ------------------------------------------------------------------------
 
 ## 코스피200 지수와 S&P500 지수: Binned Scatter Plot
-
 
 ::::: columns
 ::: {.column width="50%"}
@@ -211,7 +210,6 @@ g_lead_bin
 :::
 :::::
 
-
 ------------------------------------------------------------------------
 
 ## 코스피200 지수와 S&P500 지수: Regression Line
@@ -250,12 +248,11 @@ g_sameday_bin +
 
     -   설명변수 (독립변수, independent variable): *S&P500 return* $(x)$
 
--   각 거래일 $i$에 대해 $x_i$와 $y_i$를 관측할 수 있음. 예, S&P500 수익률과 코스피200 수익률의 *결합 분포(joint distribution)*를 시각화할 수 있음.
+-   각 거래일 $i$에 대해 $x_i$와 $y_i$를 관측할 수 있음. 예, S&P500 수익률과 코스피200 수익률의 *결합 분포(joint distribution)*를 관찰.
 
--   회귀선은 이 관계를 **선(line)** 하나로 요약하고 있음. 절편 $b_0$와 기울기 $b_1$을 갖는 선의 방정식은 다음과 같음:
-$$
-\widehat{y}_i = b_0 + b_1 x_i
-$$
+-   회귀선은 이 관계를 **선(line)** 하나로 요약하고 있음. 절편 $b_0$와 기울기 $b_1$을 갖는 선의 방정식은 다음과 같음: $$
+    \widehat{y}_i = b_0 + b_1 x_i
+    $$
 
 -   $\widehat{y}_i$는 *관측값* $i$에서의 예측값(prediction)을 의미함. 즉, 주어진 회귀 직선에 따라 우리가 $y_i$를 어떻게 예측하는지 보여줌.
 
@@ -349,16 +346,15 @@ plot_ex + geom_line(color = "#d90502")
 
 -   만약 모든 데이터가 직선 위에 있다면, $\widehat{y}_i = y_i$.
 
--   대부분의 경우 *종속변수* $(y)$는 우리가 선택한 *독립변수* $(x)$들에 의해서만 설명되지 않음, $\widehat{y}_i \neq y_i$. 실제 값과 예측 값의 차이를 잔차(residual)라 부름.
+-   대부분의 경우 *종속변수* $(y)$는 우리가 선택한 *독립변수* $(x)$들에 의해서만 완벽히 설명되지 않음, $\widehat{y}_i \neq y_i$. 실제 값과 예측 값의 차이를 잔차(residual)라 부름. 즉 $y_i - \widehat y_i = e_i$
 
--   **실제 데이터** $(x_i, y_i)$는 따라서 **예측값 + 잔차**로 표현될 수 있음. $e_i$로 표시.
+-   **실제 데이터** $(x_i, y_i)$는 따라서 **예측값 + 잔차**로 표현될 수 있음.
 
     $$
     y_i = \widehat y_i + e_i = b_0 + b_1 x_i + e_i
     $$
 
 ------------------------------------------------------------------------
-
 
 ## Simple Linear Regression: Graphically 1
 
@@ -382,8 +378,6 @@ plot_2 <- g_sameday_bin +
   annotate("text", x = -260, y = 230, label = "hat(y)", parse = TRUE, colour = "#d90502", size = 6)
 plot_2
 ```
-
-
 
 ------------------------------------------------------------------------
 
@@ -446,12 +440,11 @@ g_sameday_bin +
 > 절편 (Intercept):$b_0^{OLS} = \bar{y} - b_1\bar{x}$
 
 -   잔차 제곱합을 최소화하는 문제를 풀어 유도됨.\
-    자세한 수학적 과정은 [[여기]](https://www.youtube.com/watch?v=Hi5EJnBHFB4)에서 확인.
+    자세한 수학적 과정은 [\[여기\]](https://www.youtube.com/watch?v=Hi5EJnBHFB4)에서 확인.
 
 ------------------------------------------------------------------------
 
 ## Ordinary Least Squares (OLS) 해석
-
 
 > 절편 $(b_0)$: $x = 0$일 때 예측된 $y$ 값 $(\widehat{y})$.
 
@@ -477,14 +470,9 @@ lm(formula = dependent variable ~  independent variable, data = data.frame conta
 
 ***코스피200 지수와 S&P500 지수***
 
--   다음과 같은 선형 모형을 OLS로 추정: 
-  $\textrm{KOSPI200 return}_i = b_0 + b_1 \textrm{S&P500 return}_i + e_i$
+-   다음과 같은 선형 모형을 OLS로 추정: $\textrm{KOSPI200 return}_i = b_0 + b_1 \textrm{S&P500 return}_i + e_i$
 
-
-
-
-
------------------------------------------------------------
+------------------------------------------------------------------------
 
 ## Ordinary Least Squares (OLS): Prediction
 
@@ -503,7 +491,7 @@ $$
 \end{aligned}
 $$
 
-S\&P500 수익률이 30bp일 때 예상되는 코스피200 수익률은?
+S&P500 수익률이 30bp일 때 예상되는 코스피200 수익률은?
 
 $$
 \begin{aligned}
@@ -517,16 +505,16 @@ $$
 
 `r countdown(minutes = 5, top = "20px", right = "10px", font_size = "0.8em")`
 
-
-1.  익일 코스피200 평균 수익률(`ret_kospi200_lead`)을 S\&P500 수익률 구간(`ret_sp500`)에 대해 회귀분석 수행. 회귀 계수(coefficients)를 해석하시오.
+1.  익일 코스피200 평균 수익률(`ret_kospi200_lead`)을 S&P500 수익률에 대해 회귀분석 수행. 회귀 계수(coefficients)를 해석하시오.
 
 ```{r, echo=F, eval=F}
 kospi_reg <- lm(ret_kospi200_lead ~ ret_sp500, data = merged_px)
 summary(kospi_reg)
 ```
 
-2.  이 회귀분석에서 OLS 계수 $b_0$ 및 $b_1$을 직접 계산 (공식 이용). \
-    *힌트*: `cov`, `var`, `mean` 함수 사용.
+2.  이 회귀분석에서 OLS 계수 $b_0$ 및 $b_1$을 직접 계산 (공식 이용).\
+    ***힌트***: `cov`, `var`, `mean` 함수 사용.
+
 ```{r, echo=F, eval=F}
 b_1 <- cov(merged_px$ret_sp500, merged_px$ret_kospi200_lead) / var(merged_px$ret_sp500)
 b_0 <- mean(merged_px$ret_kospi200_lead) - b_1 * mean(merged_px$ret_sp500)
@@ -534,13 +522,13 @@ b_0
 b_1
 ```
 
-3.  S\&P500 수익률이 0bp일 때, 예측된 익일 코스피200 수익률은 얼마인가?
+3.  S&P500 수익률이 0bp일 때, 예측된 익일 코스피200 수익률은 얼마인가?
 
 ```{r, echo=F, eval=F}
 b_0 + b_1 * 0
 ```
 
-4.  S\&P500 수익률이 30bp일 때, 예측된 익일 코스피200 수익률은 얼마인가?
+4.  S&P500 수익률이 30bp일 때, 예측된 익일 코스피200 수익률은 얼마인가?
 
 ```{r, echo=F, eval=F}
 b_0 + b_1 * 30
@@ -584,7 +572,6 @@ b_0 + b_1 * 30
 
 -   Francis Anscombe (1973)는 통계적으로 *완전히 동일한* 네 개의 데이터셋을 만들었음. 하지만 **시각적으로 보면 완전히 다름!**
 
-
 ```{r, echo=FALSE, fig.height=4}
 ##-- now some "magic" to do the 4 regressions in a loop:
 ff <- y ~ x
@@ -617,10 +604,9 @@ if (requireNamespace("kableExtra", quietly = TRUE)) {
 }
 ```
 
-
 ------------------------------------------------------------------------
 
-## 데이터에서 비선형 관계? 
+## 데이터에서 비선형 관계?
 
 ::::: columns
 ::: {.column width="50%"}
@@ -635,7 +621,7 @@ if (requireNamespace("kableExtra", quietly = TRUE)) {
 :::
 
 ::: {.column width="50%"}
--   예를 들어, 아래 데이터를 사용해 다중 회귀 모델을 적용할 수 있음:
+-   예를 들어, 아래 데이터에 다중 회귀 모델을 적용할 수 있음:
 
 ```{r non-line-cars-ols2, echo=FALSE, fig.height=6}
 data(mtcars)
@@ -658,8 +644,7 @@ mtcars %>% ggplot(aes(x = hp, y = mpg)) +
 
 ## 분산 분석 (Analysis of Variance)
 
--   다음 관계를 기억할 것:
-    $$
+-   다음 관계를 기억할 것: $$
     y_i = \widehat{y}_i + e_i
     $$
 
@@ -676,8 +661,6 @@ mtcars %>% ggplot(aes(x = hp, y = mpg)) +
     -   $Var(x+y) = Var(x) + Var(y) + 2Cov(x,y)$
     -   $Cov(\hat{y},e) = 0$
 
-
-
 ------------------------------------------------------------------------
 
 ## 적합도 평가 (Goodness of Fit)
@@ -688,10 +671,11 @@ $$
 R^2 = \frac{\text{variance explained}}{\text{total variance}} = \frac{SSE}{SST} = 1 - \frac{SSR}{SST}\in[0,1]
 $$
 
-  - $R^2$ 값이 **1에 가까울수록**, 모델의 **설명력**이 ***높음.***
-  - $R^2$ 값이 **0에 가까울수록**, 모델의 **설명력**이 ***낮음***.
-  - 예를 들어, $R^2 = 0.5$이면, **$x$의 변화가 $y$의 변화 중 50%를 설명함**.
+-   $R^2$ 값이 **1에 가까울수록**, 모델의 **설명력**이 ***높음.***
 
+-   $R^2$ 값이 **0에 가까울수록**, 모델의 **설명력**이 ***낮음***.
+
+-   예를 들어, $R^2 = 0.5$이면, $x$의 변화가 $y$의 변화 중 50%를 설명함.
 
 -   낮은 $R^2$ 값이 무조건 모델이 쓸모없다는 뜻은 아님! **예측(predictive power)**보다는 **인과적 메커니즘(causal mechanisms)**에 더 초점을 맞추는 경우.
 
@@ -703,8 +687,8 @@ $$
 
 `r countdown(minutes = 10, top = "20px", right = "10px", font_size = "0.8em")`
 
+1.  코스피200 수익률을 S&P500 수익률에 대해 회귀(regress)하고 결과를 `kospi_reg` 객체에 저장.
 
-1.  `ret_kospi200`를 `ret_sp500`에 대해 회귀(regress)하고 결과를 `kospi_reg` 객체에 저장.
 ```{r, echo=F, eval=F}
 kospi_reg <- lm(ret_kospi200 ~ ret_sp500, data = merged_px)
 summary(kospi_reg)
@@ -712,35 +696,33 @@ summary(kospi_reg)
 
 2.  `summary(kospi_reg)`를 실행하여 **(다중)** $R^2$ 값을 확인함. 이 값의 의미를 해석할 것.
 
-3.  `ret_sp500`와 `ret_kospi200` 간 **상관계수(correlation)**를 제곱하여 계산. 이 값은 **단일 설명변수**(one regressor)를 가진 회귀에서 $R^2$와 상관계수 간의 관계를 보여줌을 보이시오.
+3.  코스피200 수익률을 S&P500 수익률 간 **상관계수(correlation)**를 제곱하여 계산. 참고: 이 값은 **단일 설명변수**를 가진 회귀에서 $R^2$와 상관계수 간의 관계를 보여줌.
 
 ```{r, echo=F, eval=F}
 cor(merged_px$ret_sp500, merged_px$ret_kospi200)^2
 ```
 
-4.  1번과 2번을 `ret_kospi200_lead`에 대해 반복함.\
-    동일일 코스피200 수익률과 익일 코스피200 수익률 중 어떤 결과가 S\&P500 수익률 변화로 더 많이 설명되는지 비교하시오.
+4.  1번과 2번을 익일 코스피200 수익률에 대해 반복.\
+    당일 코스피200 수익률과 익일 코스피200 수익률 중 어떤 결과가 S&P500 수익률 변화로 더 많이 설명되는지 비교하시오.
+
 ```{r, echo=F, eval=F}
 kospi_reg <- lm(ret_kospi200_lead ~ ret_sp500, data = merged_px)
 summary(kospi_reg)
 ```
 
-5.  (Optional) `broom` 패키지를 설치 및 로드한 후, `kospi_reg`를 `augment()` 함수에 전달하여 새로운 객체에 저장함.\
+5.  (Optional) `broom` 패키지를 설치 및 로드한 후, `augment(kospi_reg)`를 새로운 객체에 저장.\
     `ret_kospi200_lead`의 분산(SST)과 예측값의 분산(SSE)을 사용하여 $R^2$ 값을 직접 계산하시오. (이전 슬라이드의 공식을 참고할 것.)
-    - `broom` 패키지의 `augment()` 함수는 회귀 결과에 예측값과 잔차를 추가하는 데 사용됨.\
-```{r, echo=F, eval=F}
-if (!requireNamespace("broom")) {install.packages("broom")}
-library(broom)
-kospi_reg_aug <- augment(kospi_reg) # 회귀 결과에 예측값과 잔차 추가
-SST <- var(merged_px$ret_kospi200_lead) * (nrow(merged_px) - 1)
-SSE <- var(kospi_reg_aug$.fitted) * (nrow(kospi_reg_aug) - 1)
-R_squared <- SSE / SST
-R_squared
-```
 
+    -   `broom` 패키지의 `augment()` 함수는 회귀 결과에 예측값과 잔차를 추가하는 데 사용됨.\
 
-
+    ```{r, echo=F, eval=F}
+    if (!requireNamespace("broom")) {install.packages("broom")}
+    library(broom)
+    kospi_reg_aug <- augment(kospi_reg) # 회귀 결과에 예측값과 잔차 추가
+    SST <- var(merged_px$ret_kospi200_lead) * (nrow(merged_px) - 1)
+    SSE <- var(kospi_reg_aug$.fitted) * (nrow(kospi_reg_aug) - 1)
+    R_squared <- SSE / SST
+    R_squared
+    ```
 
 # THE END!
-
-
