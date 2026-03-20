@@ -445,13 +445,25 @@ library(dslabs)
 data(polls_us_election_2016)
 ```
 
-1.  grade 값이 결측치(NA)인 여론조사는?
+1.  grade 값이 결측치(NA)인 여론조사는? `head`를 사용하여 확인.
 
-2.  다음 조건을 모두 만족하는 여론조사는? (i) American Strategies, GfK Group, Merrill Poll에서 조사한 경우, (ii) 표본 크기가 1,000명 이상인 경우, (iii) 2016년 10월 20일에 시작된 경우. **힌트**: (i) 조건에서는 %in% 연산자가 유용, 벡터는 `c()`함수로 만들 수 있음. (iii)에서는 날짜 변수의 형식을 확인 "yyyy-mm-dd"
+2.  다음 조건을 모두 만족하는 여론조사는? 
+(i) American Strategies, GfK Group, Merrill Poll에서 조사한 경우, 
+(ii) 표본 크기가 1,000명 이상인 경우, 
+(iii) 2016년 10월 20일에 시작된 경우. 
 
-3.  다음 조건을 모두 만족하는 여론조사는? (i) Johnson 후보의 여론조사 데이터가 누락되지 않은 경우, (ii) 트럼프와 클린턴의 원본 여론조사 지지율 합이 95%를 초과하는 경우, (iii) 오하이오(OH) 주에서 실시된 경우 **힌트**: 트럼프와 클린턴의 지지율 합계를 계산하는 새로운 변수를 생성한 후 `filter()` 를 적용
+**힌트**: (i) 조건에서는 %in% 연산자가 유용, 벡터는 `c()`함수로 만들 수 있음. (iii)에서는 날짜 변수의 형식을 확인 "yyyy-mm-dd"
 
-4.  표본 크기가 2,000명 이상인 여론조사에서 트럼프의 평균 지지율이 가장 높은 주는? **힌트**: `filter(), group_by(), summarise(), arrange()` 사용. 내림차순 정렬하려면 `arrange()` 함수 사용.
+3.  다음 조건을 모두 만족하는 여론조사는? 
+(i) Johnson 후보의 여론조사 데이터가 누락되지 않은 경우, 
+(ii) 트럼프와 클린턴의 원본 여론조사 지지율 합이 95%를 초과하는 경우, 
+(iii) 오하이오(OH) 주에서 실시된 경우 
+
+**힌트**: 트럼프와 클린턴의 지지율 합계를 계산하는 새로운 변수를 생성한 후 `filter()` 를 적용
+
+4.  표본 크기가 2,000명 이상인 여론조사에서 트럼프의 평균 지지율이 가장 높은 주는? 
+
+**힌트**: `filter(), group_by(), summarise(), arrange()` 사용. 내림차순 정렬하려면 `arrange()` 함수 사용.
 
 ------------------------------------------------------------------------
 
@@ -1181,12 +1193,21 @@ g + scale_x_continuous(breaks = seq(1950, 2020, 10))
 
 `gapminder` 데이터를 사용하여 다음의 그래프를 `ggplot2`로 생성하시오
 
+```{r}
+library(dslabs)
+data(gapminder, package = "dslabs")
+```
+
 1.  2015년 기대수명(Life Expectancy)의 히스토그램을 작성하시오.  
+
     **힌트**: 히스토그램을 만들 때 aes()에 y 값을 지정해야 할까? `geom_*` 내에서 다음 옵션을 설정하시오: `binwidth` = 5, `boundary` = 45, `colour` = "white", `fill` = "#d90502". x축은 "기대 수명", y축은 "빈도"로 레이블 하시오.
 
     *Optional:* 생성한 히스토그램을 대륙(Continent)별로 나누어 (`facet_grid()`) 각 대륙이 새로운 행(row)에 표시되도록 만드시오. **힌트**: `facet_grid(rows = vars(continent))`
 
+
+
 2.  연도/대륙별 평균 기대수명을 구하고 대륙별로 평균 기대수명에 대한 Boxplot 으로 그리시오. `geom_*` 옵션: `colour` = "black", `fill` = "#d90502".  
+
     **힌트**: continent 및 year 두 개의 변수로 그룹화해야함.
 
 3.  2015년 출산율(Fertility Rate, y축)과 영아 사망률(Infant Mortality, x축) 간의 관계를 나타내는 산점도 (Scatter Plot)를 작성하시오. `geom_*` 옵션: `size` = 3, `alpha` = 0.5, `colour` = "#d90502". `labs()`를 사용하여 레이블을 추가 (x = "영아 사망률", y = "출산율")
@@ -1430,7 +1451,9 @@ knitr::include_graphics("../img/photos/correlation-examples.svg")
 
 `r countdown(minutes = 10, top = "20px", right = "10px", font_size = "0.8em", color_border = "blue")`
 
-1.  2011년 GDP의 평균을 계산하고 mean이라는 객체에 할당하시오. 결측값은 제외. **힌트**: `mean` 함수의 도움말을 읽고 `NA`를 제거하는 방법을 확인
+1.  2011년 GDP의 평균을 계산하고 mean이라는 객체에 할당하시오. 결측값은 제외. 
+
+**힌트**: `mean` 함수의 도움말을 읽고 `NA`를 제거하는 방법을 확인
 
 2.  2011년 GDP의 중앙값을 계산하고 median이라는 객체에 할당하시오. 마찬가지로 결측값을 제외. 중앙값이 평균보다 큰가, 작은가?
 

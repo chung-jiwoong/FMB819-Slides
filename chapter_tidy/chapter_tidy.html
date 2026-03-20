@@ -784,18 +784,35 @@
 </section>
 <section id="task-1" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 1</h2>
-<p><countdown-timer class="countdown" id="timer_ccbb93c5" minutes="10" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;--countdown-color-border:blue;"></countdown-timer></p>
+<p><countdown-timer class="countdown" id="timer_d6a44662" minutes="10" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;--countdown-color-border:blue;"></countdown-timer></p>
 <p>다음 코드를 실행하여 데이터를 로드합니다.</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href=""></a><span class="fu">library</span>(dslabs)</span>
 <span id="cb42-2"><a href=""></a><span class="fu">data</span>(polls_us_election_2016)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ol type="1">
-<li><p>grade 값이 결측치(NA)인 여론조사는?</p></li>
-<li><p>다음 조건을 모두 만족하는 여론조사는? (i) American Strategies, GfK Group, Merrill Poll에서 조사한 경우, (ii) 표본 크기가 1,000명 이상인 경우, (iii) 2016년 10월 20일에 시작된 경우. <strong>힌트</strong>: (i) 조건에서는 %in% 연산자가 유용, 벡터는 <code>c()</code>함수로 만들 수 있음. (iii)에서는 날짜 변수의 형식을 확인 “yyyy-mm-dd”</p></li>
-<li><p>다음 조건을 모두 만족하는 여론조사는? (i) Johnson 후보의 여론조사 데이터가 누락되지 않은 경우, (ii) 트럼프와 클린턴의 원본 여론조사 지지율 합이 95%를 초과하는 경우, (iii) 오하이오(OH) 주에서 실시된 경우 <strong>힌트</strong>: 트럼프와 클린턴의 지지율 합계를 계산하는 새로운 변수를 생성한 후 <code>filter()</code> 를 적용</p></li>
-<li><p>표본 크기가 2,000명 이상인 여론조사에서 트럼프의 평균 지지율이 가장 높은 주는? <strong>힌트</strong>: <code>filter(), group_by(), summarise(), arrange()</code> 사용. 내림차순 정렬하려면 <code>arrange()</code> 함수 사용.</p></li>
+<li><p>grade 값이 결측치(NA)인 여론조사는? <code>head</code>를 사용하여 확인.</p></li>
+<li><p>다음 조건을 모두 만족하는 여론조사는?</p></li>
 </ol>
+<ol type="i">
+<li>American Strategies, GfK Group, Merrill Poll에서 조사한 경우,</li>
+<li>표본 크기가 1,000명 이상인 경우,</li>
+<li>2016년 10월 20일에 시작된 경우.</li>
+</ol>
+<p><strong>힌트</strong>: (i) 조건에서는 %in% 연산자가 유용, 벡터는 <code>c()</code>함수로 만들 수 있음. (iii)에서는 날짜 변수의 형식을 확인 “yyyy-mm-dd”</p>
+<ol start="3" type="1">
+<li>다음 조건을 모두 만족하는 여론조사는?</li>
+</ol>
+<ol type="i">
+<li>Johnson 후보의 여론조사 데이터가 누락되지 않은 경우,</li>
+<li>트럼프와 클린턴의 원본 여론조사 지지율 합이 95%를 초과하는 경우,</li>
+<li>오하이오(OH) 주에서 실시된 경우</li>
+</ol>
+<p><strong>힌트</strong>: 트럼프와 클린턴의 지지율 합계를 계산하는 새로운 변수를 생성한 후 <code>filter()</code> 를 적용</p>
+<ol start="4" type="1">
+<li>표본 크기가 2,000명 이상인 여론조사에서 트럼프의 평균 지지율이 가장 높은 주는?</li>
+</ol>
+<p><strong>힌트</strong>: <code>filter(), group_by(), summarise(), arrange()</code> 사용. 내림차순 정렬하려면 <code>arrange()</code> 함수 사용.</p>
 </section>
 <section id="주가-자료-다루기" class="slide level2" data-background-color="#E2E2E2">
 <h2>주가 자료 다루기</h2>
@@ -881,7 +898,7 @@
 </section>
 <section id="task-2" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 2</h2>
-<p><countdown-timer class="countdown" id="timer_c64b3a51" minutes="5" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;--countdown-color-border:blue;"></countdown-timer></p>
+<p><countdown-timer class="countdown" id="timer_47bff183" minutes="5" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;--countdown-color-border:blue;"></countdown-timer></p>
 <p>다음 코드를 실행하여 데이터를 로드.</p>
 <ol type="1">
 <li>대륙(continent)/연도(year)별 <strong>평균 인구(변수명: mean_pop)</strong>를 계산하고, 결과를 새로운 객체 <code>gapminder_mean</code>에 저장하시오. <strong>힌트</strong>: 두 개의 기준으로 그룹화해야 하므로 <code>group_by(continent, year)</code>를 사용하고 <code>summarise</code>를 적용.</li>
@@ -1438,14 +1455,14 @@
 </section>
 <section id="task-3" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 3</h2>
-<p><countdown-timer class="countdown" id="timer_b3bb4276" minutes="10" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;--countdown-color-border:blue;"></countdown-timer></p>
+<p><countdown-timer class="countdown" id="timer_77bb1e6f" minutes="10" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;--countdown-color-border:blue;"></countdown-timer></p>
 <p><code>gapminder</code> 데이터를 사용하여 다음의 그래프를 <code>ggplot2</code>로 생성하시오</p>
 <ol type="1">
-<li><p>2015년 기대수명(Life Expectancy)의 히스토그램을 작성하시오.<br>
-<strong>힌트</strong>: 히스토그램을 만들 때 aes()에 y 값을 지정해야 할까? <code>geom_*</code> 내에서 다음 옵션을 설정하시오: <code>binwidth</code> = 5, <code>boundary</code> = 45, <code>colour</code> = “white”, <code>fill</code> = “#d90502”. x축은 “기대 수명”, y축은 “빈도”로 레이블 하시오.</p>
+<li><p>2015년 기대수명(Life Expectancy)의 히스토그램을 작성하시오.</p>
+<p><strong>힌트</strong>: 히스토그램을 만들 때 aes()에 y 값을 지정해야 할까? <code>geom_*</code> 내에서 다음 옵션을 설정하시오: <code>binwidth</code> = 5, <code>boundary</code> = 45, <code>colour</code> = “white”, <code>fill</code> = “#d90502”. x축은 “기대 수명”, y축은 “빈도”로 레이블 하시오.</p>
 <p><em>Optional:</em> 생성한 히스토그램을 대륙(Continent)별로 나누어 (<code>facet_grid()</code>) 각 대륙이 새로운 행(row)에 표시되도록 만드시오. <strong>힌트</strong>: <code>facet_grid(rows = vars(continent))</code></p></li>
-<li><p>연도/대륙별 평균 기대수명을 구하고 대륙별로 평균 기대수명에 대한 Boxplot 으로 그리시오. <code>geom_*</code> 옵션: <code>colour</code> = “black”, <code>fill</code> = “#d90502”.<br>
-<strong>힌트</strong>: continent 및 year 두 개의 변수로 그룹화해야함.</p></li>
+<li><p>연도/대륙별 평균 기대수명을 구하고 대륙별로 평균 기대수명에 대한 Boxplot 으로 그리시오. <code>geom_*</code> 옵션: <code>colour</code> = “black”, <code>fill</code> = “#d90502”.</p>
+<p><strong>힌트</strong>: continent 및 year 두 개의 변수로 그룹화해야함.</p></li>
 <li><p>2015년 출산율(Fertility Rate, y축)과 영아 사망률(Infant Mortality, x축) 간의 관계를 나타내는 산점도 (Scatter Plot)를 작성하시오. <code>geom_*</code> 옵션: <code>size</code> = 3, <code>alpha</code> = 0.5, <code>colour</code> = “#d90502”. <code>labs()</code>를 사용하여 레이블을 추가 (x = “영아 사망률”, y = “출산율”)</p></li>
 </ol>
 </section>
@@ -1715,7 +1732,7 @@
 </section>
 <section id="task-4" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 4</h2>
-<p><countdown-timer class="countdown" id="timer_ba6fd337" minutes="10" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;--countdown-color-border:blue;"></countdown-timer></p>
+<p><countdown-timer class="countdown" id="timer_2c5662f7" minutes="10" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;--countdown-color-border:blue;"></countdown-timer></p>
 <ol type="1">
 <li><p>2011년 GDP의 평균을 계산하고 mean이라는 객체에 할당하시오. 결측값은 제외. <strong>힌트</strong>: <code>mean</code> 함수의 도움말을 읽고 <code>NA</code>를 제거하는 방법을 확인</p></li>
 <li><p>2011년 GDP의 중앙값을 계산하고 median이라는 객체에 할당하시오. 마찬가지로 결측값을 제외. 중앙값이 평균보다 큰가, 작은가?</p></li>
