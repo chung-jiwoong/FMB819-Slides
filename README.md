@@ -6,18 +6,54 @@
 
 | 주제 | 슬라이드(HTML) | 소스(QMD) | 과제(QMD) | 해답 |
 |---|---|---|---|---|
-| 1. Introduction | [보기](https://chung-jiwoong.github.io/FMB819/chapter_intro/chapter_intro.html) | [소스](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_intro/chapter_intro.qmd) | [과제](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_intro/tasks/intro_tasks.qmd) | [해답](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_intro/tasks/intro_solution.qmd) |
-| 2. Tidying, Visualising and Summarising Data | [보기](https://chung-jiwoong.github.io/FMB819/chapter_tidy/chapter_tidy.html) | [소스](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_tidy/chapter_tidy.qmd) | [과제](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_tidy/tasks/tidy_tasks.qmd) | [해답](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_tidy/tasks/tidy_solution.qmd) |
-| 3. Simple Linear Regression | [보기](https://chung-jiwoong.github.io/FMB819/chapter_slr/chapter_slr.html) | [소스](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/chapter_slr.qmd) | [과제](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/tasks/slr_tasks.qmd) | [해답](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/tasks/slr_solution.qmd) |
-| 4. Multiple Linear Regression | [보기](https://chung-jiwoong.github.io/FMB819/chapter_mlr/chapter_mlr.html) | [소스](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_mlr/chapter_mlr.qmd) | [과제](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_mlr/tasks/mlr_tasks.qmd) | [해답](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_mlr/tasks/mlr_solution.qmd) |
-| 5. Sampling | [보기](https://chung-jiwoong.github.io/FMB819/chapter_sampling/chapter_sampling.html) | [소스](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_sampling/chapter_sampling.qmd) | [과제](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_sampling/tasks/sampling_tasks.qmd) | [해답](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_sampling/tasks/sampling_solution.qmd) |
-
+| 1. Introduction | [보기][intro-html] | [소스][intro-qmd] | [과제][intro-task] | [해답][intro-sol] |
+| 2. Tidying, Visualising and Summarising Data | [보기][tidy-html] | [소스][tidy-qmd] | [과제][tidy-task] | [해답][tidy-sol] |
+| 3. Simple Linear Regression | [보기][slr-html] | [소스][slr-qmd] | [과제][slr-task] | [해답][slr-sol] |
+| 4. Multiple Linear Regression | [보기][mlr-html] | [소스][mlr-qmd] | [과제][mlr-task] | [해답][mlr-sol] |
+| 5. Sampling | [보기][samp-html] | [소스][samp-qmd] | [과제][samp-task] | [해답][samp-sol] |
 
 ## 기타 주제
 
 | 주제 | 슬라이드(HTML) | 소스(QMD) |
 |---|---|---|
-| Dart Open API 이용 | [보기](https://chung-jiwoong.github.io/FMB819/chapter_others/chapter_dart.html) | [소스](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_others/chapter_dart.qmd) |
+| Dart Open API 이용 | [보기][dart-html] | [소스][dart-qmd] |
+
+---
+
+[base-io]: https://chung-jiwoong.github.io/FMB819
+[base-raw]: https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main
+
+[intro-html]: https://chung-jiwoong.github.io/FMB819/chapter_intro/chapter_intro.html
+[intro-qmd]:  https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_intro/chapter_intro.qmd
+[intro-task]: https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_intro/tasks/intro_tasks.qmd
+[intro-sol]:  https://chung-jiwoong.github.io/FMB819/chapter_introtasks/intro_solution.qmd
+
+[tidy-html]: https://chung-jiwoong.github.io/FMB819/chapter_tidy/chapter_tidy.html
+[tidy-qmd]:  https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_tidy/chapter_tidy.qmd
+[tidy-task]: https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_tidy/tasks/tidy_tasks.qmd
+[tidy-sol]:  https://chung-jiwoong.github.io/FMB819/chapter_tidy/tasks/tidy_solution.html
+
+[slr-html]: https://chung-jiwoong.github.io/FMB819/chapter_slr/chapter_slr.html
+[slr-qmd]:  https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/chapter_slr.qmd
+[slr-task]: https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/tasks/slr_tasks.qmd
+[slr-sol]:  https://chung-jiwoong.github.io/FMB819/chapter_slr/tasks/slr_solution.html
+
+[mlr-html]: https://chung-jiwoong.github.io/FMB819/chapter_mlr/chapter_mlr.html
+[mlr-qmd]:  https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_mlr/chapter_mlr.qmd
+[mlr-task]: https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_mlr/tasks/mlr_tasks.qmd
+[mlr-sol]:  https://chung-jiwoong.github.io/FMB819/chapter_mlr/tasks/mlr_solution.html
+
+[samp-html]: https://chung-jiwoong.github.io/FMB819/chapter_sampling/chapter_sampling.html
+[samp-qmd]:  https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_sampling/chapter_sampling.qmd
+[samp-task]: https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_sampling/tasks/sampling_tasks.qmd
+[samp-sol]:  https://chung-jiwoong.github.io/FMB819/chapter_sampling/tasks/sampling_solution.html
+
+[dart-html]: https://chung-jiwoong.github.io/FMB819/chapter_others/chapter_dart.html
+[dart-qmd]:  https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_others/chapter_dart.qmd
+
+
+
+
 
 
 <!-- 
