@@ -7,7 +7,7 @@ format:
 ---
 
 
-```{r}
+```{r, echo=FALSE}
 knitr::opts_chunk$set(
     echo = TRUE,
     message = FALSE,
@@ -299,6 +299,15 @@ print(summary_stats)
 ```
 
 5.  두 종목의 수익률 간 **상관계수(`cor`)**를 계산하시오. (상관관계를 구하려면 두 수익률을 가로(열)로 나란히 배치해야 하는데, 한국과 미국의 휴장일이 달라 데이터의 길이가 어긋나는 현상이 발생하기 때문에 날짜를 기준으로 데이터를 맞추는 과정(`pivot_wider` 또는 `inner_join`)이 필요함.)
+
+```{r}
+spy_returns <- stock_returns %>% filter(symbol=="SPY") %>% select(date, daily_return) %>% rename(spy=daily_return)
+ks_returns <- stock_returns %>% filter(symbol=="005930.KS") %>% select(date, daily_return) %>% rename(ks=daily_return)
+returns_wide <- inner_join(spy_returns, ks_returns, by = "date")
+
+correlation <- cor(returns_wide$ks, returns_wide$spy)
+print(correlation)
+```
 
 ```{r, echo=T, eval=T}
 # 5. 넓은 형태(Wide format)로 변환하여 상관계수 계산
