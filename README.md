@@ -6,7 +6,7 @@
 
 | 주제 | 슬라이드(HTML) | 소스(QMD) | 과제(QMD) | 해답 |
 |---|---|---|---|---|
-| 1. Introduction | [보기][intro-html] | [소스][intro-qmd] | [과제][intro-task] | [해답] |
+| 1. Introduction | [보기][intro-html] | [소스][intro-qmd] | [과제][intro-task] | |
 | 2. Tidying, Visualising and Summarising Data | [보기][tidy-html] | [소스][tidy-qmd] | [과제][tidy-task] | [해답][tidy-sol] |
 | 3. Simple Linear Regression | [보기][slr-html] | [소스][slr-qmd] | [과제][slr-task] | [해답][slr-sol] |
 | 4. Multiple Linear Regression | [보기][mlr-html] | [소스][mlr-qmd] | [과제][mlr-task] | [해답][mlr-sol] |
