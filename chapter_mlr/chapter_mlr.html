@@ -565,7 +565,7 @@ x_2 \neq a x_1 + b
 </section>
 <section id="task-1" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 1</h2>
-<p><countdown-timer class="countdown" id="timer_bbdf1a0b" minutes="5" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;--countdown-color-border:blue;"></countdown-timer></p>
+<p><countdown-timer class="countdown" id="timer_12715a2e" minutes="5" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;--countdown-color-border:blue;"></countdown-timer></p>
 <p><code>grades</code> 데이터:</p>
 <ul>
 <li><p>학생들의 학업 성취도에 영향을 미치는 요인들을 분석하기 위한 데이터셋</p></li>
@@ -580,11 +580,11 @@ x_2 \neq a x_1 + b
 <span id="cb11-2"><a href=""></a>grades <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"https://raw.githack.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/data/grade5.dta"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ol start="2" type="1">
-<li>avgverb (읽기 점수)를 종속 변수로,</li>
-</ol>
+<li>avgverb (읽기 점수)를 종속 변수로,
 <ol type="1">
-<li><p>classize를 독립변수로 회귀분석하고</p></li>
-<li><p>classize와 disadvantaged (저소득 학생 비율)를 독립 변수로 사용하여 회귀분석.</p></li>
+<li>classize를 독립변수로 회귀분석.</li>
+<li>classize와 disadvantaged (저소득 학생 비율)를 독립 변수로 사용하여 회귀분석.</li>
+</ol></li>
 </ol>
 <p>결과를 reg1, reg2 객체에 저장. 각 계수(coefficient)의 의미는 무엇인가? 단순 선형 회귀와 비교했을 때 계수는 어떻게 달라졌는가?</p>
 </section>
@@ -709,78 +709,48 @@ b_1 = c_1 + OVB
 </ul></li>
 </ul>
 </section>
-<section id="task-2" class="slide level2 scrollable" data-background-color="#ffebf0">
-<h2>Task 2</h2>
-<p><countdown-timer class="countdown" id="timer_d0813930" minutes="15" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;--countdown-color-border:blue;"></countdown-timer></p>
-<p><strong>STAR 데이터</strong></p>
-<ul>
-<li>STAR(Student Teacher Achievement Ratio) 데이터는 1985년부터 1989년까지 미국 테네시 주에서 진행된 무작위 실험의 결과를 담고 있음.</li>
-<li>학생들을 소규모 학급(small), 일반 학급(regular), 보조 교사가 있는 일반 학급(regular+aide)으로 무작위 배정하여, 학급 규모가 학생들의 학업 성취도에 미치는 영향을 분석하기 위한 데이터셋.</li>
-</ul>
-<ol type="1">
-<li><strong>STAR 데이터</strong>를 다운로드 <a href="https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_causality/data/star_data.csv">링크</a>. 데이터를 <code>star_df</code>라는 객체에 저장. NA 값이 있는 행은 제거하시오. <code>grades</code>가 “2”인 학생들만 선택하시오.</li>
-</ol>
-<ol start="2" type="1">
-<li><code>math</code>를 <code>school</code> 변수에 대해 회귀 분석하시오. <code>school</code> 변수가 포함하는 값들을 먼저 확인. 회귀 계수를 해석하시오. 누락된 범주 (category)는? 결과가 예상과 일치하는가? 만약 다르다면 왜 그런가? 누락된 변수가 존재할 가능성이 있는가?</li>
-</ol>
-<ol start="3" type="1">
-<li><code>lunch</code> 변수가 <code>"free"</code>인 학생들의 비율을 <strong>학교 위치(school) 별로 계산</strong>하시오. 결과를 보고, <strong>무료 점심 자격 여부(<code>free</code>) 변수를 추가하여 이전 회귀 분석을 다시 수행</strong>하시오. <code>free</code> 변수를 추가했을 때 회귀 계수는 어떻게 변화하는가?</li>
-</ol>
-<ol start="4" type="1">
-<li><code>math</code>를 <code>star</code> 변수에 대해 회귀 분석하시오. 다음의 모든 변수를 포함하여 다중 회귀 분석을 수행하시오:<br>
-<code>math ~ star + gender + ethnicity + lunch + degree + experience + school</code>. 무작위 실험이 <strong>잘 수행되었다고 판단할 수 있는가?</strong></li>
-</ol>
-<ol start="5" type="1">
-<li><p><strong>다중 회귀 분석</strong>에서 얻은 <strong>수정된</strong> <span class="math inline">\(R^2\)</span> 값을 확인하시오. 수정된 <span class="math inline">\(R^2\)</span> 값이 의미하는 바는 무엇인가? 관측 가능한 개별 학생, 교사, 학교 특성이 학업 성취도에 미치는 중요성에 대해 어떤 결론을 내릴 수 있는가?</p></li>
-<li><p>(Optional) <code>math</code>를 <code>gender</code>와 <code>experience</code> 변수에 대해 회귀 분석하시오. 회귀 계수를 어떻게 해석할 수 있는가? 이러한 회귀 분석 결과를 시각적으로 표현한다면 어떻게 보일 것인가?</p></li>
-</ol>
-</section>
-<section class="slide level2">
-
+<section id="fama-french-3-요인-모형" class="slide level2">
+<h2>Fama-French 3 요인 모형</h2>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="co"># ============================================================</span></span>
-<span id="cb15-2"><a href=""></a><span class="co">#  OVB 예시: CAPM → Fama-French 3 Factor (AAPL, 2000~)</span></span>
-<span id="cb15-3"><a href=""></a><span class="co"># ============================================================</span></span>
-<span id="cb15-4"><a href=""></a></span>
-<span id="cb15-5"><a href=""></a><span class="fu">library</span>(tidyquant)</span>
-<span id="cb15-6"><a href=""></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb15-7"><a href=""></a><span class="fu">library</span>(lubridate)</span>
-<span id="cb15-8"><a href=""></a><span class="fu">library</span>(readr)</span>
-<span id="cb15-9"><a href=""></a></span>
-<span id="cb15-10"><a href=""></a><span class="co"># ── 1. Fama-French 3요인 데이터 수집 ─────────────────────────</span></span>
-<span id="cb15-11"><a href=""></a>ff_temp <span class="ot">&lt;-</span> <span class="fu">tempfile</span>()</span>
-<span id="cb15-12"><a href=""></a><span class="fu">download.file</span>(<span class="st">"https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_CSV.zip"</span>,</span>
-<span id="cb15-13"><a href=""></a>              ff_temp, <span class="at">mode =</span> <span class="st">"wb"</span>)</span>
-<span id="cb15-14"><a href=""></a></span>
-<span id="cb15-15"><a href=""></a>ff_raw <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">unzip</span>(ff_temp, <span class="at">exdir =</span> <span class="fu">tempdir</span>()),</span>
-<span id="cb15-16"><a href=""></a>                   <span class="at">skip =</span> <span class="dv">3</span>, <span class="at">col_types =</span> <span class="fu">cols</span>(<span class="at">.default =</span> <span class="fu">col_double</span>())) <span class="sc">%&gt;%</span></span>
-<span id="cb15-17"><a href=""></a>  <span class="fu">rename</span>(<span class="at">date =</span> <span class="st">`</span><span class="at">...1</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb15-18"><a href=""></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(SMB), <span class="fu">nchar</span>(<span class="fu">as.character</span>(date)) <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb15-19"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">date  =</span> <span class="fu">ym</span>(date),</span>
-<span id="cb15-20"><a href=""></a>         <span class="fu">across</span>(<span class="fu">c</span>(<span class="st">`</span><span class="at">Mkt-RF</span><span class="st">`</span>, SMB, HML, RF), <span class="sc">~</span> . <span class="sc">/</span> <span class="dv">100</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb15-21"><a href=""></a>  <span class="fu">filter</span>(date <span class="sc">&gt;=</span> <span class="fu">as.Date</span>(<span class="st">"2000-01-01"</span>))</span>
-<span id="cb15-22"><a href=""></a></span>
-<span id="cb15-23"><a href=""></a><span class="fu">unlink</span>(ff_temp)</span>
-<span id="cb15-24"><a href=""></a></span>
-<span id="cb15-25"><a href=""></a><span class="co"># ── 2. 개별 주식 월별 수익률 수집 (AAPL) ─────────────────────</span></span>
-<span id="cb15-26"><a href=""></a>stock_returns <span class="ot">&lt;-</span> <span class="fu">tq_get</span>(<span class="st">"BRK-B"</span>, <span class="at">get =</span> <span class="st">"stock.prices"</span>,</span>
-<span id="cb15-27"><a href=""></a>                        <span class="at">from =</span> <span class="st">"2000-01-01"</span>, <span class="at">to =</span> <span class="fu">Sys.Date</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb15-28"><a href=""></a>  <span class="fu">drop_na</span>(adjusted) <span class="sc">%&gt;%</span></span>
-<span id="cb15-29"><a href=""></a>  <span class="fu">tq_transmute</span>(<span class="at">select =</span> adjusted, <span class="at">mutate_fun =</span> periodReturn,</span>
-<span id="cb15-30"><a href=""></a>               <span class="at">period =</span> <span class="st">"monthly"</span>, <span class="at">col_rename =</span> <span class="st">"R_stock"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb15-31"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">floor_date</span>(date, <span class="st">"month"</span>))</span>
-<span id="cb15-32"><a href=""></a></span>
-<span id="cb15-33"><a href=""></a><span class="co"># ── 3. 병합 및 초과수익률 계산 ───────────────────────────────</span></span>
-<span id="cb15-34"><a href=""></a>df <span class="ot">&lt;-</span> stock_returns <span class="sc">%&gt;%</span></span>
-<span id="cb15-35"><a href=""></a>  <span class="fu">left_join</span>(ff_raw, <span class="at">by =</span> <span class="st">"date"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb15-36"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">excess_stock =</span> R_stock <span class="sc">-</span> RF) <span class="sc">%&gt;%</span></span>
-<span id="cb15-37"><a href=""></a>  <span class="fu">drop_na</span>()</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="fu">library</span>(tidyquant)</span>
+<span id="cb15-2"><a href=""></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb15-3"><a href=""></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb15-4"><a href=""></a><span class="fu">library</span>(readr)</span>
+<span id="cb15-5"><a href=""></a></span>
+<span id="cb15-6"><a href=""></a><span class="co"># ── 1. Fama-French 3요인 데이터 수집 ─────────────────────────</span></span>
+<span id="cb15-7"><a href=""></a>ff_temp <span class="ot">&lt;-</span> <span class="fu">tempfile</span>()</span>
+<span id="cb15-8"><a href=""></a><span class="fu">download.file</span>(<span class="st">"https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_CSV.zip"</span>,</span>
+<span id="cb15-9"><a href=""></a>              ff_temp, <span class="at">mode =</span> <span class="st">"wb"</span>)</span>
+<span id="cb15-10"><a href=""></a></span>
+<span id="cb15-11"><a href=""></a>ff_raw <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">unzip</span>(ff_temp, <span class="at">exdir =</span> <span class="fu">tempdir</span>()),</span>
+<span id="cb15-12"><a href=""></a>                   <span class="at">skip =</span> <span class="dv">3</span>, <span class="at">col_types =</span> <span class="fu">cols</span>(<span class="at">.default =</span> <span class="fu">col_double</span>())) <span class="sc">%&gt;%</span></span>
+<span id="cb15-13"><a href=""></a>  <span class="fu">rename</span>(<span class="at">date =</span> <span class="st">`</span><span class="at">...1</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-14"><a href=""></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(SMB), <span class="fu">nchar</span>(<span class="fu">as.character</span>(date)) <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-15"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">date  =</span> <span class="fu">ym</span>(date),</span>
+<span id="cb15-16"><a href=""></a>         <span class="fu">across</span>(<span class="fu">c</span>(<span class="st">`</span><span class="at">Mkt-RF</span><span class="st">`</span>, SMB, HML, RF), <span class="sc">~</span> . <span class="sc">/</span> <span class="dv">100</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb15-17"><a href=""></a>  <span class="fu">filter</span>(date <span class="sc">&gt;=</span> <span class="fu">as.Date</span>(<span class="st">"2000-01-01"</span>))</span>
+<span id="cb15-18"><a href=""></a></span>
+<span id="cb15-19"><a href=""></a><span class="fu">unlink</span>(ff_temp)</span>
+<span id="cb15-20"><a href=""></a></span>
+<span id="cb15-21"><a href=""></a><span class="co"># ── 2. 개별 주식 월별 수익률 수집 (AAPL) ─────────────────────</span></span>
+<span id="cb15-22"><a href=""></a>stock_returns <span class="ot">&lt;-</span> <span class="fu">tq_get</span>(<span class="st">"BRK-B"</span>, <span class="at">get =</span> <span class="st">"stock.prices"</span>,</span>
+<span id="cb15-23"><a href=""></a>                        <span class="at">from =</span> <span class="st">"2000-01-01"</span>, <span class="at">to =</span> <span class="fu">Sys.Date</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb15-24"><a href=""></a>  <span class="fu">drop_na</span>(adjusted) <span class="sc">%&gt;%</span></span>
+<span id="cb15-25"><a href=""></a>  <span class="fu">tq_transmute</span>(<span class="at">select =</span> adjusted, <span class="at">mutate_fun =</span> periodReturn,</span>
+<span id="cb15-26"><a href=""></a>               <span class="at">period =</span> <span class="st">"monthly"</span>, <span class="at">col_rename =</span> <span class="st">"R_stock"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-27"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">floor_date</span>(date, <span class="st">"month"</span>))</span>
+<span id="cb15-28"><a href=""></a></span>
+<span id="cb15-29"><a href=""></a><span class="co"># ── 3. 병합 및 초과수익률 계산 ───────────────────────────────</span></span>
+<span id="cb15-30"><a href=""></a>df <span class="ot">&lt;-</span> stock_returns <span class="sc">%&gt;%</span></span>
+<span id="cb15-31"><a href=""></a>  <span class="fu">left_join</span>(ff_raw, <span class="at">by =</span> <span class="st">"date"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-32"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">excess_stock =</span> R_stock <span class="sc">-</span> RF) <span class="sc">%&gt;%</span></span>
+<span id="cb15-33"><a href=""></a>  <span class="fu">drop_na</span>()</span>
+<span id="cb15-34"><a href=""></a></span>
+<span id="cb15-35"><a href=""></a><span class="co"># ── 4. CAPM vs Fama-French 회귀분석 ──────────────────────────</span></span>
+<span id="cb15-36"><a href=""></a>reg1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(excess_stock <span class="sc">~</span> <span class="st">`</span><span class="at">Mkt-RF</span><span class="st">`</span>,             <span class="at">data =</span> df)  <span class="co"># CAPM</span></span>
+<span id="cb15-37"><a href=""></a>reg2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(excess_stock <span class="sc">~</span> <span class="st">`</span><span class="at">Mkt-RF</span><span class="st">`</span> <span class="sc">+</span> SMB <span class="sc">+</span> HML, <span class="at">data =</span> df)  <span class="co"># FF3F</span></span>
 <span id="cb15-38"><a href=""></a></span>
-<span id="cb15-39"><a href=""></a><span class="co"># ── 4. CAPM vs Fama-French 회귀분석 ──────────────────────────</span></span>
-<span id="cb15-40"><a href=""></a>reg1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(excess_stock <span class="sc">~</span> <span class="st">`</span><span class="at">Mkt-RF</span><span class="st">`</span>,             <span class="at">data =</span> df)  <span class="co"># CAPM</span></span>
-<span id="cb15-41"><a href=""></a>reg2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(excess_stock <span class="sc">~</span> <span class="st">`</span><span class="at">Mkt-RF</span><span class="st">`</span> <span class="sc">+</span> SMB <span class="sc">+</span> HML, <span class="at">data =</span> df)  <span class="co"># FF3F</span></span>
-<span id="cb15-42"><a href=""></a></span>
-<span id="cb15-43"><a href=""></a><span class="fu">summary</span>(reg1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb15-39"><a href=""></a><span class="fu">summary</span>(reg1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## 
 ## Call:
@@ -825,6 +795,37 @@ b_1 = c_1 + OVB
 ## F-statistic: 75.44 on 3 and 309 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
+</section>
+<section id="task-2" class="slide level2 scrollable" data-background-color="#ffebf0">
+<h2>Task 2</h2>
+<p><countdown-timer class="countdown" id="timer_51003a1e" minutes="15" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;--countdown-color-border:blue;"></countdown-timer></p>
+<p><strong>STAR 데이터</strong></p>
+<ul>
+<li>STAR(Student Teacher Achievement Ratio) 데이터는 1985년부터 1989년까지 미국 테네시 주에서 진행된 무작위 실험의 결과를 담고 있음.</li>
+<li>학생들을 소규모 학급(small), 일반 학급(regular), 보조 교사가 있는 일반 학급(regular+aide)으로 무작위 배정하여, 학급 규모가 학생들의 학업 성취도에 미치는 영향을 분석하기 위한 데이터셋.</li>
+</ul>
+<ol type="1">
+<li><strong>STAR 데이터</strong>를 불러와 <code>star_df</code>라는 객체에 저장. NA 값이 있는 행은 제거하시오. <code>grades</code>가 “2”인 학생들만 선택하시오.</li>
+</ol>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb19-2"><a href=""></a><span class="co"># 데이터 불러오기</span></span>
+<span id="cb19-3"><a href=""></a>star_df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_causality/data/star_data.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ol start="2" type="1">
+<li><code>math</code>를 <code>school</code> (학교 위치 유형)변수에 대해 회귀 분석하시오. <code>school</code> 변수가 포함하는 값들을 먼저 확인. 회귀 계수를 해석하시오. 누락된 범주 (category)는? 결과가 예상과 일치하는가? 만약 다르다면 왜 그런가? 누락된 변수가 존재할 가능성이 있는가?</li>
+</ol>
+<ol start="3" type="1">
+<li><code>lunch</code> 변수가 <code>"free"</code>인 학생들의 비율을 <strong>학교 위치 유형형(school) 별로 계산</strong>하시오. 결과를 보고, <strong>무료 점심 자격 여부(<code>free</code>) 변수를 추가하여 이전 회귀 분석을 다시 수행</strong>하시오. <code>free</code> 변수를 추가했을 때 회귀 계수는 어떻게 변화하는가?</li>
+</ol>
+<ol start="4" type="1">
+<li><code>math</code>를 <code>star</code> 변수에 대해 회귀 분석하시오. 다음의 모든 변수를 포함하여 다중 회귀 분석을 수행하시오:<br>
+<code>math ~ star + gender + ethnicity + lunch + degree + experience + school</code>. 절편과 계수를 해석하시오.</li>
+</ol>
+<ol start="5" type="1">
+<li><p><strong>다중 회귀 분석</strong>에서 얻은 <strong>수정된</strong> <span class="math inline">\(R^2\)</span> 값을 확인하시오. 수정된 <span class="math inline">\(R^2\)</span> 값이 의미하는 바는 무엇인가? 관측 가능한 개별 학생, 교사, 학교 특성이 학업 성취도에 미치는 중요성에 대해 어떤 결론을 내릴 수 있는가?</p></li>
+<li><p>(Optional) <code>math</code>를 <code>gender</code>와 <code>experience</code> 변수에 대해 회귀 분석하시오. 회귀 계수를 어떻게 해석할 수 있는가? 이러한 회귀 분석 결과를 시각적으로 표현한다면 어떻게 보일 것인가?</p></li>
+</ol>
 </section>
 <section id="the-end" class="title-slide slide level1 center">
 <h1>THE END!</h1>

@@ -375,13 +375,11 @@ library(haven)
 grades <- read_dta("https://raw.githack.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/data/grade5.dta")
 ```
 
-2.  avgverb (읽기 점수)를 종속 변수로, 
+2.  avgverb (읽기 점수)를 종속 변수로,
+    1.  classize를 독립변수로 회귀분석.
+    2.  classize와 disadvantaged (저소득 학생 비율)를 독립 변수로 사용하여 회귀분석.
 
-(1) classize를 독립변수로 회귀분석하고 
-
-(2) classize와 disadvantaged (저소득 학생 비율)를 독립 변수로 사용하여 회귀분석. 
-
-결과를 reg1, reg2 객체에 저장. 각 계수(coefficient)의 의미는 무엇인가? 단순 선형 회귀와 비교했을 때 계수는 어떻게 달라졌는가? 
+결과를 reg1, reg2 객체에 저장. 각 계수(coefficient)의 의미는 무엇인가? 단순 선형 회귀와 비교했을 때 계수는 어떻게 달라졌는가?
 
 ```{r task1_2, echo=FALSE, eval=FALSE}
 lm(avgverb ~ classize, data = grades)
@@ -522,6 +520,53 @@ reg3$coefficients
 
 ------------------------------------------------------------------------
 
+## Fama-French 3 요인 모형
+
+```{r, echo=TRUE, eval=TRUE}
+library(tidyquant)
+library(dplyr)
+library(lubridate)
+library(readr)
+
+# ── 1. Fama-French 3요인 데이터 수집 ─────────────────────────
+ff_temp <- tempfile()
+download.file("https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_CSV.zip",
+              ff_temp, mode = "wb")
+
+ff_raw <- read_csv(unzip(ff_temp, exdir = tempdir()),
+                   skip = 3, col_types = cols(.default = col_double())) %>%
+  rename(date = `...1`) %>%
+  filter(!is.na(SMB), nchar(as.character(date)) == 6) %>%
+  mutate(date  = ym(date),
+         across(c(`Mkt-RF`, SMB, HML, RF), ~ . / 100)) %>%
+  filter(date >= as.Date("2000-01-01"))
+
+unlink(ff_temp)
+
+# ── 2. 개별 주식 월별 수익률 수집 (AAPL) ─────────────────────
+stock_returns <- tq_get("BRK-B", get = "stock.prices",
+                        from = "2000-01-01", to = Sys.Date()) %>%
+  drop_na(adjusted) %>%
+  tq_transmute(select = adjusted, mutate_fun = periodReturn,
+               period = "monthly", col_rename = "R_stock") %>%
+  mutate(date = floor_date(date, "month"))
+
+# ── 3. 병합 및 초과수익률 계산 ───────────────────────────────
+df <- stock_returns %>%
+  left_join(ff_raw, by = "date") %>%
+  mutate(excess_stock = R_stock - RF) %>%
+  drop_na()
+
+# ── 4. CAPM vs Fama-French 회귀분석 ──────────────────────────
+reg1 <- lm(excess_stock ~ `Mkt-RF`,             data = df)  # CAPM
+reg2 <- lm(excess_stock ~ `Mkt-RF` + SMB + HML, data = df)  # FF3F
+
+summary(reg1)
+summary(reg2)
+```
+
+------------------------------------------------------------------------
+
 ## Task 2 {background-color="#ffebf0"}
 
 `r countdown(minutes = 15, top = "20px", right = "10px", font_size = "0.8em", color_border = "blue")`
@@ -586,54 +631,4 @@ summary(reg_full)
 
 6.  (Optional) `math`를 `gender`와 `experience` 변수에 대해 회귀 분석하시오. 회귀 계수를 어떻게 해석할 수 있는가? 이러한 회귀 분석 결과를 시각적으로 표현한다면 어떻게 보일 것인가?
 
----
-
-## Fama-French 3 요인 모형
-
-```{r, echo=TRUE, eval=TRUE}
-# ============================================================
-#  OVB 예시: CAPM → Fama-French 3 Factor (AAPL, 2000~)
-# ============================================================
-
-library(tidyquant)
-library(dplyr)
-library(lubridate)
-library(readr)
-
-# ── 1. Fama-French 3요인 데이터 수집 ─────────────────────────
-ff_temp <- tempfile()
-download.file("https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_CSV.zip",
-              ff_temp, mode = "wb")
-
-ff_raw <- read_csv(unzip(ff_temp, exdir = tempdir()),
-                   skip = 3, col_types = cols(.default = col_double())) %>%
-  rename(date = `...1`) %>%
-  filter(!is.na(SMB), nchar(as.character(date)) == 6) %>%
-  mutate(date  = ym(date),
-         across(c(`Mkt-RF`, SMB, HML, RF), ~ . / 100)) %>%
-  filter(date >= as.Date("2000-01-01"))
-
-unlink(ff_temp)
-
-# ── 2. 개별 주식 월별 수익률 수집 (AAPL) ─────────────────────
-stock_returns <- tq_get("BRK-B", get = "stock.prices",
-                        from = "2000-01-01", to = Sys.Date()) %>%
-  drop_na(adjusted) %>%
-  tq_transmute(select = adjusted, mutate_fun = periodReturn,
-               period = "monthly", col_rename = "R_stock") %>%
-  mutate(date = floor_date(date, "month"))
-
-# ── 3. 병합 및 초과수익률 계산 ───────────────────────────────
-df <- stock_returns %>%
-  left_join(ff_raw, by = "date") %>%
-  mutate(excess_stock = R_stock - RF) %>%
-  drop_na()
-
-# ── 4. CAPM vs Fama-French 회귀분석 ──────────────────────────
-reg1 <- lm(excess_stock ~ `Mkt-RF`,             data = df)  # CAPM
-reg2 <- lm(excess_stock ~ `Mkt-RF` + SMB + HML, data = df)  # FF3F
-
-summary(reg1)
-summary(reg2)
-```    
 # THE END!
