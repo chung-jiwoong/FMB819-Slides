@@ -11,6 +11,8 @@
 | 3. Simple Linear Regression | [보기][slr-html] | [소스][slr-qmd] | [과제][slr-task] | [해답][slr-sol] |
 | 4. Multiple Linear Regression | [보기][mlr-html] | [소스][mlr-qmd] | [과제][mlr-task] | [해답][mlr-sol] |
 | 5. Sampling | [보기][samp-html] | [소스][samp-qmd] | [과제][samp-task] | [해답][samp-sol] |
+| 6. Hypothesis Testing | [보기][hypo-html] | [소스][hypo-qmd] | |   |
+| 7. Regression Inference | [보기][infer-html] | [소스][infer-qmd] | [과제][infer-task] | [해답][infer-sol] |
 
 ## 기타 주제
 
@@ -47,6 +49,14 @@
 [samp-qmd]:  https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_sampling/chapter_sampling.qmd
 [samp-task]: https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_sampling/tasks/sampling_tasks.qmd
 [samp-sol]:  https://chung-jiwoong.github.io/FMB819/chapter_sampling/tasks/sampling_solution.html
+
+[hypo-html]: https://chung-jiwoong.github.io/FMB819/chapter_ci_hyptest/chapter_ci_hyptest.html
+[hypo-qmd]:  https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_ci_hyptest/chapter_ci_hyptest.qmd
+
+[infer-html]: https://chung-jiwoong.github.io/FMB819/chapter_reginference/chapter_reginference.html
+[infer-qmd]:  https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_reginference/chapter_reginference.qmd
+[infer-task]: https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_reginference/tasks/reginference_tasks.qmd
+[infer-sol]:  https://chung-jiwoong.github.io/FMB819/chapter_reginference/tasks/reginference_solution.html
 
 [dart-html]: https://chung-jiwoong.github.io/FMB819/chapter_others/chapter_dart.html
 [dart-qmd]:  https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_others/chapter_dart.qmd
