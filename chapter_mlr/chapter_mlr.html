@@ -6,8 +6,8 @@
 <script src="chapter_mlr_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="chapter_mlr_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="chapter_mlr_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="chapter_mlr_files/libs/quarto-html/quarto-syntax-highlighting-dfa48a90d809c806c7ea2d5aecd9fc66.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.9.29">
+<link href="chapter_mlr_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.8.25">
 
   <meta name="author" content="고려대학교 경영대학 정지웅">
   <title>Multiple Regression</title>
@@ -17,9 +17,6 @@
   <link rel="stylesheet" href="chapter_mlr_files/libs/revealjs/dist/reset.css">
   <link rel="stylesheet" href="chapter_mlr_files/libs/revealjs/dist/reveal.css">
   <style>
-    /* Default styles provided by pandoc.
-    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-    */
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -98,7 +95,7 @@
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="chapter_mlr_files/libs/revealjs/dist/theme/quarto-0427d8d92a431aa6a6430e53ec02a470.css">
+  <link rel="stylesheet" href="chapter_mlr_files/libs/revealjs/dist/theme/quarto-0fde88a82f0356838740f155f1088782.css">
   <link href="chapter_mlr_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="chapter_mlr_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="chapter_mlr_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -259,68 +256,79 @@
 <section id="베타의-추정" class="slide level2">
 <h2>베타의 추정</h2>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="co"># (설치되지 않은 경우 주석 해제하여 설치)</span></span>
-<span id="cb1-2"><a href=""></a><span class="co"># install.packages("tidyquant")</span></span>
-<span id="cb1-3"><a href=""></a><span class="co"># install.packages("tidyr")</span></span>
-<span id="cb1-4"><a href=""></a><span class="co"># install.packages("dplyr")</span></span>
-<span id="cb1-5"><a href=""></a><span class="fu">library</span>(tidyquant)</span>
-<span id="cb1-6"><a href=""></a><span class="fu">library</span>(tidyr)</span>
-<span id="cb1-7"><a href=""></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-8"><a href=""></a></span>
-<span id="cb1-9"><a href=""></a>raw_data <span class="ot">&lt;-</span> <span class="fu">tq_get</span>(<span class="fu">c</span>(<span class="st">"^KS200"</span>, <span class="st">"006800.KS"</span>), </span>
-<span id="cb1-10"><a href=""></a>                   <span class="at">get  =</span> <span class="st">"stock.prices"</span>,</span>
-<span id="cb1-11"><a href=""></a>                   <span class="at">from =</span> <span class="st">"2010-01-01"</span>,</span>
-<span id="cb1-12"><a href=""></a>                   <span class="at">to   =</span> <span class="fu">Sys.Date</span>())</span>
-<span id="cb1-13"><a href=""></a></span>
-<span id="cb1-14"><a href=""></a><span class="co"># 결측치 정리 (NA 제거): 수정주가(adjusted)를 기준으로 결측치가 있는 행을 제거.</span></span>
-<span id="cb1-15"><a href=""></a>clean_data <span class="ot">&lt;-</span> raw_data <span class="sc">%&gt;%</span> <span class="fu">drop_na</span>(adjusted) </span>
-<span id="cb1-16"><a href=""></a></span>
-<span id="cb1-17"><a href=""></a><span class="co"># 월별 수익률 계산: tq_transmute를 사용하여 일별 주가를 월별 수익률로 변환.</span></span>
-<span id="cb1-18"><a href=""></a>monthly_returns <span class="ot">&lt;-</span> clean_data <span class="sc">%&gt;%</span></span>
-<span id="cb1-19"><a href=""></a>  <span class="fu">group_by</span>(symbol) <span class="sc">%&gt;%</span></span>
-<span id="cb1-20"><a href=""></a>  <span class="fu">tq_transmute</span>(<span class="at">select     =</span> adjusted,</span>
-<span id="cb1-21"><a href=""></a>               <span class="at">mutate_fun =</span> periodReturn,</span>
-<span id="cb1-22"><a href=""></a>               <span class="at">period     =</span> <span class="st">"monthly"</span>,</span>
-<span id="cb1-23"><a href=""></a>               <span class="at">col_rename =</span> <span class="st">"monthly_return"</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="co"># ============================================================</span></span>
+<span id="cb1-2"><a href=""></a><span class="co">#  CAPM 베타 추정: 미래에셋증권(006800.KS) vs KOSPI 200</span></span>
+<span id="cb1-3"><a href=""></a><span class="co">#  모형: (Ri - Rf) = α + β(Rm - Rf) + ε</span></span>
+<span id="cb1-4"><a href=""></a><span class="co"># ============================================================</span></span>
+<span id="cb1-5"><a href=""></a></span>
+<span id="cb1-6"><a href=""></a><span class="fu">library</span>(tidyquant)</span>
+<span id="cb1-7"><a href=""></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-8"><a href=""></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-9"><a href=""></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb1-10"><a href=""></a></span>
+<span id="cb1-11"><a href=""></a><span class="co"># ── 1. 주가 및 무위험이자율 수집 ─────────────────────────────</span></span>
+<span id="cb1-12"><a href=""></a>raw_data <span class="ot">&lt;-</span> <span class="fu">tq_get</span>(<span class="fu">c</span>(<span class="st">"^KS200"</span>, <span class="st">"006800.KS"</span>),</span>
+<span id="cb1-13"><a href=""></a>                   <span class="at">get =</span> <span class="st">"stock.prices"</span>, <span class="at">from =</span> <span class="st">"2010-01-01"</span>, <span class="at">to =</span> <span class="fu">Sys.Date</span>())</span>
+<span id="cb1-14"><a href=""></a></span>
+<span id="cb1-15"><a href=""></a>rf_raw <span class="ot">&lt;-</span> <span class="fu">tq_get</span>(<span class="st">"IRSTCI01KRM156N"</span>,</span>
+<span id="cb1-16"><a href=""></a>                 <span class="at">get =</span> <span class="st">"economic.data"</span>, <span class="at">from =</span> <span class="st">"2010-01-01"</span>, <span class="at">to =</span> <span class="fu">Sys.Date</span>())</span>
+<span id="cb1-17"><a href=""></a></span>
+<span id="cb1-18"><a href=""></a><span class="co"># ── 2. 월별 수익률 계산 ──────────────────────────────────────</span></span>
+<span id="cb1-19"><a href=""></a>monthly_returns <span class="ot">&lt;-</span> raw_data <span class="sc">%&gt;%</span></span>
+<span id="cb1-20"><a href=""></a>  <span class="fu">drop_na</span>(adjusted) <span class="sc">%&gt;%</span></span>
+<span id="cb1-21"><a href=""></a>  <span class="fu">group_by</span>(symbol) <span class="sc">%&gt;%</span></span>
+<span id="cb1-22"><a href=""></a>  <span class="fu">tq_transmute</span>(<span class="at">select =</span> adjusted, <span class="at">mutate_fun =</span> periodReturn,</span>
+<span id="cb1-23"><a href=""></a>               <span class="at">period =</span> <span class="st">"monthly"</span>, <span class="at">col_rename =</span> <span class="st">"monthly_return"</span>)</span>
 <span id="cb1-24"><a href=""></a></span>
-<span id="cb1-25"><a href=""></a><span class="co"># 베타 추정을 위한 데이터 구조 변경 (Wide format)</span></span>
-<span id="cb1-26"><a href=""></a><span class="co"># 선형 회귀(lm) 함수에 넣기 쉽게 두 자산의 수익률을 각각의 열로 배치.</span></span>
-<span id="cb1-27"><a href=""></a>returns_wide <span class="ot">&lt;-</span> monthly_returns <span class="sc">%&gt;%</span></span>
-<span id="cb1-28"><a href=""></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> symbol, <span class="at">values_from =</span> monthly_return) <span class="sc">%&gt;%</span></span>
-<span id="cb1-29"><a href=""></a>  <span class="fu">rename</span>(<span class="at">KOSPI200 =</span> <span class="st">`</span><span class="at">^KS200</span><span class="st">`</span>, <span class="at">MiraeAsset =</span> <span class="st">`</span><span class="at">006800.KS</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb1-30"><a href=""></a>  <span class="fu">drop_na</span>() <span class="co"># 두 지표 모두 데이터가 존재하는 월만 남김</span></span>
-<span id="cb1-31"><a href=""></a></span>
-<span id="cb1-32"><a href=""></a><span class="co"># 베타(Beta) 추정</span></span>
-<span id="cb1-33"><a href=""></a>beta_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(MiraeAsset <span class="sc">~</span> KOSPI200, <span class="at">data =</span> returns_wide)</span>
-<span id="cb1-34"><a href=""></a></span>
-<span id="cb1-35"><a href=""></a><span class="co"># 회귀분석 결과 요약 출력</span></span>
-<span id="cb1-36"><a href=""></a><span class="fu">summary</span>(beta_model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-25"><a href=""></a><span class="co"># ── 3. 무위험이자율 전처리 (연율 % → 월복리) ─────────────────</span></span>
+<span id="cb1-26"><a href=""></a>rf_monthly <span class="ot">&lt;-</span> rf_raw <span class="sc">%&gt;%</span></span>
+<span id="cb1-27"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">date    =</span> <span class="fu">floor_date</span>(date, <span class="st">"month"</span>),</span>
+<span id="cb1-28"><a href=""></a>         <span class="at">rf_rate =</span> (<span class="dv">1</span> <span class="sc">+</span> price <span class="sc">/</span> <span class="dv">100</span>)<span class="sc">^</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">12</span>) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-29"><a href=""></a>  <span class="fu">select</span>(date, rf_rate)</span>
+<span id="cb1-30"><a href=""></a></span>
+<span id="cb1-31"><a href=""></a><span class="co"># ── 4. Wide format 변환 및 무위험이자율 병합 ─────────────────</span></span>
+<span id="cb1-32"><a href=""></a>returns_wide <span class="ot">&lt;-</span> monthly_returns <span class="sc">%&gt;%</span></span>
+<span id="cb1-33"><a href=""></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> symbol, <span class="at">values_from =</span> monthly_return) <span class="sc">%&gt;%</span></span>
+<span id="cb1-34"><a href=""></a>  <span class="fu">rename</span>(<span class="at">KOSPI200 =</span> <span class="st">`</span><span class="at">^KS200</span><span class="st">`</span>, <span class="at">MiraeAsset =</span> <span class="st">`</span><span class="at">006800.KS</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-35"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">floor_date</span>(date, <span class="st">"month"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb1-36"><a href=""></a>  <span class="fu">left_join</span>(rf_monthly, <span class="at">by =</span> <span class="st">"date"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-37"><a href=""></a>  <span class="fu">fill</span>(rf_rate, <span class="at">.direction =</span> <span class="st">"down"</span>)</span>
+<span id="cb1-38"><a href=""></a></span>
+<span id="cb1-39"><a href=""></a><span class="co"># ── 5. 초과수익률 계산 및 결측치 제거 ────────────────────────</span></span>
+<span id="cb1-40"><a href=""></a>returns_wide <span class="ot">&lt;-</span> returns_wide <span class="sc">%&gt;%</span></span>
+<span id="cb1-41"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">excess_market =</span> KOSPI200   <span class="sc">-</span> rf_rate,</span>
+<span id="cb1-42"><a href=""></a>         <span class="at">excess_stock  =</span> MiraeAsset <span class="sc">-</span> rf_rate) <span class="sc">%&gt;%</span></span>
+<span id="cb1-43"><a href=""></a>  <span class="fu">drop_na</span>()</span>
+<span id="cb1-44"><a href=""></a></span>
+<span id="cb1-45"><a href=""></a><span class="co"># ── 6. CAPM 회귀분석 ─────────────────────────────────────────</span></span>
+<span id="cb1-46"><a href=""></a>beta_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(excess_stock <span class="sc">~</span> excess_market, <span class="at">data =</span> returns_wide)</span>
+<span id="cb1-47"><a href=""></a><span class="fu">summary</span>(beta_model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## 
 ## Call:
-## lm(formula = MiraeAsset ~ KOSPI200, data = returns_wide)
+## lm(formula = excess_stock ~ excess_market, data = returns_wide)
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.20492 -0.04662 -0.00657  0.03347  0.39777 
+## -0.20434 -0.04680 -0.00633  0.03278  0.40044 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) 0.001751   0.006332   0.277    0.782    
-## KOSPI200    1.609119   0.111201  14.470   &lt;2e-16 ***
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   0.002973   0.006317   0.471    0.638    
+## excess_market 1.599262   0.110903  14.420   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 0.08722 on 192 degrees of freedom
-## Multiple R-squared:  0.5217, Adjusted R-squared:  0.5192 
-## F-statistic: 209.4 on 1 and 192 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 0.08739 on 192 degrees of freedom
+## Multiple R-squared:  0.5199, Adjusted R-squared:  0.5174 
+## F-statistic: 207.9 on 1 and 192 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </section>
 <section id="베타의-추정-그래프" class="slide level2">
 <h2>베타의 추정: 그래프</h2>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">plot</span>(returns_wide<span class="sc">$</span>KOSPI200, returns_wide<span class="sc">$</span>MiraeAsset, </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">plot</span>(returns_wide<span class="sc">$</span>excess_market, returns_wide<span class="sc">$</span>excess_stock, </span>
 <span id="cb3-2"><a href=""></a>     <span class="at">xlab =</span> <span class="st">"KOSPI 200"</span>, <span class="at">ylab =</span> <span class="st">"Mireae Asset"</span>)</span>
 <span id="cb3-3"><a href=""></a><span class="fu">abline</span>(beta_model, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>) <span class="co"># 회귀선 덧그리기 (빨간색 굵은 선)</span></span>
 <span id="cb3-4"><a href=""></a>eq <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">"y = %.4f * x + %.4f"</span>, <span class="fu">coef</span>(beta_model)[<span class="dv">2</span>], <span class="fu">coef</span>(beta_model)[<span class="dv">1</span>])</span>
@@ -343,7 +351,7 @@ y_i = b_0 + b_1 x_i + e_i
 </ul></li>
 <li><p>⚠️ 만약 <span class="math inline">\(y_i\)</span>에 영향을 주는 다른 모든 요인이 <span class="math inline">\(x_i\)</span>와 상관관계가 있다면,<br>
 → <span class="math inline">\(b_1\)</span>은 인과적 효과(Causal Effect)로 해석될 수 없음.</p></li>
-<li><p>이를 해결하기 위해, <strong>모델을 확장하고(<span class="math inline">\(y_i\)</span>를 동시에 설명하는 다른 요인을 포함)</strong><br>
+<li><p>이를 해결하기 위해, <strong>모델을 확장하고(</strong><span class="math inline">\(y_i\)</span>를 동시에 설명하는 다른 요인을 포함)<br>
 → <span class="math inline">\(y_i\)</span>와 <span class="math inline">\(x_i\)</span> 모두와 관련된 변수들을 고려해야 함.</p></li>
 </ul>
 </section>
@@ -379,7 +387,7 @@ y_i = b_0 + b_1 x_{1,i} + b_2 x_{2,i}  + b_3 x_{3,i} + \dots + b_k x_{k,i} + e_i
 <ul>
 <li><p><strong>절편 (</strong><span class="math inline">\(b_0\)</span>): <span class="math inline">\(x_1, x_2, x_3, ...\)</span> 모든 독립 변수가 0일 때, 예측된 <span class="math inline">\(y\)</span> 값 <span class="math inline">\(\widehat{y}\)</span></p></li>
 <li><p><strong>기울기 (</strong><span class="math inline">\(b_k\)</span>): <span class="math inline">\(x_k\)</span>가 1 단위 증가할 때, <span class="math inline">\(y\)</span> 값이 평균적으로 어떻게 변하는지 예측… 단, 다른 모든 독립 변수들은 일정하게 유지!</p></li>
-<li><p><strong>다른 모든 변수들을 일정하게 유지한다는 점</strong>이 <strong>단순 선형 회귀(SLM)와 다른 점</strong>.<br>
+<li><p><strong>다른 모든 변수들을 일정하게 유지한다는 점</strong>이 <strong>단순 선형 회귀와 다른 점</strong>.<br>
 </p></li>
 <li><p>즉, <span class="math inline">\(x_k\)</span>가 <span class="math inline">\(y\)</span>에 미치는 개별적인 효과를 고립시켜 분석하는 것.</p></li>
 <li><p><strong>인과 추론(Causal Inference)을 유의해야 하는 점</strong></p>
@@ -412,59 +420,96 @@ y_i = b_0 + b_1 x_{1,i} + b_2 x_{2,i}  + b_3 x_{3,i} + \dots + b_k x_{k,i} + e_i
 <section id="다중-회귀-분석-베타-추정-1" class="slide level2 scrollable">
 <h2>다중 회귀 분석: 베타 추정</h2>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="fu">library</span>(tidyquant)  <span class="co"># 금융 데이터 수집 및 변환을 위한 패키지</span></span>
-<span id="cb5-2"><a href=""></a><span class="fu">library</span>(tidyr)  <span class="co"># 데이터 구조 변경을 위한 패키지</span></span>
-<span id="cb5-3"><a href=""></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb5-4"><a href=""></a></span>
-<span id="cb5-5"><a href=""></a>raw_data <span class="ot">&lt;-</span> <span class="fu">tq_get</span>(<span class="fu">c</span>(<span class="st">"^KS200"</span>, <span class="st">"006800.KS"</span>, <span class="st">"^SP500TR"</span>, <span class="st">"000001.SS"</span>, <span class="st">"^N225"</span>), </span>
-<span id="cb5-6"><a href=""></a>                   <span class="at">get  =</span> <span class="st">"stock.prices"</span>,</span>
-<span id="cb5-7"><a href=""></a>                   <span class="at">from =</span> <span class="st">"2010-01-01"</span>,</span>
-<span id="cb5-8"><a href=""></a>                   <span class="at">to   =</span> <span class="fu">Sys.Date</span>())</span>
-<span id="cb5-9"><a href=""></a></span>
-<span id="cb5-10"><a href=""></a><span class="co"># 결측치 정리 (NA 제거): 수정주가(adjusted)를 기준으로 결측치가 있는 행을 제거.</span></span>
-<span id="cb5-11"><a href=""></a>clean_data <span class="ot">&lt;-</span> raw_data <span class="sc">%&gt;%</span> <span class="fu">drop_na</span>(adjusted) </span>
-<span id="cb5-12"><a href=""></a></span>
-<span id="cb5-13"><a href=""></a><span class="co"># 월별 수익률 계산: tq_transmute를 사용하여 일별 주가를 월별 수익률로 변환.</span></span>
-<span id="cb5-14"><a href=""></a>monthly_returns <span class="ot">&lt;-</span> clean_data <span class="sc">%&gt;%</span></span>
-<span id="cb5-15"><a href=""></a>  <span class="fu">group_by</span>(symbol) <span class="sc">%&gt;%</span></span>
-<span id="cb5-16"><a href=""></a>  <span class="fu">tq_transmute</span>(<span class="at">select     =</span> adjusted,</span>
-<span id="cb5-17"><a href=""></a>               <span class="at">mutate_fun =</span> periodReturn,</span>
-<span id="cb5-18"><a href=""></a>               <span class="at">period     =</span> <span class="st">"monthly"</span>,</span>
-<span id="cb5-19"><a href=""></a>               <span class="at">col_rename =</span> <span class="st">"monthly_return"</span>)</span>
-<span id="cb5-20"><a href=""></a></span>
-<span id="cb5-21"><a href=""></a><span class="co"># 베타 추정을 위한 데이터 구조 변경 </span></span>
-<span id="cb5-22"><a href=""></a>returns_wide <span class="ot">&lt;-</span> monthly_returns <span class="sc">%&gt;%</span></span>
-<span id="cb5-23"><a href=""></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> symbol, <span class="at">values_from =</span> monthly_return) <span class="sc">%&gt;%</span></span>
-<span id="cb5-24"><a href=""></a>  <span class="fu">rename</span>(<span class="at">KOSPI200 =</span> <span class="st">`</span><span class="at">^KS200</span><span class="st">`</span>, <span class="at">MiraeAsset =</span> <span class="st">`</span><span class="at">006800.KS</span><span class="st">`</span>, <span class="at">SP500 =</span> <span class="st">`</span><span class="at">^SP500TR</span><span class="st">`</span>, <span class="at">SSE =</span> <span class="st">`</span><span class="at">000001.SS</span><span class="st">`</span>, <span class="at">N225 =</span> <span class="st">`</span><span class="at">^N225</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb5-25"><a href=""></a>  <span class="fu">arrange</span>(date) <span class="sc">%&gt;%</span></span>
-<span id="cb5-26"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">SP500_lag =</span> <span class="fu">lag</span>(SP500), <span class="at">SSE_lag =</span> <span class="fu">lag</span>(SSE)) <span class="sc">%&gt;%</span> <span class="co"># SP500과 SSE, N225의 1개월 지연값 추가</span></span>
-<span id="cb5-27"><a href=""></a>  <span class="fu">drop_na</span>() <span class="co"># 기존 결측치 및 lead/lag 함수 사용으로 인해 첫째 달과 마지막 달에 발생한 NA 제거</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="co"># ============================================================</span></span>
+<span id="cb5-2"><a href=""></a><span class="co">#  CAPM 베타 추정: 미래에셋증권(006800.KS) - 4개국 시장</span></span>
+<span id="cb5-3"><a href=""></a><span class="co">#  모형: (Ri - Rf_KR) = α + β1(Rm_KR - Rf_KR) + β2(Rm_US - Rf_US)</span></span>
+<span id="cb5-4"><a href=""></a><span class="co">#                       + β3(Rm_CN - Rf_CN) + β4(Rm_JP - Rf_JP) + ε</span></span>
+<span id="cb5-5"><a href=""></a><span class="co"># ============================================================</span></span>
+<span id="cb5-6"><a href=""></a></span>
+<span id="cb5-7"><a href=""></a><span class="fu">library</span>(tidyquant)</span>
+<span id="cb5-8"><a href=""></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb5-9"><a href=""></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb5-10"><a href=""></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb5-11"><a href=""></a></span>
+<span id="cb5-12"><a href=""></a><span class="co"># ── 1. 주가 및 무위험이자율 수집 ─────────────────────────────</span></span>
+<span id="cb5-13"><a href=""></a>raw_data <span class="ot">&lt;-</span> <span class="fu">tq_get</span>(<span class="fu">c</span>(<span class="st">"^KS200"</span>, <span class="st">"006800.KS"</span>, <span class="st">"^SP500TR"</span>, <span class="st">"000001.SS"</span>, <span class="st">"^N225"</span>),</span>
+<span id="cb5-14"><a href=""></a>                   <span class="at">get =</span> <span class="st">"stock.prices"</span>, <span class="at">from =</span> <span class="st">"2010-01-01"</span>, <span class="at">to =</span> <span class="fu">Sys.Date</span>())</span>
+<span id="cb5-15"><a href=""></a></span>
+<span id="cb5-16"><a href=""></a>rf_raw <span class="ot">&lt;-</span> <span class="fu">tq_get</span>(<span class="fu">c</span>(<span class="st">"TB3MS"</span>,             <span class="co"># 미국: 3개월 T-Bill</span></span>
+<span id="cb5-17"><a href=""></a>                   <span class="st">"IRSTCI01KRM156N"</span>,   <span class="co"># 한국: 콜금리</span></span>
+<span id="cb5-18"><a href=""></a>                   <span class="st">"IRSTCI01CNM156N"</span>,   <span class="co"># 중국: 단기금리</span></span>
+<span id="cb5-19"><a href=""></a>                   <span class="st">"IRSTCI01JPM156N"</span>),  <span class="co"># 일본: 콜금리</span></span>
+<span id="cb5-20"><a href=""></a>                 <span class="at">get =</span> <span class="st">"economic.data"</span>, <span class="at">from =</span> <span class="st">"2010-01-01"</span>, <span class="at">to =</span> <span class="fu">Sys.Date</span>())</span>
+<span id="cb5-21"><a href=""></a></span>
+<span id="cb5-22"><a href=""></a><span class="co"># ── 2. 월별 수익률 계산 ──────────────────────────────────────</span></span>
+<span id="cb5-23"><a href=""></a>monthly_returns <span class="ot">&lt;-</span> raw_data <span class="sc">%&gt;%</span></span>
+<span id="cb5-24"><a href=""></a>  <span class="fu">drop_na</span>(adjusted) <span class="sc">%&gt;%</span></span>
+<span id="cb5-25"><a href=""></a>  <span class="fu">group_by</span>(symbol) <span class="sc">%&gt;%</span></span>
+<span id="cb5-26"><a href=""></a>  <span class="fu">tq_transmute</span>(<span class="at">select =</span> adjusted, <span class="at">mutate_fun =</span> periodReturn,</span>
+<span id="cb5-27"><a href=""></a>               <span class="at">period =</span> <span class="st">"monthly"</span>, <span class="at">col_rename =</span> <span class="st">"monthly_return"</span>)</span>
 <span id="cb5-28"><a href=""></a></span>
-<span id="cb5-29"><a href=""></a><span class="co"># 베타(Beta) 추정 (Lead, Lag 포함)</span></span>
-<span id="cb5-30"><a href=""></a>beta_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(MiraeAsset <span class="sc">~</span> KOSPI200 <span class="sc">+</span> SP500 <span class="sc">+</span> SSE <span class="sc">+</span> N225, <span class="at">data =</span> returns_wide)</span>
-<span id="cb5-31"><a href=""></a><span class="fu">summary</span>(beta_model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-29"><a href=""></a><span class="co"># ── 3. 무위험이자율 전처리 (연율 % → 월복리) ─────────────────</span></span>
+<span id="cb5-30"><a href=""></a>rf_monthly <span class="ot">&lt;-</span> rf_raw <span class="sc">%&gt;%</span></span>
+<span id="cb5-31"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">date    =</span> <span class="fu">floor_date</span>(date, <span class="st">"month"</span>),</span>
+<span id="cb5-32"><a href=""></a>         <span class="at">rf_rate =</span> (<span class="dv">1</span> <span class="sc">+</span> price <span class="sc">/</span> <span class="dv">100</span>)<span class="sc">^</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">12</span>) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-33"><a href=""></a>  <span class="fu">select</span>(symbol, date, rf_rate) <span class="sc">%&gt;%</span></span>
+<span id="cb5-34"><a href=""></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> symbol, <span class="at">values_from =</span> rf_rate) <span class="sc">%&gt;%</span></span>
+<span id="cb5-35"><a href=""></a>  <span class="fu">rename</span>(<span class="at">rf_US =</span> TB3MS,</span>
+<span id="cb5-36"><a href=""></a>         <span class="at">rf_KR =</span> IRSTCI01KRM156N,</span>
+<span id="cb5-37"><a href=""></a>         <span class="at">rf_CN =</span> IRSTCI01CNM156N,</span>
+<span id="cb5-38"><a href=""></a>         <span class="at">rf_JP =</span> IRSTCI01JPM156N)</span>
+<span id="cb5-39"><a href=""></a></span>
+<span id="cb5-40"><a href=""></a><span class="co"># ── 4. Wide format 변환 및 무위험이자율 병합 ─────────────────</span></span>
+<span id="cb5-41"><a href=""></a>returns_wide <span class="ot">&lt;-</span> monthly_returns <span class="sc">%&gt;%</span></span>
+<span id="cb5-42"><a href=""></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> symbol, <span class="at">values_from =</span> monthly_return) <span class="sc">%&gt;%</span></span>
+<span id="cb5-43"><a href=""></a>  <span class="fu">rename</span>(<span class="at">KOSPI200   =</span> <span class="st">`</span><span class="at">^KS200</span><span class="st">`</span>,</span>
+<span id="cb5-44"><a href=""></a>         <span class="at">MiraeAsset =</span> <span class="st">`</span><span class="at">006800.KS</span><span class="st">`</span>,</span>
+<span id="cb5-45"><a href=""></a>         <span class="at">SP500      =</span> <span class="st">`</span><span class="at">^SP500TR</span><span class="st">`</span>,</span>
+<span id="cb5-46"><a href=""></a>         <span class="at">SSE        =</span> <span class="st">`</span><span class="at">000001.SS</span><span class="st">`</span>,</span>
+<span id="cb5-47"><a href=""></a>         <span class="at">N225       =</span> <span class="st">`</span><span class="at">^N225</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-48"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">floor_date</span>(date, <span class="st">"month"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-49"><a href=""></a>  <span class="fu">left_join</span>(rf_monthly, <span class="at">by =</span> <span class="st">"date"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-50"><a href=""></a>  <span class="fu">fill</span>(rf_US, rf_KR, rf_CN, rf_JP, <span class="at">.direction =</span> <span class="st">"down"</span>)</span>
+<span id="cb5-51"><a href=""></a></span>
+<span id="cb5-52"><a href=""></a><span class="co"># ── 5. 국가별 초과수익률 계산 및 Lag 변수 생성 ───────────────</span></span>
+<span id="cb5-53"><a href=""></a>returns_wide <span class="ot">&lt;-</span> returns_wide <span class="sc">%&gt;%</span></span>
+<span id="cb5-54"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">excess_market_KR =</span> KOSPI200   <span class="sc">-</span> rf_KR,</span>
+<span id="cb5-55"><a href=""></a>         <span class="at">excess_stock     =</span> MiraeAsset <span class="sc">-</span> rf_KR,</span>
+<span id="cb5-56"><a href=""></a>         <span class="at">excess_market_US =</span> SP500      <span class="sc">-</span> rf_US,</span>
+<span id="cb5-57"><a href=""></a>         <span class="at">excess_market_CN =</span> SSE        <span class="sc">-</span> rf_CN,</span>
+<span id="cb5-58"><a href=""></a>         <span class="at">excess_market_JP =</span> N225       <span class="sc">-</span> rf_JP,</span>
+<span id="cb5-59"><a href=""></a>         <span class="at">excess_SP500_lag =</span> <span class="fu">lag</span>(excess_market_US),</span>
+<span id="cb5-60"><a href=""></a>         <span class="at">excess_SSE_lag   =</span> <span class="fu">lag</span>(excess_market_CN)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-61"><a href=""></a>  <span class="fu">drop_na</span>()</span>
+<span id="cb5-62"><a href=""></a></span>
+<span id="cb5-63"><a href=""></a><span class="co"># ── 6. CAPM 회귀분석 ─────────────────────────────────────────</span></span>
+<span id="cb5-64"><a href=""></a>beta_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(excess_stock <span class="sc">~</span> excess_market_KR <span class="sc">+</span> excess_market_US <span class="sc">+</span></span>
+<span id="cb5-65"><a href=""></a>                   excess_market_CN <span class="sc">+</span> excess_market_JP,</span>
+<span id="cb5-66"><a href=""></a>                 <span class="at">data =</span> returns_wide)</span>
+<span id="cb5-67"><a href=""></a><span class="fu">summary</span>(beta_model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## 
 ## Call:
-## lm(formula = MiraeAsset ~ KOSPI200 + SP500 + SSE + N225, data = returns_wide)
+## lm(formula = excess_stock ~ excess_market_KR + excess_market_US + 
+##     excess_market_CN + excess_market_JP, data = returns_wide)
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.22767 -0.05541 -0.00668  0.04378  0.31783 
+## -0.21153 -0.05092 -0.00596  0.04910  0.32649 
 ## 
 ## Coefficients:
-##              Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)  0.006784   0.008361   0.811   0.4185    
-## KOSPI200     1.863533   0.169369  11.003   &lt;2e-16 ***
-## SP500       -0.447328   0.255541  -1.751   0.0823 .  
-## SSE          0.347607   0.144418   2.407   0.0174 *  
-## N225         0.002292   0.210508   0.011   0.9913    
+##                   Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)       0.003963   0.008241   0.481   0.6314    
+## excess_market_KR  1.621064   0.188177   8.615 2.46e-14 ***
+## excess_market_US -0.347624   0.252464  -1.377   0.1710    
+## excess_market_CN  0.328229   0.145332   2.258   0.0256 *  
+## excess_market_JP  0.006303   0.209636   0.030   0.9761    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 0.09091 on 138 degrees of freedom
-## Multiple R-squared:  0.5844, Adjusted R-squared:  0.5724 
-## F-statistic: 48.52 on 4 and 138 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 0.08588 on 126 degrees of freedom
+## Multiple R-squared:  0.5167, Adjusted R-squared:  0.5014 
+## F-statistic: 33.68 on 4 and 126 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <p><strong><em>Questions</em></strong></p>
@@ -520,7 +565,7 @@ x_2 \neq a x_1 + b
 </section>
 <section id="task-1" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 1</h2>
-<p><countdown-timer class="countdown" id="timer_19766262" minutes="5" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;--countdown-color-border:blue;"></countdown-timer></p>
+<p><countdown-timer class="countdown" id="timer_bbdf1a0b" minutes="5" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;--countdown-color-border:blue;"></countdown-timer></p>
 <p><code>grades</code> 데이터:</p>
 <ul>
 <li><p>학생들의 학업 성취도에 영향을 미치는 요인들을 분석하기 위한 데이터셋</p></li>
@@ -530,9 +575,18 @@ x_2 \neq a x_1 + b
 <ol type="1">
 <li><code>haven</code> 패키지의 <code>read_dta()</code> 함수를 사용하여 데이터를 불러오기. 데이터를 <code>grades</code>라는 객체에 저장</li>
 </ol>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="fu">library</span>(haven)</span>
+<span id="cb11-2"><a href=""></a>grades <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"https://raw.githack.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/data/grade5.dta"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <ol start="2" type="1">
-<li>avgverb (읽기 점수)를 종속 변수로, classize와 disadvantaged를 독립 변수로 사용하여 회귀분석. 결과를 reg 객체에 저장. 각 계수(coefficient)의 의미는 무엇인가? 단순 선형 회귀와 비교했을 때 계수는 어떻게 달라졌는가? 수학 점수 회귀 분석과 비교했을 때 계수의 차이점은 무엇인가?</li>
+<li>avgverb (읽기 점수)를 종속 변수로,</li>
 </ol>
+<ol type="1">
+<li><p>classize를 독립변수로 회귀분석하고</p></li>
+<li><p>classize와 disadvantaged (저소득 학생 비율)를 독립 변수로 사용하여 회귀분석.</p></li>
+</ol>
+<p>결과를 reg1, reg2 객체에 저장. 각 계수(coefficient)의 의미는 무엇인가? 단순 선형 회귀와 비교했을 때 계수는 어떻게 달라졌는가?</p>
 </section>
 <section id="누락변수-편의-omitted-variable-bias-ovb" class="slide level2">
 <h2>누락변수 편의 (Omitted Variable Bias, OVB)</h2>
@@ -630,7 +684,7 @@ b_1 = c_1 + OVB
 ##   69.94438332    0.07167819   -0.33957877</code></pre>
 </div>
 </div>
-<p><strong><em>누락변수와 독립변수</em></strong>: <span class="math inline">\(\text{\% disadvantaged} = d_0 + \color{#d96502}{d_1}\text{size} + e\)</span></p>
+<p><strong><em>누락변수와 독립변수</em></strong>: <span class="math inline">\(\text{disadvantaged} = d_0 + \color{#d96502}{d_1}\text{size} + e\)</span></p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
 <pre><code>## (Intercept)    classize 
@@ -657,7 +711,7 @@ b_1 = c_1 + OVB
 </section>
 <section id="task-2" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 2</h2>
-<p><countdown-timer class="countdown" id="timer_f6bac3b2" minutes="15" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;--countdown-color-border:blue;"></countdown-timer></p>
+<p><countdown-timer class="countdown" id="timer_d0813930" minutes="15" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;--countdown-color-border:blue;"></countdown-timer></p>
 <p><strong>STAR 데이터</strong></p>
 <ul>
 <li>STAR(Student Teacher Achievement Ratio) 데이터는 1985년부터 1989년까지 미국 테네시 주에서 진행된 무작위 실험의 결과를 담고 있음.</li>
@@ -680,6 +734,97 @@ b_1 = c_1 + OVB
 <li><p><strong>다중 회귀 분석</strong>에서 얻은 <strong>수정된</strong> <span class="math inline">\(R^2\)</span> 값을 확인하시오. 수정된 <span class="math inline">\(R^2\)</span> 값이 의미하는 바는 무엇인가? 관측 가능한 개별 학생, 교사, 학교 특성이 학업 성취도에 미치는 중요성에 대해 어떤 결론을 내릴 수 있는가?</p></li>
 <li><p>(Optional) <code>math</code>를 <code>gender</code>와 <code>experience</code> 변수에 대해 회귀 분석하시오. 회귀 계수를 어떻게 해석할 수 있는가? 이러한 회귀 분석 결과를 시각적으로 표현한다면 어떻게 보일 것인가?</p></li>
 </ol>
+</section>
+<section class="slide level2">
+
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="co"># ============================================================</span></span>
+<span id="cb15-2"><a href=""></a><span class="co">#  OVB 예시: CAPM → Fama-French 3 Factor (AAPL, 2000~)</span></span>
+<span id="cb15-3"><a href=""></a><span class="co"># ============================================================</span></span>
+<span id="cb15-4"><a href=""></a></span>
+<span id="cb15-5"><a href=""></a><span class="fu">library</span>(tidyquant)</span>
+<span id="cb15-6"><a href=""></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb15-7"><a href=""></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb15-8"><a href=""></a><span class="fu">library</span>(readr)</span>
+<span id="cb15-9"><a href=""></a></span>
+<span id="cb15-10"><a href=""></a><span class="co"># ── 1. Fama-French 3요인 데이터 수집 ─────────────────────────</span></span>
+<span id="cb15-11"><a href=""></a>ff_temp <span class="ot">&lt;-</span> <span class="fu">tempfile</span>()</span>
+<span id="cb15-12"><a href=""></a><span class="fu">download.file</span>(<span class="st">"https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_CSV.zip"</span>,</span>
+<span id="cb15-13"><a href=""></a>              ff_temp, <span class="at">mode =</span> <span class="st">"wb"</span>)</span>
+<span id="cb15-14"><a href=""></a></span>
+<span id="cb15-15"><a href=""></a>ff_raw <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">unzip</span>(ff_temp, <span class="at">exdir =</span> <span class="fu">tempdir</span>()),</span>
+<span id="cb15-16"><a href=""></a>                   <span class="at">skip =</span> <span class="dv">3</span>, <span class="at">col_types =</span> <span class="fu">cols</span>(<span class="at">.default =</span> <span class="fu">col_double</span>())) <span class="sc">%&gt;%</span></span>
+<span id="cb15-17"><a href=""></a>  <span class="fu">rename</span>(<span class="at">date =</span> <span class="st">`</span><span class="at">...1</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-18"><a href=""></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(SMB), <span class="fu">nchar</span>(<span class="fu">as.character</span>(date)) <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-19"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">date  =</span> <span class="fu">ym</span>(date),</span>
+<span id="cb15-20"><a href=""></a>         <span class="fu">across</span>(<span class="fu">c</span>(<span class="st">`</span><span class="at">Mkt-RF</span><span class="st">`</span>, SMB, HML, RF), <span class="sc">~</span> . <span class="sc">/</span> <span class="dv">100</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb15-21"><a href=""></a>  <span class="fu">filter</span>(date <span class="sc">&gt;=</span> <span class="fu">as.Date</span>(<span class="st">"2000-01-01"</span>))</span>
+<span id="cb15-22"><a href=""></a></span>
+<span id="cb15-23"><a href=""></a><span class="fu">unlink</span>(ff_temp)</span>
+<span id="cb15-24"><a href=""></a></span>
+<span id="cb15-25"><a href=""></a><span class="co"># ── 2. 개별 주식 월별 수익률 수집 (AAPL) ─────────────────────</span></span>
+<span id="cb15-26"><a href=""></a>stock_returns <span class="ot">&lt;-</span> <span class="fu">tq_get</span>(<span class="st">"BRK-B"</span>, <span class="at">get =</span> <span class="st">"stock.prices"</span>,</span>
+<span id="cb15-27"><a href=""></a>                        <span class="at">from =</span> <span class="st">"2000-01-01"</span>, <span class="at">to =</span> <span class="fu">Sys.Date</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb15-28"><a href=""></a>  <span class="fu">drop_na</span>(adjusted) <span class="sc">%&gt;%</span></span>
+<span id="cb15-29"><a href=""></a>  <span class="fu">tq_transmute</span>(<span class="at">select =</span> adjusted, <span class="at">mutate_fun =</span> periodReturn,</span>
+<span id="cb15-30"><a href=""></a>               <span class="at">period =</span> <span class="st">"monthly"</span>, <span class="at">col_rename =</span> <span class="st">"R_stock"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-31"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">floor_date</span>(date, <span class="st">"month"</span>))</span>
+<span id="cb15-32"><a href=""></a></span>
+<span id="cb15-33"><a href=""></a><span class="co"># ── 3. 병합 및 초과수익률 계산 ───────────────────────────────</span></span>
+<span id="cb15-34"><a href=""></a>df <span class="ot">&lt;-</span> stock_returns <span class="sc">%&gt;%</span></span>
+<span id="cb15-35"><a href=""></a>  <span class="fu">left_join</span>(ff_raw, <span class="at">by =</span> <span class="st">"date"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-36"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">excess_stock =</span> R_stock <span class="sc">-</span> RF) <span class="sc">%&gt;%</span></span>
+<span id="cb15-37"><a href=""></a>  <span class="fu">drop_na</span>()</span>
+<span id="cb15-38"><a href=""></a></span>
+<span id="cb15-39"><a href=""></a><span class="co"># ── 4. CAPM vs Fama-French 회귀분석 ──────────────────────────</span></span>
+<span id="cb15-40"><a href=""></a>reg1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(excess_stock <span class="sc">~</span> <span class="st">`</span><span class="at">Mkt-RF</span><span class="st">`</span>,             <span class="at">data =</span> df)  <span class="co"># CAPM</span></span>
+<span id="cb15-41"><a href=""></a>reg2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(excess_stock <span class="sc">~</span> <span class="st">`</span><span class="at">Mkt-RF</span><span class="st">`</span> <span class="sc">+</span> SMB <span class="sc">+</span> HML, <span class="at">data =</span> df)  <span class="co"># FF3F</span></span>
+<span id="cb15-42"><a href=""></a></span>
+<span id="cb15-43"><a href=""></a><span class="fu">summary</span>(reg1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## 
+## Call:
+## lm(formula = excess_stock ~ `Mkt-RF`, data = df)
+## 
+## Residuals:
+##       Min        1Q    Median        3Q       Max 
+## -0.147556 -0.030312 -0.004963  0.027317  0.226232 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 0.004818   0.002596   1.856   0.0644 .  
+## `Mkt-RF`    0.540107   0.056905   9.491   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.04551 on 311 degrees of freedom
+## Multiple R-squared:  0.2246, Adjusted R-squared:  0.2221 
+## F-statistic: 90.09 on 1 and 311 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a><span class="fu">summary</span>(reg2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## 
+## Call:
+## lm(formula = excess_stock ~ `Mkt-RF` + SMB + HML, data = df)
+## 
+## Residuals:
+##       Min        1Q    Median        3Q       Max 
+## -0.084686 -0.028620 -0.003535  0.022087  0.181207 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  0.003766   0.002252   1.672   0.0955 .  
+## `Mkt-RF`     0.641848   0.051166  12.544  &lt; 2e-16 ***
+## SMB         -0.474546   0.073802  -6.430 4.84e-10 ***
+## HML          0.464624   0.065379   7.107 8.26e-12 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.03939 on 309 degrees of freedom
+## Multiple R-squared:  0.4228, Adjusted R-squared:  0.4172 
+## F-statistic: 75.44 on 3 and 309 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
 </section>
 <section id="the-end" class="title-slide slide level1 center">
 <h1>THE END!</h1>

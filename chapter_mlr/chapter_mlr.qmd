@@ -14,8 +14,6 @@ revealjs-plugins:
   - revealjs-text-resizer 
 ---
 
-
-
 ```{r setup, include=FALSE,warning=FALSE,message=FALSE}
 options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(
@@ -55,7 +53,7 @@ countdown(
 
 ## Today's Agenda
 
--   **다중 독립 변수** 
+-   **다중 독립 변수**
 -   **누락 변수 편향** (Omitted Variable Bias)
 -   **조정된** $R^2$ (Adjusted $R^2$)
 
@@ -67,91 +65,95 @@ countdown(
 
 -   자산의 리스크프리미엄을 어떻게 결정해야하는지에 대한 모형
 -   포트폴리오 이론에 기반을 둠
-    -   즉 모든 투자자는 분산이 최대화된 시장포트폴리오에 투자하며, 
+    -   즉 모든 투자자는 분산이 최대화된 시장포트폴리오에 투자하며,
     -   개별 자산 고유의 리스크는 제거 될 수 있으므로, 이에 대한 리스크 프리미엄은 0이 됨.
     -   제거되지 못하는 체계적 위험에 대해서만 리스크 프리미엄이 존재함.
     -   자산의 체계적 위험은 자산과 시장포트폴리오 간의 공분산으로 측정됨.
     -   '베타'는 이러한 체계적 위험의 크기를 측정: $E(R_i) = R_f + \beta_i (E(R_m) - R_f)$
-
-- CAPM은 “리스크 프리미엄을 베타 하나로 설명하는” **벤치마크**
-- CAPM을 **완전한 진리**라기보다, **출발점**으로 사용
+-   CAPM은 “리스크 프리미엄을 베타 하나로 설명하는” **벤치마크**
+-   CAPM을 **완전한 진리**라기보다, **출발점**으로 사용
 
 ------------------------------------------------------------------------
 
 ## CAPM의 활용
 
-- **기업가치평가(DCF)**: 할인율이 필요함  
-- **프로젝트 투자판단(NPV)**: 프로젝트의 리스크에 맞는 요구수익률이 필요함  
-- **성과평가(알파/샤프/정보비율)**: "시장을 감안하면 잘했나?"를 평가해야 함  
-- **포트폴리오/리스크관리**: "이 자산이 시장과 얼마나 연동되는가?"를 알아야 함 
+-   **기업가치평가(DCF)**: 할인율이 필요함\
 
+-   **프로젝트 투자판단(NPV)**: 프로젝트의 리스크에 맞는 요구수익률이 필요함\
+
+-   **성과평가(알파/샤프/정보비율)**: "시장을 감안하면 잘했나?"를 평가해야 함\
+
+-   **포트폴리오/리스크관리**: "이 자산이 시장과 얼마나 연동되는가?"를 알아야 함
 
 -   **단순 선형 회귀**를 이용하여 베타를 추정
+
     -   자산의 초과 수익률을 종속 변수로, 시장 포트폴리오의 초과 수익률을 독립 변수로 하는 회귀 분석 수행
-       
 
 ------------------------------------------------------------------------
 
 ## 베타의 추정
 
-
 ```{r beta1, echo = TRUE, eval = TRUE}
-# (설치되지 않은 경우 주석 해제하여 설치)
-# install.packages("tidyquant")
-# install.packages("tidyr")
-# install.packages("dplyr")
+# ============================================================
+#  CAPM 베타 추정: 미래에셋증권(006800.KS) vs KOSPI 200
+#  모형: (Ri - Rf) = α + β(Rm - Rf) + ε
+# ============================================================
+
 library(tidyquant)
 library(tidyr)
 library(dplyr)
+library(lubridate)
 
-raw_data <- tq_get(c("^KS200", "006800.KS"), 
-                   get  = "stock.prices",
-                   from = "2010-01-01",
-                   to   = Sys.Date())
+# ── 1. 주가 및 무위험이자율 수집 ─────────────────────────────
+raw_data <- tq_get(c("^KS200", "006800.KS"),
+                   get = "stock.prices", from = "2010-01-01", to = Sys.Date())
 
-# 결측치 정리 (NA 제거): 수정주가(adjusted)를 기준으로 결측치가 있는 행을 제거.
-clean_data <- raw_data %>% drop_na(adjusted) 
+rf_raw <- tq_get("IRSTCI01KRM156N",
+                 get = "economic.data", from = "2010-01-01", to = Sys.Date())
 
-# 월별 수익률 계산: tq_transmute를 사용하여 일별 주가를 월별 수익률로 변환.
-monthly_returns <- clean_data %>%
+# ── 2. 월별 수익률 계산 ──────────────────────────────────────
+monthly_returns <- raw_data %>%
+  drop_na(adjusted) %>%
   group_by(symbol) %>%
-  tq_transmute(select     = adjusted,
-               mutate_fun = periodReturn,
-               period     = "monthly",
-               col_rename = "monthly_return")
+  tq_transmute(select = adjusted, mutate_fun = periodReturn,
+               period = "monthly", col_rename = "monthly_return")
 
-# 베타 추정을 위한 데이터 구조 변경 (Wide format)
-# 선형 회귀(lm) 함수에 넣기 쉽게 두 자산의 수익률을 각각의 열로 배치.
+# ── 3. 무위험이자율 전처리 (연율 % → 월복리) ─────────────────
+rf_monthly <- rf_raw %>%
+  mutate(date    = floor_date(date, "month"),
+         rf_rate = (1 + price / 100)^(1/12) - 1) %>%
+  select(date, rf_rate)
+
+# ── 4. Wide format 변환 및 무위험이자율 병합 ─────────────────
 returns_wide <- monthly_returns %>%
   pivot_wider(names_from = symbol, values_from = monthly_return) %>%
   rename(KOSPI200 = `^KS200`, MiraeAsset = `006800.KS`) %>%
-  drop_na() # 두 지표 모두 데이터가 존재하는 월만 남김
+  mutate(date = floor_date(date, "month")) %>%
+  left_join(rf_monthly, by = "date") %>%
+  fill(rf_rate, .direction = "down")
 
-# 베타(Beta) 추정
-beta_model <- lm(MiraeAsset ~ KOSPI200, data = returns_wide)
+# ── 5. 초과수익률 계산 및 결측치 제거 ────────────────────────
+returns_wide <- returns_wide %>%
+  mutate(excess_market = KOSPI200   - rf_rate,
+         excess_stock  = MiraeAsset - rf_rate) %>%
+  drop_na()
 
-# 회귀분석 결과 요약 출력
+# ── 6. CAPM 회귀분석 ─────────────────────────────────────────
+beta_model <- lm(excess_stock ~ excess_market, data = returns_wide)
 summary(beta_model)
 ```
 
+------------------------------------------------------------------------
 
-
-
----
-
-## 베타의 추정: 그래프 
-
+## 베타의 추정: 그래프
 
 ```{r beta1_plot, echo = TRUE, eval = TRUE, fig.width = 10, fig.height = 10}
-plot(returns_wide$KOSPI200, returns_wide$MiraeAsset, 
+plot(returns_wide$excess_market, returns_wide$excess_stock, 
      xlab = "KOSPI 200", ylab = "Mireae Asset")
 abline(beta_model, col = "red", lwd = 2) # 회귀선 덧그리기 (빨간색 굵은 선)
 eq <- sprintf("y = %.4f * x + %.4f", coef(beta_model)[2], coef(beta_model)[1])
 legend("topleft", legend = eq, bty = "n", text.col = "red")
 ```
-
-
-
 
 ------------------------------------------------------------------------
 
@@ -170,7 +172,7 @@ $$
 -   ⚠️ 만약 $y_i$에 영향을 주는 다른 모든 요인이 $x_i$와 상관관계가 있다면,\
     → $b_1$은 인과적 효과(Causal Effect)로 해석될 수 없음.
 
--   이를 해결하기 위해, **모델을 확장하고($y_i$를 동시에 설명하는 다른 요인을 포함)**\
+-   이를 해결하기 위해, **모델을 확장하고(**$y_i$를 동시에 설명하는 다른 요인을 포함)\
     → $y_i$와 $x_i$ 모두와 관련된 변수들을 고려해야 함.
 
 ------------------------------------------------------------------------
@@ -208,7 +210,7 @@ $$
 
 -   **기울기 (**$b_k$): $x_k$가 1 단위 증가할 때, $y$ 값이 평균적으로 어떻게 변하는지 예측... 단, 다른 모든 독립 변수들은 일정하게 유지!
 
--   **다른 모든 변수들을 일정하게 유지한다는 점**이 **단순 선형 회귀(SLM)와 다른 점**.\
+-   **다른 모든 변수들을 일정하게 유지한다는 점**이 **단순 선형 회귀와 다른 점**.\
 
 -   즉, $x_k$가 $y$에 미치는 개별적인 효과를 고립시켜 분석하는 것.
 
@@ -224,12 +226,10 @@ $$
 -   단순 선형 회귀와 매우 유사함.
     -   `lm()` 함수를 사용하여 다중 회귀 분석 수행 가능.
 
-```r
+``` r
 lm(formula = dependent variable ~  independent variable 1 + independent variable 2 + ...,
    data = data.frame containing the data)
 ```
-
-
 
 ------------------------------------------------------------------------
 
@@ -241,43 +241,75 @@ lm(formula = dependent variable ~  independent variable 1 + independent variable
 
 $KOSPI200 = b_0 + b_1 SP500 + b_2 SSE + b_3 N225 + e$
 
-
-
 ## 다중 회귀 분석: 베타 추정
 
-
-
 ```{r beta2, echo = TRUE, eval = TRUE}
-library(tidyquant)  # 금융 데이터 수집 및 변환을 위한 패키지
-library(tidyr)  # 데이터 구조 변경을 위한 패키지
+# ============================================================
+#  CAPM 베타 추정: 미래에셋증권(006800.KS) - 4개국 시장
+#  모형: (Ri - Rf_KR) = α + β1(Rm_KR - Rf_KR) + β2(Rm_US - Rf_US)
+#                       + β3(Rm_CN - Rf_CN) + β4(Rm_JP - Rf_JP) + ε
+# ============================================================
+
+library(tidyquant)
+library(tidyr)
 library(dplyr)
+library(lubridate)
 
-raw_data <- tq_get(c("^KS200", "006800.KS", "^SP500TR", "000001.SS", "^N225"), 
-                   get  = "stock.prices",
-                   from = "2010-01-01",
-                   to   = Sys.Date())
+# ── 1. 주가 및 무위험이자율 수집 ─────────────────────────────
+raw_data <- tq_get(c("^KS200", "006800.KS", "^SP500TR", "000001.SS", "^N225"),
+                   get = "stock.prices", from = "2010-01-01", to = Sys.Date())
 
-# 결측치 정리 (NA 제거): 수정주가(adjusted)를 기준으로 결측치가 있는 행을 제거.
-clean_data <- raw_data %>% drop_na(adjusted) 
+rf_raw <- tq_get(c("TB3MS",             # 미국: 3개월 T-Bill
+                   "IRSTCI01KRM156N",   # 한국: 콜금리
+                   "IRSTCI01CNM156N",   # 중국: 단기금리
+                   "IRSTCI01JPM156N"),  # 일본: 콜금리
+                 get = "economic.data", from = "2010-01-01", to = Sys.Date())
 
-# 월별 수익률 계산: tq_transmute를 사용하여 일별 주가를 월별 수익률로 변환.
-monthly_returns <- clean_data %>%
+# ── 2. 월별 수익률 계산 ──────────────────────────────────────
+monthly_returns <- raw_data %>%
+  drop_na(adjusted) %>%
   group_by(symbol) %>%
-  tq_transmute(select     = adjusted,
-               mutate_fun = periodReturn,
-               period     = "monthly",
-               col_rename = "monthly_return")
+  tq_transmute(select = adjusted, mutate_fun = periodReturn,
+               period = "monthly", col_rename = "monthly_return")
 
-# 베타 추정을 위한 데이터 구조 변경 
+# ── 3. 무위험이자율 전처리 (연율 % → 월복리) ─────────────────
+rf_monthly <- rf_raw %>%
+  mutate(date    = floor_date(date, "month"),
+         rf_rate = (1 + price / 100)^(1/12) - 1) %>%
+  select(symbol, date, rf_rate) %>%
+  pivot_wider(names_from = symbol, values_from = rf_rate) %>%
+  rename(rf_US = TB3MS,
+         rf_KR = IRSTCI01KRM156N,
+         rf_CN = IRSTCI01CNM156N,
+         rf_JP = IRSTCI01JPM156N)
+
+# ── 4. Wide format 변환 및 무위험이자율 병합 ─────────────────
 returns_wide <- monthly_returns %>%
   pivot_wider(names_from = symbol, values_from = monthly_return) %>%
-  rename(KOSPI200 = `^KS200`, MiraeAsset = `006800.KS`, SP500 = `^SP500TR`, SSE = `000001.SS`, N225 = `^N225`) %>%
-  arrange(date) %>%
-  mutate(SP500_lag = lag(SP500), SSE_lag = lag(SSE)) %>% # SP500과 SSE, N225의 1개월 지연값 추가
-  drop_na() # 기존 결측치 및 lead/lag 함수 사용으로 인해 첫째 달과 마지막 달에 발생한 NA 제거
+  rename(KOSPI200   = `^KS200`,
+         MiraeAsset = `006800.KS`,
+         SP500      = `^SP500TR`,
+         SSE        = `000001.SS`,
+         N225       = `^N225`) %>%
+  mutate(date = floor_date(date, "month")) %>%
+  left_join(rf_monthly, by = "date") %>%
+  fill(rf_US, rf_KR, rf_CN, rf_JP, .direction = "down")
 
-# 베타(Beta) 추정 (Lead, Lag 포함)
-beta_model <- lm(MiraeAsset ~ KOSPI200 + SP500 + SSE + N225, data = returns_wide)
+# ── 5. 국가별 초과수익률 계산 및 Lag 변수 생성 ───────────────
+returns_wide <- returns_wide %>%
+  mutate(excess_market_KR = KOSPI200   - rf_KR,
+         excess_stock     = MiraeAsset - rf_KR,
+         excess_market_US = SP500      - rf_US,
+         excess_market_CN = SSE        - rf_CN,
+         excess_market_JP = N225       - rf_JP,
+         excess_SP500_lag = lag(excess_market_US),
+         excess_SSE_lag   = lag(excess_market_CN)) %>%
+  drop_na()
+
+# ── 6. CAPM 회귀분석 ─────────────────────────────────────────
+beta_model <- lm(excess_stock ~ excess_market_KR + excess_market_US +
+                   excess_market_CN + excess_market_JP,
+                 data = returns_wide)
 summary(beta_model)
 ```
 
@@ -287,14 +319,12 @@ summary(beta_model)
 2.  단순 선형 회귀(SLM)와 비교했을 때 KOSPI200 계수는 어떻게 달라졌는가?
 3.  미래에셋 수익률을 S&P500 수익률에 대해 회귀 분석을 수행했을 때, 베타는 어떤가?
 
-
 ------------------------------------------------------------------------
 
 ## 다중공선성(Perfect Collinearity)
 
 -   추가하는 변수는 반드시 **새로운 정보**를 제공해야 함.
-  - 회귀 모형에 추가하는 변수들은 **완전히 선형결합(linear combination)**이 될 수 없음.
-
+-   회귀 모형에 추가하는 변수들은 **완전히 선형결합(linear combination)**이 될 수 없음.
 
 $$
 x_2 \neq a x_1 + b
@@ -312,11 +342,11 @@ $$
 
 ## 다중공선성(Perfect Collinearity)
 
-- 다중공선성 문제를 확인하는 방법
-  - **분산 팽창 계수(Variance Inflation Factor, VIF)**: 일반적으로 VIF 값이 10을 초과하면 다중공선성 문제가 있다고 간주됨.
-  - **상관 행렬**: 독립 변수들 간의 상관 관계를 시각적으로 확인. 
-  - **회귀 계수의 부호 변화**: 다중공선성이 존재할 때, 회귀 계수의 부호가 예상과 다르게 나타날 수 있음. 
-  - **회귀 계수의 유의성**: 다중공선성이 존재할 때, 회귀 계수의 유의성이 낮아질 수 있음. 이는 모델의 예측 성능을 저하시킬 수 있음.
+-   다중공선성 문제를 확인하는 방법
+    -   **분산 팽창 계수(Variance Inflation Factor, VIF)**: 일반적으로 VIF 값이 10을 초과하면 다중공선성 문제가 있다고 간주됨.
+    -   **상관 행렬**: 독립 변수들 간의 상관 관계를 시각적으로 확인.
+    -   **회귀 계수의 부호 변화**: 다중공선성이 존재할 때, 회귀 계수의 부호가 예상과 다르게 나타날 수 있음.
+    -   **회귀 계수의 유의성**: 다중공선성이 존재할 때, 회귀 계수의 유의성이 낮아질 수 있음. 이는 모델의 예측 성능을 저하시킬 수 있음.
 
 ```{r vif, echo = TRUE, eval = TRUE}
 library(car)  # VIF 계산을 위한 패키지
@@ -324,41 +354,40 @@ vif(beta_model)  # VIF 값 계산
 cor(returns_wide[, c("KOSPI200", "SP500", "SSE", "N225")])  # 상관 행렬 계산
 ```
 
-
-
-
 ------------------------------------------------------------------------
 
 ## Task 1 {background-color="#ffebf0"}
 
 `r countdown(minutes = 5, top = "20px", right = "10px", font_size = "0.8em", color_border = "blue")`
 
-`grades` 데이터: 
+`grades` 데이터:
 
--  학생들의 학업 성취도에 영향을 미치는 요인들을 분석하기 위한 데이터셋
--  학생들의 읽기 점수(avgverb), 수학 점수(avgmath), 학급 규모(classize), 그리고 사회경제적 불리함(disadvantaged) 등의 변수를 포함
+-   학생들의 학업 성취도에 영향을 미치는 요인들을 분석하기 위한 데이터셋
 
+-   학생들의 읽기 점수(avgverb), 수학 점수(avgmath), 학급 규모(classize), 그리고 사회경제적 불리함(disadvantaged) 등의 변수를 포함
 
 -   **읽기(Reading) 점수를 종속 변수(Dependent Variable)** 로 설정하여 회귀 분석을 수행
 
 1.  `haven` 패키지의 `read_dta()` 함수를 사용하여 데이터를 불러오기. 데이터를 `grades`라는 객체에 저장
 
-
-```{r task1_1, echo=FALSE, eval=FALSE}
+```{r task1_1, echo=TRUE, eval=FALSE}
 library(haven)
 grades <- read_dta("https://raw.githack.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/data/grade5.dta")
 ```
 
+2.  avgverb (읽기 점수)를 종속 변수로, 
 
-2.  avgverb (읽기 점수)를 종속 변수로, classize와 disadvantaged를 독립 변수로 사용하여 회귀분석. 결과를 reg 객체에 저장. 각 계수(coefficient)의 의미는 무엇인가? 단순 선형 회귀와 비교했을 때 계수는 어떻게 달라졌는가? 수학 점수 회귀 분석과 비교했을 때 계수의 차이점은 무엇인가?
+(1) classize를 독립변수로 회귀분석하고 
+
+(2) classize와 disadvantaged (저소득 학생 비율)를 독립 변수로 사용하여 회귀분석. 
+
+결과를 reg1, reg2 객체에 저장. 각 계수(coefficient)의 의미는 무엇인가? 단순 선형 회귀와 비교했을 때 계수는 어떻게 달라졌는가? 
 
 ```{r task1_2, echo=FALSE, eval=FALSE}
+lm(avgverb ~ classize, data = grades)
 reg <- lm(avgverb ~ classize + disadvantaged, data = grades)
 summary(reg)
 ```
-
-
-
 
 ------------------------------------------------------------------------
 
@@ -385,7 +414,6 @@ y = c_0 + c_1x + \color{#d90502}{c_2}z + e
 $$
 
 -   이 모델에서는 $x$뿐만 아니라 누락된 변수 $z$도 $y$에 영향을 미침. 즉, $z$를 포함하면, $c_1$이 더 정확한 값을 가질 수 있음.
-
 
 ------------------------------------------------------------------------
 
@@ -414,8 +442,6 @@ $$
 
 💡 **결론:**\
 만약 $z$를 생략하면, $b_1$은 $c_1$에 OVB가 더해진 값이 되어, 실제 값과 차이가 날 수 있음.
-
-
 
 ------------------------------------------------------------------------
 
@@ -458,7 +484,6 @@ library(haven)
 grades <- read_dta("https://raw.githack.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/data/grade5.dta")
 ```
 
-
 ```{r, echo = FALSE}
 reg1 <- lm(avgmath ~ classize, grades)
 reg1$coefficients
@@ -471,7 +496,7 @@ reg2 <- lm(avgmath ~ classize + disadvantaged, grades)
 reg2$coefficients
 ```
 
-***누락변수와 독립변수***: $\text{\% disadvantaged} = d_0 + \color{#d96502}{d_1}\text{size} + e$
+***누락변수와 독립변수***: $\text{disadvantaged} = d_0 + \color{#d96502}{d_1}\text{size} + e$
 
 ```{r, echo = FALSE}
 reg3 <- lm(disadvantaged ~ classize, grades)
@@ -497,17 +522,22 @@ reg3$coefficients
 
 ------------------------------------------------------------------------
 
-
 ## Task 2 {background-color="#ffebf0"}
 
 `r countdown(minutes = 15, top = "20px", right = "10px", font_size = "0.8em", color_border = "blue")`
 
 **STAR 데이터**
 
--  STAR(Student Teacher Achievement Ratio) 데이터는 1985년부터 1989년까지 미국 테네시 주에서 진행된 무작위 실험의 결과를 담고 있음.
--  학생들을 소규모 학급(small), 일반 학급(regular), 보조 교사가 있는 일반 학급(regular+aide)으로 무작위 배정하여, 학급 규모가 학생들의 학업 성취도에 미치는 영향을 분석하기 위한 데이터셋.
+-   STAR(Student Teacher Achievement Ratio) 데이터는 1985년부터 1989년까지 미국 테네시 주에서 진행된 무작위 실험의 결과를 담고 있음.
+-   학생들을 소규모 학급(small), 일반 학급(regular), 보조 교사가 있는 일반 학급(regular+aide)으로 무작위 배정하여, 학급 규모가 학생들의 학업 성취도에 미치는 영향을 분석하기 위한 데이터셋.
 
-1.  **STAR 데이터**를 다운로드 [링크](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_causality/data/star_data.csv). 데이터를 `star_df`라는 객체에 저장. NA 값이 있는 행은 제거하시오. `grades`가 "2"인 학생들만 선택하시오.
+1.  **STAR 데이터**를 불러와 `star_df`라는 객체에 저장. NA 값이 있는 행은 제거하시오. `grades`가 "2"인 학생들만 선택하시오.
+
+```{r, echo=TRUE, eval=FALSE}
+library(dplyr)
+# 데이터 불러오기
+star_df <- read.csv("https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_causality/data/star_data.csv")
+```
 
 ```{r, echo=FALSE, eval=FALSE}
 library(dplyr)
@@ -515,13 +545,14 @@ library(dplyr)
 star_df <- read.csv("https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_causality/data/star_data.csv")
 
 # NA 값이 있는 행 제거
-star_df <- star_df %>% filter(complete.cases(.)) %>% filter(grade == "2")
+star_df <- star_df %>% drop_na() %>% filter(grade == "2")
+#star_df <- star_df %>% filter(complete.cases(.)) 
 #star_df <- star_df %>% filter(na.omit(.))
 #star_df <- star_df %>% filter(!is.na(.))
 ```
 
+2.  `math`를 `school` (학교 위치 유형)변수에 대해 회귀 분석하시오. `school` 변수가 포함하는 값들을 먼저 확인. 회귀 계수를 해석하시오. 누락된 범주 (category)는? 결과가 예상과 일치하는가? 만약 다르다면 왜 그런가? 누락된 변수가 존재할 가능성이 있는가?
 
-2.  `math`를 `school` 변수에 대해 회귀 분석하시오. `school` 변수가 포함하는 값들을 먼저 확인. 회귀 계수를 해석하시오. 누락된 범주 (category)는? 결과가 예상과 일치하는가? 만약 다르다면 왜 그런가? 누락된 변수가 존재할 가능성이 있는가?
 ```{r, echo=FALSE, eval=FALSE}
 # school 변수의 값 확인
 unique(star_df$school)
@@ -530,7 +561,7 @@ reg_school <- lm(math ~ school, data = star_df)
 summary(reg_school)
 ```
 
-3.  `lunch` 변수가 `"free"`인 학생들의 비율을 **학교 위치(school) 별로 계산**하시오. 결과를 보고, **무료 점심 자격 여부(`free`) 변수를 추가하여 이전 회귀 분석을 다시 수행**하시오. `free` 변수를 추가했을 때 회귀 계수는 어떻게 변화하는가?
+3.  `lunch` 변수가 `"free"`인 학생들의 비율을 **학교 위치 유형형(school) 별로 계산**하시오. 결과를 보고, **무료 점심 자격 여부(`free`) 변수를 추가하여 이전 회귀 분석을 다시 수행**하시오. `free` 변수를 추가했을 때 회귀 계수는 어떻게 변화하는가?
 
 ```{r, echo=FALSE, eval=FALSE}
 # 학교 위치별로 lunch가 "free"인 학생들의 비율 계산
@@ -544,17 +575,65 @@ summary(reg_school_free)
 ```
 
 4.  `math`를 `star` 변수에 대해 회귀 분석하시오. 다음의 모든 변수를 포함하여 다중 회귀 분석을 수행하시오:\
-    `math ~ star + gender + ethnicity + lunch + degree + experience + school`. 무작위 실험이 **잘 수행되었다고 판단할 수 있는가?**
+    `math ~ star + gender + ethnicity + lunch + degree + experience + school`. 절편과 계수를 해석하시오.
+
 ```{r, echo=FALSE, eval=FALSE}
 reg_full <- lm(math ~ star + gender + ethnicity + lunch + degree + experience + school, data = star_df)
 summary(reg_full)
 ```
 
-
 5.  **다중 회귀 분석**에서 얻은 **수정된** $R^2$ 값을 확인하시오. 수정된 $R^2$ 값이 의미하는 바는 무엇인가? 관측 가능한 개별 학생, 교사, 학교 특성이 학업 성취도에 미치는 중요성에 대해 어떤 결론을 내릴 수 있는가?
 
 6.  (Optional) `math`를 `gender`와 `experience` 변수에 대해 회귀 분석하시오. 회귀 계수를 어떻게 해석할 수 있는가? 이러한 회귀 분석 결과를 시각적으로 표현한다면 어떻게 보일 것인가?
 
+---
 
+## Fama-French 3 요인 모형
 
+```{r, echo=TRUE, eval=TRUE}
+# ============================================================
+#  OVB 예시: CAPM → Fama-French 3 Factor (AAPL, 2000~)
+# ============================================================
+
+library(tidyquant)
+library(dplyr)
+library(lubridate)
+library(readr)
+
+# ── 1. Fama-French 3요인 데이터 수집 ─────────────────────────
+ff_temp <- tempfile()
+download.file("https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_CSV.zip",
+              ff_temp, mode = "wb")
+
+ff_raw <- read_csv(unzip(ff_temp, exdir = tempdir()),
+                   skip = 3, col_types = cols(.default = col_double())) %>%
+  rename(date = `...1`) %>%
+  filter(!is.na(SMB), nchar(as.character(date)) == 6) %>%
+  mutate(date  = ym(date),
+         across(c(`Mkt-RF`, SMB, HML, RF), ~ . / 100)) %>%
+  filter(date >= as.Date("2000-01-01"))
+
+unlink(ff_temp)
+
+# ── 2. 개별 주식 월별 수익률 수집 (AAPL) ─────────────────────
+stock_returns <- tq_get("BRK-B", get = "stock.prices",
+                        from = "2000-01-01", to = Sys.Date()) %>%
+  drop_na(adjusted) %>%
+  tq_transmute(select = adjusted, mutate_fun = periodReturn,
+               period = "monthly", col_rename = "R_stock") %>%
+  mutate(date = floor_date(date, "month"))
+
+# ── 3. 병합 및 초과수익률 계산 ───────────────────────────────
+df <- stock_returns %>%
+  left_join(ff_raw, by = "date") %>%
+  mutate(excess_stock = R_stock - RF) %>%
+  drop_na()
+
+# ── 4. CAPM vs Fama-French 회귀분석 ──────────────────────────
+reg1 <- lm(excess_stock ~ `Mkt-RF`,             data = df)  # CAPM
+reg2 <- lm(excess_stock ~ `Mkt-RF` + SMB + HML, data = df)  # FF3F
+
+summary(reg1)
+summary(reg2)
+```    
 # THE END!
