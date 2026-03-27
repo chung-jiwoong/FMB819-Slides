@@ -1,0 +1,141 @@
+---
+title: "수업 과제"
+author: "홍길동 (2025012345)"       #이름과 학번을 넣으세요
+date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
+format: 
+  html:
+    toc: false
+    theme: default
+echo: true  
+include: true 
+warning: false
+embed-resources: true
+---
+
+
+
+1.  코스피200 및 S&P500 일별 종가 데이터를 불러와 날짜를 기준으로 두 지수를 병합한 뒤, `merged_px` 객체를 생성하시오. 그리고 일별 수익률 변수(`ret_sp500`, `ret_kospi200`, `ret_kospi200_lead`)를 생성하시오. (`inner_join`)
+
+
+```{r, echo=TRUE, eval=TRUE}
+library(dplyr)
+library(tidyverse)
+
+sp500_px <- read_csv("https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/data/%5Espx_d.csv") |>
+  transmute(date = as.Date(Date), sp500_close = as.numeric(Close)) |> 
+  arrange(date)
+
+ks200_px <- read_csv("https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_slr/data/%5Ekospi_d.csv") |>
+  transmute(date = as.Date(Date), kospi200_close = as.numeric(Close)) |> 
+  arrange(date)
+
+merged_px <- inner_join(sp500_px, ks200_px, by = "date") |> 
+  mutate(
+    ret_sp500 =  10000 * (log(sp500_close) - log(lag(sp500_close))),
+    ret_kospi200 =  10000 * (log(kospi200_close) - log(lag(kospi200_close)))
+  ) |> 
+  mutate(ret_kospi200_lead = lead(ret_kospi200)) |> 
+  drop_na()
+```
+
+2.  데이터셋 설명:
+
+    -   총 몇 개의 관측치가 있는가?\
+
+    -   데이터셋을 확인하고 어떤 변수가 있는지 확인하시오.
+
+    -   `skimr` 패키지의 `skim` 함수 사용해서 생성한 수익률 변수에 대한 기본적인 요약 통계 확인.\
+
+        **힌트**: `dplyr`의 `select` 사용해서 변수 선택한 후 `%>%`로 `skim()` 적용하면 됨.
+
+```{r, echo=TRUE, eval=TRUE}
+if (!requireNamespace("skimr")) {install.packages("skimr")}
+library(skimr)
+returns_raw <- merged_px %>% select(date, ret_sp500, ret_kospi200, ret_kospi200_lead)
+skim(returns_raw)
+```
+
+3.  S&P500 수익률(`ret_sp500`)과 코스피200 수익률(`ret_kospi200`, `ret_kospi200_lead`)의 상관관계는?
+
+```{r, echo=TRUE, eval=TRUE}
+cor(returns_raw$ret_sp500, returns_raw$ret_kospi200)
+cor(returns_raw$ret_sp500, returns_raw$ret_kospi200_lead)
+```
+
+
+
+## Task 2 
+
+
+1.  익일 코스피200 평균 수익률(`ret_kospi200_lead`)을 S&P500 수익률에 대해 회귀분석 수행. 회귀 계수(coefficients)를 해석하시오.
+
+```{r, echo=TRUE, eval=TRUE}
+kospi_reg <- lm(ret_kospi200_lead ~ ret_sp500, data = merged_px)
+summary(kospi_reg)
+```
+
+2.  이 회귀분석에서 OLS 계수 $b_0$ 및 $b_1$을 직접 계산 (공식 이용).\
+    ***힌트***: `cov`, `var`, `mean` 함수 사용.
+
+```{r, echo=TRUE, eval=TRUE}
+b_1 <- cov(merged_px$ret_sp500, merged_px$ret_kospi200_lead) / var(merged_px$ret_sp500)
+b_0 <- mean(merged_px$ret_kospi200_lead) - b_1 * mean(merged_px$ret_sp500)
+b_0
+b_1
+```
+
+3.  S&P500 수익률이 0bp일 때, 예측된 익일 코스피200 수익률은 얼마인가?
+
+```{r, echo=TRUE, eval=TRUE}
+b_0 + b_1 * 0
+```
+
+4.  S&P500 수익률이 30bp일 때, 예측된 익일 코스피200 수익률은 얼마인가?
+
+```{r, echo=TRUE, eval=TRUE}
+b_0 + b_1 * 30
+```
+
+
+
+## Task 3
+
+
+1.  코스피200 수익률을 S&P500 수익률에 대해 회귀(regress)하고 결과를 `kospi_reg` 객체에 저장.
+
+```{r, echo=TRUE, eval=TRUE}
+kospi_reg <- lm(ret_kospi200 ~ ret_sp500, data = merged_px)
+summary(kospi_reg)
+```
+
+2.  `summary(kospi_reg)`를 실행하여 **(다중)** $R^2$ 값을 확인함. 이 값의 의미를 해석할 것.
+
+3.  코스피200 수익률을 S&P500 수익률 간 **상관계수(correlation)**를 제곱하여 계산. 참고: 이 값은 **단일 설명변수**를 가진 회귀에서 $R^2$와 상관계수 간의 관계를 보여줌.
+
+```{r, echo=TRUE, eval=TRUE}
+cor(merged_px$ret_sp500, merged_px$ret_kospi200)^2
+```
+
+4.  1번과 2번을 익일 코스피200 수익률에 대해 반복.\
+    당일 코스피200 수익률과 익일 코스피200 수익률 중 어떤 결과가 S&P500 수익률 변화로 더 많이 설명되는지 비교하시오.
+
+```{r, echo=TRUE, eval=TRUE}
+kospi_reg <- lm(ret_kospi200_lead ~ ret_sp500, data = merged_px)
+summary(kospi_reg)
+```
+
+5.  (Optional) `broom` 패키지를 설치 및 로드한 후, `augment(kospi_reg)`를 새로운 객체에 저장.\
+    `ret_kospi200_lead`의 분산(SST)과 예측값의 분산(SSE)을 사용하여 $R^2$ 값을 직접 계산하시오. (이전 슬라이드의 공식을 참고할 것.)
+
+    -   `broom` 패키지의 `augment()` 함수는 회귀 결과에 예측값과 잔차를 추가하는 데 사용됨.\
+
+    ```{r, echo=TRUE, eval=TRUE}
+    if (!requireNamespace("broom")) {install.packages("broom")}
+    library(broom)
+    kospi_reg_aug <- augment(kospi_reg) # 회귀 결과에 예측값과 잔차 추가
+    SST <- var(merged_px$ret_kospi200_lead) * (nrow(merged_px) - 1)
+    SSE <- var(kospi_reg_aug$.fitted) * (nrow(kospi_reg_aug) - 1)
+    R_squared <- SSE / SST
+    R_squared
+    ```
+
