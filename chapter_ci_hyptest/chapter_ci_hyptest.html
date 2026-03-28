@@ -214,22 +214,41 @@
 </section>
 <section id="todays-agenda" class="slide level2">
 <h2>Today’s Agenda</h2>
+<p><strong>Part 1 — 신뢰 구간 (Confidence Intervals)</strong></p>
 <ul>
-<li><p><em>신뢰 구간(Confidence interval)</em>: 가능한 <strong><em>값의 범위</em></strong> 제공</p></li>
-<li><p><em>가설 검정(Hypothesis testing)</em>: 그룹 간 통계량 비교</p></li>
+<li>점 추정치의 한계: 왜 범위가 필요한가?</li>
+<li>부트스트랩(Bootstrap)을 이용한 신뢰 구간 구축</li>
+<li>신뢰 구간의 정확한 해석</li>
 </ul>
-</section>
-<section id="현실은" class="slide level2">
-<h2>현실은?</h2>
+<p><strong>Part 2 — 가설 검정 (Hypothesis Testing)</strong></p>
 <ul>
-<li><p>실제로는 모집단에서 <strong><em>단 한 개의 표본</em></strong>만 추출할 수 있음 (<strong><em>1000개</em></strong>가 아님!).</p></li>
-<li><p>또한, 모집단의 <strong><em>진짜 모수</em></strong>를 모름.</p></li>
-<li><p>그럼 우리가 지난 시간했던 것은 무슨 의미가 있었을까?</p></li>
+<li>귀무가설과 대립가설</li>
+<li>순열 검정(Permutation Test)을 이용한 귀무분포 생성</li>
+<li>p-값과 유의수준: 언제 귀무가설을 기각하는가?</li>
+<li>검정 오류(Type I / II Error)</li>
+</ul>
+<blockquote>
+<p><strong>핵심 질문</strong>: 표본에서 얻은 숫자를 얼마나 믿을 수 있는가? 그리고 두 그룹 간 차이가 “진짜” 차이인가?</p>
+</blockquote>
+</section>
+<section id="표본이-하나뿐이라면" class="slide level2">
+<h2>표본이 하나뿐이라면?</h2>
+<ul>
+<li><p>지난 시간: 표본을 <strong><em>1,000번</em></strong> 반복 추출하여 표본 분포를 시뮬레이션했음.</p></li>
+<li><p><strong>현실</strong>: 모집단에서 단 <strong><em>하나의 표본</em></strong>만 얻을 수 있음. 비용과 시간 때문.</p></li>
+<li><p>또한, 모집단의 <strong><em>진짜 모수</em></strong>는 알 수 없음.</p></li>
 </ul>
 <p><br></p>
+<blockquote>
+<p><strong>그렇다면 지난 시간에 한 것은 의미가 없었나?</strong></p>
+</blockquote>
 <ul>
-<li><p>비록 관찰할 수 없지만, <strong><em>표본 분포는 실제로 존재</em></strong>하며, 더 나아가 우리는 그것이 어떻게 행동하는지 알고 있음!</p></li>
-<li><p>이제 이것을 어떻게 활용할 수 있는지 살펴보자…</p></li>
+<li><p>아니다. 관찰할 수는 없지만 <strong><em>표본 분포는 실제로 존재</em></strong>하며, 우리는 CLT 덕분에 그것이 어떻게 행동하는지 알고 있음.</p></li>
+<li><p>이제 이 지식을 <strong><em>단 하나의 표본</em></strong>에서 활용하는 방법을 배움.</p>
+<ul>
+<li><strong>신뢰 구간</strong>: 추정값의 불확실성을 범위로 표현</li>
+<li><strong>가설 검정</strong>: “이 차이가 우연인가?”를 확률로 판단</li>
+</ul></li>
 </ul>
 </section>
 <section>
@@ -240,30 +259,76 @@
 <section id="점-추정에서-신뢰-구간으로" class="slide level2">
 <h2>점 추정에서 신뢰 구간으로</h2>
 <ul>
-<li><p>지금까지 우리는 표본에서 <strong><em>점 추정치</em></strong>만을 계산했음: <em>표본 평균</em>, <em>표본 비율</em>, <em>회귀 계수</em> 등.</p></li>
-<li><p>이 <strong><em>표본 통계량</em></strong>은 <strong><em>표본 변동성</em></strong>으로 인해 <strong><em>진짜 모집단 모수</em></strong>와 다를 수 있음.</p></li>
-<li><p>점 추정치 대신, 모집단 모수에 대한 <strong><em>가능한 값의 범위</em></strong>를 제공할 수도 있음.</p></li>
-<li><p>이것이 바로 <strong><em>신뢰 구간</em></strong> (Confidence interval)이 하는 일.</p></li>
+<li><p>지금까지 표본에서 <strong><em>점 추정치</em></strong>만 계산했음: 표본 평균, 표본 비율, 회귀 계수 등.</p></li>
+<li><p>이 <strong><em>표본 통계량</em></strong>은 <strong><em>표본 변동성</em></strong> 때문에 진짜 모집단 모수와 다를 수 있음.</p></li>
+<li><p>점 추정치 대신, 모집단 모수에 대한 <strong><em>가능한 값의 범위</em></strong>를 제공할 수 있음.</p></li>
+<li><p>이것이 바로 <strong><em>신뢰 구간 (Confidence Interval)</em></strong> 이 하는 일.</p></li>
+</ul>
+<p><br></p>
+<p><strong>비유 — 낚시</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">방법</th>
+<th style="text-align: center;">도구</th>
+<th style="text-align: left;">비유</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">점 추정</td>
+<td style="text-align: center;">작살</td>
+<td style="text-align: left;">한 점을 정확히 겨냥 — 맞으면 좋지만 빗나가면 끝</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">신뢰 구간</td>
+<td style="text-align: center;">그물</td>
+<td style="text-align: left;">범위를 감싸서 잡음 — 더 믿을 수 있음</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>여기서 “물고기”는 모집단의 참값 <span class="math inline">\((p)\)</span></p>
+</blockquote>
+</section>
+<section id="신뢰-구간-구축-방법" class="slide level2">
+<h2>신뢰 구간 구축 방법</h2>
+<p>신뢰 구간을 구축하는 두 가지 주요 접근법:</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">방법</th>
+<th style="text-align: left;">원리</th>
+<th style="text-align: left;">특징</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>이론적 접근</strong></td>
+<td style="text-align: left;">CLT + 수학 공식</td>
+<td style="text-align: left;">R이 기본으로 사용하는 방식</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>시뮬레이션 접근</strong></td>
+<td style="text-align: left;">부트스트래핑 (Bootstrapping)</td>
+<td style="text-align: left;">직관적, 가정이 적음</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>오늘은 <strong>시뮬레이션 접근(부트스트랩)</strong> 에 집중하여 개념을 직관적으로 이해.</li>
 </ul>
 </section>
-<section id="신뢰-구간-구축" class="slide level2 scrollable">
-<h2>신뢰 구간 구축</h2>
+<section id="다시-파스타로-단-하나의-표본" class="slide level2">
+<h2>다시 파스타로: 단 하나의 표본</h2>
 <ul>
-<li><p>신뢰 구간을 구축하는 여러 가지 방법이 있음:</p>
-<ol type="1">
-<li><p><em>이론적 접근</em>: 수학적 공식 (<strong><em>중심 극한 정리</em></strong>)을 사용하여 특정 조건 하에서 점 추정치의 표본 분포를 유도함 → <strong><em><code>R</code>이 만드는 방식!</em></strong></p></li>
-<li><p><em>시뮬레이션 접근</em>: <strong><em>부트스트래핑(Bootstrapping)</em></strong> 방법을 사용하여 점 추정치의 표본 분포를 <em>재구성</em></p></li>
-</ol></li>
-<li><p>우선 개념을 직관적으로 이해하기 위해 시뮬레이션에 초점을 맞출 것이며, 수학적 접근법은 다음에 다루겠음.</p></li>
-</ul>
-</section>
-<section id="다시-파스타로-돌아가기" class="slide level2">
-<h2>다시 파스타로 돌아가기</h2>
-<ul>
-<li><p>파스타 그릇에서 <em>단 하나의 랜덤 표본</em>만 얻을 수 있다고 가정하자.</p></li>
-<li><p>단일 표본으로 표본 변동성(sampling variation)을 어떻게 분석할 수 있을까?<br>
-<code>👉</code> <strong><em>복원추출(bootstrap resampling)</em></strong> 사용!</p></li>
-<li><p>먼저, 우리의 그릇에서 크기 <span class="math inline">\(n = 50\)</span>인 무작위 표본을 하나 추출해보자.</p></li>
+<li><p>파스타 그릇에서 <strong><em>단 하나의 랜덤 표본</em></strong> <span class="math inline">\((n=50)\)</span> 만 얻을 수 있다고 가정.</p></li>
+<li><p>단일 표본으로 표본 변동성을 어떻게 분석할 수 있을까? <code>👉</code> <strong><em>복원추출 (Bootstrap Resampling)</em></strong> 사용!</p></li>
 </ul>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">library</span>(tidyverse)</span>
@@ -278,7 +343,7 @@
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="fu">head</span>(my_sample,<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="fu">head</span>(my_sample, <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
   pasta_ID color    
@@ -296,29 +361,36 @@
 <pre><code>[1] 0.46</code></pre>
 </div>
 </div>
-<p>이 표본에서 녹색 파스타의 비율은: <span class="math inline">\(\hat{p} = 0.46\)</span>.</p>
+<p>이 표본에서 녹색 파스타의 비율: <span class="math inline">\(\hat{p} = 0.46\)</span>.</p>
+<p>이것이 최선의 추정값이지만, 얼마나 불확실한가?</p>
 </div></div>
 </section>
-<section id="표본-재추출resampling하기" class="slide level2 scrollable">
-<h2>표본 재추출(Resampling)하기</h2>
-<ul>
-<li><strong><em>부트스트랩(bootstrap) 표본</em></strong>을 어떻게 얻을 수 있을까?</li>
-</ul>
+<section id="부트스트랩-아이디어-표본에서-표본-만들기" class="slide level2 scrollable">
+<h2>부트스트랩 아이디어: 표본에서 표본 만들기</h2>
+<p><strong>핵심 아이디어</strong>: 모집단이 없으면, 내 표본을 “모집단처럼” 쓰면 된다.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>부트스트랩 표본 추출 절차</strong></p>
 <ol type="1">
-<li><p>표본에서 <strong><em>하나의</em></strong> 파스타를 무작위로 선택하고 해당 색상을 기록한다.</p></li>
-<li><p>선택한 파스타를 표본에 다시 넣는다.</p></li>
-<li><p>위의 1번과 2번 과정을 49번 반복하여, <strong><em>새로운 표본의 크기가 원래 표본과 크기가 같아질 때까지</em></strong> 진행한다.</p></li>
-<li><p>부트스트랩 표본에서 녹색 파스타의 비율을 계산한다.</p></li>
+<li>표본에서 파스타 1개를 무작위 선택 → 색상 기록</li>
+<li>선택한 파스타를 표본에 <strong>다시 넣음</strong> (복원추출)</li>
+<li>1–2를 반복 → 원래 표본 크기(<span class="math inline">\(n=50\)</span>)와 동일한 새 표본</li>
+<li>새 표본에서 <span class="math inline">\(\hat{p}\)</span> 계산</li>
+<li>이 과정을 1,000번 반복 → <strong>부트스트랩 분포</strong></li>
 </ol>
+</div><div class="column" style="width:50%;">
+<p><strong>왜 복원추출인가?</strong></p>
 <ul>
-<li><p>이 과정은 <strong><em>복원추출(resampling with replacement)</em></strong>이라고 불린다.</p>
-<ul>
-<li><em>재추출(resampling)</em>: 하나의 표본에서 반복적으로 새로운 표본을 추출하는 과정.</li>
-<li><em>복원추출(with replacement)</em>: 한 번 선택된 파스타를 다시 원래 표본에 포함시키는 방식.</li>
-</ul></li>
+<li>복원 없이 뽑으면 항상 같은 표본 → 변동성 없음</li>
+<li>복원 추출이어야 표본마다 조금씩 다른 <span class="math inline">\(\hat{p}\)</span>가 생성됨</li>
+<li>이 변동성이 <strong><em>표본 변동성을 근사</em></strong>함</li>
 </ul>
+<blockquote>
+<p>핵심: 부트스트랩은 “단 하나의 표본”으로 표본 분포를 <em>흉내낸다</em>.</p>
+</blockquote>
+</div></div>
 </section>
-<section id="표본-재추출resampling하기-1" class="slide level2">
+<section id="표본-재추출resampling하기" class="slide level2">
 <h2>표본 재추출(Resampling)하기</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
@@ -352,8 +424,7 @@
 </div>
 </div><div class="column" style="width:50%;">
 <ul>
-<li><p>왜 같은 파스타가 여러 번 선택될까? 여러 개의 파스타가 반복적으로 선택되었다. 왜 그런 걸까?</p></li>
-<li><p>부트스트랩 표본에서 녹색 파스타의 비율을 계산해보자.</p></li>
+<li>같은 <code>pasta_ID</code>가 여러 번 등장함 → 복원추출의 특징</li>
 </ul>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="fu">mean</span>(one_bootstrap<span class="sc">$</span>color <span class="sc">==</span> <span class="st">"green"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -362,37 +433,30 @@
 </div>
 </div>
 <ul>
-<li><p>이 비율은 원래 표본에서의 비율과 다르다! 이는 복원추출(resampling with replacement) 때문에 발생하는 현상이다.</p></li>
-<li><p>이 과정을 여러 번 반복하면 어떻게 될까? 각각의 비율이 항상 같을까?</p></li>
+<li><p>원래 표본의 <span class="math inline">\(\hat{p} = 0.46\)</span> 과 조금 다름.</p></li>
+<li><p>이 과정을 1,000번 반복하면 → 매번 조금씩 다른 <span class="math inline">\(\hat{p}\)</span> 를 얻음.</p></li>
+<li><p>이 1,000개의 <span class="math inline">\(\hat{p}\)</span> 분포 = <strong><em>부트스트랩 분포</em></strong>.</p></li>
 </ul>
 </div></div>
 </section>
 <section id="부트스트랩-분포-생성하기" class="slide level2">
 <h2>부트스트랩 분포 생성하기</h2>
-<ul>
-<li>표본 재추출(부트스트랩) 과정을 1,000번 반복하면,<br>
-1,000개의 부트스트랩 표본과 1,000개의 부트스트랩 추정값을 얻을 수 있음!</li>
-</ul>
 <div class="columns">
 <div class="column" style="width:50%;">
-<ul>
-<li><code>infer</code> 패키지를 사용하여 부트스트랩 수행</li>
-</ul>
+<p><code>infer</code> 패키지로 부트스트랩 수행</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a><span class="fu">library</span>(infer)</span>
 <span id="cb12-2"><a href=""></a></span>
 <span id="cb12-3"><a href=""></a>bootstrap_distrib <span class="ot">=</span> my_sample <span class="sc">%&gt;%</span></span>
-<span id="cb12-4"><a href=""></a>  <span class="co"># specify the variable and level of interest</span></span>
+<span id="cb12-4"><a href=""></a>  <span class="co"># 관심 변수와 성공 수준 지정</span></span>
 <span id="cb12-5"><a href=""></a>  <span class="fu">specify</span>(<span class="at">response =</span> color, <span class="at">success =</span> <span class="st">"green"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb12-6"><a href=""></a>  <span class="co"># generate 1000 bootstrap samples </span></span>
+<span id="cb12-6"><a href=""></a>  <span class="co"># 부트스트랩 표본 1,000개 생성</span></span>
 <span id="cb12-7"><a href=""></a>  <span class="fu">generate</span>(<span class="at">reps =</span> <span class="dv">1000</span>, <span class="at">type =</span> <span class="st">"bootstrap"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb12-8"><a href=""></a>  <span class="co"># calculate the proportion of green pasta for each</span></span>
+<span id="cb12-8"><a href=""></a>  <span class="co"># 각 표본에서 녹색 파스타 비율 계산</span></span>
 <span id="cb12-9"><a href=""></a>  <span class="fu">calculate</span>(<span class="at">stat =</span> <span class="st">"prop"</span>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div><div class="column" style="width:50%;">
-<ul>
-<li>부트스트랩 결과 확인</li>
-</ul>
+<p>부트스트랩 결과 확인</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
 <pre><code>Response: color (factor)
@@ -410,7 +474,8 @@
 <pre><code>[1] 1000</code></pre>
 </div>
 </div>
-<p>부트스트랩 표본의 변동성을 시각화해보자!</p>
+<p>1,000개의 <span class="math inline">\(\hat{p}\)</span> 값이 생성됨.<br>
+이 분포를 시각화하면?</p>
 </div></div>
 </section>
 <section id="부트스트랩-분포" class="slide level2">
@@ -418,47 +483,27 @@
 
 <img data-src="chapter_ci_hyptest_files/figure-revealjs/unnamed-chunk-10-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"><ul>
 <li><strong><em>부트스트랩 분포</em></strong>는 <strong><em>표본 분포</em></strong>를 근사하는 역할을 함.</li>
+<li>분포의 중심은 원래 표본 <span class="math inline">\(\hat{p}\)</span>에 가깝고, 퍼짐 정도가 추정의 불확실성을 나타냄.</li>
 </ul>
 </section>
 <section id="부트스트랩-분포와-평균" class="slide level2">
 <h2>부트스트랩 분포와 평균</h2>
 
 <img data-src="chapter_ci_hyptest_files/figure-revealjs/unnamed-chunk-11-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"><ul>
-<li>부트스트랩 분포의 평균은 원래 표본 비율과 매우 가까움.</li>
-</ul>
-</section>
-<section id="부트스트랩-분포와-평균-1" class="slide level2">
-<h2>부트스트랩 분포와 평균</h2>
-
-<img data-src="chapter_ci_hyptest_files/figure-revealjs/unnamed-chunk-12-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"><ul>
-<li>이제 이 부트스트랩 분포를 이용해 신뢰 구간을 만들어보자!</li>
-</ul>
-</section>
-<section id="신뢰-구간-이해하기" class="slide level2">
-<h2>신뢰 구간 이해하기</h2>
-<ul>
-<li><p>낚시에 비유:</p>
-<ul>
-<li><p><em>점 추정치(point estimate)</em>: 작살로 물고기를 잡기.</p></li>
-<li><p><em>신뢰 구간(confidence interval)</em>: 그물로 물고기를 잡기.</p></li>
-</ul></li>
-<li><p>여기서 물고기는 전체 그릇에서 초록색 파스타의 실제 비율 <span class="math inline">\((p)\)</span>.</p></li>
-<li><p><strong>점 추정치</strong>는 표본에서 얻은 초록색 파스타의 비율 <span class="math inline">\((\hat{p})\)</span>.</p></li>
-<li><p><strong>신뢰 구간</strong>: 이전 부트스트랩 분포에서, <strong><em>대부분의 비율이 어디에 위치하는가?</em></strong></p></li>
-<li><p>신뢰 구간을 구성하는 방법: <strong><em>백분위수(percentile) 방법</em></strong>.</p></li>
-<li><p>신뢰 수준 <strong><em>confidence level</em></strong>을 지정해야 함: 일반적으로 90%, 95%, 99% 사용.</p></li>
+<li>부트스트랩 분포의 평균은 원래 표본 비율 <span class="math inline">\(\hat{p} = 0.46\)</span>과 매우 가까움.</li>
+<li>이제 이 분포에서 <strong><em>중앙 95%의 범위</em></strong>를 신뢰 구간으로 사용하자.</li>
 </ul>
 </section>
 <section id="백분위수-방법-95-신뢰-구간" class="slide level2">
 <h2>백분위수 방법: 95% 신뢰 구간</h2>
 <ul>
-<li><p>부트스트랩 분포에서 중앙 95%의 값을 사용하여 신뢰 구간을 생성.</p></li>
-<li><p>이를 위해 2.5% 및 97.5% 백분위수를 계산:</p></li>
+<li>부트스트랩 분포에서 <strong>중앙 95%</strong>의 값을 사용하여 신뢰 구간 생성.</li>
+<li>2.5% 및 97.5% 백분위수를 계산:</li>
 </ul>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="fu">quantile</span>(bootstrap_distrib<span class="sc">$</span>stat,<span class="fl">0.025</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="fu">quantile</span>(bootstrap_distrib<span class="sc">$</span>stat, <span class="fl">0.025</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>2.5% 
 0.32 </code></pre>
@@ -466,7 +511,7 @@
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a><span class="fu">quantile</span>(bootstrap_distrib<span class="sc">$</span>stat,<span class="fl">0.975</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a><span class="fu">quantile</span>(bootstrap_distrib<span class="sc">$</span>stat, <span class="fl">0.975</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>97.5% 
   0.6 </code></pre>
@@ -474,83 +519,102 @@
 </div>
 </div></div>
 <ul>
-<li><p>따라서 95% 신뢰 구간은 <span class="math inline">\([0.32 ; 0.6]\)</span>.</p></li>
-<li><p>이는 값의 범위(range).</p></li>
+<li><strong>95% 신뢰 구간</strong>: <span class="math inline">\([0.32,\; 0.6]\)</span></li>
 </ul>
-<p>신뢰 구간을 표본 분포에서 확인해 보자.</p>
+<p><br></p>
+<p><strong><code>infer</code> 패키지로 한 번에 계산</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a>ci_95 <span class="ot">&lt;-</span> <span class="fu">get_confidence_interval</span>(bootstrap_distrib, <span class="at">level =</span> <span class="fl">0.95</span>, <span class="at">type =</span> <span class="st">"percentile"</span>)</span>
+<span id="cb19-2"><a href=""></a>ci_95</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  lower_ci upper_ci
+     &lt;dbl&gt;    &lt;dbl&gt;
+1     0.32      0.6</code></pre>
+</div>
+</div>
 </section>
-<section id="백분위수-방법-95-신뢰-구간-시각화" class="slide level2">
-<h2>백분위수 방법: 95% 신뢰 구간 시각화</h2>
+<section id="신뢰-구간-시각화-참값-포함-여부" class="slide level2">
+<h2>95% 신뢰 구간 시각화: 참값 포함 여부</h2>
 
 <img data-src="chapter_ci_hyptest_files/figure-revealjs/unnamed-chunk-15-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"><ul>
-<li>신뢰 구간이 모집단의 실제 비율을 포함하는가?</li>
+<li>붉은 영역이 95% 신뢰 구간. 실제 모집단 비율 <span class="math inline">\(p\)</span>가 구간 내에 포함됨.</li>
+<li>항상 포함될까? 다음 슬라이드에서 확인.</li>
 </ul>
 </section>
-<section id="백분위수-방법-95-신뢰-구간-시각화-1" class="slide level2">
-<h2>백분위수 방법: 95% 신뢰 구간 시각화</h2>
+<section id="신뢰-구간의-올바른-해석" class="slide level2">
+<h2>신뢰 구간의 올바른 해석</h2>
 
-<img data-src="chapter_ci_hyptest_files/figure-revealjs/unnamed-chunk-16-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"><ul>
-<li>모집단의 실제 모수값이 95% 신뢰 구간 내에 포함됨! 항상 그럴까?</li>
-</ul>
+<img data-src="chapter_ci_hyptest_files/figure-revealjs/unnamed-chunk-16-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"><p>100개의 신뢰 구간 중 <strong><em>약 95개</em></strong>가 실제 모수 <span class="math inline">\(p\)</span>를 포함함.</p>
 </section>
 <section id="신뢰-구간-해석" class="slide level2">
-<h2>95% 신뢰 구간 해석</h2>
-<ul>
-<li><code>bowl</code>에서 100개의 서로 다른 표본을 반복적으로 추출하고, 각 표본에 대해 백분위수 방법을 사용하여 95% 신뢰 구간을 계산.</li>
-</ul>
-
-<img data-src="chapter_ci_hyptest_files/figure-revealjs/unnamed-chunk-17-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"><ul>
-<li>얼마나 많은 신뢰구간이 실제 모수값을 포함하고 있는가?</li>
-</ul>
-</section>
-<section id="신뢰-구간-해석-1" class="slide level2">
-<h2>95% 신뢰 구간 해석</h2>
+<h2>신뢰 구간 해석</h2>
 <blockquote>
-<p>정확한 해석: 표본추출 과정을 매우 여러 번 반복한다고 가정하면, 생성된 신뢰구간의 <strong><em>약 95%</em></strong>가 모집단의 실제 모수를 포함할 것으로 기대됨.</p>
+<p>*해석<strong>: 동일한 방법으로 신뢰 구간을 반복 생성하면, 그 중 </strong>약 95%가 모집단 모수를 포함**할 것으로 기대된다.</p>
 </blockquote>
-<ul>
-<li><p>즉, 95% 신뢰구간은 95%의 확률로 모집단 모수를 포함하는 것이 아니라, 동일한 방법으로 신뢰구간을 반복적으로 생성했을 때, 약 95%의 신뢰구간이 모집단 모수를 포함할 것을 의미함.</p></li>
-<li><p><strong><em>질문:</em></strong></p>
-<ul>
-<li><p>신뢰수준이 증가하면 신뢰구간의 폭은 어떻게 변할까?</p></li>
-<li><p>표본 크기가 증가하면 신뢰구간의 폭은 어떻게 변할까?</p></li>
-</ul></li>
-</ul>
-</section>
-<section id="신뢰-구간-해석-2" class="slide level2">
-<h2>95% 신뢰 구간 해석</h2>
-<blockquote>
-<p>정확한 해석: 표본추출 과정을 매우 여러 번 반복한다고 가정하면, 생성된 신뢰구간의 <strong><em>약 95%</em></strong>가 모집단의 참된 모수를 포함할 것으로 기대됨.</p>
-</blockquote>
-<ul>
-<li>즉, 95% 신뢰구간은 95%의 확률로 모집단 모수를 포함하는 것이 아니라, 동일한 방법으로 신뢰구간을 반복적으로 생성했을 때, 약 95%의 신뢰구간이 모집단 모수를 포함할 것을 의미함.</li>
-</ul>
-<blockquote>
-<p>간단한 해석: 우리는 모집단 모수를 포함할 가능성이 95%인 신뢰구간을 얻었다고 말할 수 있음.</p>
-</blockquote>
-<ul>
-<li><p><strong><em>신뢰수준의 영향:</em></strong> 신뢰수준이 증가할수록 신뢰구간은 더 넓어짐.</p>
-<ul>
-<li><strong>직관적 이해:</strong> 신뢰수준이 높아질수록, 신뢰구간이 모집단 모수를 포함해야 하는 빈도가 증가해야 하므로, 이를 보장하기 위해 신뢰구간이 더 넓어짐.</li>
-</ul></li>
-<li><p><strong><em>표본 크기의 영향:</em></strong> 표본 크기가 커질수록 신뢰구간은 더 좁아짐.</p>
-<ul>
-<li><strong>직관적 이해:</strong> 표본 크기가 커질수록 표본추출에 따른 표본변동성이 줄어들며, 따라서 부트스트랩 분포의 분산이 감소함. 결과적으로 신뢰구간이 더 좁아짐.</li>
-</ul></li>
-</ul>
+<p><br></p>
+<p><strong>신뢰 구간의 폭에 영향을 주는 요인</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">변화</th>
+<th style="text-align: center;">구간 폭</th>
+<th style="text-align: left;">이유</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">신뢰수준 ↑ (95% → 99%)</td>
+<td style="text-align: center;">넓어짐</td>
+<td style="text-align: left;">더 많이 포함해야 하므로</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">표본 크기 ↑</td>
+<td style="text-align: center;">좁아짐</td>
+<td style="text-align: left;">표본 변동성 감소 → <span class="math inline">\(SE\)</span> 감소</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="신뢰구간에서-가설검정으로" class="slide level2">
 <h2>신뢰구간에서 가설검정으로</h2>
 <ul>
-<li><p><em>신뢰구간</em>은 <em>점 추정(point estimation)</em>의 확장으로 볼 수 있음.</p></li>
-<li><p>하지만 우리가 <strong>두 그룹 간의 표본 통계를 비교하고 싶다면?</strong></p>
+<li><p>신뢰 구간은 <strong>“모집단 모수가 어떤 범위에 있을까?”</strong> 라는 질문에 답함.</p></li>
+<li><p>그런데 경영 현장의 질문은 종종 이런 형태:</p>
 <ul>
-<li><em>예시:</em> 남성과 여성 간의 평균 임금 차이. 이 차이가 <strong>유의미한(significant)</strong> 차이일까?</li>
+<li>남성과 여성의 평균 임금 차이가 <strong>통계적으로 유의미</strong>한가?</li>
+<li>신제품 출시 후 고객 전환율이 <strong>실제로 올랐는가</strong>, 아니면 우연인가?</li>
+<li>A안과 B안 중 어느 쪽이 <strong>진짜 더 효과적</strong>인가?</li>
 </ul></li>
-<li><p>이러한 비교는 <strong><em>가설검정(hypothesis testing)</em></strong>의 영역임.</p></li>
-<li><p>신뢰구간과 마찬가지로, 가설검정도 모집단에 대한 성격을 표본 정보를 기반으로 판단하는 데 사용됨.</p></li>
-<li><p>그러나 이러한 추론을 수행하는 방법론적 틀이 신뢰구간과는 <strong>약간 다름</strong>.</p></li>
+<li><p>이런 질문에 답하는 도구: <strong><em>가설 검정 (Hypothesis Testing)</em></strong></p></li>
 </ul>
+<p><br></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">신뢰 구간</th>
+<th style="text-align: left;">가설 검정</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">질문</td>
+<td style="text-align: left;">모수의 범위는?</td>
+<td style="text-align: left;">이 차이가 우연인가?</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">결과</td>
+<td style="text-align: left;">값의 범위</td>
+<td style="text-align: left;">기각 / 기각 불가</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">활용</td>
+<td style="text-align: left;">추정, 불확실성 정량화</td>
+<td style="text-align: left;">의사결정, 차이 검증</td>
+</tr>
+</tbody>
+</table>
 </section></section>
 <section>
 <section id="hypothesis-testing" class="title-slide slide level1 center">
@@ -560,22 +624,19 @@
 <section id="은행-승진에서-성차별이-존재하는가" class="slide level2">
 <h2>은행 승진에서 성차별이 존재하는가?</h2>
 <ul>
-<li><p>1974년 <em>Journal of Applied Psychology</em>에 게재된 <a href="https://pdfs.semanticscholar.org/39f6/d40e907ff08af4ddd3280c2ceee55ee1ddb6.pdf">논문</a>에서는 은행 여성 직원들이 차별을 받았는지 조사함.</p></li>
-<li><p>48명의 (남성) 관리자에게 <strong>동일한</strong> 지원자 이력서를 제공하되, 이름만 남성 또는 여성으로 변경하여 실험을 진행.</p>
+<li><p>1974년 <em>Journal of Applied Psychology</em> 연구: 은행 여직원 차별 여부 조사.</p></li>
+<li><p>48명의 (남성) 관리자에게 <strong>동일한 이력서</strong> 제공, 지원자 이름만 남성/여성으로 구분.</p>
 <ul>
-<li>이력서는 “<em>직원을 지점장으로 승진시킬지 여부를 결정하는 요청 메모 형식</em>”으로 작성.</li>
+<li>이력서: <em>“지점장 승진 여부를 결정하는 요청 메모”</em> 형식.</li>
 </ul></li>
-<li><p><strong>검증하고자 하는 가설:</strong> <em>승진에서 성차별이 존재하는가?</em></p></li>
+<li><p><strong>검증하고자 하는 가설</strong>: 승진에서 성차별이 존재하는가?</p></li>
 </ul>
 <div class="columns">
 <div class="column" style="width:50%;">
-<ul>
-<li>이 실험 데이터는 <code>moderndive</code> 패키지의 <code>promotions</code> 데이터셋에 포함되어 있음.</li>
-</ul>
-</div><div class="column" style="width:50%;">
+<p>실험 데이터: <code>moderndive</code> 패키지의 <code>promotions</code> 데이터셋</p>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="fu">library</span>(moderndive)</span>
-<span id="cb19-2"><a href=""></a><span class="fu">head</span>(promotions)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a><span class="fu">library</span>(moderndive)</span>
+<span id="cb21-2"><a href=""></a><span class="fu">head</span>(promotions)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 3
      id decision gender
@@ -588,15 +649,20 @@
 6     6 promoted male  </code></pre>
 </div>
 </div>
+</div><div class="column" style="width:50%;">
+<p><strong>이 실험이 중요한 이유</strong></p>
+<ul>
+<li>이력서 내용이 <strong>동일</strong> → 성별 외 다른 변수 통제</li>
+<li>즉, 승진 결정의 차이는 오직 <strong>성별 때문</strong>이어야 함</li>
+<li>오늘날에도 A/B 테스트, 임금 감사 등 동일한 논리 적용</li>
+</ul>
 </div></div>
 </section>
 <section id="차별의-증거가-있는가" class="slide level2">
 <h2>차별의 증거가 있는가?</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<ul>
-<li>지원 여부에 따라 남성과 여성의 승진 횟수를 확인.</li>
-</ul>
+<p>성별별 승진 결정 집계</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 4 × 4
@@ -610,40 +676,37 @@
 </div>
 </div>
 <ul>
-<li>남성과 여성 간 승진률 차이는 29.2%포인트임!</li>
+<li>남성 승진율: <strong>87.5%</strong>, 여성 승진율: <strong>58.3%</strong></li>
+<li>차이: <strong>29.2%포인트</strong></li>
 </ul>
 </div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="chapter_ci_hyptest_files/figure-revealjs/unnamed-chunk-20-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
+<p><img data-src="chapter_ci_hyptest_files/figure-revealjs/unnamed-chunk-19-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
 </figure>
 </div>
 </div>
 </div>
 </div></div>
-<ul>
-<li><strong><em>질문:</em></strong>
-<ul>
-<li>이 차이가 결정적인 증거인가? 남성과 여성 간 승진률 차이가 우연히 발생할 가능성은 없는가?</li>
-</ul></li>
-</ul>
+<blockquote>
+<p><strong><em>핵심 질문</em></strong>: 이 29.2%p 차이가 성차별의 증거인가, 아니면 <strong>우연</strong>히 발생한 것인가?</p>
+</blockquote>
 </section>
-<section id="가상의-세계-설정-성차별이-없는-경우" class="slide level2">
-<h2>가상의 세계 설정: 성차별이 없는 경우</h2>
+<section id="가상의-세계-성차별이-없다면" class="slide level2">
+<h2>가상의 세계: 성차별이 없다면?</h2>
 <ul>
-<li><p>만약 성차별이 존재하지 않는 세상이 있다면? 승진 결정은 성별과 <strong><em>완전히 독립적</em></strong>이어야.</p></li>
-<li><p>이를 실험적으로 재현하기 위해, 기존 데이터에서 <code>gender</code> 변수를 무작위로 섞어(<code>shuffle</code>)<br>
-각 행에 다시 할당한 후, 승진율이 어떻게 변하는지 살펴보자.</p></li>
+<li><p>만약 성차별이 <strong>존재하지 않는</strong> 세상이라면, 승진 결정은 성별과 <strong><em>완전히 독립적</em></strong>이어야 함.</p></li>
+<li><p>이를 시뮬레이션하는 방법: <code>gender</code> 변수를 <strong>무작위로 섞어</strong> (shuffle) 재할당.</p></li>
 </ul>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a>promotions <span class="sc">%&gt;%</span></span>
-<span id="cb22-2"><a href=""></a>       <span class="fu">left_join</span>(promotions_shuffled <span class="sc">%&gt;%</span></span>
-<span id="cb22-3"><a href=""></a>                   <span class="fu">rename</span>(<span class="at">shuffled_gender =</span> gender)) <span class="sc">%&gt;%</span></span>
-<span id="cb22-4"><a href=""></a>  <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a>promotions <span class="sc">%&gt;%</span></span>
+<span id="cb24-2"><a href=""></a>  <span class="fu">left_join</span>(promotions_shuffled <span class="sc">%&gt;%</span></span>
+<span id="cb24-3"><a href=""></a>              <span class="fu">rename</span>(<span class="at">shuffled_gender =</span> gender)) <span class="sc">%&gt;%</span></span>
+<span id="cb24-4"><a href=""></a>  <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 4
      id decision gender shuffled_gender
@@ -656,9 +719,6 @@
 6     6 promoted male   male           </code></pre>
 </div>
 </div>
-<ul>
-<li>재배열된 샘플에서 승진률은 어떻게 나타날까?</li>
-</ul>
 </div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
@@ -673,174 +733,105 @@
 </div>
 </div>
 <ul>
-<li>무작위로 섞인 후 승진율 차이는 4.2%포인트로 감소함!</li>
+<li>무작위로 섞은 후 차이: <strong>4.2%포인트</strong> (원래 29.2%p → 대폭 감소)</li>
 </ul>
 </div></div>
 </section>
-<section id="가상의-세계-설정-성차별이-없는-경우-1" class="slide level2">
-<h2>가상의 세계 설정: 성차별이 없는 경우</h2>
+<section id="표본-변동성을-고려해야-한다" class="slide level2">
+<h2>표본 변동성을 고려해야 한다</h2>
 <ul>
-<li><p>만약 성차별이 전혀 존재하지 않는 세상이 있다면? 승진 결정은 성별과 <strong><em>완전히 독립적</em></strong>이어야 함.</p></li>
-<li><p>이를 실험적으로 재현하기 위해, 기존 데이터에서 <code>gender</code> 변수를 무작위로 섞어(<code>shuffle</code>)<br>
-각 행에 다시 할당한 후, 승진율이 어떻게 변하는지 살펴보자.</p></li>
+<li><p>“성차별 없는 세계”에서 한 번 섞었을 때 4.2%p가 나왔음.</p></li>
+<li><p>그런데 <strong>다시 섞으면</strong> 4.2%p가 또 나올까? 아니면 다른 값?</p></li>
+<li><p>표본 변동성 때문에 매번 다른 값이 나옴 → 한 번의 결과만으로 판단 불가.</p></li>
 </ul>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>promotions <span class="sc">%&gt;%</span></span>
-<span id="cb25-2"><a href=""></a>       <span class="fu">left_join</span>(promotions_shuffled <span class="sc">%&gt;%</span></span>
-<span id="cb25-3"><a href=""></a>                   <span class="fu">rename</span>(<span class="at">shuffled_gender =</span> gender)) <span class="sc">%&gt;%</span></span>
-<span id="cb25-4"><a href=""></a>  <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 4
-     id decision gender shuffled_gender
-  &lt;int&gt; &lt;fct&gt;    &lt;fct&gt;  &lt;fct&gt;          
-1     1 promoted male   female         
-2     2 promoted male   female         
-3     3 promoted male   male           
-4     4 promoted male   female         
-5     5 promoted male   male           
-6     6 promoted male   male           </code></pre>
-</div>
-</div>
-<ul>
-<li>재배열된 샘플에서 승진률은 어떻게 나타날까?</li>
-</ul>
-</div><div class="column" style="width:50%;">
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="chapter_ci_hyptest_files/figure-revealjs/unnamed-chunk-24-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
-</figure>
-</div>
-</div>
-</div>
-</div></div>
-</section>
-<section id="표본-변동성sampling-variation" class="slide level2">
-<h2>표본 변동성(Sampling Variation)</h2>
-<ul>
-<li><p>가상의 세계에서 승진율 차이는 <strong><em>4.2%포인트</em></strong>에 불과했음.</p></li>
-<li><p>그렇다면, 이제 성차별이 존재하는지 확실히 답할 수 있을까?</p></li>
-<li><p>No! <strong><em>표본 변동성을 고려해야 함!</em></strong></p>
-<ul>
-<li><strong>한 번 더 무작위 재배열(shuffling)을 하면, 4.2%포인트와 얼마나 다른 결과가 나올까?</strong><br>
-</li>
-<li>즉, 4.2%포인트라는 값이 <strong><em>가상의 세계에서 얼마나 대표적인 값인지</em></strong> 평가해야 함.<br>
-</li>
-<li>더 나아가, <strong><em>가상의 세계에서 29.2%포인트 차이가 발생할 확률은 얼마나 될까?</em></strong></li>
-</ul></li>
-<li><p><strong><em>“성차별이 없다”는 가설하에서</em></strong> 전체 샘플 분포를 살펴보아야 함.</p></li>
-<li><p>어떻게? <strong><em>무작위 재배열을 아주 많이 반복하고, 매번 승진율 차이를 계산</em></strong>.</p></li>
-</ul>
-<!-- 즉,   -->
-<!-- 1. 성별을 무작위로 섞는 과정을 여러 번 수행하고,   -->
-<!-- 2. 매번 남성과 여성의 승진율 차이를 기록하여   -->
-<!-- 3. 전체적인 분포를 확인하면,   -->
-<!-- 4. 실제 관측된 29.2%포인트 차이가 우연히 발생할 수 있는지 판단할 수 있음. -->
-</section>
-<section id="번의-무작위-재배열로-표본-분포-생성" class="slide level2">
-<h2>1000번의 무작위 재배열로 표본 분포 생성</h2>
-
-<img data-src="chapter_ci_hyptest_files/figure-revealjs/unnamed-chunk-25-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"></section>
-<section id="번의-무작위-재배열로-표본-분포-생성-1" class="slide level2">
-<h2>1000번의 무작위 재배열로 표본 분포 생성</h2>
-
-<img data-src="chapter_ci_hyptest_files/figure-revealjs/unnamed-chunk-26-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"><ul>
-<li>성차별이 없다고 가정했을 때, 0.292 차이가 발생할 확률은 얼마나 될까?</li>
-</ul>
-</section>
-<section id="방금-한-것은" class="slide level2">
-<h2>방금 한 것은…</h2>
-<ul>
-<li><p>우리는 <strong><em>가설 검정(hypothesis testing)</em></strong> 절차를 실행했으며, 그중에서도 <strong><em>순열 검정(permutation test)</em></strong> 을 사용함.</p></li>
-<li><p>질문: <em>성차별이 없는 가상의 세계에서, 실제 관측된 승진율 차이가 발생할 가능성은 얼마나 될까?</em></p></li>
-<li><p>결론: <strong><em>그럴 가능성이 낮음</em></strong> → 따라서 우리는 <strong><em>“성차별이 없다”는 가설을 기각할 가능성이 높음</em></strong>.</p></li>
-<li><p>이제부터 가설 검정의 공식적인 이론적 틀을 소개함.</p></li>
-</ul>
-</section>
-<section id="가설-검정의-표기법과-정의" class="slide level2">
-<h2>가설 검정의 표기법과 정의</h2>
-<ul>
-<li><p><strong><em>가설 검정(hypothesis test)</em></strong> 은 <strong><em>두 개의 경쟁 가설</em></strong> 을 비교하는 과정임:</p>
-<ul>
-<li><p><strong><em>귀무가설(null hypothesis,</em></strong> <span class="math inline">\(H_0\)</span>): 일반적으로 차이가 없다는 가설을 의미함.</p></li>
-<li><p><strong><em>대립가설(alternative hypothesis,</em></strong> <span class="math inline">\(H_A\)</span> 또는 <span class="math inline">\(H_1\)</span>): 연구자가 주장하는 가설.</p></li>
-</ul></li>
-<li><p>앞선 승진 실험의 경우: <span class="math display">\[\begin{align}H_0&amp;: p_m - p_f = 0\\H_A&amp;: p_m - p_f &gt; 0,\end{align}\]</span> 여기서 <span class="math inline">\(p_m =\)</span> 남성의 승진 비율, <span class="math inline">\(p_f =\)</span> 여성의 승진 비율.</p>
-<ul>
-<li>위의 대립가설은 <em>단측(한쪽) 검정(one-sided test)</em> 으로, <span class="math inline">\(p_m &gt; p_f\)</span>, 즉 여성에게 차별이 존재한다고 주장함.</li>
-<li><em>양측 검정(two-sided test)</em> 의 경우 <span class="math inline">\(H_A: p_m - p_f \neq 0\)</span> 로 표현됨.</li>
-</ul></li>
-</ul>
-</section>
-<section id="가설-검정의-표기법과-정의-1" class="slide level2">
-<h2>가설 검정의 표기법과 정의</h2>
-<ul>
-<li><p><strong><em>검정 통계량(test statistic)</em></strong>: 가설 검정을 위해 사용되는 <em>점 추정값 또는 표본 통계량</em>.</p>
-<ul>
-<li><em>앞선 사례에서</em>: 표본 비율 차이 <span class="math inline">\(\hat{p}_m - \hat{p}_f\)</span>.</li>
-</ul></li>
-<li><p><strong><em>관측된 검정 통계량(observed test statistic)</em></strong>: 실제 데이터에서 관측된 검정 통계량의 값.</p>
-<ul>
-<li><em>앞선 사례에서</em>: 실제 관측된 차이 <span class="math inline">\(\hat{p}_m - \hat{p}_f = 0.292 = 29.2\%\)</span>포인트.</li>
-</ul></li>
-<li><p><strong><em>귀무분포(null distribution)</em></strong>: <em>귀무가설</em> <span class="math inline">\(H_0\)</span> 이 참이라고 가정했을 때 검정 통계량의 표본 분포.</p>
-<ul>
-<li><em>앞선 사례에서</em>: 차별이 없다고 가정했을 때 <span class="math inline">\(\hat{p}_m - \hat{p}_f\)</span> 가 가질 수 있는 모든 값들의 분포.</li>
-<li>바로 우리가 앞서 본 분포임.</li>
-</ul></li>
-</ul>
-</section>
-<section id="귀무분포-null-distribution" class="slide level2">
-<h2>귀무분포 (Null Distribution)</h2>
-
-<img data-src="chapter_ci_hyptest_files/figure-revealjs/unnamed-chunk-27-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"></section>
-<section id="가설-검정의-표기법과-정의-2" class="slide level2">
-<h2>가설 검정의 표기법과 정의</h2>
+<p><strong>우리가 알아야 할 것</strong>:</p>
 <blockquote>
-<p><strong><em>p-값(p-value)</em></strong>: 귀무가설 <span class="math inline">\(H_0\)</span> 이 참일 때, 우리가 관측한 검정 통계량과 <em>같거나 더 극단적인</em> 값을 관측할 확률.</p>
+<p>성차별이 <strong>없는</strong> 세계에서, “무작위로 섞었을 때 29.2%p 이상의 차이가 나올 가능성”이 얼마나 되는가?</p>
 </blockquote>
+<p><strong>방법</strong>: 무작위 재배열을 <strong>1,000번</strong> 반복 → 각 번마다 차이 계산 → 분포 생성.</p>
 <ul>
-<li><p>귀무가설 <span class="math inline">\(H_0\)</span> 이 참이라면, 즉 차별이 없는 세상에서 우리가 0.292의 승진 비율 차이를 관측한 것이 얼마나 <em>놀라운</em> 일인가? 매우 놀라운가? 약간 놀라운가?</p></li>
-<li><p><strong><em>더 극단적인 값</em></strong>이란 무엇인가?</p>
-<ul>
-<li>대립가설에 따라 정의됨: 이 경우, 남성이 여성보다 승진할 <strong><em>가능성이 더 높다</em></strong>는 가정. 따라서, <strong><em>더 극단적인 값</em></strong>이란 <strong><em>0.292보다 더 큰 승진 비율 차이</em></strong>를 의미함.</li>
-</ul></li>
-<li><p><strong><em>해석</em></strong>: p-값이 작을수록, <em>관측된 통계량이 귀무가설과 일치하지 않을 가능성이 높음</em>.</p></li>
-<li><p>언제 귀무가설 <span class="math inline">\(H_0\)</span> 을 <strong><em>기각</em></strong>할지 결정하는 기준은?</p></li>
+<li>이것이 <strong><em>귀무분포 (Null Distribution)</em></strong> 임.</li>
 </ul>
 </section>
-<section id="가설-검정의-표기법과-정의-3" class="slide level2">
-<h2>가설 검정의 표기법과 정의</h2>
+<section id="가설-검정의-표기법-정의" class="slide level2">
+<h2>가설 검정의 표기법 정의</h2>
+<p><strong>두 개의 경쟁 가설</strong></p>
 <ul>
-<li><p>귀무가설 <span class="math inline">\(H_0\)</span> 을 기각할지 여부를 결정하기 위해 <strong><em>유의수준</em></strong>을 설정함.</p></li>
-<li><p><strong><em>유의수준</em></strong> <span class="math inline">\((\alpha)\)</span>: p-값의 <strong>컷오프 기준</strong> 역할을 함.</p>
+<li><strong><em>귀무가설</em></strong> <span class="math inline">\(H_0\)</span>: 기본 가설. 일반적으로 “차이 없음”, “효과 없음”.</li>
+<li><strong><em>대립가설</em></strong> <span class="math inline">\(H_A\)</span>: 연구자가 주장하는 가설.</li>
+</ul>
+<p><strong>승진 실험의 가설</strong></p>
+<p><span class="math display">\[H_0: p_m - p_f = 0 \quad \text{(성별 간 승진율 차이 없음)}\]</span> <span class="math display">\[H_A: p_m - p_f &gt; 0 \quad \text{(남성의 승진율이 더 높음)}\]</span></p>
+<p>여기서 <span class="math inline">\(p_m\)</span> = 남성 승진 비율, <span class="math inline">\(p_f\)</span> = 여성 승진 비율.</p>
 <ul>
-<li>일반적으로 사용되는 값: <span class="math inline">\(\alpha = 0.01\)</span>, <span class="math inline">\(0.05\)</span>, 또는 <span class="math inline">\(0.1\)</span>.</li>
-</ul></li>
-<li><p><strong><em>판단 기준</em></strong>:</p>
-<ul>
-<li><p>p-값이 <strong><em>유의수준</em></strong> <span class="math inline">\(\alpha\)</span>보다 작으면, “<span class="math inline">\(\alpha\)</span> 유의수준에서 귀무가설을 기각한다.”</p></li>
-<li><p>반대로, p-값이 <span class="math inline">\(\alpha\)</span>보다 크면, “<span class="math inline">\(\alpha\)</span> 유의수준에서 귀무가설을 기각할 수 없다.”라고 표현함.</p></li>
-</ul></li>
-<li><p><strong><em>해석</em></strong>: 귀무가설이 참일 때 관측값이 일어날 가능성이 너무 낮다면, 해당 가설이 <strong>거짓일 가능성이 높음</strong>.</p></li>
-<li><p>우리 예제에서 이를 어떻게 적용하는지 살펴보자.</p></li>
+<li>위의 <span class="math inline">\(H_A\)</span>는 <strong><em>단측 검정 (one-sided test)</em></strong>: 방향이 있음 (<span class="math inline">\(p_m &gt; p_f\)</span>).</li>
+<li><strong><em>양측 검정 (two-sided test)</em></strong>: <span class="math inline">\(H_A: p_m - p_f \neq 0\)</span> (방향 무관, 차이만 검정).</li>
 </ul>
 </section>
-<section id="p-value-시각화" class="slide level2">
-<h2>p-value 시각화</h2>
+<section id="핵심-용어-정의" class="slide level2">
+<h2>핵심 용어 정의</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">용어</th>
+<th style="text-align: left;">정의</th>
+<th style="text-align: left;">이 예시에서</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>검정 통계량</strong> (Test statistic)</td>
+<td style="text-align: left;">가설 검정에 사용되는 표본 통계량</td>
+<td style="text-align: left;"><span class="math inline">\(\hat{p}_m - \hat{p}_f\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>관측된 검정 통계량</strong> (Observed test statistic)</td>
+<td style="text-align: left;">실제 데이터에서 관측된 값</td>
+<td style="text-align: left;"><span class="math inline">\(0.292\)</span> (29.2%p)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>귀무분포</strong> (Null distribution)</td>
+<td style="text-align: left;"><span class="math inline">\(H_0\)</span>이 참일 때 검정 통계량의 분포</td>
+<td style="text-align: left;">1,000번 섞어서 얻은 차이의 분포</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>p-값</strong> (p-value)</td>
+<td style="text-align: left;"><span class="math inline">\(H_0\)</span>이 참일 때, 관측값만큼 극단적인 값이 나올 확률</td>
+<td style="text-align: left;">아래에서 계산</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>유의수준</strong> (Significance level, <span class="math inline">\(\alpha\)</span>)</td>
+<td style="text-align: left;">귀무가설 기각의 컷오프 기준</td>
+<td style="text-align: left;">통상 0.05</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="귀무분포-생성-1000번의-무작위-재배열" class="slide level2">
+<h2>귀무분포 생성: 1,000번의 무작위 재배열</h2>
 
-<img data-src="chapter_ci_hyptest_files/figure-revealjs/unnamed-chunk-28-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"><ul>
-<li>검은 부분이 p-value에 해당!</li>
+<img data-src="chapter_ci_hyptest_files/figure-revealjs/unnamed-chunk-22-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"><ul>
+<li>분포의 중심은 <strong>0</strong> 근처: 성차별이 없으면 차이가 0에 가까워야 함.</li>
+<li>실제 관측값 <strong>0.292</strong>는 분포의 오른쪽 끝에 위치 → 매우 드문 값.</li>
 </ul>
 </section>
-<section id="p-value-계산-및-의사-결정" class="slide level2">
-<h2>p-value 계산 및 의사 결정</h2>
-<ul>
-<li>p-값의 정의를 다시 떠올려 보자: <strong><em>귀무가설</em></strong> <span class="math inline">\(H_0\)</span>이 참이라고 가정할 때, 우리가 얻은 통계량보다 같거나 더 극단적인 값을 관측할 확률.</li>
+<section id="p-값-시각화" class="slide level2">
+<h2>p-값 시각화</h2>
+
+<img data-src="chapter_ci_hyptest_files/figure-revealjs/unnamed-chunk-23-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"><ul>
+<li><strong>파란 영역</strong> = p-값: <span class="math inline">\(H_0\)</span> 하에서 0.292 이상의 차이가 나올 확률.</li>
 </ul>
+</section>
+<section id="p-값-계산-및-의사-결정" class="slide level2">
+<h2>p-값 계산 및 의사 결정</h2>
+<blockquote>
+<p><strong><em>p-값</em></strong>: <span class="math inline">\(H_0\)</span>이 참일 때, 관측된 검정 통계량과 <strong>같거나 더 극단적인</strong> 값을 관측할 확률.</p>
+</blockquote>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>p_value <span class="ot">&lt;-</span> <span class="fu">mean</span>(null_distribution<span class="sc">$</span>stat <span class="sc">&gt;=</span> <span class="fl">0.292</span>)</span>
 <span id="cb27-2"><a href=""></a>p_value</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -849,90 +840,207 @@
 </div>
 </div>
 <ul>
-<li><p>차별이 없는 세상에서는 <span class="math inline">\(\hat{p}_m - \hat{p}_f\)</span> 값이 0.292 이상일 확률이 0.7%에 불과함.</p></li>
-<li><p>따라서 5% 유의수준에서 귀무가설 <span class="math inline">\(H_0\)</span> (즉, 차별이 없다는 가설)을 기각할 수 있음.</p>
-<ul>
-<li>즉, <span class="math inline">\(\hat{p_m} - \hat{p_f} = 0.292\)</span>는 5% 유의수준에서 0과 통계적으로 유의미하게 다름.</li>
-</ul></li>
-<li><p><strong>질문:</strong> 만약 유의수준을 <span class="math inline">\(\alpha = 0.01 = 1\%\)</span>로 설정했다면, 차별이 없다는 가설을 기각할 수 있었을까?</p></li>
+<li>성차별이 없는 세계에서 <span class="math inline">\(\hat{p}_m - \hat{p}_f \geq 0.292\)</span> 일 확률: <strong>0.7%</strong></li>
 </ul>
+<p><strong>의사 결정</strong> (유의수준 <span class="math inline">\(\alpha = 0.05\)</span>)</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">비교</th>
+<th style="text-align: left;">판단</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">p-값 <span class="math inline">\((0.007)\)</span> <span class="math inline">\(&lt;\)</span> <span class="math inline">\(\alpha\)</span> <span class="math inline">\((0.05)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(H_0\)</span> <strong>기각</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">해석</td>
+<td style="text-align: left;">29.2%p 차이는 우연이 아닐 가능성이 높음 → 성차별의 통계적 증거 존재</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>만약 <span class="math inline">\(\alpha = 0.01\)</span>로 설정했다면?</strong> p-값이 0.01보다 작은지 확인 후 동일하게 판단.</p>
+</blockquote>
 </section>
 <section id="검정-오류-testing-errors" class="slide level2">
 <h2>검정 오류 (Testing Errors)</h2>
 <ul>
-<li><p>확률을 다루기 때문에 <strong>오류</strong>를 범할 수 있음.</p></li>
-<li><p>29%p 차이는 <span class="math inline">\(H_0\)</span> 하에서 <em>드물게</em> 발생할 수 있지만, <strong>절대 불가능한 것은 아님</strong>.</p>
-<ul>
-<li>실제로, 이러한 차이(또는 더 큰 차이)는 약 <strong>0.007%의 확률</strong>로 발생할 수 있음.</li>
-</ul></li>
-<li><p>따라서, 때때로 우리는 <span class="math inline">\(H_0\)</span>를 기각하지만, 사실 <span class="math inline">\(H_0\)</span>가 참일 수도 있음.</p>
-<ul>
-<li>5% 유의 수준을 설정하면, 이러한 오류가 <strong>5%를 넘지 않도록</strong> 보장할 수 있음.</li>
-</ul></li>
-</ul>
-</section>
-<section id="검정-오류-testing-errors-1" class="slide level2">
-<h2>검정 오류 (Testing Errors)</h2>
-<ul>
-<li>가설 검정에서는 <strong><em>두 가지 유형의 오류</em></strong>가 존재함.</li>
+<li>확률을 다루기 때문에 <strong>오류</strong>를 피할 수 없음.</li>
+<li>0.292의 차이는 <span class="math inline">\(H_0\)</span> 하에서 <em>드물지만</em> <strong>불가능하지는 않음</strong>.</li>
 </ul>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p>![(../img/photos/gt_error_table_ht.png)</p>
+<p><img data-src="../img/photos/gt_error_table_ht.png"></p>
 </div><div class="column" style="width:50%;">
-<p><strong>제1종 오류 (Type I Error)</strong>: 귀무가설(<span class="math inline">\(H_0\)</span>)이 참인데도 이를 기각하는 경우. <strong><em>False Positive</em></strong></p>
-<p><strong>제2종 오류 (Type II Error)</strong>: 귀무가설(<span class="math inline">\(H_0\)</span>)이 거짓인데도 이를 기각하지 않는 경우. <strong><em>False Negative</em></strong></p>
+<p><strong>제1종 오류 (Type I Error)</strong><br>
+<span class="math inline">\(H_0\)</span>이 <em>참인데</em> 기각 → <strong>False Positive</strong><br>
+<em>예: 실제로 차별이 없는데 “있다”고 결론</em></p>
+<p>유의수준 <span class="math inline">\(\alpha\)</span>로 제어: <span class="math inline">\(\alpha = 0.05\)</span>이면<br>
+5% 이하의 확률로만 이 오류를 범함.</p>
+<p><strong>제2종 오류 (Type II Error)</strong><br>
+<span class="math inline">\(H_0\)</span>이 <em>거짓인데</em> 기각 못함 → <strong>False Negative</strong><br>
+<em>예: 실제 차별이 있는데 “없다”고 결론</em></p>
 </div></div>
-<ul>
-<li>실제로, 우리는 <strong>제1종 오류의 발생 빈도를</strong> <span class="math inline">\(\alpha\)</span> 로 설정하여 통제하고, <strong>제2종 오류를 최소화하려고 노력함</strong>.</li>
-</ul>
 </section>
-<section id="이-모든-것이-회귀-분석과-어떻게-관련될까" class="slide level2">
-<h2>이 모든 것이 회귀 분석과 어떻게 관련될까?</h2>
+<section id="통계적-추론과-회귀-분석의-연결" class="slide level2">
+<h2>통계적 추론과 회귀 분석의 연결</h2>
 <ul>
-<li><p>이제 <strong><em>통계적 추론 (statistical inference)</em></strong> 을 실제로 수행할 수 있는 모든 도구를 갖춤!</p></li>
-<li><p>회귀 분석은 <strong><em>표본 데이터 (sample)</em></strong> 를 기반으로 함.</p></li>
-<li><p>따라서 <strong><em>회귀 계수 (regression coefficient)</em></strong> 도 <strong><em>표본 변동성 (sampling variation)</em></strong> 에 영향을 받으며, 이는 모집단의 참된 계수가 아님.</p></li>
-<li><p><strong><em>질문</em></strong>: 추정된 효과가 특정 값과 통계적으로 유의미하게 다른가?</p></li>
+<li><p>지금까지 배운 신뢰 구간·가설 검정 = <strong><em>통계적 추론 (Statistical Inference)</em></strong>의 핵심 도구.</p></li>
+<li><p>회귀 분석도 <strong>표본 데이터</strong>를 기반으로 하므로, 동일한 논리가 적용됨:</p></li>
 </ul>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">회귀 분석 출력값</th>
+<th style="text-align: left;">통계적 추론 연결</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">회귀 계수 <span class="math inline">\(\hat{\beta}_1\)</span></td>
+<td style="text-align: left;">점 추정량 — 표본 변동성에 영향받음</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">표준 오차 (Std. Error)</td>
+<td style="text-align: left;"><span class="math inline">\(\hat{\beta}_1\)</span>의 표준 오차 (<span class="math inline">\(SE\)</span>)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">t-값 (t-statistic)</td>
+<td style="text-align: left;">검정 통계량: <span class="math inline">\(t = \hat{\beta}_1 / SE\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">p-값 (Pr(&gt;|t|))</td>
+<td style="text-align: left;"><span class="math inline">\(H_0: \beta_1 = 0\)</span> 하에서의 p-값</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">95% 신뢰 구간</td>
+<td style="text-align: left;"><span class="math inline">\(\hat{\beta}_1 \pm 1.96 \times SE\)</span></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>핵심</strong>: 회귀 계수가 “유의미하다” = p-값 <span class="math inline">\(&lt; \alpha\)</span> = 해당 변수가 결과에 <strong>실제 영향을 미칠 가능성이 높음</strong>.</p>
+</blockquote>
+</section>
+<section id="신뢰-구간-공식-1.96은-어디서-왔는가" class="slide level2">
+<h2>95% 신뢰 구간 공식: 1.96은 어디서 왔는가?</h2>
+<div class="columns">
+<div class="column" style="width:45%;">
+<p><strong>3단계 논리 흐름</strong></p>
+<p><strong>① CLT 적용</strong></p>
+<p>표본이 충분히 크면, <span class="math inline">\(\hat{\beta}_1\)</span>은 정규 분포를 따름:</p>
+<p><span class="math display">\[\hat{\beta}_1 \approx N\!\left(\beta_1,\; SE^2\right)\]</span></p>
+<p><strong>② 표준화 (z-변환)</strong></p>
+<p><span class="math display">\[z = \frac{\hat{\beta}_1 - \beta_1}{SE} \approx N(0,\, 1)\]</span></p>
+<p><strong>③ 1.96의 출처</strong></p>
+<p>표준 정규분포의 성질:</p>
+<p><span class="math display">\[P(-1.96 \leq z \leq +1.96) = 0.95\]</span></p>
+<p>이를 <span class="math inline">\(\beta_1\)</span>에 대해 풀면:</p>
+<p><span class="math display">\[\therefore\quad \hat{\beta}_1 \pm 1.96 \times SE\]</span></p>
+</div><div class="column" style="width:55%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="chapter_ci_hyptest_files/figure-revealjs/unnamed-chunk-25-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>신뢰수준별 z-값</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: center;">신뢰수준</th>
+<th style="text-align: center;">z-값</th>
+<th style="text-align: left;">구간 폭</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">90%</td>
+<td style="text-align: center;">±1.645</td>
+<td style="text-align: left;">좁음 — 덜 보수적</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>95%</strong></td>
+<td style="text-align: center;"><strong>±1.96</strong></td>
+<td style="text-align: left;"><strong>통상 사용 기준</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">99%</td>
+<td style="text-align: center;">±2.576</td>
+<td style="text-align: left;">넓음 — 더 보수적</td>
+</tr>
+</tbody>
+</table>
+</div></div>
+</section>
+<section id="회귀-출력에서-신뢰-구간-읽기" class="slide level2">
+<h2>회귀 출력에서 신뢰 구간 읽기</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a><span class="co"># lm() 출력에서 95% CI 직접 확인</span></span>
+<span id="cb29-2"><a href=""></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> wt, <span class="at">data =</span> mtcars)</span>
+<span id="cb29-3"><a href=""></a><span class="fu">confint</span>(model, <span class="at">level =</span> <span class="fl">0.95</span>)   <span class="co"># β̂ ± 1.96 × SE 와 동일</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                2.5 %    97.5 %
+(Intercept) 33.450500 41.119753
+wt          -6.486308 -4.202635</code></pre>
+</div>
+</div>
+<ul>
+<li><code>confint()</code>가 반환하는 구간 = <span class="math inline">\(\hat{\beta}_1 \pm 1.96 \times SE\)</span> (이론적 공식)</li>
+<li>회귀 출력의 <code>Std. Error</code> × 1.96 = CI 반폭 (half-width)</li>
+</ul>
+<blockquote>
+<p>핵심: 회귀 계수가 “유의미하다” (<span class="math inline">\(p &lt; 0.05\)</span>) ⟺ 95% CI가 <strong>0을 포함하지 않는다</strong>.</p>
+</blockquote>
 </section></section>
 <section>
 <section id="the-end" class="title-slide slide level1 center">
 <h1>THE END!</h1>
 
 </section>
-<section id="appendix-code-to-generate-the-null-distribution" class="slide level2">
-<h2>Appendix: code to generate the null distribution</h2>
+<section id="appendix-infer-파이프라인-전체-코드" class="slide level2">
+<h2>Appendix: <code>infer</code> 파이프라인 전체 코드</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a>null_distribution <span class="ot">&lt;-</span> promotions <span class="sc">%&gt;%</span> </span>
-<span id="cb29-2"><a href=""></a>  <span class="co"># takes formula, defines success</span></span>
-<span id="cb29-3"><a href=""></a>  <span class="fu">specify</span>(<span class="at">formula =</span> decision <span class="sc">~</span> gender,</span>
-<span id="cb29-4"><a href=""></a>          <span class="at">success =</span> <span class="st">"promoted"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb29-5"><a href=""></a>  <span class="co"># decisions are independent of gender</span></span>
-<span id="cb29-6"><a href=""></a>  <span class="fu">hypothesize</span>(<span class="at">null =</span> <span class="st">"independence"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb29-7"><a href=""></a>  <span class="co"># generate 1000 reshufflings of data</span></span>
-<span id="cb29-8"><a href=""></a>  <span class="fu">generate</span>(<span class="at">reps =</span> <span class="dv">1000</span>, <span class="at">type =</span> <span class="st">"permute"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb29-9"><a href=""></a>  <span class="co"># compute p_m - p_f from each reshuffle</span></span>
-<span id="cb29-10"><a href=""></a>  <span class="fu">calculate</span>(<span class="at">stat =</span> <span class="st">"diff in props"</span>,</span>
-<span id="cb29-11"><a href=""></a>            <span class="at">order =</span> <span class="fu">c</span>(<span class="st">"male"</span>, <span class="st">"female"</span>))</span>
-<span id="cb29-12"><a href=""></a></span>
-<span id="cb29-13"><a href=""></a><span class="fu">visualize</span>(null_distribution,</span>
-<span id="cb29-14"><a href=""></a>          <span class="at">bins =</span> <span class="dv">10</span>,</span>
-<span id="cb29-15"><a href=""></a>          <span class="at">fill =</span> <span class="st">"#d90502"</span>) <span class="sc">+</span> </span>
-<span id="cb29-16"><a href=""></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Sampling distribution"</span>,</span>
-<span id="cb29-17"><a href=""></a>       <span class="at">x =</span> <span class="st">"Difference in promotion rates (male - female)"</span>,</span>
-<span id="cb29-18"><a href=""></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>) <span class="sc">+</span></span>
-<span id="cb29-19"><a href=""></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="fl">0.4</span>, <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb29-20"><a href=""></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a><span class="co"># 귀무분포 생성</span></span>
+<span id="cb31-2"><a href=""></a>null_distribution <span class="ot">&lt;-</span> promotions <span class="sc">%&gt;%</span> </span>
+<span id="cb31-3"><a href=""></a>  <span class="co"># 변수와 성공 기준 지정</span></span>
+<span id="cb31-4"><a href=""></a>  <span class="fu">specify</span>(<span class="at">formula =</span> decision <span class="sc">~</span> gender,</span>
+<span id="cb31-5"><a href=""></a>          <span class="at">success =</span> <span class="st">"promoted"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-6"><a href=""></a>  <span class="co"># 귀무가설: 성별과 승진 독립</span></span>
+<span id="cb31-7"><a href=""></a>  <span class="fu">hypothesize</span>(<span class="at">null =</span> <span class="st">"independence"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-8"><a href=""></a>  <span class="co"># 1,000번 무작위 재배열</span></span>
+<span id="cb31-9"><a href=""></a>  <span class="fu">generate</span>(<span class="at">reps =</span> <span class="dv">1000</span>, <span class="at">type =</span> <span class="st">"permute"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-10"><a href=""></a>  <span class="co"># 각 재배열에서 p_m - p_f 계산</span></span>
+<span id="cb31-11"><a href=""></a>  <span class="fu">calculate</span>(<span class="at">stat =</span> <span class="st">"diff in props"</span>,</span>
+<span id="cb31-12"><a href=""></a>            <span class="at">order =</span> <span class="fu">c</span>(<span class="st">"male"</span>, <span class="st">"female"</span>))</span>
+<span id="cb31-13"><a href=""></a></span>
+<span id="cb31-14"><a href=""></a><span class="co"># 귀무분포 시각화</span></span>
+<span id="cb31-15"><a href=""></a><span class="fu">visualize</span>(null_distribution,</span>
+<span id="cb31-16"><a href=""></a>          <span class="at">bins =</span> <span class="dv">10</span>,</span>
+<span id="cb31-17"><a href=""></a>          <span class="at">fill =</span> <span class="st">"#d90502"</span>) <span class="sc">+</span> </span>
+<span id="cb31-18"><a href=""></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Difference in promotion rates (male - female)"</span>,</span>
+<span id="cb31-19"><a href=""></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>) <span class="sc">+</span></span>
+<span id="cb31-20"><a href=""></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="fl">0.4</span>, <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb31-21"><a href=""></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="chapter_ci_hyptest_files/figure-revealjs/unnamed-chunk-31-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
+<p><img data-src="chapter_ci_hyptest_files/figure-revealjs/unnamed-chunk-28-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
 </figure>
 </div>
 </div>
