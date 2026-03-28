@@ -1004,31 +1004,4 @@ ggplot(data=cps,aes(y = log_wage, x = education, colour = gender)) +
 :::
 :::::
 
-------------------------------------------------------------------------
-
-## 🔍 인과 관계를 찾아가는 길
-
-✅ 데이터를 어떻게 다룰까?: 읽기(Read), 정리(Tidy), 시각화(Visualize)...
-
-✅ 변수간 관계를 어떻게 요약할까? 단순 / 다중 선형 회귀...비선형회귀, 교차변수...
-
-✅ 인과 관계(Causality)란 무엇인가?
-
-✅ 전체 모집단을 관측하지 못하면 어떻게 할까? Sampling!
-
-✅ ***우리의 연구 결과가 단순한 무작위(Randomness) 때문일 수도 있을까?*** 신뢰구간과 가설검정. 통계적 추론
-
-❌ 실제로 외생성을 어떻게 찾아낼 수 있을까?
-
-------------------------------------------------------------------------
-
-
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-
-::: {style="display: flex; justify-content: center; align-items: center; height: 70vh;"}
-<h2 style="color: #ff6666; text-align: center; font-family: &#39;Pacifico&#39;, cursive; font-size: 50px;">
-
-THE END!
-
-</h2>
-:::
+# THE END!

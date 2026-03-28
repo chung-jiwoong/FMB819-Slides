@@ -36,6 +36,17 @@ library(infer)
 library(cowplot)   # plot_grid() 사용을 위해 추가
 library(countdown)
 
+library(showtext)
+
+font_add_google("Nanum Gothic", "nanumgothic")
+showtext_auto()      # 모든 그래픽 디바이스에 자동 적용
+
+theme_set(
+  theme_bw(base_size = 14) +
+  theme(text = element_text(family = "nanumgothic"))
+)
+
+
 countdown(
   color_border              = "#d90502",
   color_text                = "black",
@@ -194,7 +205,7 @@ p_hat
 
 1.  표본에서 파스타 1개를 무작위 선택 → 색상 기록
 2.  선택한 파스타를 표본에 **다시 넣음** (복원추출)
-3.  1–2를 49번 반복 → 원래 표본 크기($n=50$)와 동일한 새 표본
+3.  1–2를 반복 → 원래 표본 크기($n=50$)와 동일한 새 표본
 4.  새 표본에서 $\hat{p}$ 계산
 5.  이 과정을 1,000번 반복 → **부트스트랩 분포**
 :::
@@ -433,11 +444,9 @@ ggplot(percentile_cis) +
 
 ------------------------------------------------------------------------
 
-## 신뢰 구간 해석: 자주 하는 실수
+## 신뢰 구간 해석
 
-> ❌ **틀린 해석**: "모집단 모수가 이 구간 안에 있을 확률이 95%다."
->
-> ✅ **정확한 해석**: 동일한 방법으로 신뢰 구간을 반복 생성하면, 그 중 **약 95%가 모집단 모수를 포함**할 것으로 기대된다.
+> *해석**: 동일한 방법으로 신뢰 구간을 반복 생성하면, 그 중 **약 95%가 모집단 모수를 포함**할 것으로 기대된다.
 
 <br>
 
@@ -458,7 +467,7 @@ ggplot(percentile_cis) +
 
     -   남성과 여성의 평균 임금 차이가 **통계적으로 유의미**한가?
     -   신제품 출시 후 고객 전환율이 **실제로 올랐는가**, 아니면 우연인가?
-    -   A안과 B안 중 어느 쪽이 **진짜 더 효과적**인가? (A/B 테스트)
+    -   A안과 B안 중 어느 쪽이 **진짜 더 효과적**인가?
 
 -   이런 질문에 답하는 도구: ***가설 검정 (Hypothesis Testing)***
 
@@ -580,7 +589,7 @@ promotions_shuffled %>%
 
 **우리가 알아야 할 것**:
 
-> 성차별이 **없는** 세계에서, "무작위로 섞었을 때 29.2%p 이상의 차이가 나올 확률"이 얼마나 되는가?
+> 성차별이 **없는** 세계에서, "무작위로 섞었을 때 29.2%p 이상의 차이가 나올 가능성"이 얼마나 되는가?
 
 **방법**: 무작위 재배열을 **1,000번** 반복 → 각 번마다 차이 계산 → 분포 생성.
 
@@ -631,12 +640,11 @@ null_distribution <- promotions %>%
 
 visualize(null_distribution, bins = 10, fill = "darkred") + 
   geom_vline(xintercept = 0.292, linewidth = 1.25) +
-  labs(title = "귀무분포: 성차별이 없는 세계에서의 승진율 차이",
-       x = "Difference in promotion rates (male - female)", 
+  labs(x = "Difference in promotion rates (male - female)", 
        y = "Frequency") +
   xlim(-0.4, 0.4) +
   annotate("text", x = 0.17, y = 485, label = "observed statistic (0.292)", size = 4) +
-  theme_bw(base_size = 14)
+  theme_bw(base_size = 14) 
 ```
 
 -   분포의 중심은 **0** 근처: 성차별이 없으면 차이가 0에 가까워야 함.
@@ -655,7 +663,7 @@ visualize(null_distribution, bins = 10, fill = "#d90502") +
   shade_p_value(obs_stat = obs_diff_prop,
                 size = 0.5,
                 direction = "right", 
-                fill = "black") +
+                fill = "blue") +
   labs(x = "Differences in sample proportions (male - female)",
        y = "Frequency") +
   xlim(-0.4, 0.4) +
@@ -664,7 +672,7 @@ visualize(null_distribution, bins = 10, fill = "#d90502") +
   annotate("text", x = 0.19, y = 485, label = "observed test statistic (0.292)", size = 4)
 ```
 
--   **검은 영역** = p-값: $H_0$ 하에서 0.292 이상의 차이가 나올 확률.
+-   **파란 영역** = p-값: $H_0$ 하에서 0.292 이상의 차이가 나올 확률.
 
 ------------------------------------------------------------------------
 
@@ -712,7 +720,6 @@ $H_0$이 *참인데* 기각 → **False Positive**\
 $H_0$이 *거짓인데* 기각 못함 → **False Negative**\
 *예: 실제 차별이 있는데 "없다"고 결론*
 
-표본 크기를 늘려 줄일 수 있음.
 :::
 :::::
 
@@ -734,6 +741,95 @@ $H_0$이 *거짓인데* 기각 못함 → **False Negative**\
 
 > **핵심**: 회귀 계수가 "유의미하다" = p-값 $< \alpha$ = 해당 변수가 결과에 **실제 영향을 미칠 가능성이 높음**.
 
+
+------------------------------------------------------------------------
+
+## 95% 신뢰 구간 공식: 1.96은 어디서 왔는가?
+
+::::: columns
+::: {.column width="45%"}
+
+**3단계 논리 흐름**
+
+**① CLT 적용**
+
+표본이 충분히 크면, $\hat{\beta}_1$은 정규 분포를 따름:
+
+$$\hat{\beta}_1 \approx N\!\left(\beta_1,\; SE^2\right)$$
+
+**② 표준화 (z-변환)**
+
+$$z = \frac{\hat{\beta}_1 - \beta_1}{SE} \approx N(0,\, 1)$$
+
+**③ 1.96의 출처**
+
+표준 정규분포의 성질:
+
+$$P(-1.96 \leq z \leq +1.96) = 0.95$$
+
+이를 $\beta_1$에 대해 풀면:
+
+$$\therefore\quad \hat{\beta}_1 \pm 1.96 \times SE$$
+
+:::
+
+::: {.column width="55%"}
+```{r, echo=FALSE, fig.height=4.5}
+library(tidyverse)
+
+x <- seq(-4, 4, length.out = 500)
+df  <- data.frame(x = x, y = dnorm(x))
+df_shade <- df %>% filter(x >= -1.96, x <= 1.96)
+
+ggplot(df, aes(x, y)) +
+  geom_area(data = df_shade, fill = "#B5D4F4", alpha = 0.7) +
+  geom_line(color = "#185FA5", linewidth = 1.2) +
+  geom_vline(xintercept = c(-1.96, 1.96),
+             linetype = "dashed", color = "#378ADD", linewidth = 0.8) +
+  annotate("text", x = 0,    y = 0.19, label = "95%",
+           size = 6, fontface = "bold", color = "#185FA5") +
+  annotate("text", x = -2.8, y = 0.03, label = "2.5%",
+           size = 3.5, color = "gray50") +
+  annotate("text", x =  2.8, y = 0.03, label = "2.5%",
+           size = 3.5, color = "gray50") +
+  annotate("text", x = -1.96, y = -0.018, label = "-1.96",
+           size = 3.5, color = "#378ADD") +
+  annotate("text", x =  1.96, y = -0.018, label = "+1.96",
+           size = 3.5, color = "#378ADD") +
+  scale_x_continuous(breaks = c(-3, 0, 3)) +
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.05))) +
+  labs(x = "z (표준편차 단위)", y = NULL,
+       title = "표준 정규분포 N(0, 1)") +
+  theme_bw(base_size = 13) +
+  theme(axis.text.y  = element_blank(),
+        axis.ticks.y = element_blank(),
+        panel.grid   = element_blank())
+```
+
+**신뢰수준별 z-값**
+
+| 신뢰수준 | z-값 | 구간 폭 |
+|:---:|:---:|:---|
+| 90% | ±1.645 | 좁음 — 덜 보수적 |
+| **95%** | **±1.96** | **통상 사용 기준** |
+| 99% | ±2.576 | 넓음 — 더 보수적 |
+
+:::
+:::::
+
+------------------------------------------------------------------------
+
+## 회귀 출력에서 신뢰 구간 읽기
+```{r, echo=TRUE}
+# lm() 출력에서 95% CI 직접 확인
+model <- lm(mpg ~ wt, data = mtcars)
+confint(model, level = 0.95)   # β̂ ± 1.96 × SE 와 동일
+```
+
+- `confint()`가 반환하는 구간 = $\hat{\beta}_1 \pm 1.96 \times SE$ (이론적 공식)
+- 회귀 출력의 `Std. Error` × 1.96 = CI 반폭 (half-width)
+
+> 핵심: 회귀 계수가 "유의미하다" ($p < 0.05$) ⟺ 95% CI가 **0을 포함하지 않는다**.
 
 
 # THE END!

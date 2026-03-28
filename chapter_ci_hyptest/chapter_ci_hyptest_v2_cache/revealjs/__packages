@@ -13,3 +13,6 @@ lubridate
 infer
 cowplot
 countdown
+sysfonts
+showtextdb
+showtext
