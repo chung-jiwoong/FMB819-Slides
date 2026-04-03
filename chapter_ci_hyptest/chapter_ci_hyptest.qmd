@@ -146,7 +146,7 @@ overwrite = FALSE
 -   파스타 그릇에서 ***단 하나의 랜덤 표본*** $(n=50)$ 만 얻을 수 있다고 가정.
 
 -   단일 표본으로 표본 변동성을 어떻게 분석할 수 있을까?
-    `👉` ***복원추출 (Bootstrap Resampling)*** 사용!
+    `👉` ***Bootstrap Resampling*** 사용!
 
 ```{r, echo = FALSE}
 bowl <- read.csv("https://www.dropbox.com/s/qpjsk0rfgc0gx80/pasta.csv?dl=1")
@@ -553,7 +553,7 @@ ggplot(promotions, aes(x = gender, fill = decision)) +
 
 -   만약 성차별이 **존재하지 않는** 세상이라면, 승진 결정은 성별과 ***완전히 독립적***이어야 함.
 
--   이를 시뮬레이션하는 방법: `gender` 변수를 **무작위로 섞어** (shuffle) 재할당.
+-   이를 시뮬레이션하는 방법: `gender` 변수를 **무작위로 섞어** 재할당.
 
 ::::: columns
 ::: {.column width="50%"}
@@ -623,7 +623,7 @@ $$H_A: p_m - p_f > 0 \quad \text{(남성의 승진율이 더 높음)}$$
 | **검정 통계량** (Test statistic) | 가설 검정에 사용되는 표본 통계량 | $\hat{p}_m - \hat{p}_f$ |
 | **관측된 검정 통계량** (Observed test statistic) | 실제 데이터에서 관측된 값 | $0.292$ (29.2%p) |
 | **귀무분포** (Null distribution) | $H_0$이 참일 때 검정 통계량의 분포 | 1,000번 섞어서 얻은 차이의 분포 |
-| **p-값** (p-value) | $H_0$이 참일 때, 관측값만큼 극단적인 값이 나올 확률 | 아래에서 계산 |
+| **p-값** (p-value) | $H_0$이 참일 때, 관측값이 나올 확률 | 아래에서 계산 |
 | **유의수준** (Significance level, $\alpha$) | 귀무가설 기각의 컷오프 기준 | 통상 0.05 |
 
 ------------------------------------------------------------------------
@@ -734,10 +734,10 @@ $H_0$이 *거짓인데* 기각 못함 → **False Negative**\
 | 회귀 분석 출력값 | 통계적 추론 연결 |
 |:---|:---|
 | 회귀 계수 $\hat{\beta}_1$ | 점 추정량 — 표본 변동성에 영향받음 |
-| 표준 오차 (Std. Error) | $\hat{\beta}_1$의 표준 오차 ($SE$) |
-| t-값 (t-statistic) | 검정 통계량: $t = \hat{\beta}_1 / SE$ |
+| 표준 오차 (Std. Error) | $\hat{\beta}_1$의 표본분포의 표준편차 |
 | p-값 (Pr(>\|t\|)) | $H_0: \beta_1 = 0$ 하에서의 p-값 |
 | 95% 신뢰 구간 | $\hat{\beta}_1 \pm 1.96 \times SE$ |
+| t-값 (t-statistic) | 검정 통계량: $t = \hat{\beta}_1 / SE$ |
 
 > **핵심**: 회귀 계수가 "유의미하다" = p-값 $< \alpha$ = 해당 변수가 결과에 **실제 영향을 미칠 가능성이 높음**.
 

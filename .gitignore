@@ -2,6 +2,10 @@
 
 
 # Keep chapter task solutions local only
+
+chapter_slr/tasks/slr_solution_old.qmd
+chapter_slr/tasks/slr_tasks_old.qmd
+
 chapter_causality/tasks/causality_solution.qmd
 chapter_causality/tasks/causality_solution.html
 
@@ -17,10 +21,7 @@ chapter_causality/tasks/causality_solution.html
 #chapter_tidy/tasks/tidy_solution.qmd
 #chapter_tidy/tasks/tidy_solution.html
 
-chapter_reginference/tasks/reginference_solution.qmd
-chapter_reginference/tasks/reginference_solution.html
-
-chapter_slr/tasks/slr_solution_old.qmd
-chapter_slr/tasks/slr_tasks_old.qmd
+#chapter_reginference/tasks/reginference_solution.qmd
+#chapter_reginference/tasks/reginference_solution.html
 
 **/*.quarto_ipynb

@@ -1,0 +1,311 @@
+---
+title: "수업 과제"
+author: "홍길동 (2025012345)"       #이름과 학번을 넣으세요
+date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
+format: html
+echo: true  
+include: true 
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+    echo = TRUE,
+    message = FALSE,
+    warning = FALSE,
+    comment = "##")
+```
+
+## Task 1
+
+**녹색 파스타 비율**의 샘플링 분포를 생성한 것처럼, $b_\textrm{small}$의 부트스트랩 분포를 생성하자.
+
+1.  학급 크기와 학생 성취도 슬라이드([링크](#star_again))에서 데이터 로딩 및 정리 코드**를 복사하여 실행.
+
+
+```{r}
+library(tidyverse)
+
+star_df = read.csv("https://www.dropbox.com/s/bf1fog8yasw3wjj/star_data.csv?dl=1")
+star_df = star_df[complete.cases(star_df),]
+star_df = star_df %>%
+    filter(star %in% c("small","regular") &
+               grade == "k") %>% 
+    mutate(small = (star == "small"))
+```
+
+
+2.  **`star_df`에서 1,000개의 샘플을 추출하여** $b_\textrm{small}$ 의 부트스트랩 분포를 생성하시오. 아래 코드를 사용하면 됨:
+
+```{r}
+library(infer)
+bootstrap_distrib <- star_df %>% 
+    mutate(small=as.numeric(small)) %>% 
+    specify(response = math, explanatory = small) %>%
+    generate(reps = 1000, type = "bootstrap") %>%
+    calculate(stat = "slope")
+```
+
+3.  이 시뮬레이션된 샘플링 분포를 시각화하고, $b_\textrm{small}$의 평균과 표준 오차를 계산하시오.
+
+
+```{r, echo=FALSE, eval=TRUE,  fig.height = 4.25, fig.width = 8}
+library(infer)
+bootstrap_distrib = star_df %>% 
+    mutate(small=as.numeric(small)) %>% 
+    specify(formula = math ~ small) %>%
+    generate(reps = 1000, type = "bootstrap") %>%
+    calculate(stat = "slope")
+se_simul = round(sd(bootstrap_distrib$stat),3)
+
+bootstrap_distrib %>%
+    ggplot(aes(x = stat)) +
+    geom_histogram(boundary = 9, binwidth = 0.5, col = "white", fill = "#d90502") +
+    labs(
+        x = "Bootstrap sample slope estimate",
+        y = "Frequency"
+    ) +
+    theme_bw(base_size = 14)
+
+mean(bootstrap_distrib$stat)
+sd(bootstrap_distrib$stat)    
+```
+
+
+---
+
+## Task 2 
+
+
+1.  Task 1에서 생성한 부트스트랩 분포를 사용하여 *퍼센타일 방법*으로 95% 신뢰구간을 계산하시오.
+
+
+```{r}
+ci_pctile = bootstrap_distrib %>%
+    summarise(
+        lower = quantile(stat, 0.025),
+        upper = quantile(stat, 0.975)
+    )
+ci_pctile
+```
+
+
+2.  이전 슬라이드에서 구한 신뢰구간과 얼마나 유사한가?
+
+
+```{r}
+# standard error method
+ci_stderror <- bootstrap_distrib %>%
+  summarise(
+    lower = 8.895 - 1.96*sd(stat),
+    upper = 8.895 + 1.96*sd(stat))
+ci_stderror
+
+# theory
+library(broom)
+ci_theory <- tidy(lm(math ~ small, star_df),
+     conf.int = TRUE, conf.level = 0.95) %>%
+  filter(term == "smallTRUE") %>%
+  select(term, conf.low, conf.high)
+ci_theory
+
+bootstrap_distrib %>%
+    ggplot(aes(x = stat)) +
+    geom_histogram(boundary = 9, binwidth = 0.5, col = "white", fill = "#d90502") +
+    labs(
+        x = "Bootstrap sample slope estimate",
+        y = "Frequency",
+        title = "95% confidence interval computed with different methods",
+        subtitle = "percentile (dashed), standard error (longdashed) and theory (solid)"
+    ) +
+  geom_vline(xintercept = c(ci_pctile$lower, ci_pctile$upper), linetype = "dashed", show.legend = TRUE) +
+  geom_vline(xintercept = c(ci_stderror$lower, ci_stderror$upper), linetype = "longdash", show.legend = TRUE) +
+  geom_vline(xintercept = c(ci_theory$conf.low, ci_theory$conf.high)) +
+  theme_bw(base_size = 14)
+```
+
+
+---
+
+
+## Task 3-1
+
+다시 교육과 성별이 임금에 미치는 효과에 대한 질문으로 돌아가 보겠음.
+
+1.  `AER` 패키지에서 `CPS1985` 데이터를 로드하고, 각 변수의 정의를 확인: `?CPS1985`
+
+```{r, eval=F}
+library(AER)
+data("CPS1985")
+?CPS1985
+```
+
+2.  `wage`의 로그 값을 `log_wage` 변수로 생성.
+
+```{r,echo=T, eval=F}
+cps <- CPS1985 %>%
+    mutate(log_wage = log(wage))
+```
+
+3.  `log_wage`를 `gender`와 `education`에 회귀 분석하고, 결과를 `reg1`으로 저장.
+
+```{r, eval=F}
+reg1 <- lm(log_wage ~ gender + education, cps)
+summary(reg1)
+tidy(reg1)
+```
+
+-   각 계수를 해석하시오.
+-   계수들이 통계적으로 유의한가? 어느 유의수준에서 유의한가?
+
+
+절편(Intercept): 교육을 전혀 받지 않은 남성의 기대 로그 임금입니다.
+genderfemale: 교육 수준을 통제했을 때, 여성은 평균적으로 남성보다 약 23% 적은 임금을 받습니다.
+education: 교육을 1년 더 받을 때마다, 성별을 통제한 상태에서 평균적으로 임금이 약 7.68% 증가합니다.
+
+이 회귀식을 해석하는 한 가지 방법은 다음과 같습니다:
+```{r}
+reg1_aug <- augment(reg1)
+
+cps %>%
+  ggplot(aes(x = education, y = log_wage, color = gender)) +
+  geom_point() +
+  geom_line(data = reg1_aug %>% filter(gender == "male"), aes(x = education, y = .fitted)) +
+  geom_line(data = reg1_aug %>% filter(gender == "female"), aes(x = education, y = .fitted)) +
+  labs(
+    x = "Years of education",
+    y = "Log wage",
+    color = "",
+    title = "Relationship between income and education, by gender",
+    subtitle = "Lines correspond to fitted values from a regression of log wage on a gender dummy and education level."
+  ) +
+  theme_bw(base_size = 14) +
+  theme(legend.position = "top")
+```
+두 선은 기울기가 같습니다. 이 기울기는 앞서 본 회귀식에서 education 계수와 같습니다. 두 선 사이의 간격은 gender 계수에 해당합니다. 동일한 교육 수준을 기준으로 할 때, 평균적으로 남성과 여성의 임금 차이는 23%입니다. 절편은 교육 연수가 0일 때 빨간 선이 y축과 만나는 값입니다.
+
+
+모든 계수는 p-value가 거의 0에 가까우므로 1% 유의수준에서 통계적으로 유의합니다.
+
+
+4.  `log_wage`를 `gender`, `education` 그리고 `gender*education`의 상호작용 항과 함께 회귀 분석하고, 결과를 `reg2`로 저장.
+
+```{r, eval=F}
+reg2 <- lm(log_wage ~ gender * education, cps)
+summary(reg2)
+tidy(reg2)
+```
+
+-   $female \times education$ 에 해당하는 계수를 어떻게 해석할 수 있는가?
+-   이 계수의 귀무가설을 5% 유의수준에서 기각할 수 있는가? 10% 유의수준에서는?
+
+여성의 경우, 교육을 1년 더 받을 때 평균적으로 남성보다 임금이 추가로 3% 더 증가합니다. 다시 말해, 여성은 교육을 1년 더 받을 때 평균적으로 임금이 9.5% 증가하는 반면, 남성은 오직 6.5% 증가합니다.
+
+이 회귀식을 해석하는 한 가지 방법은 다음과 같습니다:
+
+
+```{r}
+cps %>%
+  ggplot(aes(x = education, y = log_wage, color = gender)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    x = "Years of education",
+    y = "Log wage",
+    color = "",
+    title = "Relationship between income and education, by gender",
+    subtitle = "Lines correspond to fitted values from a regression of log wage on a gender dummy, education level and\ntheir interaction"
+  ) +
+  theme_bw(base_size = 14) +
+  theme(legend.position = "top")
+```
+
+성별마다 기울기가 다릅니다: 남성의 경우 기울기는 education 계수이고, 여성의 경우 기울기는 education + gender*female입니다. 상호작용항(interaction term)은 (두 변수 중 하나가 연속형일 때) 이러한 기울기의 차이를 허용합니다. 절편은 교육을 받지 않은 남성의 기대 임금이며, gender 계수는 교육을 받지 않은 남성과 여성 간의 기대 임금 차이를 나타냅니다.
+
+상호작용항의 p-value는 $0.055$이므로 5% 유의수준에서는 아쉽게도 기각할 수 없지만, 10% 유의수준에서는 통계적으로 유의합니다.
+
+
+---
+
+
+## Task 3-2 
+
+
+1.  로그 임금과 교육 수준 간의 관계를 나타내는 산점도를 생성하라.
+
+```{r}
+cps %>%
+  ggplot(aes(x = education, y = log_wage, color = gender)) +
+  geom_point() +
+  labs(
+    x = "Years of education",
+    y = "Log wage",
+    color = "",
+    title = "Relationship between income and education, by gender") +
+  theme_bw(base_size = 14) +
+  theme(legend.position = "top")
+```
+
+2.  `geom_smooth`를 사용하여 *회귀선*을 추가하라. 이 선이 무엇을 나타내는가?
+
+```{r}
+cps %>%
+  ggplot(aes(x = education, y = log_wage, color = gender)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(
+    x = "Years of education",
+    y = "Log wage",
+    color = "",
+    title = "Relationship between income and education, by gender") +
+  theme_bw(base_size = 14) +
+  theme(legend.position = "top")
+```
+
+이 선들은 로그 임금을 성별 더미 변수, 교육 수준, 그리고 이 둘의 상호작용 항에 대해 회귀한 결과로 얻은 적합값(fitted values)을 나타냅니다 (이전 단계에서 실행한 회귀식). 음영 처리된 영역은 회귀 계수가 아닌, 적합된 선 자체에 대한 95% 신뢰 구간(confidence interval)을 의미합니다.
+
+
+3.  음영 영역이 무엇을 의미하는지 설명하라.
+
+-   `cps` 데이터에서 하나의 부트스트랩 표본을 추출하라.
+```{r}
+cps_boot <- cps %>%
+  rep_sample_n(reps = 1, size = nrow(cps), replace = TRUE)
+```
+
+-   `log_wage`를 `gender`, `education`, 그리고 `gender*education`의 상호작용 항과 함께 회귀 분석하고, 결과를 `reg_bootstrap`으로 저장하라.
+
+```{r}
+reg_bootsrap <- lm(log_wage ~ gender*education, cps_boot)
+tidy(reg_bootsrap)
+```
+
+-   `reg_bootstrap`에서 남성의 절편 값을 `intercept_men_bootstrap`으로, 기울기 값을 `slope_men_bootstrap`으로 추출하여 저장하라. 여성의 경우도 동일하게 수행하라.
+
+```{r}
+intercept_men_bootstrap = reg_bootsrap$coefficients[1]
+slope_men_bootstrap = reg_bootsrap$coefficients[3]
+
+intercept_women_bootstrap = reg_bootsrap$coefficients[1] + reg_bootsrap$coefficients[2]
+slope_women_bootstrap = reg_bootsrap$coefficients[3] + reg_bootsrap$coefficients[4]
+```
+
+-   이전 플롯에 이 부트스트랩 표본에서 예측된 두 회귀선을 추가하라 (*힌트*: `geom_abline`을 두 번 사용하라).
+
+```{r}
+cps %>%
+  ggplot(aes(x = education, y = log_wage, color = gender)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  geom_abline(slope = slope_men_bootstrap, intercept = intercept_men_bootstrap, linetype = "dashed", color = "#F8766D") +
+  geom_abline(slope = slope_women_bootstrap, intercept = intercept_women_bootstrap, linetype = "dashed", color = "#00BFC4") +
+  labs(
+    x = "Years of education",
+    y = "Log wage",
+    color = "",
+    title = "Relationship between income and education, by gender",
+    subtitle = "Sample regression lines (solid), bootstrap sample regression lines (dashed)") +
+  theme_bw(base_size = 14) +
+  theme(legend.position = "top")
+```
+이 절차를 100번 반복한다면, 음영 처리된 영역의 각 위치에서 평균적으로 95%의 적합선이 그 영역 안에 포함되고, 5%는 그 밖에 위치하게 됩니다.

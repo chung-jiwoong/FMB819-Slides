@@ -328,7 +328,7 @@
 <h2>다시 파스타로: 단 하나의 표본</h2>
 <ul>
 <li><p>파스타 그릇에서 <strong><em>단 하나의 랜덤 표본</em></strong> <span class="math inline">\((n=50)\)</span> 만 얻을 수 있다고 가정.</p></li>
-<li><p>단일 표본으로 표본 변동성을 어떻게 분석할 수 있을까? <code>👉</code> <strong><em>복원추출 (Bootstrap Resampling)</em></strong> 사용!</p></li>
+<li><p>단일 표본으로 표본 변동성을 어떻게 분석할 수 있을까? <code>👉</code> <strong><em>Bootstrap Resampling</em></strong> 사용!</p></li>
 </ul>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">library</span>(tidyverse)</span>
@@ -698,7 +698,7 @@
 <h2>가상의 세계: 성차별이 없다면?</h2>
 <ul>
 <li><p>만약 성차별이 <strong>존재하지 않는</strong> 세상이라면, 승진 결정은 성별과 <strong><em>완전히 독립적</em></strong>이어야 함.</p></li>
-<li><p>이를 시뮬레이션하는 방법: <code>gender</code> 변수를 <strong>무작위로 섞어</strong> (shuffle) 재할당.</p></li>
+<li><p>이를 시뮬레이션하는 방법: <code>gender</code> 변수를 <strong>무작위로 섞어</strong> 재할당.</p></li>
 </ul>
 <div class="columns">
 <div class="column" style="width:50%;">
@@ -801,7 +801,7 @@
 </tr>
 <tr class="even">
 <td style="text-align: left;"><strong>p-값</strong> (p-value)</td>
-<td style="text-align: left;"><span class="math inline">\(H_0\)</span>이 참일 때, 관측값만큼 극단적인 값이 나올 확률</td>
+<td style="text-align: left;"><span class="math inline">\(H_0\)</span>이 참일 때, 관측값이 나올 확률</td>
 <td style="text-align: left;">아래에서 계산</td>
 </tr>
 <tr class="odd">
@@ -909,98 +909,24 @@
 </tr>
 <tr class="even">
 <td style="text-align: left;">표준 오차 (Std. Error)</td>
-<td style="text-align: left;"><span class="math inline">\(\hat{\beta}_1\)</span>의 표준 오차 (<span class="math inline">\(SE\)</span>)</td>
+<td style="text-align: left;"><span class="math inline">\(\hat{\beta}_1\)</span>의 표본분포의 표준편차</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">p-값 (Pr(&gt;|t|))</td>
+<td style="text-align: left;"><span class="math inline">\(H_0: \beta_1 = 0\)</span> 하에서의 p-값</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">95% 신뢰 구간</td>
+<td style="text-align: left;"><span class="math inline">\(\hat{\beta}_1 \pm 1.96 \times SE\)</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">t-값 (t-statistic)</td>
 <td style="text-align: left;">검정 통계량: <span class="math inline">\(t = \hat{\beta}_1 / SE\)</span></td>
 </tr>
-<tr class="even">
-<td style="text-align: left;">p-값 (Pr(&gt;|t|))</td>
-<td style="text-align: left;"><span class="math inline">\(H_0: \beta_1 = 0\)</span> 하에서의 p-값</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">95% 신뢰 구간</td>
-<td style="text-align: left;"><span class="math inline">\(\hat{\beta}_1 \pm 1.96 \times SE\)</span></td>
-</tr>
 </tbody>
 </table>
 <blockquote>
 <p><strong>핵심</strong>: 회귀 계수가 “유의미하다” = p-값 <span class="math inline">\(&lt; \alpha\)</span> = 해당 변수가 결과에 <strong>실제 영향을 미칠 가능성이 높음</strong>.</p>
-</blockquote>
-</section>
-<section id="신뢰-구간-공식-1.96은-어디서-왔는가" class="slide level2">
-<h2>95% 신뢰 구간 공식: 1.96은 어디서 왔는가?</h2>
-<div class="columns">
-<div class="column" style="width:45%;">
-<p><strong>3단계 논리 흐름</strong></p>
-<p><strong>① CLT 적용</strong></p>
-<p>표본이 충분히 크면, <span class="math inline">\(\hat{\beta}_1\)</span>은 정규 분포를 따름:</p>
-<p><span class="math display">\[\hat{\beta}_1 \approx N\!\left(\beta_1,\; SE^2\right)\]</span></p>
-<p><strong>② 표준화 (z-변환)</strong></p>
-<p><span class="math display">\[z = \frac{\hat{\beta}_1 - \beta_1}{SE} \approx N(0,\, 1)\]</span></p>
-<p><strong>③ 1.96의 출처</strong></p>
-<p>표준 정규분포의 성질:</p>
-<p><span class="math display">\[P(-1.96 \leq z \leq +1.96) = 0.95\]</span></p>
-<p>이를 <span class="math inline">\(\beta_1\)</span>에 대해 풀면:</p>
-<p><span class="math display">\[\therefore\quad \hat{\beta}_1 \pm 1.96 \times SE\]</span></p>
-</div><div class="column" style="width:55%;">
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="chapter_ci_hyptest_files/figure-revealjs/unnamed-chunk-25-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
-</figure>
-</div>
-</div>
-</div>
-<p><strong>신뢰수준별 z-값</strong></p>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th style="text-align: center;">신뢰수준</th>
-<th style="text-align: center;">z-값</th>
-<th style="text-align: left;">구간 폭</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">90%</td>
-<td style="text-align: center;">±1.645</td>
-<td style="text-align: left;">좁음 — 덜 보수적</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;"><strong>95%</strong></td>
-<td style="text-align: center;"><strong>±1.96</strong></td>
-<td style="text-align: left;"><strong>통상 사용 기준</strong></td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">99%</td>
-<td style="text-align: center;">±2.576</td>
-<td style="text-align: left;">넓음 — 더 보수적</td>
-</tr>
-</tbody>
-</table>
-</div></div>
-</section>
-<section id="회귀-출력에서-신뢰-구간-읽기" class="slide level2">
-<h2>회귀 출력에서 신뢰 구간 읽기</h2>
-<div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a><span class="co"># lm() 출력에서 95% CI 직접 확인</span></span>
-<span id="cb29-2"><a href=""></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> wt, <span class="at">data =</span> mtcars)</span>
-<span id="cb29-3"><a href=""></a><span class="fu">confint</span>(model, <span class="at">level =</span> <span class="fl">0.95</span>)   <span class="co"># β̂ ± 1.96 × SE 와 동일</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                2.5 %    97.5 %
-(Intercept) 33.450500 41.119753
-wt          -6.486308 -4.202635</code></pre>
-</div>
-</div>
-<ul>
-<li><code>confint()</code>가 반환하는 구간 = <span class="math inline">\(\hat{\beta}_1 \pm 1.96 \times SE\)</span> (이론적 공식)</li>
-<li>회귀 출력의 <code>Std. Error</code> × 1.96 = CI 반폭 (half-width)</li>
-</ul>
-<blockquote>
-<p>핵심: 회귀 계수가 “유의미하다” (<span class="math inline">\(p &lt; 0.05\)</span>) ⟺ 95% CI가 <strong>0을 포함하지 않는다</strong>.</p>
 </blockquote>
 </section></section>
 <section>
@@ -1013,34 +939,34 @@ wt          -6.486308 -4.202635</code></pre>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a><span class="co"># 귀무분포 생성</span></span>
-<span id="cb31-2"><a href=""></a>null_distribution <span class="ot">&lt;-</span> promotions <span class="sc">%&gt;%</span> </span>
-<span id="cb31-3"><a href=""></a>  <span class="co"># 변수와 성공 기준 지정</span></span>
-<span id="cb31-4"><a href=""></a>  <span class="fu">specify</span>(<span class="at">formula =</span> decision <span class="sc">~</span> gender,</span>
-<span id="cb31-5"><a href=""></a>          <span class="at">success =</span> <span class="st">"promoted"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb31-6"><a href=""></a>  <span class="co"># 귀무가설: 성별과 승진 독립</span></span>
-<span id="cb31-7"><a href=""></a>  <span class="fu">hypothesize</span>(<span class="at">null =</span> <span class="st">"independence"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb31-8"><a href=""></a>  <span class="co"># 1,000번 무작위 재배열</span></span>
-<span id="cb31-9"><a href=""></a>  <span class="fu">generate</span>(<span class="at">reps =</span> <span class="dv">1000</span>, <span class="at">type =</span> <span class="st">"permute"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb31-10"><a href=""></a>  <span class="co"># 각 재배열에서 p_m - p_f 계산</span></span>
-<span id="cb31-11"><a href=""></a>  <span class="fu">calculate</span>(<span class="at">stat =</span> <span class="st">"diff in props"</span>,</span>
-<span id="cb31-12"><a href=""></a>            <span class="at">order =</span> <span class="fu">c</span>(<span class="st">"male"</span>, <span class="st">"female"</span>))</span>
-<span id="cb31-13"><a href=""></a></span>
-<span id="cb31-14"><a href=""></a><span class="co"># 귀무분포 시각화</span></span>
-<span id="cb31-15"><a href=""></a><span class="fu">visualize</span>(null_distribution,</span>
-<span id="cb31-16"><a href=""></a>          <span class="at">bins =</span> <span class="dv">10</span>,</span>
-<span id="cb31-17"><a href=""></a>          <span class="at">fill =</span> <span class="st">"#d90502"</span>) <span class="sc">+</span> </span>
-<span id="cb31-18"><a href=""></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Difference in promotion rates (male - female)"</span>,</span>
-<span id="cb31-19"><a href=""></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>) <span class="sc">+</span></span>
-<span id="cb31-20"><a href=""></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="fl">0.4</span>, <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb31-21"><a href=""></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a><span class="co"># 귀무분포 생성</span></span>
+<span id="cb29-2"><a href=""></a>null_distribution <span class="ot">&lt;-</span> promotions <span class="sc">%&gt;%</span> </span>
+<span id="cb29-3"><a href=""></a>  <span class="co"># 변수와 성공 기준 지정</span></span>
+<span id="cb29-4"><a href=""></a>  <span class="fu">specify</span>(<span class="at">formula =</span> decision <span class="sc">~</span> gender,</span>
+<span id="cb29-5"><a href=""></a>          <span class="at">success =</span> <span class="st">"promoted"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-6"><a href=""></a>  <span class="co"># 귀무가설: 성별과 승진 독립</span></span>
+<span id="cb29-7"><a href=""></a>  <span class="fu">hypothesize</span>(<span class="at">null =</span> <span class="st">"independence"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-8"><a href=""></a>  <span class="co"># 1,000번 무작위 재배열</span></span>
+<span id="cb29-9"><a href=""></a>  <span class="fu">generate</span>(<span class="at">reps =</span> <span class="dv">1000</span>, <span class="at">type =</span> <span class="st">"permute"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-10"><a href=""></a>  <span class="co"># 각 재배열에서 p_m - p_f 계산</span></span>
+<span id="cb29-11"><a href=""></a>  <span class="fu">calculate</span>(<span class="at">stat =</span> <span class="st">"diff in props"</span>,</span>
+<span id="cb29-12"><a href=""></a>            <span class="at">order =</span> <span class="fu">c</span>(<span class="st">"male"</span>, <span class="st">"female"</span>))</span>
+<span id="cb29-13"><a href=""></a></span>
+<span id="cb29-14"><a href=""></a><span class="co"># 귀무분포 시각화</span></span>
+<span id="cb29-15"><a href=""></a><span class="fu">visualize</span>(null_distribution,</span>
+<span id="cb29-16"><a href=""></a>          <span class="at">bins =</span> <span class="dv">10</span>,</span>
+<span id="cb29-17"><a href=""></a>          <span class="at">fill =</span> <span class="st">"#d90502"</span>) <span class="sc">+</span> </span>
+<span id="cb29-18"><a href=""></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Difference in promotion rates (male - female)"</span>,</span>
+<span id="cb29-19"><a href=""></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>) <span class="sc">+</span></span>
+<span id="cb29-20"><a href=""></a>  <span class="fu">xlim</span>(<span class="sc">-</span><span class="fl">0.4</span>, <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb29-21"><a href=""></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="chapter_ci_hyptest_files/figure-revealjs/unnamed-chunk-28-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
+<p><img data-src="chapter_ci_hyptest_files/figure-revealjs/unnamed-chunk-26-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
 </figure>
 </div>
 </div>
