@@ -1,0 +1,96 @@
+---
+title: "수업 과제"
+author: "홍길동 (2025012345)"       #이름과 학번을 넣으세요
+date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
+format: html
+echo: true  
+include: true 
+warning: false
+---
+
+
+
+## Task 1 
+
+
+1.  이전 슬라이드에서 녹색 파스타 비율을 포함하는 `data.frame`을 생성하시오. 이 데이터 프레임의 이름을 `pasta`로 지정하고, 비율을 포함하는 변수를 `prop_green`으로 설정하시오.\
+
+```{r, echo=TRUE, eval=FALSE}
+pasta <- data.frame(prop_green = c(0.7,0.7,0.5,0.5,0.3,0.5,0.4,0.45,0.55,0.4,0.35,0.45,0.45,0.7,0.55,0.5,0.35,0.65))
+```
+
+
+2.  `ggplot2`를 사용하여 이 비율의 히스토그램을 생성하시오.\
+    `geom_histogram()` 함수에서 다음 매개변수를 사용하시오:\
+    `boundary = 0.325, binwidth = 0.05`.
+
+```{r}
+library(tidyverse)
+pasta %>%
+    ggplot(aes(x = prop_green)) +
+    geom_histogram(boundary = 0.325, binwidth = 0.05, color = "white", fill = "darkgreen")
+```
+
+
+
+---
+
+## Task 2 
+
+
+33개의 표본만 추출하는 대신, 이번에는 ***1000개***를 추출해보자!
+
+1.  데이터를 불러와 `pasta` 객체에 저장하시오.
+
+```{r}
+pasta <- read.csv("https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_sampling/data/pasta.csv")
+```
+
+
+2.  `moderndive` 패키지의 `rep_sample_n()` 함수를 사용하여 크기 50인 표본을 1000개 생성하라.
+
+```{r}
+library(moderndive)
+virtual_samples <- pasta %>% 
+    rep_sample_n(size = 50, reps = 1000)
+```
+
+
+3.  각 표본에서 초록색 파스타의 비율을 계산하라.
+
+```{r}
+virtual_prop_green <- virtual_samples %>% 
+    group_by(replicate) %>% 
+    summarize(
+        num_green = sum(color == "green"),
+        sample_n = n()) %>% 
+    mutate(prop_green = num_green / sample_n)
+```
+
+
+
+4.  각 표본에서 얻은 초록색 파스타 비율의 히스토그램을 그리시오.
+
+```{r}
+virtual_prop_green %>% ggplot(
+    aes(x = prop_green)) +
+    geom_histogram(
+        binwidth = 0.02,
+        boundary = 0.41,
+        color = "white",
+        fill = "darkgreen") +
+    labs(x = "Proportion of green pasta in sample",
+         y = "Frequency",
+         title = "Distribution of 1000 samples of size 50") +
+    theme_bw(base_size = 14)
+```
+
+5.  무엇을 관찰할 수 있는가? 어떤 비율이 가장 자주 발생하는가? 33개의 표본을 사용할 때와 비교하여 히스토그램의 모양이 어떻게 달라지는가?
+
+**분포는 정규분포와 매우 유사해 보입니다. 가장 자주 나타나는 비율은 약 0.5입니다. 33개의 표본만 추출했을 때보다 분포 형태가 훨씬 더 정규분포에 가까워졌습니다.**
+
+6.  추출한 50개의 파스타 중 초록색 파스타가 20% 미만일 확률은 얼마나 되는가?
+
+
+**그럴 가능성은 극히 낮습니다.**
+

@@ -1,0 +1,147 @@
+---
+title: "수업 과제"
+author: "홍길동 (2025012345)"       #이름과 학번을 넣으세요
+date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
+format: 
+  html:
+    toc: false
+    theme: default
+echo: true  
+include: true 
+warning: false
+---
+
+
+
+
+## Task 1
+
+-   **읽기(Reading) 점수를 종속 변수(Dependent Variable)** 로 설정하여 회귀 분석을 수행
+
+1.  `haven` 패키지의 `read_dta()` 함수를 사용하여 데이터를 불러오기. 데이터를 `grades`라는 객체에 저장
+
+```{r}
+library(haven)
+grades <- read_dta("https://raw.githack.com/chung-jiwoong/FMB819-Slides/refs/heads/main/chapter_slr/data/grade5.dta")
+```
+
+2.  avgverb (읽기 점수)를 종속 변수로, (1) classize를 독립변수로 회귀분석하고 (2) classize와 disadvantaged (저소득 학생 비율)를 독립 변수로 사용하여 회귀분석. 결과를 reg1, reg2 객체에 저장. 각 계수(coefficient)의 의미는 무엇인가? 단순 선형 회귀와 비교했을 때 계수는 어떻게 달라졌는가? 
+
+```{r task1_2, echo=FALSE, eval=FALSE}
+reg1 <- lm(avgverb ~ classize, data = grades)
+summary(reg1)
+reg2 <- lm(avgverb ~ classize + disadvantaged, data = grades)
+summary(reg2)
+```
+
+#### 계수의 의미
+
+**reg1** (`avgverb ~ classize`)
+- `classize` = +0.222: 학급 규모 1명 증가 시 읽기 점수 0.222점 상승
+
+**reg2** (`avgverb ~ classize + disadvantaged`)
+- `classize` = -0.031: 저소득 비율 통제 후, 학급 규모 1명 증가 시 0.031점 하락
+- `disadvantaged` = -0.350: 학급 규모 통제 후, 저소득 학생 비율 1%p 증가 시 0.350점 하락
+
+#### 계수 변화 원인
+
+| | reg1 | reg2 |
+|---|---|---|
+| classize 계수 | +0.222*** | -0.031 (유의하지 않음) |
+| R² | 0.036 | 0.367 |
+
+reg1에서 `disadvantaged`를 생략하면, 저소득 학생 비율이 높은 학교일수록
+학급이 작고 점수도 낮은 **음(-)의 상관관계**를 classize가 흡수하여
+계수가 양(+)으로 편의됩니다.
+
+reg1의 양(+) 계수는 인과적 해석이 불가능하며,
+실질적으로 읽기 점수에 영향을 미치는 변수는 `disadvantaged`입니다.
+
+
+
+
+## Task 2
+
+1.  **STAR 데이터**를 다운로드 [링크](https://chung-jiwoong.github.io/FMB819-Slides/chapter_causality/data/star_data.csv). `read.csv()`를 사용하여 `star_df` 객체에 저장. `NA` 값이 있는 행을 제거: `star_df <- star_df[complete.cases(star_df),]`
+
+```{r}
+library(tidyverse)
+
+star_df <- read.csv("https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_causality/data/star_data.csv")
+
+# NA 값이 있는 행 제거
+star_df <- star_df %>% filter(complete.cases(.)) %>% filter(grade == "2")
+#star_df <- star_df %>% filter(na.omit(.))
+#star_df <- star_df %>% filter(!is.na(.))
+```
+
+
+
+2.  `math`를 `school` 변수에 대해 회귀 분석하시오. `school` 변수가 포함하는 값들을 먼저 확인. 회귀 계수를 해석하시오. 누락된 범주 (category)는? 결과가 예상과 일치하는가? 만약 다르다면 왜 그런가? 누락된 변수가 존재할 가능성이 있는가?
+
+```{r}
+# school 변수의 값 확인
+unique(star_df$school)
+# math를 school 변수에 대해 회귀 분석
+reg_school <- lm(math ~ school, data = star_df)
+summary(reg_school)
+```
+
+**`school` 변수는 학교의 위치 유형을 나타내는 범주형 변수입니다. 네 가지 범주가 있으며, 각각은 inner-city(도심), suburban(교외), rural(농촌), urban(도시)입니다.**
+
+**회귀 분석에서 누락된 기준 범주는 `inner-city`이므로, 절편은 inner-city에 위치한 학교 학생들의 평균 수학 점수를 나타냅니다. 나머지 계수들은 모두 inner-city 학생들의 예상 점수를 기준으로 해석해야 합니다. 예를 들어, 농촌 학교 학생들은 평균적으로 inner-city 학교 학생들보다 30점 더 높고, 교외 지역 학생들은 약 17점, 도시 지역 학생들은 약 20점 더 높습니다. 일반적으로 inner-city 지역은 저소득층 비율이 높기 때문에, 다른 지역에 비해 점수가 낮은 것이 그로 인해 설명될 수 있습니다. 생략된 변수는 학생 개인 혹은 학교 차원의 불리함을 나타내는 변수일 수 있습니다.**
+
+
+3.  `lunch` 변수가 `"free"`인 학생들의 비율을 **학교 위치(school) 별로 계산**하시오. 결과를 보고, **무료 점심 자격 여부(`free`) 변수를 추가하여 이전 회귀 분석을 다시 수행**하시오. `free` 변수를 추가했을 때 회귀 계수는 어떻게 변화하는가?
+
+```{r}
+# 학교 위치별로 lunch가 "free"인 학생들의 비율 계산
+star_df %>%
+  group_by(school) %>%
+  summarise(free_ratio = mean(lunch == "free"))
+
+# free 변수를 추가하여 회귀 분석 수행
+reg_school_free <- lm(math ~ school + lunch, data = star_df)
+summary(reg_school_free)
+```
+
+**예상한 대로, 무료 급식 자격을 갖춘 학생들의 비율은 inner-city 학교에서 현저히 높습니다 (해당 학생 비율이 거의 90%에 달함). 반면, 다른 지역에서는 그 비율이 34%에서 44% 사이로 나타납니다.**
+
+
+**학생들의 무료 급식 자격 여부를 회귀에 포함하면, rural, suburban, urban 지역에 대한 계수들이 크게 감소하는 것을 확인할 수 있습니다. 이는 학교 위치를 통제한 상태에서도, 무료 급식 자격이 없는 학생들이 평균적으로 자격이 있는 학생들보다 수학 점수가 유의미하게 더 높다는 것을 보여줍니다.**
+
+
+4.  `math`를 `star` 변수에 대해 회귀 분석하시오. 다음의 모든 변수를 포함하여 다중 회귀 분석을 수행하시오:\
+    `math ~ star + gender + ethnicity + lunch + degree + experience + school`.
+   
+```{r}
+lm(math ~ star, data = star_df)
+```
+
+**계수의 해석은 통상적인 조건부 평균의 비교입니다. 즉, 소규모 학급의 학생들은 일반 학급(기준 범주) 학생들에 비해 평균적으로 8.94점 높은 점수를 기록하는 반면, 보조 교사가 있는 일반 학급의 학생들은 2.70점 높은 데 그칩니다.**
+
+
+```{r}
+reg_full <- lm(math ~ star + gender + ethnicity + lunch + degree + experience + school, data = star_df)
+summary(reg_full)
+```
+
+**처리변수 `star`의 계수는 이전 단순 회귀분석과 비교했을 때 매우 소폭 감소합니다. 이는 무작위 실험이었다는 점을 고려하면 예상된 결과로, 무작위 배정이 잘 이루어졌다고 볼 수 있습니다. 만약 무작위 배정이 제대로 이루어지지 않았다면, 이러한 변수들을 통제했을 때 `star` 계수가 훨씬 더 크게 변화했을 것입니다.**
+
+
+
+5.  **다중 회귀 분석**에서 얻은 **수정된** $R^2$ 값을 확인하시오. 수정된 $R^2$ 값이 의미하는 바는 무엇인가? 관측 가능한 개별 학생, 교사, 학교 특성이 학업 성취도에 미치는 중요성에 대해 어떤 결론을 내릴 수 있는가?
+
+```{r}
+reg_all <- lm(math ~ star + gender + ethnicity + lunch + degree + experience + school, star_df)
+summary(reg_all)
+```
+
+**이전 회귀분석의 수정된 $R^2$는 약 0.15로, 해당 모형이 학생들의 수학 점수 분산의 약 15%를 설명함을 의미합니다. 이는 수학 점수 분산의 85%가 여전히 설명되지 않는다는 것을 뜻합니다. 쉽게 말해, 학급 규모, 성별, 인종, 무료 급식 여부, 교사 경력 및 학위, 학교 위치 등의 변수는 이 데이터셋에서 학생들 간 수학 점수 차이의 극히 일부만을 설명합니다. 이를 조금 더 확장하면, 교육 성과의 차이 대부분은 이러한 요인들로 설명되지 않는다고 볼 수 있습니다. 단, 이것이 해당 변수들이 교육 성과에 중요한 인과적 영향을 미치지 않는다는 것을 의미하지는 않습니다.**
+
+6.  (Optional) `math`를 `gender`와 `experience` 변수에 대해 회귀 분석하시오. 회귀 계수를 어떻게 해석할 수 있는가? 이러한 회귀 분석 결과를 시각적으로 표현한다면 어떻게 보일 것인가?
+```{r}
+summary(reg_all)
+```
+
+**이전 회귀의 조정된 $R^2$ 값은 약 0.15로, 이는 해당 모형이 학생들의 수학 점수 변동 중 약 15%만 설명한다는 것을 의미합니다. 다시 말해, 전체 점수 변동의 85%는 설명되지 않은 상태로 남아 있습니다. 쉽게 말하면, 학급 규모, 성별, 인종, 무료 급식 여부, 교사 경력 및 학위, 학교 위치 등은 이 데이터에서 학생들의 수학 점수 차이를 설명하는 데 큰 역할을 하지 못한다는 뜻입니다. 이를 조금 확대 해석하면, 교육 성과의 대부분은 이러한 관측 가능한 변수들로 설명되지 않는다는 주장도 가능합니다. 다만, 이것이 해당 변수들이 교육 성과에 중요한 인과적 효과를 갖지 않는다는 뜻은 절대 아닙니다.**
