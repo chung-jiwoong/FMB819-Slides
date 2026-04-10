@@ -823,7 +823,7 @@ table(Predicted = pred_class_test, Actual = test_df$default)
 
 3.  (Optional) `pROC` 패키지를 사용하여 테스트 세트의 **ROC 곡선**과 **AUC**를 계산하고 시각화하시오.
 
-```{r, echo=FALSE, eval=FALSE}
+```{r, echo=TRUE, eval=FALSE}
 if (!requireNamespace("pROC")) install.packages("pROC")
 library(pROC)
 roc_test <- roc(test_df$default, pred_test, quiet = TRUE)

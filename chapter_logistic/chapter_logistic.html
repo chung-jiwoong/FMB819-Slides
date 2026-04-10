@@ -759,7 +759,7 @@ p_i = \frac{e^{b_0 + b_1 x_i}}{1 + e^{b_0 + b_1 x_i}}
 </section>
 <section id="task-1" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 1</h2>
-<p><countdown-timer class="countdown" id="timer_56ce6acc" minutes="8" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
+<p><countdown-timer class="countdown" id="timer_f82be4fc" minutes="8" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
 <ol type="1">
 <li><code>Default</code> 데이터에서 <code>default</code>를 이진 변수(0/1)로 변환한 뒤, <code>balance</code>에 대해 <strong>OLS 회귀</strong>와 <strong>로지스틱 회귀</strong>를 각각 추정하시오.</li>
 </ol>
@@ -1017,7 +1017,7 @@ R^2_{\text{McFadden}} = 1 - \frac{\log L(\hat{M})}{\log L(M_0)}
 </section>
 <section id="task-2" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 2</h2>
-<p><countdown-timer class="countdown" id="timer_7e3e6e27" minutes="10" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
+<p><countdown-timer class="countdown" id="timer_2ccdbb9c" minutes="10" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
 <ol type="1">
 <li><code>balance</code>, <code>income</code>, <code>student</code>를 모두 포함한 다중 로지스틱 회귀 결과에서, 각 변수의 <strong>오즈비(Odds Ratio)</strong> 를 계산하고 해석하시오.</li>
 </ol>
@@ -1145,7 +1145,7 @@ R^2_{\text{McFadden}} = 1 - \frac{\log L(\hat{M})}{\log L(M_0)}
 </section>
 <section id="task-3" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 3</h2>
-<p><countdown-timer class="countdown" id="timer_bba699ff" minutes="12" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
+<p><countdown-timer class="countdown" id="timer_a896f813" minutes="12" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
 <ol type="1">
 <li><code>Default</code> 데이터를 7:3 비율로 <strong>훈련(train)</strong> / <strong>테스트(test)</strong> 세트로 분리한 뒤, 훈련 세트로 다중 로지스틱 회귀를 추정하시오.</li>
 </ol>
@@ -1170,6 +1170,12 @@ R^2_{\text{McFadden}} = 1 - \frac{\log L(\hat{M})}{\log L(M_0)}
 <ol start="3" type="1">
 <li>(Optional) <code>pROC</code> 패키지를 사용하여 테스트 세트의 <strong>ROC 곡선</strong>과 <strong>AUC</strong>를 계산하고 시각화하시오.</li>
 </ol>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">"pROC"</span>)) <span class="fu">install.packages</span>(<span class="st">"pROC"</span>)</span>
+<span id="cb26-2"><a href=""></a><span class="fu">library</span>(pROC)</span>
+<span id="cb26-3"><a href=""></a>roc_test <span class="ot">&lt;-</span> <span class="fu">roc</span>(test_df<span class="sc">$</span>default, pred_test, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb26-4"><a href=""></a><span class="fu">plot</span>(roc_test, <span class="at">col =</span> <span class="st">"#d90502"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">"AUC ="</span>, <span class="fu">round</span>(<span class="fu">auc</span>(roc_test), <span class="dv">3</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 </section>
 <section id="the-end" class="title-slide slide level1 center">
 <h1>THE END!</h1>
