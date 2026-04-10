@@ -391,8 +391,58 @@
 \]</span></p>
 
 <img data-src="chapter_logistic_files/figure-revealjs/unnamed-chunk-7-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
-<section id="오즈odds란-무엇인가" class="slide level2">
-<h2>오즈(Odds)란 무엇인가?</h2>
+<section id="계수의-해석" class="slide level2">
+<h2>계수의 해석</h2>
+<ul>
+<li>Balance 가 1000달러라면?</li>
+</ul>
+<p><span class="math display">\[
+\Pr(\text{default}_i = 1) = \frac{e^{b_0 + b_1 \cdot \text{balance}_i}}{1 + e^{b_0 + b_1 \cdot \text{balance}_i}}
+\]</span></p>
+<p><span class="math display">\[
+p_0 = \frac{e^{b_0 + b_1 \cdot (1,000)}}{1 + e^{b_0 + b_1 \cdot (1,000)}}
+\]</span> <span class="math display">\[
+\frac{p_0}{1-p_0} = e^{b_0 + b_1 \cdot (1,000)}
+\]</span></p>
+<p><span class="math display">\[
+\log \left(\frac{p_0}{1-p_0} \right) = b_0 + b_1 \cdot (1,000)
+\]</span></p>
+</section>
+<section id="계수의-해석-1" class="slide level2">
+<h2>계수의 해석</h2>
+<ul>
+<li>Balance 가 1001달러라면?</li>
+</ul>
+<p><span class="math display">\[
+\Pr(\text{default}_i = 1) = \frac{e^{b_0 + b_1 \cdot \text{balance}_i}}{1 + e^{b_0 + b_1 \cdot \text{balance}_i}}
+\]</span></p>
+<p><span class="math display">\[
+p_1 = \frac{e^{b_0 + b_1 \cdot (1,001)}}{1 + e^{b_0 + b_1 \cdot (1,001)}}
+\]</span> <span class="math display">\[
+\frac{p_1}{1-p_1} = e^{b_0 + b_1 \cdot (1,001)}
+\]</span></p>
+<p><span class="math display">\[
+\log \left(\frac{p_1}{1-p_1} \right) = b_0 + b_1 \cdot (1,001)
+\]</span></p>
+</section>
+<section id="계수의-해석-2" class="slide level2">
+<h2>계수의 해석</h2>
+<ul>
+<li>Balance 가 1000달러에서 1001달러로 증가하면?</li>
+</ul>
+<p><span class="math display">\[
+\log \left(\frac{p}{1-p} \right) \text{이} \;\; b_1 \;\;\text{만큼 증가}.
+\]</span></p>
+<p><span class="math display">\[
+\log \left(\frac{p_1}{1-p_1} \right) - \log \left(\frac{p_0}{1-p_0} \right) =b_1
+\]</span> <span class="math display">\[
+\log \frac{ \left(\frac{p_1}{1-p_1} \right)}{ \left(\frac{p_0}{1-p_0} \right)} =b_1
+\]</span> <span class="math display">\[
+\frac{ \left(\frac{p_1}{1-p_1} \right)}{ \left(\frac{p_0}{1-p_0} \right)} = e^{b_1}
+\]</span></p>
+</section>
+<section id="오즈odds" class="slide level2">
+<h2>오즈(Odds)</h2>
 <ul>
 <li><strong>오즈(Odds)</strong>: 사건이 일어날 확률 vs.&nbsp;일어나지 않을 확률의 <strong>비율</strong></li>
 </ul>
@@ -445,8 +495,8 @@ p = \frac{\text{Odds}}{1 + \text{Odds}}
 </ul>
 </div>
 </section>
-<section id="로그-오즈log-odds와-로지스틱-회귀의-연결" class="slide level2">
-<h2>로그 오즈(Log-Odds)와 로지스틱 회귀의 연결</h2>
+<section id="로그-오즈log-odds" class="slide level2">
+<h2>로그 오즈(Log-Odds)</h2>
 <ul>
 <li>오즈는 항상 양수(0 ~ ∞). 로그를 취하면 → <strong>로그 오즈(log-odds, logit)</strong>: <span class="math inline">\((-\infty, +\infty)\)</span></li>
 </ul>
@@ -470,21 +520,14 @@ p_i = \frac{e^{b_0 + b_1 x_i}}{1 + e^{b_0 + b_1 x_i}}
 \underbrace{p}_{\text{확률 (0~1)}} \longleftrightarrow \underbrace{\frac{p}{1-p}}_{\text{오즈 (0~∞)}} \longleftrightarrow \underbrace{\log\frac{p}{1-p}}_{\text{로그오즈 (-∞~+∞)}}
 \]</span></p>
 </section>
-<section id="오즈비odds-ratio-정의와-의미" class="slide level2">
-<h2>오즈비(Odds Ratio): 정의와 의미</h2>
+<section id="오즈비odds-ratio" class="slide level2">
+<h2>오즈비(Odds Ratio)</h2>
 <ul>
 <li><strong>오즈비(OR)</strong>: <span class="math inline">\(x\)</span>가 1단위 증가했을 때 오즈의 <strong>배율 변화</strong></li>
 </ul>
 <p><span class="math display">\[
-\text{OR} = \frac{\text{Odds}(x+1)}{\text{Odds}(x)} = e^{b_1}
-\]</span></p>
-<p><strong>왜 <span class="math inline">\(e^{b_1}\)</span>인가?</strong> 로그 오즈 모형에서:</p>
-<p><span class="math display">\[
-\log\text{Odds}(x+1) - \log\text{Odds}(x) = b_1
-\quad\Rightarrow\quad
-\frac{\text{Odds}(x+1)}{\text{Odds}(x)} = e^{b_1}
-\]</span></p>
-<p><strong>해석 방법:</strong></p>
+\text{OR} = \frac{\text{Odds}(x+1)}{\text{Odds}(x)} = \frac{ \left(\frac{p_1}{1-p_1} \right)}{ \left(\frac{p_0}{1-p_0} \right)}= e^{b_1}
+\]</span> <strong>해석:</strong></p>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -564,6 +607,11 @@ p_i = \frac{e^{b_0 + b_1 x_i}}{1 + e^{b_0 + b_1 x_i}}
 <p><strong>Step 3</strong>: 기준 확률 <span class="math inline">\(p_0\)</span>에서 <span class="math inline">\(x\)</span>가 1 증가하면</p>
 <p><span class="math display">\[p_1 = \frac{\text{OR} \times p_0}{1 - p_0 + \text{OR} \times p_0}\]</span></p>
 <table class="caption-top">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 54%">
+<col style="width: 22%">
+</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: center;">기준 확률 <span class="math inline">\(p_0\)</span></th>
@@ -711,7 +759,7 @@ p_i = \frac{e^{b_0 + b_1 x_i}}{1 + e^{b_0 + b_1 x_i}}
 </section>
 <section id="task-1" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 1</h2>
-<p><countdown-timer class="countdown" id="timer_5ba219da" minutes="8" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
+<p><countdown-timer class="countdown" id="timer_56ce6acc" minutes="8" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
 <ol type="1">
 <li><code>Default</code> 데이터에서 <code>default</code>를 이진 변수(0/1)로 변환한 뒤, <code>balance</code>에 대해 <strong>OLS 회귀</strong>와 <strong>로지스틱 회귀</strong>를 각각 추정하시오.</li>
 </ol>
@@ -909,7 +957,7 @@ p_i = \frac{e^{b_0 + b_1 x_i}}{1 + e^{b_0 + b_1 x_i}}
 <li>계산 편의상 로그를 취한 <strong>로그 우도(log-likelihood)</strong> 사용: 항상 <strong>음수</strong>, 0에 가까울수록 좋음</li>
 </ul>
 <div class="fragment">
-<p><strong>McFadden’s Pseudo <span class="math inline">\(R^2\)</span></strong>: 귀무모형 대비 얼마나 우도가 개선되었는가?</p>
+<p><strong>McFadden’s Pseudo</strong> <span class="math inline">\(R^2\)</span>: 귀무모형 대비 얼마나 우도가 개선되었는가?</p>
 <p><span class="math display">\[
 R^2_{\text{McFadden}} = 1 - \frac{\log L(\hat{M})}{\log L(M_0)}
 \]</span></p>
@@ -919,7 +967,7 @@ R^2_{\text{McFadden}} = 1 - \frac{\log L(\hat{M})}{\log L(M_0)}
 </ul>
 </div>
 <div class="fragment">
-<p><strong>왜 추정 모형이 좋을수록 <span class="math inline">\(R^2\)</span>가 커지는가?</strong></p>
+<p><strong>왜 추정 모형이 좋을수록</strong> <span class="math inline">\(R^2\)</span>가 커지는가?</p>
 <p>로그 우도는 항상 음수이므로, 모형이 좋을수록 <span class="math inline">\(\log L(\hat{M})\)</span>이 <strong>0에 가까워짐</strong> (덜 음수).</p>
 <table class="caption-top">
 <thead>
@@ -969,7 +1017,7 @@ R^2_{\text{McFadden}} = 1 - \frac{\log L(\hat{M})}{\log L(M_0)}
 </section>
 <section id="task-2" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 2</h2>
-<p><countdown-timer class="countdown" id="timer_1d5bfe03" minutes="10" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
+<p><countdown-timer class="countdown" id="timer_7e3e6e27" minutes="10" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
 <ol type="1">
 <li><code>balance</code>, <code>income</code>, <code>student</code>를 모두 포함한 다중 로지스틱 회귀 결과에서, 각 변수의 <strong>오즈비(Odds Ratio)</strong> 를 계산하고 해석하시오.</li>
 </ol>
@@ -1097,7 +1145,7 @@ R^2_{\text{McFadden}} = 1 - \frac{\log L(\hat{M})}{\log L(M_0)}
 </section>
 <section id="task-3" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 3</h2>
-<p><countdown-timer class="countdown" id="timer_3a62e63f" minutes="12" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
+<p><countdown-timer class="countdown" id="timer_bba699ff" minutes="12" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
 <ol type="1">
 <li><code>Default</code> 데이터를 7:3 비율로 <strong>훈련(train)</strong> / <strong>테스트(test)</strong> 세트로 분리한 뒤, 훈련 세트로 다중 로지스틱 회귀를 추정하시오.</li>
 </ol>

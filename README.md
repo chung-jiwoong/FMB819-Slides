@@ -12,7 +12,7 @@
 | 4. Multiple Linear Regression | [보기][mlr-html] | [소스][mlr-qmd] | [과제][mlr-task] | [해답][mlr-sol] |
 | 5. Sampling | [보기][samp-html] | [소스][samp-qmd] | [과제][samp-task] | [해답][samp-sol] |
 | 6. Hypothesis Testing | [보기][hypo-html] | [소스][hypo-qmd] | |   |
-| 7. Regression Inference | [보기][infer-html] | [소스][infer-qmd] | [과제][infer-task] | [해답][infer-sol] |
+| 7. Regression Inference | [보기][infer-html] | [소스][infer-qmd] | [과제] | [해답] |
 
 ## 기타 주제
 
