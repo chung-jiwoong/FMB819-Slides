@@ -18,7 +18,8 @@
 
 | 주제 | 슬라이드(HTML) | 소스(QMD) |
 |---|---|---|
-| Dart Open API 이용 | [보기][dart-html] | [소스][dart-qmd] |
+| Dart Open API | [보기][dart-html] | [소스][dart-qmd] |
+| Logistic Regression | [보기][logit-html] | [소스][logit-qmd] |
 
 ---
 
@@ -58,10 +59,11 @@
 [infer-task]: https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_reginference/tasks/reginference_tasks.qmd
 [infer-sol]:  https://chung-jiwoong.github.io/FMB819/chapter_reginference/tasks/reginference_solution.html
 
-[dart-html]: https://chung-jiwoong.github.io/FMB819/chapter_others/chapter_dart.html
-[dart-qmd]:  https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_others/chapter_dart.qmd
+[dart-html]: https://chung-jiwoong.github.io/FMB819/chapter_dart/chapter_dart.html
+[dart-qmd]:  https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_dart/chapter_dart.qmd
 
-
+[logit-html]: https://chung-jiwoong.github.io/FMB819/chapter_logistic/chapter_logistic.html
+[logit-qmd]:  https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_logistic/chapter_logistic.qmd
 
 
 
@@ -74,9 +76,6 @@ ttps://chung-jiwoong.github.io/FMB819/chapter_tidy/tasks/tidy_tasks.qmd
 | 4. Introduction to Causality | [보기](https://chung-jiwoong.github.io/FMB819/chapter_causality/chapter_causality.html) | [소스](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_causality/chapter_causality.qmd) | [과제](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_causality/tasks/causality_tasks.qmd) | [해답](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_causality/tasks/causality_solution.qmd) |
 | 6. Linear Regression Extensions | [보기](https://chung-jiwoong.github.io/FMB819/chapter_regext/chapter_regext.html) | [소스](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_regext/chapter_regext.qmd) | - | |
 
-
-| 8. Confidence Intervals and Hypothesis Testing | [보기](https://chung-jiwoong.github.io/FMB819/chapter_ci_hyptest/chapter_ci_hyptest.html) | [소스](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_ci_hyptest/chapter_ci_hyptest.qmd) | - | |
-| 9. Regression Inference | [보기](https://chung-jiwoong.github.io/FMB819/chapter_reginference/chapter_reginference.html) | [소스](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_reginference/chapter_reginference.qmd) | [과제](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_reginference/tasks/reginference_tasks.qmd) | [해답](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_reginference/tasks/reginference_solution.qmd) |
 | 10. Differences-in-Differences (Optional) | [보기](https://chung-jiwoong.github.io/FMB819/chapter_did/chapter_did.html) | [소스](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_did/chapter_did.qmd) | - | |
 | 11. Regression Discontinuity Design (Optional) | [보기](https://chung-jiwoong.github.io/FMB819/chapter-rdd/chapter_rdd.html) | [소스](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter-rdd/chapter_rdd.qmd) | - | |
 | 12. Instrumental Variables (Optional) | [보기](https://chung-jiwoong.github.io/FMB819/chapter_iv/chapter_iv.html) | [소스](https://raw.githubusercontent.com/chung-jiwoong/FMB819/refs/heads/main/chapter_iv/chapter_iv.qmd) | - | |
