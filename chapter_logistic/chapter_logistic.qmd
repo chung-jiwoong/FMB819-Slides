@@ -73,7 +73,6 @@ data(Default)
 -   하지만 현실에서는 **이진(binary) 결과**에 관심을 갖는 경우가 많음:
 
     -   대출 채무 불이행 여부 (**default** vs. **non-default**)
-    -   주가 방향 (**상승** vs. **하락**)
     -   고객 이탈 여부 (**이탈** vs. **유지**)
     -   M&A 성사 여부 (**성공** vs. **실패**)
 
@@ -423,7 +422,7 @@ $$
 **기준 확률(baseline probability)** $p_0$: $x$가 변하기 **전**, 현재 고객의 채무 불이행 확률.\
 예) 잔액 1,000달러 고객의 불이행 확률이 3% → $p_0 = 0.03$
 
-OLS와 달리 로지스틱 회귀에서는 **어디서 출발하느냐**에 따라 확률 변화폭이 달라짐.
+**어디서 출발하느냐**에 따라 확률 변화폭이 달라짐.
 
 . . .
 
@@ -439,41 +438,6 @@ $$p_1 = \frac{\text{OR} \times p_0}{1 - p_0 + \text{OR} \times p_0}$$
 
 > OR은 같아도 **기준 확률에 따라 실제 확률 변화폭이 다름!**
 
-------------------------------------------------------------------------
-
-## 왜 확률 변화폭이 달라지는가?
-
-**OR = 2 (오즈가 2배)** 일 때, 기준 확률에 따른 확률 변화:
-
-```{r, echo=FALSE, fig.height=4.5, fig.width=10}
-library(tidyverse)
-or_val <- 2
-tibble(p0 = seq(0.02, 0.98, by = 0.01)) |>
-  mutate(
-    odds0   = p0 / (1 - p0),
-    odds1   = or_val * odds0,
-    p1      = odds1 / (1 + odds1),
-    delta_p = p1 - p0
-  ) |>
-  ggplot(aes(x = p0, y = delta_p)) +
-  geom_line(color = "#d90502", linewidth = 1.5) +
-  geom_vline(xintercept = c(0.10, 0.50, 0.90),
-             linetype = "dashed", color = "steelblue", linewidth = 0.8) +
-  annotate("text", x = 0.10, y = 0.22, label = "p0=10%\nDelta p=+8%p",  size = 3.8, color = "steelblue", hjust = -0.1) +
-  annotate("text", x = 0.50, y = 0.22, label = "p0=50%\nDelta p=+17%p", size = 3.8, color = "steelblue", hjust = -0.1) +
-  annotate("text", x = 0.90, y = 0.12, label = "p0=90%\nDelta p=+5%p",  size = 3.8, color = "steelblue", hjust =  1.1) +
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1),
-                     limits = c(0, 0.28)) +
-  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
-  labs(x = "Baseline probability p0",
-       y = "Change in probability (Delta p)",
-       title = "When OR = 2: Change in probability by baseline probability",
-       subtitle = "The change is largest near p0 = 50% and smallest near 0% or 100%") +
-  theme_bw(base_size = 14)
-```
-
-**직관**: 확률이 이미 90%면 아무리 OR이 커도 100%를 넘을 수 없음 → 변화폭이 작아질 수밖에 없음.\
-반대로 확률이 0%에 가깝다면 아무리 OR이 커도 올라갈 여지가 적음.
 
 ------------------------------------------------------------------------
 
