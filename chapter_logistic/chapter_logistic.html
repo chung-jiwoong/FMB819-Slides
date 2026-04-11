@@ -600,7 +600,7 @@ p_i = \frac{e^{b_0 + b_1 x_i}}{1 + e^{b_0 + b_1 x_i}}
 <div class="fragment">
 <p><strong>기준 확률(baseline probability)</strong> <span class="math inline">\(p_0\)</span>: <span class="math inline">\(x\)</span>가 변하기 <strong>전</strong>, 현재 고객의 채무 불이행 확률.<br>
 예) 잔액 1,000달러 고객의 불이행 확률이 3% → <span class="math inline">\(p_0 = 0.03\)</span></p>
-<p>OLS와 달리 로지스틱 회귀에서는 <strong>어디서 출발하느냐</strong>에 따라 확률 변화폭이 달라짐.</p>
+<p><strong>어디서 출발하느냐</strong>에 따라 확률 변화폭이 달라짐.</p>
 </div>
 <div class="fragment">
 <p><strong>Step 3</strong>: 기준 확률 <span class="math inline">\(p_0\)</span>에서 <span class="math inline">\(x\)</span>가 1 증가하면</p>
@@ -640,13 +640,6 @@ p_i = \frac{e^{b_0 + b_1 x_i}}{1 + e^{b_0 + b_1 x_i}}
 <p>OR은 같아도 <strong>기준 확률에 따라 실제 확률 변화폭이 다름!</strong></p>
 </blockquote>
 </div>
-</section>
-<section id="왜-확률-변화폭이-달라지는가" class="slide level2">
-<h2>왜 확률 변화폭이 달라지는가?</h2>
-<p><strong>OR = 2 (오즈가 2배)</strong> 일 때, 기준 확률에 따른 확률 변화:</p>
-
-<img data-src="chapter_logistic_files/figure-revealjs/unnamed-chunk-8-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"><p><strong>직관</strong>: 확률이 이미 90%면 아무리 OR이 커도 100%를 넘을 수 없음 → 변화폭이 작아질 수밖에 없음.<br>
-반대로 확률이 0%에 가깝다면 아무리 OR이 커도 올라갈 여지가 적음.</p>
 </section>
 <section id="r에서-로지스틱-회귀-glm" class="slide level2">
 <h2>R에서 로지스틱 회귀: <code>glm()</code></h2>
@@ -752,13 +745,13 @@ p_i = \frac{e^{b_0 + b_1 x_i}}{1 + e^{b_0 + b_1 x_i}}
 <section id="예측-확률-시각화" class="slide level2">
 <h2>예측 확률: 시각화</h2>
 
-<img data-src="chapter_logistic_files/figure-revealjs/unnamed-chunk-13-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="1056"><ul>
+<img data-src="chapter_logistic_files/figure-revealjs/unnamed-chunk-12-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="1056"><ul>
 <li>잔액이 일정 수준을 넘으면 채무 불이행 확률이 <strong>급격히</strong> 상승</li>
 </ul>
 </section>
 <section id="task-1" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 1</h2>
-<p><countdown-timer class="countdown" id="timer_0281da9c" minutes="8" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
+<p><countdown-timer class="countdown" id="timer_a7f92e3d" minutes="8" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
 <ol type="1">
 <li><code>Default</code> 데이터에서 <code>default</code>를 이진 변수(0/1)로 변환한 뒤, <code>balance</code>에 대해 <strong>OLS 회귀</strong>와 <strong>로지스틱 회귀</strong>를 각각 추정하시오.</li>
 </ol>
@@ -1016,7 +1009,7 @@ R^2_{\text{McFadden}} = 1 - \frac{\log L(\hat{M})}{\log L(M_0)}
 </section>
 <section id="task-2" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 2</h2>
-<p><countdown-timer class="countdown" id="timer_48436c30" minutes="10" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
+<p><countdown-timer class="countdown" id="timer_a894024a" minutes="10" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
 <ol type="1">
 <li><code>balance</code>, <code>income</code>, <code>student</code>를 모두 포함한 다중 로지스틱 회귀 결과에서, 각 변수의 <strong>오즈비(Odds Ratio)</strong> 를 계산하고 해석하시오.</li>
 </ol>
@@ -1093,7 +1086,7 @@ R^2_{\text{McFadden}} = 1 - \frac{\log L(\hat{M})}{\log L(M_0)}
 <h2>ROC 곡선</h2>
 <p><strong>ROC 곡선</strong>: threshold를 0 → 1로 움직이면서 민감도/특이도 변화를 추적한 곡선</p>
 
-<img data-src="chapter_logistic_files/figure-revealjs/unnamed-chunk-25-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="1056"><ul>
+<img data-src="chapter_logistic_files/figure-revealjs/unnamed-chunk-24-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="1056"><ul>
 <li>곡선이 <strong>왼쪽 위 모서리</strong>에 가까울수록 좋은 모형</li>
 <li><strong>AUC</strong>: 곡선 아래 면적. 1이면 완벽, <strong>0.5면 동전 던지기와 동일</strong> (점선)</li>
 </ul>
@@ -1144,7 +1137,7 @@ R^2_{\text{McFadden}} = 1 - \frac{\log L(\hat{M})}{\log L(M_0)}
 </section>
 <section id="task-3" class="slide level2 scrollable" data-background-color="#ffebf0">
 <h2>Task 3</h2>
-<p><countdown-timer class="countdown" id="timer_2ec1fa8a" minutes="12" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
+<p><countdown-timer class="countdown" id="timer_3e3258da" minutes="12" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
 <ol type="1">
 <li><code>Default</code> 데이터를 7:3 비율로 <strong>훈련(train)</strong> / <strong>테스트(test)</strong> 세트로 분리한 뒤, 훈련 세트로 다중 로지스틱 회귀를 추정하시오.</li>
 </ol>

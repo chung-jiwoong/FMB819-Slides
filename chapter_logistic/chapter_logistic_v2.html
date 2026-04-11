@@ -220,7 +220,7 @@
 <h2>Today’s Agenda</h2>
 <ul>
 <li><p><strong><em>로지스틱 회귀(Logistic Regression)</em></strong> 의 필요성과 직관적 이해</p></li>
-<li><p><strong>오즈(Odds)</strong> 와 <strong>로그 오즈(Log-odds)</strong> 개념 및 계수 해석</p></li>
+<li><p><strong>오즈(Odds)</strong>, <strong>오즈비(OR)</strong>, <strong>한계 효과(Marginal Effect)</strong>: 계수 해석 방법</p></li>
 <li><p>실증 분석: 신용카드 채무 불이행(Default) 예측</p></li>
 <li><p><strong>예측 확률</strong> 계산 및 <strong>모형 적합도</strong> 평가</p></li>
 </ul>
@@ -229,22 +229,19 @@
 <h2>왜 로지스틱 회귀인가?</h2>
 <ul>
 <li><p>지금까지는 연속형 종속변수 <span class="math inline">\(y\)</span>를 다루었음: 수익률, 매출, 가격 등</p></li>
-<li><p>하지만 현실에서는 <strong>이진(binary) 결과</strong>에 관심을 갖는 경우가 많음:</p>
+<li><p>현실에서는 <strong>Yes/No 이진 결과</strong>에 관심을 갖는 경우가 많음:</p>
 <ul>
 <li>대출 채무 불이행 여부 (<strong>default</strong> vs.&nbsp;<strong>non-default</strong>)</li>
-<li>주가 방향 (<strong>상승</strong> vs.&nbsp;<strong>하락</strong>)</li>
 <li>고객 이탈 여부 (<strong>이탈</strong> vs.&nbsp;<strong>유지</strong>)</li>
 <li>M&amp;A 성사 여부 (<strong>성공</strong> vs.&nbsp;<strong>실패</strong>)</li>
 </ul></li>
-<li><p>이처럼 <span class="math inline">\(y_i \in \{0, 1\}\)</span> 인 경우, OLS(선형 회귀)를 그대로 적용하면 문제가 생김.</p></li>
-<li><p><strong>로지스틱 회귀(Logistic Regression)</strong> 는 이러한 이진 결과를 모형화하기 위해 고안된 방법임.</p></li>
+<li><p><span class="math inline">\(y_i \in \{0, 1\}\)</span> 인 경우, OLS를 그대로 쓰면 문제가 생김 → 왜?</p></li>
 </ul>
 </section>
 <section id="분석-예제-신용카드-채무-불이행" class="slide level2">
 <h2>분석 예제: 신용카드 채무 불이행</h2>
 <ul>
-<li><p><code>ISLR2</code> 패키지의 <code>Default</code> 데이터셋 사용</p></li>
-<li><p>10,000명의 신용카드 고객에 대한 데이터:</p>
+<li><p><code>ISLR2</code> 패키지의 <code>Default</code> 데이터셋: 10,000명의 신용카드 고객</p>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -271,26 +268,11 @@
 </tr>
 </tbody>
 </table></li>
-<li><p>핵심 질문: <strong>신용카드 잔액(<code>balance</code>)과 소득(<code>income</code>)으로 채무 불이행을 예측할 수 있는가?</strong></p></li>
+<li><p><strong>핵심 질문</strong>: 신용카드 잔액(<code>balance</code>)으로 채무 불이행을 예측할 수 있는가?</p></li>
 </ul>
-</section>
-<section id="데이터-살펴보기" class="slide level2">
-<h2>데이터 살펴보기</h2>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">library</span>(ISLR2)</span>
-<span id="cb1-2"><a href=""></a><span class="fu">data</span>(Default)</span>
-<span id="cb1-3"><a href=""></a><span class="fu">glimpse</span>(Default)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>## Rows: 10,000
-## Columns: 4
-## $ default &lt;fct&gt; No, No, No, No, No, No, No, No, No, No, No, No, No, No, No, No…
-## $ student &lt;fct&gt; No, Yes, No, No, No, Yes, No, Yes, No, No, Yes, Yes, No, No, N…
-## $ balance &lt;dbl&gt; 729.5265, 817.1804, 1073.5492, 529.2506, 785.6559, 919.5885, 8…
-## $ income  &lt;dbl&gt; 44361.625, 12106.135, 31767.139, 35704.494, 38463.496, 7491.55…</code></pre>
-</div>
-</div>
-<div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>Default <span class="sc">|&gt;</span> <span class="fu">count</span>(default)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">data</span>(Default)</span>
+<span id="cb1-2"><a href=""></a>Default <span class="sc">|&gt;</span> <span class="fu">count</span>(default)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>##   default    n
 ## 1      No 9667
@@ -298,7 +280,7 @@
 </div>
 </div>
 <ul>
-<li>채무 불이행자(<code>Yes</code>)는 전체의 약 <strong>3.3%</strong> — 심한 <strong>클래스 불균형(class imbalance)</strong></li>
+<li>채무 불이행자(<code>Yes</code>)는 전체의 약 <strong>3.3%</strong> — 대부분은 정상 고객</li>
 </ul>
 </section>
 <section id="채무-불이행자의-분포" class="slide level2">
@@ -309,7 +291,7 @@
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="chapter_logistic_v2_files/figure-revealjs/unnamed-chunk-3-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
+<p><img data-src="chapter_logistic_v2_files/figure-revealjs/unnamed-chunk-2-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
 </figure>
 </div>
 </div>
@@ -319,269 +301,283 @@
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="chapter_logistic_v2_files/figure-revealjs/unnamed-chunk-4-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
+<p><img data-src="chapter_logistic_v2_files/figure-revealjs/unnamed-chunk-3-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
 </figure>
 </div>
 </div>
 </div>
 </div></div>
 <ul>
-<li>채무 불이행자는 <strong>신용카드 잔액이 높은</strong> 경향이 있음.</li>
+<li>채무 불이행자는 <strong>잔액이 높은</strong> 경향이 있음 → <code>balance</code>가 유용한 예측변수일 것</li>
 </ul>
 </section>
-<section id="선형-확률-모형-linear-probability-model" class="slide level2">
-<h2>선형 확률 모형 (Linear Probability Model)</h2>
-<ul>
-<li>가장 단순한 접근: <span class="math inline">\(y_i \in \{0, 1\}\)</span> 에 <strong>그냥 OLS를 적용</strong></li>
-</ul>
-<p><span class="math display">\[
-\Pr(\text{default}_i = 1) = b_0 + b_1 \cdot \text{balance}_i + e_i
-\]</span></p>
+<section id="ols를-그대로-쓰면-선형-확률-모형" class="slide level2">
+<h2>OLS를 그대로 쓰면? (선형 확률 모형)</h2>
 
-<img data-src="chapter_logistic_v2_files/figure-revealjs/unnamed-chunk-5-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
-<section id="선형-확률-모형의-문제점" class="slide level2">
-<h2>선형 확률 모형의 문제점</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>문제 1: 확률이 [0, 1] 범위를 벗어남</strong></p>
-<ul>
-<li>OLS는 예측값이 음수 혹은 1 초과가 될 수 있음</li>
-<li>확률은 반드시 <span class="math inline">\([0, 1]\)</span> 사이여야 함</li>
+<img data-src="chapter_logistic_v2_files/figure-revealjs/unnamed-chunk-4-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"><ul>
+<li><strong>OLS 문제</strong>: 잔액이 매우 낮으면 <strong>확률이 음수</strong>로 예측됨</li>
+<li><strong>해결책</strong>: 어떤 <span class="math inline">\(x\)</span> 값에서도 항상 <span class="math inline">\((0,1)\)</span> 사이 값을 출력하는 함수 필요</li>
 </ul>
-<p><strong>문제 2: 분산이 이분산(heteroskedastic)</strong></p>
-<ul>
-<li><span class="math inline">\(y_i \in \{0,1\}\)</span>이면 <span class="math inline">\(\text{Var}(e_i) = p_i(1-p_i)\)</span></li>
-<li><span class="math inline">\(p_i\)</span>가 <span class="math inline">\(x_i\)</span>에 따라 변하므로, 분산이 일정하지 않음</li>
-</ul>
-</div><div class="column" style="width:50%;">
-<p><strong>우리에게 필요한 것:</strong></p>
-<p><span class="math inline">\(x\)</span>가 어떤 값을 갖더라도 항상 <strong>[0, 1] 사이의 값</strong>을 출력하는 함수</p>
-<p><span class="math display">\[
-\Pr(y_i = 1) = f(b_0 + b_1 x_i) \in [0,1]
-\]</span></p>
-<p>→ 이 역할을 하는 것이 <strong>로지스틱(시그모이드) 함수</strong></p>
-</div></div>
 </section>
-<section id="로지스틱-함수-logistic-sigmoid-function" class="slide level2">
-<h2>로지스틱 함수 (Logistic / Sigmoid Function)</h2>
-<ul>
-<li><strong>로지스틱 함수</strong>는 임의의 실수 <span class="math inline">\(z\)</span>를 <span class="math inline">\((0, 1)\)</span> 구간으로 변환:</li>
-</ul>
-<p><span class="math display">\[
-\sigma(z) = \frac{e^z}{1 + e^z} = \frac{1}{1 + e^{-z}}
-\]</span></p>
+<section id="로지스틱-함수-s자-곡선" class="slide level2">
+<h2>로지스틱 함수: S자 곡선</h2>
+<p>임의의 실수 <span class="math inline">\(z\)</span>를 항상 <span class="math inline">\((0, 1)\)</span> 사이로 압축하는 함수:</p>
+<p><span class="math display">\[\sigma(z) = \frac{e^z}{1 + e^z}\]</span></p>
 
-<img data-src="chapter_logistic_v2_files/figure-revealjs/unnamed-chunk-6-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"><ul>
-<li><span class="math inline">\(z \to +\infty\)</span>이면 <span class="math inline">\(\sigma(z) \to 1\)</span>, <span class="math inline">\(z \to -\infty\)</span>이면 <span class="math inline">\(\sigma(z) \to 0\)</span></li>
-</ul>
+<img data-src="chapter_logistic_v2_files/figure-revealjs/unnamed-chunk-5-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"><p><strong>직관</strong>: 선형 예측자 <span class="math inline">\(z = b_0 + b_1 x\)</span>가 아무리 크거나 작아도,<br>
+로지스틱 함수를 거치면 <strong>반드시 0과 1 사이</strong>로 나옴</p>
 </section>
 <section id="로지스틱-회귀-모형" class="slide level2">
 <h2>로지스틱 회귀 모형</h2>
-<ul>
-<li>선형 예측자(linear predictor) <span class="math inline">\(z_i = b_0 + b_1 x_i\)</span>를 로지스틱 함수에 통과:</li>
-</ul>
-<p><span class="math display">\[
-\Pr(y_i = 1 \mid x_i) = \frac{e^{b_0 + b_1 x_i}}{1 + e^{b_0 + b_1 x_i}}
-\]</span></p>
-<ul>
-<li>이를 채무 불이행 예제에 적용:</li>
-</ul>
-<p><span class="math display">\[
-\Pr(\text{default}_i = 1) = \frac{e^{b_0 + b_1 \cdot \text{balance}_i}}{1 + e^{b_0 + b_1 \cdot \text{balance}_i}}
-\]</span></p>
+<p>선형 예측자 <span class="math inline">\(z_i = b_0 + b_1 x_i\)</span>를 로지스틱 함수에 통과:</p>
+<p><span class="math display">\[\Pr(\text{default}_i = 1 \mid \text{balance}_i) = \frac{e^{b_0 + b_1 \cdot \text{balance}_i}}{1 + e^{b_0 + b_1 \cdot \text{balance}_i}}\]</span></p>
 
-<img data-src="chapter_logistic_v2_files/figure-revealjs/unnamed-chunk-7-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
-<section id="오즈odds란-무엇인가" class="slide level2">
-<h2>오즈(Odds)란 무엇인가?</h2>
-<ul>
-<li><strong>오즈(Odds)</strong>: 사건이 일어날 확률 vs.&nbsp;일어나지 않을 확률의 <strong>비율</strong></li>
+<img data-src="chapter_logistic_v2_files/figure-revealjs/unnamed-chunk-6-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"><ul>
+<li>잔액이 낮으면 불이행 확률 ≈ 0%, 높으면 ≈ 100%</li>
+<li>중간 구간에서 확률이 <strong>S자 형태</strong>로 가파르게 증가</li>
 </ul>
-<p><span class="math display">\[
-\text{Odds} = \frac{p}{1-p}
-\]</span></p>
-<ul>
-<li>스포츠 베팅에서 익숙한 개념: “이길 확률이 75%”라면 오즈 = 3 (3:1)</li>
-</ul>
+</section>
+<section id="오즈odds" class="slide level2">
+<h2>오즈(Odds)</h2>
+<p><strong>오즈(Odds)</strong>: 사건이 일어날 확률 vs.&nbsp;일어나지 않을 확률의 비율</p>
+<p><span class="math display">\[\text{Odds} = \frac{p}{1-p}\]</span></p>
 <table class="caption-top">
 <thead>
 <tr class="header">
 <th style="text-align: center;">확률 <span class="math inline">\(p\)</span></th>
-<th style="text-align: center;">오즈 <span class="math inline">\(\frac{p}{1-p}\)</span></th>
+<th style="text-align: center;">오즈</th>
 <th style="text-align: left;">직관적 표현</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: center;">0.10</td>
-<td style="text-align: center;">0.111</td>
+<td style="text-align: center;">0.11</td>
 <td style="text-align: left;">9번 중 1번 성공</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">0.50</td>
-<td style="text-align: center;">1.000</td>
+<td style="text-align: center;">1.00</td>
 <td style="text-align: left;">반반</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">0.75</td>
-<td style="text-align: center;">3.000</td>
-<td style="text-align: left;">3번 중 3번 성공, 1번 실패</td>
+<td style="text-align: center;">3.00</td>
+<td style="text-align: left;">3:1 (이길 가능성이 질 가능성의 3배)</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">0.90</td>
-<td style="text-align: center;">9.000</td>
-<td style="text-align: left;">9번 성공, 1번 실패</td>
+<td style="text-align: center;">9.00</td>
+<td style="text-align: left;">9:1</td>
 </tr>
 </tbody>
 </table>
+<ul>
+<li><p><strong>역변환</strong>: 오즈 → 확률: <span class="math inline">\(\quad p = \dfrac{\text{Odds}}{1 + \text{Odds}}\)</span></p></li>
+<li><p>예: 오즈 = 3 → <span class="math inline">\(p = \frac{3}{4} = 0.75\)</span></p></li>
+</ul>
 <div class="fragment">
-<ul>
-<li><strong>역변환</strong>: 오즈 → 확률</li>
-</ul>
-<p><span class="math display">\[
-p = \frac{\text{Odds}}{1 + \text{Odds}}
-\]</span></p>
-<ul>
-<li>예: 오즈 = 3 → <span class="math inline">\(p = \frac{3}{1+3} = 0.75\)</span></li>
-</ul>
+<p><strong>왜 오즈를 쓰는가?</strong> 확률은 0~1로 제한되지만,<br>
+오즈는 0~∞ → 로그 오즈는 -∞~+∞ → <strong>선형 모형에 적합</strong></p>
 </div>
 </section>
-<section id="로그-오즈log-odds와-로지스틱-회귀의-연결" class="slide level2">
-<h2>로그 오즈(Log-Odds)와 로지스틱 회귀의 연결</h2>
-<ul>
-<li>오즈는 항상 양수(0 ~ ∞). 로그를 취하면 → <strong>로그 오즈(log-odds, logit)</strong>: <span class="math inline">\((-\infty, +\infty)\)</span></li>
-</ul>
-<p><span class="math display">\[
-\text{log-odds} = \log\left(\frac{p}{1-p}\right)
-\]</span></p>
-<ul>
-<li>로지스틱 회귀는 이 <strong>로그 오즈를 선형 함수로 모형화</strong>:</li>
-</ul>
-<p><span class="math display">\[
-\underbrace{\log\left(\frac{p_i}{1-p_i}\right)}_{\text{log-odds}} = b_0 + b_1 x_i
-\]</span></p>
-<ul>
-<li>양변을 <span class="math inline">\(p\)</span>에 대해 풀면 → 로지스틱 함수:</li>
-</ul>
-<p><span class="math display">\[
-p_i = \frac{e^{b_0 + b_1 x_i}}{1 + e^{b_0 + b_1 x_i}}
-\]</span></p>
-<p><strong>세 가지 스케일의 관계:</strong></p>
-<p><span class="math display">\[
-\underbrace{p}_{\text{확률 (0~1)}} \longleftrightarrow \underbrace{\frac{p}{1-p}}_{\text{오즈 (0~∞)}} \longleftrightarrow \underbrace{\log\frac{p}{1-p}}_{\text{로그오즈 (-∞~+∞)}}
-\]</span></p>
+<section id="로그-오즈와-로지스틱-회귀의-연결" class="slide level2">
+<h2>로그 오즈와 로지스틱 회귀의 연결</h2>
+<p><span class="math display">\[\underbrace{p}_{\text{확률 }(0,1)} \xrightarrow{\div(1-p)} \underbrace{\frac{p}{1-p}}_{\text{오즈 }(0,\infty)} \xrightarrow{\log} \underbrace{\log\frac{p}{1-p}}_{\text{로그오즈 }(-\infty,+\infty)}\]</span></p>
+<p>로지스틱 회귀는 <strong>로그 오즈</strong>를 선형 함수로 모형화:</p>
+<p><span class="math display">\[\log\left(\frac{p_i}{1-p_i}\right) = b_0 + b_1 x_i\]</span></p>
+<p>양변을 <span class="math inline">\(p_i\)</span>에 대해 풀면 → 로지스틱 함수가 자연스럽게 등장:</p>
+<p><span class="math display">\[p_i = \frac{e^{b_0 + b_1 x_i}}{1 + e^{b_0 + b_1 x_i}}\]</span></p>
+<blockquote>
+<p>즉, 로지스틱 회귀 = “<strong>로그 오즈를 <span class="math inline">\(x\)</span>로 예측하는 선형 모형</strong>”</p>
+</blockquote>
 </section>
-<section id="오즈비odds-ratio-정의와-의미" class="slide level2">
-<h2>오즈비(Odds Ratio): 정의와 의미</h2>
+<section id="r에서-로지스틱-회귀-glm" class="slide level2">
+<h2>R에서 로지스틱 회귀: <code>glm()</code></h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="co"># lm() 대신 glm()을 사용, family = binomial 지정</span></span>
+<span id="cb3-2"><a href=""></a><span class="fu">glm</span>(종속변수 <span class="sc">~</span> 독립변수, <span class="at">data =</span> 데이터, <span class="at">family =</span> binomial)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <ul>
-<li><strong>오즈비(OR)</strong>: <span class="math inline">\(x\)</span>가 1단위 증가했을 때 오즈의 <strong>배율 변화</strong></li>
+<li><code>family = binomial</code>: 종속변수가 이진형임을 지정 → 자동으로 <strong>logit 링크</strong> 사용</li>
 </ul>
-<p><span class="math display">\[
-\text{OR} = \frac{\text{Odds}(x+1)}{\text{Odds}(x)} = e^{b_1}
-\]</span></p>
-<p><strong>왜 <span class="math inline">\(e^{b_1}\)</span>인가?</strong> 로그 오즈 모형에서:</p>
-<p><span class="math display">\[
-\log\text{Odds}(x+1) - \log\text{Odds}(x) = b_1
-\quad\Rightarrow\quad
-\frac{\text{Odds}(x+1)}{\text{Odds}(x)} = e^{b_1}
-\]</span></p>
-<p><strong>해석 방법:</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a>logit_fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(default <span class="sc">~</span> balance, <span class="at">data =</span> Default, <span class="at">family =</span> binomial)</span>
+<span id="cb4-2"><a href=""></a>broom<span class="sc">::</span><span class="fu">tidy</span>(logit_fit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## # A tibble: 2 × 5
+##   term         estimate std.error statistic   p.value
+##   &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept) -10.7      0.361        -29.5 3.62e-191
+## 2 balance       0.00550  0.000220      25.0 1.98e-137</code></pre>
+</div>
+</div>
+<p><strong>계수 읽기:</strong></p>
+<ul>
+<li><code>(Intercept)</code> = <span class="math inline">\(b_0 = -10.65\)</span>: balance = 0일 때 로그오즈</li>
+<li><code>balance</code> = <span class="math inline">\(b_1 = 0.0055\)</span>: balance가 $1 증가할 때 로그오즈 변화</li>
+</ul>
+</section>
+<section id="계수-해석-방법-1-로그오즈" class="slide level2">
+<h2>계수 해석 방법 1: 로그오즈</h2>
+<blockquote>
+<p><span class="math inline">\(b_1 = 0.0055\)</span>: balance가 <strong>$1 증가</strong>할 때, 채무불이행 <strong>로그오즈가 0.0055 증가</strong></p>
+</blockquote>
+<ul>
+<li><span class="math inline">\(b_1 &gt; 0\)</span> → balance ↑ 이면 불이행 확률 ↑ (방향 파악)</li>
+<li>로그오즈는 직관적이지 않음 → <strong>오즈비</strong>로 변환하면 더 이해하기 쉬움</li>
+</ul>
+</section>
+<section id="계수-해석-방법-2-오즈비-or" class="slide level2">
+<h2>계수 해석 방법 2: 오즈비 (OR)</h2>
+<p><strong>오즈비(OR)</strong>: <span class="math inline">\(x\)</span>가 1단위 증가할 때 오즈의 <strong>배율 변화</strong></p>
+<p><span class="math display">\[\text{OR} = e^{b_1}\]</span></p>
+<p><strong>왜 <span class="math inline">\(e^{b_1}\)</span>인가?</strong></p>
+<p><span class="math display">\[\log\text{Odds}(x+1) - \log\text{Odds}(x) = b_1 \quad\Rightarrow\quad \frac{\text{Odds}(x+1)}{\text{Odds}(x)} = e^{b_1}\]</span></p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a><span class="fu">exp</span>(<span class="fu">coef</span>(logit_fit))          <span class="co"># OR</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##  (Intercept)      balance 
+## 2.366933e-05 1.005514e+00</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="fu">exp</span>(<span class="fu">confint</span>(logit_fit))       <span class="co"># 95% CI for OR</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##                    2.5 %       97.5 %
+## (Intercept) 1.138415e-05 4.694353e-05
+## balance     1.005092e+00 1.005961e+00</code></pre>
+</div>
+</div>
+<p><strong>해석</strong>: <span class="math inline">\(\text{OR} = e^{0.0055} \approx 1.0055\)</span><br>
+→ balance $1 증가 시 채무불이행 오즈가 <strong>0.55% 증가</strong><br>
+→ balance <strong>$1,000</strong> 증가 시: <span class="math inline">\(e^{0.0055 \times 1000} \approx 241\)</span> → 오즈가 <strong>241배</strong> 증가</p>
+<blockquote>
+<p>⚠️ OR은 <strong>오즈의 배율</strong>이지, <strong>확률의 변화</strong>가 아님</p>
+</blockquote>
+</section>
+<section id="계수-해석-방법-3-한계-효과-marginal-effect" class="slide level2">
+<h2>계수 해석 방법 3: 한계 효과 (Marginal Effect)</h2>
+<p><strong>한계 효과(Marginal Effect)</strong>: <span class="math inline">\(x\)</span>가 1단위 증가할 때 <strong>확률의 변화량</strong> (<span class="math inline">\(\Delta p\)</span>)</p>
+<p><span class="math display">\[\frac{\partial p}{\partial x} = b_1 \cdot p(1-p)\]</span></p>
+<ul>
+<li>OLS의 계수 해석과 가장 유사</li>
+<li><span class="math inline">\(p(1-p)\)</span>가 곱해지므로 → <strong>기준 확률(<span class="math inline">\(p_0\)</span>)에 따라 값이 달라짐</strong></li>
+</ul>
+<p><strong>두 가지 방법:</strong></p>
 <table class="caption-top">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 27%">
+<col style="width: 45%">
+</colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: center;">OR 값</th>
-<th style="text-align: left;">의미</th>
+<th style="text-align: left;">방법</th>
+<th style="text-align: left;">설명</th>
+<th style="text-align: left;">언제 사용</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: center;">OR = 1</td>
-<td style="text-align: left;"><span class="math inline">\(x\)</span>와 무관 (<span class="math inline">\(b_1 = 0\)</span>)</td>
+<td style="text-align: left;"><strong>AME</strong> (Average Marginal Effect)</td>
+<td style="text-align: left;">모든 관측치에서 ME 계산 후 평균</td>
+<td style="text-align: left;">전체 평균 효과를 보고 싶을 때</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;">OR = 2</td>
-<td style="text-align: left;"><span class="math inline">\(x\)</span> 1단위 증가 → 오즈가 <strong>2배</strong></td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">OR = 0.5</td>
-<td style="text-align: left;"><span class="math inline">\(x\)</span> 1단위 증가 → 오즈가 <strong>절반</strong></td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">OR = 1.10</td>
-<td style="text-align: left;"><span class="math inline">\(x\)</span> 1단위 증가 → 오즈가 <strong>10% 증가</strong></td>
+<td style="text-align: left;"><strong>MEM</strong> (Marginal Effect at Mean)</td>
+<td style="text-align: left;">평균값(<span class="math inline">\(\bar{x}\)</span>)에서 ME 계산</td>
+<td style="text-align: left;">대표적인 고객에서의 효과</td>
 </tr>
 </tbody>
 </table>
-<div class="fragment">
-<blockquote>
-<p>⚠️ OR은 확률의 변화가 아니라 <strong>오즈의 배율</strong> 변화임에 주의!</p>
-</blockquote>
-</div>
 </section>
-<section id="계수-해석-로그오즈-오즈비-확률-변화" class="slide level2">
-<h2>계수 해석: 로그오즈 → 오즈비 → 확률 변화</h2>
-<p><strong>3단계 해석 흐름:</strong></p>
-<p><span class="math display">\[
-b_1 \xrightarrow{\exp} \text{OR} = e^{b_1} \xrightarrow{\text{기준 확률 필요}} \Delta p
-\]</span></p>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>Step 1: 로그오즈 해석</strong> (방향만)</p>
-<p><span class="math inline">\(b_1 &gt; 0\)</span> → <span class="math inline">\(x\)</span> ↑ 이면 확률 ↑<br>
-<span class="math inline">\(b_1 &lt; 0\)</span> → <span class="math inline">\(x\)</span> ↑ 이면 확률 ↓</p>
-<p><strong>Step 2: 오즈비로 변환</strong> (배율)</p>
-<p><span class="math display">\[\text{OR} = e^{b_1}\]</span></p>
-<p><strong>Step 3: 확률 변화 계산</strong> (크기)</p>
-<p>기준 확률 <span class="math inline">\(p_0\)</span>에서 <span class="math inline">\(x\)</span>가 1 증가하면:</p>
-<p><span class="math display">\[p_1 = \frac{\text{OR} \times p_0}{1 - p_0 + \text{OR} \times p_0}\]</span></p>
-</div><div class="column" style="width:50%;">
-<p><strong>핵심</strong>: OR이 같아도 기준 확률에 따라 확률 변화폭이 다름</p>
+<section id="한계-효과-r로-계산하기" class="slide level2">
+<h2>한계 효과: R로 계산하기</h2>
+<p><strong>방법 1: <code>margins</code> 패키지 (AME)</strong></p>
 <div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="chapter_logistic_v2_files/figure-revealjs/unnamed-chunk-8-1.svg" class="quarto-figure quarto-figure-center" width="960"></p>
-</figure>
-</div>
-</div>
-</div>
-</div></div>
-</section>
-<section id="r에서-로지스틱-회귀-glm" class="slide level2">
-<h2>R에서 로지스틱 회귀: <code>glm()</code></h2>
-<ul>
-<li>로지스틱 회귀는 <code>glm()</code> 함수로 추정 (<code>lm()</code> 대신)</li>
-</ul>
-<div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="fu">glm</span>(<span class="at">formula =</span> 종속변수 <span class="sc">~</span> 독립변수, <span class="at">data =</span> 데이터, <span class="at">family =</span> binomial)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<ul>
-<li><code>family = binomial</code>: 이진 종속변수를 위한 로지스틱 회귀 지정</li>
-</ul>
-<p><strong><em>채무 불이행 예제:</em></strong></p>
-<div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a>logit_fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(default <span class="sc">~</span> balance, <span class="at">data =</span> Default, <span class="at">family =</span> binomial)</span>
-<span id="cb6-2"><a href=""></a><span class="fu">summary</span>(logit_fit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">"margins"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) <span class="fu">install.packages</span>(<span class="st">"margins"</span>)</span>
+<span id="cb10-2"><a href=""></a><span class="fu">library</span>(margins)</span>
+<span id="cb10-3"><a href=""></a></span>
+<span id="cb10-4"><a href=""></a><span class="co"># Average Marginal Effect</span></span>
+<span id="cb10-5"><a href=""></a>ame <span class="ot">&lt;-</span> <span class="fu">margins</span>(logit_fit)</span>
+<span id="cb10-6"><a href=""></a><span class="fu">summary</span>(ame)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>## 
-## Call:
-## glm(formula = default ~ balance, family = binomial, data = Default)
-## 
-## Coefficients:
-##               Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept) -1.065e+01  3.612e-01  -29.49   &lt;2e-16 ***
-## balance      5.499e-03  2.204e-04   24.95   &lt;2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## (Dispersion parameter for binomial family taken to be 1)
-## 
-##     Null deviance: 2920.6  on 9999  degrees of freedom
-## Residual deviance: 1596.5  on 9998  degrees of freedom
-## AIC: 1600.5
-## 
-## Number of Fisher Scoring iterations: 8</code></pre>
+<pre><code>##   factor    AME     SE       z      p  lower  upper
+##  balance 0.0001 0.0000 25.2973 0.0000 0.0001 0.0001</code></pre>
 </div>
 </div>
+<p>→ balance $1 증가 시 채무불이행 확률이 평균적으로 약 <strong>0.012%p 증가</strong></p>
+</section>
+<section id="한계-효과-r로-계산하기-계속" class="slide level2">
+<h2>한계 효과: R로 계산하기 (계속)</h2>
+<p><strong>방법 2: 직접 계산 (수식 이용)</strong></p>
+<p><span class="math display">\[\text{ME} = b_1 \times \hat{p} \times (1 - \hat{p})\]</span></p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a>b1    <span class="ot">&lt;-</span> <span class="fu">coef</span>(logit_fit)[<span class="st">"balance"</span>]</span>
+<span id="cb12-2"><a href=""></a></span>
+<span id="cb12-3"><a href=""></a><span class="co"># MEM: 평균 잔액에서의 한계 효과</span></span>
+<span id="cb12-4"><a href=""></a>p_mean <span class="ot">&lt;-</span> <span class="fu">predict</span>(logit_fit,</span>
+<span id="cb12-5"><a href=""></a>                  <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">balance =</span> <span class="fu">mean</span>(Default<span class="sc">$</span>balance)),</span>
+<span id="cb12-6"><a href=""></a>                  <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb12-7"><a href=""></a>ME_mean <span class="ot">&lt;-</span> b1 <span class="sc">*</span> p_mean <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_mean)</span>
+<span id="cb12-8"><a href=""></a><span class="fu">cat</span>(<span class="st">"MEM:"</span>, <span class="fu">round</span>(ME_mean <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">4</span>), <span class="st">"%p per $1 increase in balance</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## MEM: 0.0013 %p per $1 increase in balance</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a><span class="co"># AME: 각 관측치에서 계산 후 평균</span></span>
+<span id="cb14-2"><a href=""></a>p_all <span class="ot">&lt;-</span> <span class="fu">predict</span>(logit_fit, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb14-3"><a href=""></a>ME_all <span class="ot">&lt;-</span> b1 <span class="sc">*</span> p_all <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_all)</span>
+<span id="cb14-4"><a href=""></a><span class="fu">cat</span>(<span class="st">"AME:"</span>, <span class="fu">round</span>(<span class="fu">mean</span>(ME_all) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">4</span>), <span class="st">"%p per $1 increase in balance</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## AME: 0.0119 %p per $1 increase in balance</code></pre>
+</div>
+</div>
+</section>
+<section id="한계-효과-기준-확률에-따라-달라진다" class="slide level2">
+<h2>한계 효과: 기준 확률에 따라 달라진다</h2>
+
+<img data-src="chapter_logistic_v2_files/figure-revealjs/unnamed-chunk-12-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"><ul>
+<li>ME는 <span class="math inline">\(p_0 = 0.5\)</span>에서 최대, 양 극단에서 0에 수렴</li>
+<li>표본 평균 불이행률(≈3.3%)에서 ME가 매우 작음 → <strong>AME가 작게 나오는 이유</strong></li>
+</ul>
+</section>
+<section id="세-가지-해석-방법-비교" class="slide level2">
+<h2>세 가지 해석 방법 비교</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">방법</th>
+<th style="text-align: left;">계산</th>
+<th style="text-align: left;">해석</th>
+<th style="text-align: left;">특징</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>로그오즈</strong></td>
+<td style="text-align: left;"><span class="math inline">\(b_1\)</span></td>
+<td style="text-align: left;">balance $1 증가 → 로그오즈 0.0055 증가</td>
+<td style="text-align: left;">직관적이지 않음</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>오즈비(OR)</strong></td>
+<td style="text-align: left;"><span class="math inline">\(e^{b_1}\)</span></td>
+<td style="text-align: left;">balance $1 증가 → 오즈 1.0055배</td>
+<td style="text-align: left;">배율로 표현, 기준 확률 불필요</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>한계 효과(ME)</strong></td>
+<td style="text-align: left;"><span class="math inline">\(b_1 \cdot p(1-p)\)</span></td>
+<td style="text-align: left;">balance $1 증가 → 확률 0.012%p 증가</td>
+<td style="text-align: left;">OLS와 유사, 기준 확률 필요</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="추정-결과-해석-3단계-적용" class="slide level2">
 <h2>추정 결과 해석: 3단계 적용</h2>
@@ -617,99 +613,81 @@ b_1 \xrightarrow{\exp} \text{OR} = e^{b_1} \xrightarrow{\text{기준 확률 필�
 </div>
 </div>
 <p><strong><code>balance</code> 계수 (<span class="math inline">\(\hat{b}_1 \approx 0.00550\)</span>) 3단계 해석:</strong></p>
-<p><strong>Step 1 — 로그오즈</strong>: <code>balance</code> $1 증가 → 채무 불이행 로그오즈 0.00550 증가 (양수 → 확률 ↑)</p>
-<p><strong>Step 2 — 오즈비</strong>: <span class="math inline">\(\text{OR} = e^{0.00550} \approx 1.0055\)</span> → <code>balance</code> $1 증가 시 오즈 <strong>0.55% 증가</strong></p>
-<p><strong>Step 3 — 확률 변화</strong>: <code>balance</code> <strong>1,000달러 증가</strong> 시, <span class="math inline">\(\text{OR}_{1000} = e^{0.00550 \times 1000} \approx 241\)</span></p>
-<p>기준 확률 <span class="math inline">\(p_0 = 0.03\)</span> (평균 불이행률)이라면:</p>
-<p><span class="math display">\[p_1 = \frac{241 \times 0.03}{1 - 0.03 + 241 \times 0.03} \approx 0.88\]</span></p>
-<p>→ 잔액 1,000달러 증가 시 채무 불이행 확률이 <strong>3% → 88%</strong> 로 급등!</p>
+<p><strong>Step 1 — 방향</strong>: <span class="math inline">\(b_1 &gt; 0\)</span> → balance 증가 → 채무불이행 확률 <strong>증가</strong></p>
+<p><strong>Step 2 — 오즈비</strong>: <span class="math inline">\(\text{OR} = e^{0.00550} \approx 1.0055\)</span> → $1 증가마다 오즈 <strong>0.55% 증가</strong></p>
+<p><strong>Step 3 — 한계 효과 (AME)</strong>: <code>margins(logit_fit)</code> → balance $1 증가 시 확률 약 <strong>0.012%p 증가</strong><br>
+($1,000 증가 시 → 약 <strong>+12%p</strong>, 단 기준 확률에 따라 달라짐)</p>
 </section>
 <section id="예측-확률-계산" class="slide level2">
 <h2>예측 확률 계산</h2>
 <ul>
-<li><code>predict()</code> 함수로 예측값을 구할 수 있음</li>
-<li><code>type = "response"</code>: 확률 스케일로 예측 (기본은 로그 오즈 스케일)</li>
+<li><code>predict(..., type = "response")</code>: 확률 스케일로 예측</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="co"># 신용카드 잔액이 1000달러일 때 채무 불이행 확률</span></span>
-<span id="cb8-2"><a href=""></a><span class="fu">predict</span>(logit_fit, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">balance =</span> <span class="dv">1000</span>), <span class="at">type =</span> <span class="st">"response"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a><span class="co"># balance = $1,000 vs $2,000</span></span>
+<span id="cb16-2"><a href=""></a><span class="fu">predict</span>(logit_fit,</span>
+<span id="cb16-3"><a href=""></a>        <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">balance =</span> <span class="fu">c</span>(<span class="dv">1000</span>, <span class="dv">2000</span>)),</span>
+<span id="cb16-4"><a href=""></a>        <span class="at">type =</span> <span class="st">"response"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>##           1 
-## 0.005752145</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="co"># 신용카드 잔액이 2000달러일 때 채무 불이행 확률</span></span>
-<span id="cb10-2"><a href=""></a><span class="fu">predict</span>(logit_fit, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">balance =</span> <span class="dv">2000</span>), <span class="at">type =</span> <span class="st">"response"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>##         1 
-## 0.5857694</code></pre>
+<pre><code>##           1           2 
+## 0.005752145 0.585769370</code></pre>
 </div>
 </div>
 <ul>
-<li>잔액이 두 배가 된다고 해서 확률이 단순히 두 배 되지 않음 → <strong>비선형(non-linear) 관계</strong></li>
+<li><strong>잔액이 두 배</strong>라고 확률이 두 배가 되지 않음 → <strong>비선형</strong></li>
 </ul>
-</section>
-<section id="예측-확률-시각화" class="slide level2">
-<h2>예측 확률: 시각화</h2>
 
-<img data-src="chapter_logistic_v2_files/figure-revealjs/unnamed-chunk-13-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="1056"><ul>
-<li>잔액이 일정 수준을 넘으면 채무 불이행 확률이 <strong>급격히</strong> 상승</li>
-</ul>
-</section>
-<section id="task-1" class="slide level2 scrollable" data-background-color="#ffebf0">
+<img data-src="chapter_logistic_v2_files/figure-revealjs/unnamed-chunk-15-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section id="task-1" class="slide level2" data-background-color="#ffebf0">
 <h2>Task 1</h2>
-<p><countdown-timer class="countdown" id="timer_357bafed" minutes="8" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
-<ol type="1">
-<li><code>Default</code> 데이터에서 <code>default</code>를 이진 변수(0/1)로 변환한 뒤, <code>balance</code>에 대해 <strong>OLS 회귀</strong>와 <strong>로지스틱 회귀</strong>를 각각 추정하시오.</li>
-</ol>
-<ol start="2" type="1">
-<li><code>balance = 500</code>, <code>balance = 2500</code>에서 두 모형의 <strong>예측값</strong>을 비교하시오. OLS와 로지스틱 회귀 결과가 어떻게 다른가? 왜 그런가?</li>
-</ol>
-<ol start="3" type="1">
-<li><code>student</code> 변수(학생 여부)만을 독립변수로 한 로지스틱 회귀를 추정하시오. 계수를 해석하고, <strong>오즈비(Odds Ratio)</strong> 를 계산하시오.</li>
-</ol>
-</section>
-<section id="다중-로지스틱-회귀-multiple-logistic-regression" class="slide level2">
-<h2>다중 로지스틱 회귀 (Multiple Logistic Regression)</h2>
-<ul>
-<li>단순 로지스틱 회귀와 마찬가지로, <strong>여러 개의 독립변수</strong>를 포함할 수 있음:</li>
-</ul>
-<p><span class="math display">\[
-\log\left(\frac{p_i}{1-p_i}\right) = b_0 + b_1 x_{1i} + b_2 x_{2i} + \cdots + b_k x_{ki}
-\]</span></p>
-<ul>
-<li>각 계수 <span class="math inline">\(b_j\)</span>는 <strong>다른 변수들을 통제한 후</strong>, <span class="math inline">\(x_j\)</span>가 1 단위 증가할 때 로그 오즈의 변화</li>
-</ul>
+<p><countdown-timer class="countdown" id="timer_6b469d2b" minutes="8" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
+<p>아래 코드를 순서대로 실행하며 결과를 확인해보자.</p>
+<p><strong>Step 1.</strong> OLS와 로지스틱 회귀를 각각 추정:</p>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a>logit_multi <span class="ot">&lt;-</span> <span class="fu">glm</span>(default <span class="sc">~</span> balance <span class="sc">+</span> income <span class="sc">+</span> student,</span>
-<span id="cb12-2"><a href=""></a>                   <span class="at">data =</span> Default, <span class="at">family =</span> binomial)</span>
-<span id="cb12-3"><a href=""></a><span class="fu">summary</span>(logit_multi)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>## 
-## Call:
-## glm(formula = default ~ balance + income + student, family = binomial, 
-##     data = Default)
-## 
-## Coefficients:
-##               Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept) -1.087e+01  4.923e-01 -22.080  &lt; 2e-16 ***
-## balance      5.737e-03  2.319e-04  24.738  &lt; 2e-16 ***
-## income       3.033e-06  8.203e-06   0.370  0.71152    
-## studentYes  -6.468e-01  2.363e-01  -2.738  0.00619 ** 
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## (Dispersion parameter for binomial family taken to be 1)
-## 
-##     Null deviance: 2920.6  on 9999  degrees of freedom
-## Residual deviance: 1571.5  on 9996  degrees of freedom
-## AIC: 1579.5
-## 
-## Number of Fisher Scoring iterations: 8</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a>df <span class="ot">&lt;-</span> Default <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">default_num =</span> <span class="fu">as.integer</span>(default <span class="sc">==</span> <span class="st">"Yes"</span>))</span>
+<span id="cb18-2"><a href=""></a>ols_fit   <span class="ot">&lt;-</span> <span class="fu">lm</span>(default_num <span class="sc">~</span> balance, <span class="at">data =</span> df)</span>
+<span id="cb18-3"><a href=""></a>logit_fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(default <span class="sc">~</span> balance, <span class="at">data =</span> Default, <span class="at">family =</span> binomial)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p><strong>Step 2.</strong> balance = $500과 $2,500에서 두 모형의 예측값을 비교:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="fu">predict</span>(ols_fit,   <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">balance =</span> <span class="fu">c</span>(<span class="dv">500</span>, <span class="dv">2500</span>)))</span>
+<span id="cb19-2"><a href=""></a><span class="fu">predict</span>(logit_fit, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">balance =</span> <span class="fu">c</span>(<span class="dv">500</span>, <span class="dv">2500</span>)), <span class="at">type =</span> <span class="st">"response"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>→ OLS 예측값이 이상한 이유는? 어떤 값이 나오는가?</p>
+<p><strong>Step 3.</strong> <code>student</code> 변수만으로 로지스틱 회귀 추정 후 오즈비 계산:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a>logit_s <span class="ot">&lt;-</span> <span class="fu">glm</span>(default <span class="sc">~</span> student, <span class="at">data =</span> Default, <span class="at">family =</span> binomial)</span>
+<span id="cb20-2"><a href=""></a>broom<span class="sc">::</span><span class="fu">tidy</span>(logit_s)       <span class="co"># 계수 확인</span></span>
+<span id="cb20-3"><a href=""></a><span class="fu">exp</span>(<span class="fu">coef</span>(logit_s))         <span class="co"># 오즈비: 학생이면 오즈가 몇 배?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>→ 학생이면 채무불이행 오즈가 몇 배 높은가? 계수의 부호는 무엇을 의미하는가?</p>
 </section>
-<section id="다중-로지스틱-회귀-흥미로운-결과" class="slide level2">
-<h2>다중 로지스틱 회귀: 흥미로운 결과</h2>
+<section id="다중-로지스틱-회귀" class="slide level2">
+<h2>다중 로지스틱 회귀</h2>
+<p>여러 독립변수를 동시에 포함:</p>
+<p><span class="math display">\[\log\left(\frac{p_i}{1-p_i}\right) = b_0 + b_1 \cdot \text{balance}_i + b_2 \cdot \text{income}_i + b_3 \cdot \text{student}_i\]</span></p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a>logit_multi <span class="ot">&lt;-</span> <span class="fu">glm</span>(default <span class="sc">~</span> balance <span class="sc">+</span> income <span class="sc">+</span> student,</span>
+<span id="cb21-2"><a href=""></a>                   <span class="at">data =</span> Default, <span class="at">family =</span> binomial)</span>
+<span id="cb21-3"><a href=""></a>broom<span class="sc">::</span><span class="fu">tidy</span>(logit_multi) <span class="sc">|&gt;</span></span>
+<span id="cb21-4"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">OR =</span> <span class="fu">exp</span>(estimate)) <span class="sc">|&gt;</span></span>
+<span id="cb21-5"><a href=""></a>  <span class="fu">select</span>(term, estimate, OR, p.value)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>## # A tibble: 4 × 4
+##   term            estimate        OR   p.value
+##   &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept) -10.9        0.0000190 4.91e-108
+## 2 balance       0.00574    1.01      4.22e-135
+## 3 income        0.00000303 1.00      7.12e-  1
+## 4 studentYes   -0.647      0.524     6.19e-  3</code></pre>
+</div>
+</div>
+<ul>
+<li>각 계수: <strong>다른 변수들을 통제한 후</strong> 해당 변수의 로그오즈 변화</li>
+</ul>
+</section>
+<section id="다중-회귀-교란변수ovb-사례" class="slide level2">
+<h2>다중 회귀: 교란변수(OVB) 사례</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>단변수 회귀 (student만)</strong></p>
@@ -738,7 +716,7 @@ b_1 \xrightarrow{\exp} \text{OR} = e^{b_1} \xrightarrow{\text{기준 확률 필�
 </table>
 </div>
 </div>
-<p>→ 학생일수록 채무 불이행 확률 <strong>증가</strong> (<span class="math inline">\(b_1 &gt; 0\)</span>)</p>
+<p><span class="math inline">\(b_\text{student} &gt; 0\)</span> → 학생 = 불이행 확률 <strong>높음</strong> ❓</p>
 </div><div class="column" style="width:50%;">
 <p><strong>다중 회귀 (balance, income, student)</strong></p>
 <div class="cell" data-layout-align="center">
@@ -776,22 +754,19 @@ b_1 \xrightarrow{\exp} \text{OR} = e^{b_1} \xrightarrow{\text{기준 확률 필�
 </table>
 </div>
 </div>
-<p>→ <code>balance</code>, <code>income</code> 통제 후, 학생일수록 채무 불이행 확률 <strong>감소</strong> (<span class="math inline">\(b_1 &lt; 0\)</span>)</p>
+<p><span class="math inline">\(b_\text{student} &lt; 0\)</span> → 학생 = 불이행 확률 <strong>낮음</strong> ✅</p>
 </div></div>
-<ul>
-<li><strong>교란변수(confounding)</strong>: 학생은 잔액이 높은 경향이 있어, 단변수 회귀에서 편향이 발생!</li>
-</ul>
+<p><strong>왜 방향이 바뀌었는가?</strong><br>
+학생은 잔액(<code>balance</code>)이 높은 경향 → 단변수 회귀에서 <code>balance</code> 효과가 <code>student</code>에 섞임<br>
+→ <code>balance</code>를 통제하면 진짜 <code>student</code> 효과가 드러남</p>
 </section>
-<section id="모형-적합도-혼동-행렬-confusion-matrix" class="slide level2">
-<h2>모형 적합도: 혼동 행렬 (Confusion Matrix)</h2>
-<ul>
-<li><p>로지스틱 회귀의 예측 성능을 평가하는 방법 중 하나: <strong>혼동 행렬(Confusion Matrix)</strong></p></li>
-<li><p>예측 확률 &gt; 0.5이면 <code>Yes</code>로 분류 (기본 임계값, threshold)</p></li>
-</ul>
+<section id="모형-적합도-①-혼동-행렬" class="slide level2">
+<h2>모형 적합도 ①: 혼동 행렬</h2>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a>pred_prob <span class="ot">&lt;-</span> <span class="fu">predict</span>(logit_multi, <span class="at">type =</span> <span class="st">"response"</span>)</span>
-<span id="cb14-2"><a href=""></a>pred_class <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(pred_prob <span class="sc">&gt;</span> <span class="fl">0.5</span>, <span class="st">"Yes"</span>, <span class="st">"No"</span>)</span>
-<span id="cb14-3"><a href=""></a><span class="fu">table</span>(<span class="at">Predicted =</span> pred_class, <span class="at">Actual =</span> Default<span class="sc">$</span>default)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a>pred_prob  <span class="ot">&lt;-</span> <span class="fu">predict</span>(logit_multi, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb23-2"><a href=""></a>pred_class <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(pred_prob <span class="sc">&gt;</span> <span class="fl">0.5</span>, <span class="st">"Yes"</span>, <span class="st">"No"</span>)</span>
+<span id="cb23-3"><a href=""></a>cm <span class="ot">&lt;-</span> <span class="fu">table</span>(<span class="at">Predicted =</span> pred_class, <span class="at">Actual =</span> Default<span class="sc">$</span>default)</span>
+<span id="cb23-4"><a href=""></a>cm</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>##          Actual
 ## Predicted   No  Yes
@@ -799,140 +774,483 @@ b_1 \xrightarrow{\exp} \text{OR} = e^{b_1} \xrightarrow{\text{기준 확률 필�
 ##       Yes   40  105</code></pre>
 </div>
 </div>
-<table class="caption-top">
+
+<img data-src="chapter_logistic_v2_files/figure-revealjs/unnamed-chunk-23-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="768"><table class="caption-top">
 <colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>지표</th>
-<th>설명</th>
+<th style="text-align: left;">지표</th>
+<th style="text-align: left;">계산</th>
+<th style="text-align: left;">의미</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>정확도(Accuracy)</strong></td>
-<td>전체 중 올바르게 분류된 비율</td>
+<td style="text-align: left;"><strong>정확도(Accuracy)</strong></td>
+<td style="text-align: left;">(TP+TN) / 전체</td>
+<td style="text-align: left;">전체 중 올바르게 분류된 비율</td>
 </tr>
 <tr class="even">
-<td><strong>민감도(Sensitivity)</strong></td>
-<td>실제 Yes 중 Yes로 분류된 비율 (True Positive Rate)</td>
+<td style="text-align: left;"><strong>민감도(Sensitivity)</strong></td>
+<td style="text-align: left;">TP / 실제 Yes</td>
+<td style="text-align: left;">실제 불이행자 중 잡아낸 비율</td>
 </tr>
 <tr class="odd">
-<td><strong>특이도(Specificity)</strong></td>
-<td>실제 No 중 No로 분류된 비율 (True Negative Rate)</td>
+<td style="text-align: left;"><strong>특이도(Specificity)</strong></td>
+<td style="text-align: left;">TN / 실제 No</td>
+<td style="text-align: left;">정상 고객을 정상으로 분류한 비율</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="모형-적합도-pseudo-r2" class="slide level2">
-<h2>모형 적합도: Pseudo <span class="math inline">\(R^2\)</span></h2>
+<section id="모형-적합도-②-pseudo-r2" class="slide level2">
+<h2>모형 적합도 ②: Pseudo <span class="math inline">\(R^2\)</span></h2>
+<p><strong>우도(Likelihood)</strong>: “이 모형이 맞다면, 관측된 데이터가 나올 확률”</p>
 <ul>
-<li><p>OLS의 <span class="math inline">\(R^2\)</span>는 로지스틱 회귀에 직접 적용되지 않음</p></li>
-<li><p><strong>McFadden’s Pseudo <span class="math inline">\(R^2\)</span></strong>: 로지스틱 회귀의 설명력 지표</p></li>
+<li>10명 중 3명이 불이행 → 그 3명에게 높은 확률, 7명에게 낮은 확률 예측할수록 우도 ↑</li>
+<li>로그 우도(log-likelihood)는 항상 <strong>음수</strong>, 0에 가까울수록 좋음</li>
 </ul>
-<p><span class="math display">\[
-R^2_{\text{McFadden}} = 1 - \frac{\log L(\hat{M})}{\log L(M_0)}
-\]</span></p>
-<ul>
-<li><span class="math inline">\(\log L(\hat{M})\)</span>: 추정 모형의 로그 우도(log-likelihood)</li>
-<li><span class="math inline">\(\log L(M_0)\)</span>: 절편만 있는 모형(귀무모형)의 로그 우도</li>
-<li>값이 <strong>0에 가까울수록</strong> 설명력 낮음, <strong>1에 가까울수록</strong> 높음 (통상 0.2~0.4이면 양호)</li>
-</ul>
+<p><strong>McFadden’s Pseudo <span class="math inline">\(R^2\)</span></strong>:</p>
+<p><span class="math display">\[R^2_{\text{McFadden}} = 1 - \frac{\log L(\hat{M})}{\log L(M_0)}\]</span></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">상황</th>
+<th style="text-align: center;"><span class="math inline">\(\log L(M_0)\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(\log L(\hat{M})\)</span></th>
+<th style="text-align: center;">비율</th>
+<th style="text-align: center;"><span class="math inline">\(R^2\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">개선 없음</td>
+<td style="text-align: center;">-100</td>
+<td style="text-align: center;">-100</td>
+<td style="text-align: center;">1.00</td>
+<td style="text-align: center;"><strong>0</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">절반 개선</td>
+<td style="text-align: center;">-100</td>
+<td style="text-align: center;">-50</td>
+<td style="text-align: center;">0.50</td>
+<td style="text-align: center;"><strong>0.5</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">완벽한 모형</td>
+<td style="text-align: center;">-100</td>
+<td style="text-align: center;">≈ 0</td>
+<td style="text-align: center;">≈ 0</td>
+<td style="text-align: center;"><strong>≈ 1</strong></td>
+</tr>
+</tbody>
+</table>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a><span class="co"># McFadden's R²</span></span>
-<span id="cb16-2"><a href=""></a>logit_null <span class="ot">&lt;-</span> <span class="fu">glm</span>(default <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> Default, <span class="at">family =</span> binomial)</span>
-<span id="cb16-3"><a href=""></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">logLik</span>(logit_multi) <span class="sc">/</span> <span class="fu">logLik</span>(logit_null)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>logit_null <span class="ot">&lt;-</span> <span class="fu">glm</span>(default <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> Default, <span class="at">family =</span> binomial)</span>
+<span id="cb25-2"><a href=""></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">logLik</span>(logit_multi) <span class="sc">/</span> <span class="fu">logLik</span>(logit_null)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>## 'log Lik.' 0.4619194 (df=4)</code></pre>
 </div>
 </div>
+<p>통상 <strong>0.2 ~ 0.4이면 양호</strong></p>
 </section>
-<section id="task-2" class="slide level2 scrollable" data-background-color="#ffebf0">
+<section id="task-2" class="slide level2" data-background-color="#ffebf0">
 <h2>Task 2</h2>
-<p><countdown-timer class="countdown" id="timer_b9c67a91" minutes="10" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
-<ol type="1">
-<li><code>balance</code>, <code>income</code>, <code>student</code>를 모두 포함한 다중 로지스틱 회귀 결과에서, 각 변수의 <strong>오즈비(Odds Ratio)</strong> 를 계산하고 해석하시오.</li>
-</ol>
-<ol start="2" type="1">
-<li>다음 두 고객의 <strong>채무 불이행 예측 확률</strong>을 구하시오:
-<ul>
-<li>고객 A: 학생, 잔액 1,500달러, 소득 40,000달러</li>
-<li>고객 B: 비학생, 잔액 1,500달러, 소득 40,000달러</li>
-</ul></li>
-</ol>
-<ol start="3" type="1">
-<li>혼동 행렬에서 <strong>정확도(Accuracy)</strong>, <strong>민감도(Sensitivity)</strong>, <strong>특이도(Specificity)</strong> 를 직접 계산하시오.</li>
-</ol>
+<p><countdown-timer class="countdown" id="timer_f973d84d" minutes="10" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
+<p><code>logit_multi</code> (balance + income + student 모형)를 사용하자.</p>
+<p><strong>Step 1.</strong> 오즈비와 95% CI 계산:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a><span class="fu">exp</span>(<span class="fu">coef</span>(logit_multi))       <span class="co"># 오즈비</span></span>
+<span id="cb27-2"><a href=""></a><span class="fu">exp</span>(<span class="fu">confint</span>(logit_multi))    <span class="co"># 95% CI</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>→ <code>balance</code> OR을 해석하시오. OR = 1보다 크면 어떤 의미인가?</p>
+<p><strong>Step 2.</strong> 다음 두 고객의 채무불이행 확률을 예측:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a>new_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb28-2"><a href=""></a>  <span class="at">student =</span> <span class="fu">c</span>(<span class="st">"Yes"</span>, <span class="st">"No"</span>),</span>
+<span id="cb28-3"><a href=""></a>  <span class="at">balance =</span> <span class="fu">c</span>(<span class="dv">1500</span>, <span class="dv">1500</span>),</span>
+<span id="cb28-4"><a href=""></a>  <span class="at">income  =</span> <span class="fu">c</span>(<span class="dv">40000</span>, <span class="dv">40000</span>)</span>
+<span id="cb28-5"><a href=""></a>)</span>
+<span id="cb28-6"><a href=""></a><span class="fu">predict</span>(logit_multi, <span class="at">newdata =</span> new_data, <span class="at">type =</span> <span class="st">"response"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>→ 학생과 비학생의 확률 차이는? 그 차이의 방향이 Task 1의 단변수 결과와 다른 이유는?</p>
+<p><strong>Step 3.</strong> AME 계산:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a><span class="fu">library</span>(margins)</span>
+<span id="cb29-2"><a href=""></a><span class="fu">summary</span>(<span class="fu">margins</span>(logit_multi))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>→ <code>balance</code>의 AME를 해석하시오. OR 해석과 어떻게 다른가?</p>
 </section>
 <section id="임계값threshold의-선택" class="slide level2">
 <h2>임계값(Threshold)의 선택</h2>
+<p>로지스틱 회귀는 확률을 예측함. <strong>Yes/No로 분류</strong>하려면 기준선(threshold)이 필요.</p>
+<p><strong>threshold를 바꾸면:</strong></p>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 40%">
+<col style="width: 22%">
+<col style="width: 37%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">threshold</th>
+<th style="text-align: left;">결과</th>
+<th style="text-align: left;">Trade-off</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><strong>낮게</strong> (예: 0.1)</td>
+<td style="text-align: left;">조금만 의심스러워도 Yes</td>
+<td style="text-align: left;">불이행자를 많이 잡지만, 정상 고객도 많이 오분류</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>높게</strong> (예: 0.9)</td>
+<td style="text-align: left;">거의 확실할 때만 Yes</td>
+<td style="text-align: left;">정상 고객 보호, 하지만 실제 불이행자를 많이 놓침</td>
+</tr>
+</tbody>
+</table>
+<p>→ <strong>민감도</strong> ↑ 이면 <strong>특이도</strong> ↓ (항상 trade-off)</p>
+<p><strong>실무 판단</strong>: 어떤 오류가 더 비용이 큰가?</p>
 <ul>
-<li><p>예측 확률이 threshold보다 크면 <span class="math inline">\(\hat{y} = 1\)</span> (Default = Yes)로 분류</p></li>
-<li><p>threshold를 바꾸면 민감도와 특이도가 <strong>서로 반비례</strong>로 변함:</p></li>
+<li>불이행자를 놓치는 것 (False Negative) vs.&nbsp;정상 고객을 의심하는 것 (False Positive)</li>
+<li>신용카드사 → False Negative 비용이 큼 → <strong>threshold를 낮게</strong> 설정</li>
+</ul>
+</section>
+<section id="roc-곡선" class="slide level2">
+<h2>ROC 곡선</h2>
+<p>Threshold 하나를 고르면 민감도와 특이도가 하나씩 결정됨.<br>
+ROC 곡선은 <strong>모든 threshold에서의 (민감도, 특이도) 쌍</strong>을 한 번에 시각화한 것.</p>
+<p><strong>이상적인 분류기의 두 가지 목표:</strong></p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">목표</th>
+<th style="text-align: left;">의미</th>
+<th style="text-align: center;">그래프 방향</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">민감도 = 1</td>
+<td style="text-align: left;">실제 불이행자를 <strong>하나도 놓치지 않음</strong></td>
+<td style="text-align: center;">y축 = 1 (위)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1-특이도 = 0</td>
+<td style="text-align: left;">정상 고객을 <strong>하나도 오분류하지 않음</strong></td>
+<td style="text-align: center;">x축 = 0 (왼쪽)</td>
+</tr>
+</tbody>
+</table>
+<p>→ 두 목표를 동시에 달성하는 점 = <strong>(0, 1) 왼쪽 위 꼭짓점</strong><br>
+→ 곡선이 왼쪽 위에 가까울수록 <strong>모든 threshold에서 성능이 좋은</strong> 모형</p>
+<div class="fragment">
+<p><strong>세 가지 극단적 상황:</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">상황</th>
+<th style="text-align: center;">ROC 위치</th>
+<th style="text-align: center;">AUC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">완벽한 모형</td>
+<td style="text-align: center;">왼쪽 위 꼭짓점 (0, 1)을 지남</td>
+<td style="text-align: center;"><strong>1.0</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">동전 던지기</td>
+<td style="text-align: center;">대각선 (점선) 위에 위치</td>
+<td style="text-align: center;"><strong>0.5</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">최악의 모형</td>
+<td style="text-align: center;">오른쪽 아래 (대각선 아래)</td>
+<td style="text-align: center;"><strong>&lt; 0.5</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="roc-곡선-threshold-이동의-효과" class="slide level2">
+<h2>ROC 곡선: threshold 이동의 효과</h2>
+<p><strong>threshold를 낮추면</strong> (예: 0.9 → 0.1):</p>
+<ul>
+<li>더 많은 고객을 Yes로 분류 → 민감도 ↑ (default를 더 많이 잡음)</li>
+<li>동시에 정상 고객도 더 많이 오분류 → 1-특이도 ↑ (x축 오른쪽으로 이동)</li>
 </ul>
 
-<img data-src="chapter_logistic_v2_files/figure-revealjs/unnamed-chunk-25-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="1056"><ul>
-<li><strong>AUC (Area Under the Curve)</strong>: 1에 가까울수록 좋은 분류 모형. 0.5는 무작위 분류와 동일.</li>
+<img data-src="chapter_logistic_v2_files/figure-revealjs/unnamed-chunk-28-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="1056"><ul>
+<li><strong>t = 1</strong> (왼쪽 아래): 모두 No → 불이행자를 하나도 못 잡음 (Sens = 0)</li>
+<li><strong>t = 0</strong> (오른쪽 위): 모두 Yes → 불이행자를 다 잡지만 정상 고객도 다 오분류 (1-Spec = 1)</li>
+<li><strong>threshold를 낮출수록</strong> 점이 오른쪽 위 방향으로 이동</li>
 </ul>
+</section>
+<section id="auc-직관적-이해" class="slide level2">
+<h2>AUC: 직관적 이해</h2>
+<p><strong>AUC가 의미하는 것</strong>: 모형이 두 사람을 올바르게 <strong>순위 매기는</strong> 능력</p>
+<blockquote>
+<p>불이행자 1명과 정상 고객 1명을 무작위로 뽑았을 때,<br>
+모형이 불이행자에게 <strong>더 높은 확률을 부여할 확률</strong></p>
+</blockquote>
+<div class="fragment">
+<p><strong>예시:</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: center;">상황</th>
+<th style="text-align: center;">불이행자 예측 확률</th>
+<th style="text-align: center;">정상 고객 예측 확률</th>
+<th style="text-align: center;">올바른 순위?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">✅ 좋은 예측</td>
+<td style="text-align: center;">0.82</td>
+<td style="text-align: center;">0.05</td>
+<td style="text-align: center;">Yes</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">✅ 좋은 예측</td>
+<td style="text-align: center;">0.45</td>
+<td style="text-align: center;">0.12</td>
+<td style="text-align: center;">Yes</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">❌ 나쁜 예측</td>
+<td style="text-align: center;">0.18</td>
+<td style="text-align: center;">0.67</td>
+<td style="text-align: center;">No</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="fragment">
+<p>이런 쌍을 <strong>여러번 반복</strong>해서 올바른 순위를 매긴 비율 = <strong>AUC</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: center;">AUC</th>
+<th style="text-align: left;">해석</th>
+<th style="text-align: left;">비유</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><strong>1.0</strong></td>
+<td style="text-align: left;">항상 올바르게 순위 매김</td>
+<td style="text-align: left;">완벽한 신용 심사관</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>0.95</strong></td>
+<td style="text-align: left;">95%의 쌍에서 올바르게 순위 매김</td>
+<td style="text-align: left;">매우 우수</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>0.70</strong></td>
+<td style="text-align: left;">70%의 쌍에서 올바르게 순위 매김</td>
+<td style="text-align: left;">양호</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>0.50</strong></td>
+<td style="text-align: left;">50% — 동전 던지기와 동일</td>
+<td style="text-align: left;">쓸모없는 모형</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="auc-예시" class="slide level2">
+<h2>AUC: 예시</h2>
+<p><strong>설정</strong>: 모형이 각 고객에게 채무불이행 예측 확률을 부여함</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<table class="table caption-top" style="font-size: 22px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Customer</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Predicted Prob</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Actual Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left; background-color: rgba(255, 240, 240, 255) !important;">A (Defaulter)</td>
+<td style="text-align: center; background-color: rgba(255, 240, 240, 255) !important;">0.82</td>
+<td style="text-align: center; background-color: rgba(255, 240, 240, 255) !important;">Yes</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; background-color: rgba(255, 240, 240, 255) !important;">B (Defaulter)</td>
+<td style="text-align: center; background-color: rgba(255, 240, 240, 255) !important;">0.45</td>
+<td style="text-align: center; background-color: rgba(255, 240, 240, 255) !important;">Yes</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; background-color: rgba(240, 240, 255, 255) !important;">C (Normal)</td>
+<td style="text-align: center; background-color: rgba(240, 240, 255, 255) !important;">0.12</td>
+<td style="text-align: center; background-color: rgba(240, 240, 255, 255) !important;">No</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; background-color: rgba(240, 240, 255, 255) !important;">D (Normal)</td>
+<td style="text-align: center; background-color: rgba(240, 240, 255, 255) !important;">0.05</td>
+<td style="text-align: center; background-color: rgba(240, 240, 255, 255) !important;">No</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><strong>AUC 계산</strong>: 불이행자(A, B) vs.&nbsp;정상 고객(C, D) 가능한 쌍 4개를 비교</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: center;">비교 쌍</th>
+<th style="text-align: center;">불이행자 확률</th>
+<th style="text-align: center;">정상 고객 확률</th>
+<th style="text-align: center;">올바른 순위?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">A vs.&nbsp;C</td>
+<td style="text-align: center;">0.82</td>
+<td style="text-align: center;">0.12</td>
+<td style="text-align: center;">✅ Yes</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">A vs.&nbsp;D</td>
+<td style="text-align: center;">0.82</td>
+<td style="text-align: center;">0.05</td>
+<td style="text-align: center;">✅ Yes</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">B vs.&nbsp;C</td>
+<td style="text-align: center;">0.45</td>
+<td style="text-align: center;">0.12</td>
+<td style="text-align: center;">✅ Yes</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">B vs.&nbsp;D</td>
+<td style="text-align: center;">0.45</td>
+<td style="text-align: center;">0.05</td>
+<td style="text-align: center;">✅ Yes</td>
+</tr>
+</tbody>
+</table>
+<p><strong>AUC = 4/4 = 1.0</strong> → 이 예시에서 완벽한 순위 부여</p>
+<div class="fragment">
+<blockquote>
+<p>AUC = 0.95 → 임의의 (불이행자, 정상 고객) 쌍 100개 중<br>
+<strong>95개</strong>에서 불이행자에게 더 높은 확률을 부여함</p>
+</blockquote>
+</div>
+</section>
+<section id="auc-roc-곡선의-넓이" class="slide level2">
+<h2>AUC: ROC 곡선의 넓이</h2>
+
+<img data-src="chapter_logistic_v2_files/figure-revealjs/unnamed-chunk-30-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="1056"><ul>
+<li><strong>빨간 음영</strong> (곡선 위, 대각선 위): 무작위 분류 대비 <strong>모형의 추가 성능</strong></li>
+<li><strong>회색 음영</strong> (대각선 아래): 동전 던지기도 얻을 수 있는 영역 (AUC = 0.5)</li>
+<li><h2 id="전체-auc-빨간-회색-음영-합계">전체 AUC = 빨간 + 회색 음영 합계</h2></li>
+</ul>
+</section>
+<section id="task-3" class="slide level2" data-background-color="#ffebf0">
+<h2>Task 3</h2>
+<p><countdown-timer class="countdown" id="timer_e442c0b4" minutes="12" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
+<p>모형을 훈련/테스트 세트로 나눠 실제 예측 성능을 평가해보자.</p>
+<p><strong>Step 1.</strong> 7:3으로 분리 후 훈련 세트로 모형 추정:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb30-2"><a href=""></a>train_idx   <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(Default), <span class="at">size =</span> <span class="fl">0.7</span> <span class="sc">*</span> <span class="fu">nrow</span>(Default))</span>
+<span id="cb30-3"><a href=""></a>train_df    <span class="ot">&lt;-</span> Default[train_idx, ]</span>
+<span id="cb30-4"><a href=""></a>test_df     <span class="ot">&lt;-</span> Default[<span class="sc">-</span>train_idx, ]</span>
+<span id="cb30-5"><a href=""></a></span>
+<span id="cb30-6"><a href=""></a>logit_train <span class="ot">&lt;-</span> <span class="fu">glm</span>(default <span class="sc">~</span> balance <span class="sc">+</span> income <span class="sc">+</span> student,</span>
+<span id="cb30-7"><a href=""></a>                   <span class="at">data =</span> train_df, <span class="at">family =</span> binomial)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Step 2.</strong> 테스트 세트에서 혼동 행렬 계산:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a>pred_test   <span class="ot">&lt;-</span> <span class="fu">predict</span>(logit_train, <span class="at">newdata =</span> test_df, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb31-2"><a href=""></a>pred_class  <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(pred_test <span class="sc">&gt;</span> <span class="fl">0.5</span>, <span class="st">"Yes"</span>, <span class="st">"No"</span>)</span>
+<span id="cb31-3"><a href=""></a><span class="fu">table</span>(<span class="at">Predicted =</span> pred_class, <span class="at">Actual =</span> test_df<span class="sc">$</span>default)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>→ 테스트 세트의 정확도(Accuracy)를 계산하시오. 훈련 세트와 크게 다른가?</p>
+<p><strong>Step 3 (Optional).</strong> ROC와 AUC 계산:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a><span class="fu">library</span>(pROC)</span>
+<span id="cb32-2"><a href=""></a>roc_test <span class="ot">&lt;-</span> <span class="fu">roc</span>(test_df<span class="sc">$</span>default, pred_test, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb32-3"><a href=""></a><span class="fu">plot</span>(roc_test, <span class="at">col =</span> <span class="st">"#d90502"</span>, <span class="at">lwd =</span> <span class="dv">2</span>,</span>
+<span id="cb32-4"><a href=""></a>     <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">"Test AUC ="</span>, <span class="fu">round</span>(<span class="fu">auc</span>(roc_test), <span class="dv">3</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>→ AUC가 0.5에 가까우면 어떤 의미인가?</p>
 </section>
 <section id="ols-vs.-로지스틱-회귀-정리" class="slide level2">
 <h2>OLS vs.&nbsp;로지스틱 회귀: 정리</h2>
 <table class="caption-top">
 <thead>
 <tr class="header">
-<th>구분</th>
-<th>OLS</th>
-<th>로지스틱 회귀</th>
+<th style="text-align: left;">구분</th>
+<th style="text-align: center;">OLS</th>
+<th style="text-align: center;">로지스틱 회귀</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>종속변수</td>
-<td>연속형</td>
-<td>이진형 (0/1)</td>
+<td style="text-align: left;">종속변수</td>
+<td style="text-align: center;">연속형</td>
+<td style="text-align: center;">이진형 (0/1)</td>
 </tr>
 <tr class="even">
-<td>추정 방법</td>
-<td>최소제곱법 (OLS)</td>
-<td>최대우도법 (MLE)</td>
+<td style="text-align: left;">추정 방법</td>
+<td style="text-align: center;">최소제곱법</td>
+<td style="text-align: center;">최대우도법 (MLE)</td>
 </tr>
 <tr class="odd">
-<td>예측값 범위</td>
-<td><span class="math inline">\((-\infty, +\infty)\)</span></td>
-<td><span class="math inline">\((0, 1)\)</span></td>
+<td style="text-align: left;">예측값 범위</td>
+<td style="text-align: center;"><span class="math inline">\((-\infty, +\infty)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\((0, 1)\)</span></td>
 </tr>
 <tr class="even">
-<td>계수 해석</td>
-<td><span class="math inline">\(y\)</span>의 변화량</td>
-<td>로그 오즈의 변화량</td>
+<td style="text-align: left;">계수 직접 해석</td>
+<td style="text-align: center;"><span class="math inline">\(y\)</span>의 변화량</td>
+<td style="text-align: center;">로그오즈의 변화량</td>
 </tr>
 <tr class="odd">
-<td>적합도 지표</td>
-<td><span class="math inline">\(R^2\)</span></td>
-<td>Pseudo <span class="math inline">\(R^2\)</span>, AUC</td>
+<td style="text-align: left;">확률 변화 해석</td>
+<td style="text-align: center;">계수 그대로</td>
+<td style="text-align: center;">한계 효과(ME) 별도 계산 필요</td>
 </tr>
 <tr class="even">
-<td>R 함수</td>
-<td><code>lm()</code></td>
-<td><code>glm(..., family = binomial)</code></td>
+<td style="text-align: left;">적합도 지표</td>
+<td style="text-align: center;"><span class="math inline">\(R^2\)</span></td>
+<td style="text-align: center;">Pseudo <span class="math inline">\(R^2\)</span>, AUC</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">R 함수</td>
+<td style="text-align: center;"><code>lm()</code></td>
+<td style="text-align: center;"><code>glm(..., family = binomial)</code></td>
 </tr>
 </tbody>
 </table>
-</section>
-<section id="task-3" class="slide level2 scrollable" data-background-color="#ffebf0">
-<h2>Task 3</h2>
-<p><countdown-timer class="countdown" id="timer_4146714b" minutes="12" seconds="0" update-every="1" tabindex="0" style="top:20px;right:10px;--countdown-font-size:0.8em;"></countdown-timer></p>
-<ol type="1">
-<li><code>Default</code> 데이터를 7:3 비율로 <strong>훈련(train)</strong> / <strong>테스트(test)</strong> 세트로 분리한 뒤, 훈련 세트로 다중 로지스틱 회귀를 추정하시오.</li>
-</ol>
-<ol start="2" type="1">
-<li>테스트 세트에서 예측 확률을 계산한 뒤, threshold = 0.5를 기준으로 혼동 행렬을 구하시오. 훈련 세트와 비교하여 <strong>과적합(overfitting)</strong> 여부를 판단하시오.</li>
-</ol>
-<ol start="3" type="1">
-<li>(Optional) <code>pROC</code> 패키지를 사용하여 테스트 세트의 <strong>ROC 곡선</strong>과 <strong>AUC</strong>를 계산하고 시각화하시오.</li>
-</ol>
+<div class="fragment">
+<blockquote>
+<p><strong>핵심 메시지</strong>: 로지스틱 회귀 계수는 <strong>로그오즈의 변화</strong>를 의미함.<br>
+확률 변화를 알고 싶으면 → <strong>한계 효과(AME)</strong> 를 계산할 것.</p>
+</blockquote>
+</div>
 </section>
 <section id="the-end" class="title-slide slide level1 center">
 <h1>THE END!</h1>

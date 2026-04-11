@@ -12,3 +12,5 @@ kableExtra
 countdown
 ISLR2
 pROC
+patchwork
+margins
