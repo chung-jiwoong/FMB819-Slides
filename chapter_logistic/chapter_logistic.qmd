@@ -11,7 +11,7 @@ format:
     chalkboard: true
     slide-number: true
 revealjs-plugins:
-  - revealjs-text-resizer # Thanks to https://github.com/gadenbuie/revealjs-text-resizer#readme
+  - revealjs-text-resizer
 ---
 
 ```{r setup, include=FALSE, warning=FALSE, message=FALSE}
@@ -27,9 +27,7 @@ knitr::opts_chunk$set(
 
 library("tidyverse")
 
-if (requireNamespace("kableExtra", quietly = TRUE)) {
-  library("kableExtra")
-}
+if (requireNamespace("kableExtra", quietly = TRUE)) library("kableExtra")
 
 if (requireNamespace("countdown", quietly = TRUE)) {
   library(countdown)
@@ -43,12 +41,9 @@ if (requireNamespace("countdown", quietly = TRUE)) {
     color_finished_border     = "#d90502"
   )
 } else {
-  countdown <- function(minutes = 0, top = 0, ...) {
-    paste0("[Timer: ", minutes, " min]")
-  }
+  countdown <- function(minutes = 0, top = 0, ...) paste0("[Timer: ", minutes, " min]")
 }
 
-# Load data
 if (!requireNamespace("ISLR2", quietly = TRUE)) install.packages("ISLR2")
 library(ISLR2)
 data(Default)
@@ -58,7 +53,7 @@ data(Default)
 
 -   ***로지스틱 회귀(Logistic Regression)*** 의 필요성과 직관적 이해
 
--   **오즈(Odds)** 와 **로그 오즈(Log-odds)** 개념 및 계수 해석
+-   **오즈(Odds)**, **오즈비(OR)**, **한계 효과(Marginal Effect)**: 계수 해석 방법
 
 -   실증 분석: 신용카드 채무 불이행(Default) 예측
 
@@ -70,23 +65,19 @@ data(Default)
 
 -   지금까지는 연속형 종속변수 $y$를 다루었음: 수익률, 매출, 가격 등
 
--   하지만 현실에서는 **이진(binary) 결과**에 관심을 갖는 경우가 많음:
+-   현실에서는 **Yes/No 이진 결과**에 관심을 갖는 경우가 많음:
 
     -   대출 채무 불이행 여부 (**default** vs. **non-default**)
     -   고객 이탈 여부 (**이탈** vs. **유지**)
     -   M&A 성사 여부 (**성공** vs. **실패**)
 
--   이처럼 $y_i \in \{0, 1\}$ 인 경우, OLS(선형 회귀)를 그대로 적용하면 문제가 생길 수 있음.
-
--   **로지스틱 회귀(Logistic Regression)** 는 이러한 이진 결과를 모형화하기 위해 고안된 방법임.
+-   $y_i \in \{0, 1\}$ 인 경우, OLS를 그대로 쓰면 문제가 생김 → 왜?
 
 ------------------------------------------------------------------------
 
 ## 분석 예제: 신용카드 채무 불이행
 
--   `ISLR2` 패키지의 `Default` 데이터셋 사용
-
--   10,000명의 신용카드 고객에 대한 데이터:
+-   `ISLR2` 패키지의 `Default` 데이터셋: 10,000명의 신용카드 고객
 
     | 변수      | 설명                            |
     |-----------|---------------------------------|
@@ -95,23 +86,14 @@ data(Default)
     | `balance` | 평균 신용카드 잔액 (달러)       |
     | `income`  | 연간 소득 (달러)                |
 
--   **신용카드 잔액(`balance`)과 소득(`income`)으로 채무 불이행을 예측할 수 있는가?**
-
-------------------------------------------------------------------------
-
-## 데이터 살펴보기
+-   **핵심 질문**: 신용카드 잔액(`balance`)으로 채무 불이행을 예측할 수 있는가?
 
 ```{r, echo=TRUE}
-library(ISLR2)
 data(Default)
-glimpse(Default)
-```
-
-```{r, echo=TRUE}
 Default |> count(default)
 ```
 
--   채무 불이행자(`Yes`)는 전체의 약 **3.3%**
+-   채무 불이행자(`Yes`)는 전체의 약 **3.3%** — 대부분은 정상 고객
 
 ------------------------------------------------------------------------
 
@@ -124,10 +106,8 @@ Default |>
   ggplot(aes(x = balance, y = income, color = default)) +
   geom_point(alpha = 0.4, size = 1.2) +
   scale_color_manual(values = c("No" = "gray70", "Yes" = "#d90502")) +
-  labs(title = "Default",
-       x = "Balance",
-       y = "Income",
-       color = "Default") +
+  labs(title = "Who defaults?",
+       x = "Balance ($)", y = "Income ($)", color = "Default") +
   theme_bw(base_size = 16) +
   theme(legend.position = "top")
 ```
@@ -139,80 +119,58 @@ Default |>
   ggplot(aes(x = default, y = balance, fill = default)) +
   geom_boxplot(alpha = 0.7) +
   scale_fill_manual(values = c("No" = "gray70", "Yes" = "#d90502")) +
-  labs(title = "Balance by Default",
-       x = "Default",
-       y = "Balance") +
+  labs(title = "Balance by Default status",
+       x = "Default", y = "Balance ($)") +
   theme_bw(base_size = 16) +
   theme(legend.position = "none")
 ```
 :::
 :::::
 
--   채무 불이행자는 **신용카드 잔액이 높은** 경향이 있음.
+-   채무 불이행자는 **잔액이 높은** 경향이 있음 → `balance`가 유용한 예측변수일 것
 
 ------------------------------------------------------------------------
 
-## 선형 확률 모형 (Linear Probability Model)
-
--   가장 단순한 접근: $y_i \in \{0, 1\}$ 에 **그냥 OLS를 적용**
-
-$$
-\text{Default}_i = b_0 + b_1 \cdot \text{balance}_i + e_i
-$$
+## OLS를 그대로 쓰면? (선형 확률 모형)
 
 ```{r, echo=FALSE, fig.height=4.5, fig.width=10}
 df <- Default |> mutate(default_num = as.integer(default == "Yes"))
 
-ggplot(df, aes(x = balance, y = default_num)) +
+p1 <- ggplot(df, aes(x = balance, y = default_num)) +
   geom_point(alpha = 0.08, color = "#d90502", size = 1.5) +
   geom_smooth(method = "lm", se = FALSE, color = "steelblue", linewidth = 1.2) +
-  labs(x = "Balance",
-       y = "Default (0/1)",
-       title = "OLS") +
-  theme_bw(base_size = 16)
+  geom_hline(yintercept = c(0, 1), linetype = "dashed", color = "gray40") +
+  annotate("text", x = 2700, y = -0.08, label = "Prob < 0!",
+           color = "#d90502", size = 4, fontface = "bold") +
+  labs(x = "Balance ($)", y = "Default (0 = No, 1 = Yes)",
+       title = "OLS: predictions can fall outside [0, 1]") +
+  theme_bw(base_size = 14)
+
+p2 <- ggplot(df, aes(x = balance, y = default_num)) +
+  geom_point(alpha = 0.08, color = "#d90502", size = 1.5) +
+  geom_smooth(method = "glm", method.args = list(family = "binomial"),
+              se = FALSE, color = "steelblue", linewidth = 1.2) +
+  geom_hline(yintercept = c(0, 1), linetype = "dashed", color = "gray40") +
+  labs(x = "Balance ($)", y = "Pr(Default = Yes)",
+       title = "Logistic: always between (0, 1)") +
+  theme_bw(base_size = 14)
+
+library(patchwork)
+p1 + p2
 ```
 
-------------------------------------------------------------------------
-
-## 선형 확률 모형의 문제점
-
-::::: columns
-::: {.column width="50%"}
-**문제 1: 확률이 \[0, 1\] 범위를 벗어남**
-
--   OLS는 예측값이 음수 혹은 1 초과가 될 수 있음
--   확률은 반드시 $[0, 1]$ 사이여야 함
-
-**문제 2: 분산이 이분산(heteroskedastic)**
-
--   $y_i \in \{0,1\}$이면 $\text{Var}(e_i) = p_i(1-p_i)$
--   $p_i$가 $x_i$에 따라 변하므로, 분산이 일정하지 않음
-:::
-
-::: {.column width="50%"}
-**우리에게 필요한 것:**
-
-$x$가 어떤 값을 갖더라도 항상 **\[0, 1\] 사이의 값**을 출력하는 함수
-
-$$
-\Pr(y_i = 1) = f(b_0 + b_1 x_i) \in [0,1]
-$$
-
-→ 이 역할을 하는 것이 **로지스틱(시그모이드) 함수**
-:::
-:::::
+-   **OLS 문제**: 잔액이 매우 낮으면 **확률이 음수**로 예측됨
+-   **해결책**: 어떤 $x$ 값에서도 항상 $(0,1)$ 사이 값을 출력하는 함수 필요
 
 ------------------------------------------------------------------------
 
-## 로지스틱 함수 (Logistic / Sigmoid Function)
+## 로지스틱 함수: S자 곡선
 
--   **로지스틱 함수**는 임의의 실수 $z$를 $(0, 1)$ 구간으로 변환:
+임의의 실수 $z$를 항상 $(0, 1)$ 사이로 압축하는 함수:
 
-$$
-\sigma(z) = \frac{e^z}{1 + e^z} = \frac{1}{1 + e^{-z}}
-$$
+$$\sigma(z) = \frac{e^z}{1 + e^z}$$
 
-```{r, echo=FALSE, fig.height=4.5, fig.width=10}
+```{r, echo=FALSE, fig.height=4, fig.width=10}
 tibble(z = seq(-6, 6, length.out = 300)) |>
   mutate(sigma = 1 / (1 + exp(-z))) |>
   ggplot(aes(x = z, y = sigma)) +
@@ -220,28 +178,27 @@ tibble(z = seq(-6, 6, length.out = 300)) |>
   geom_hline(yintercept = c(0, 1), linetype = "dashed", color = "gray50") +
   geom_hline(yintercept = 0.5, linetype = "dotted", color = "steelblue") +
   geom_vline(xintercept = 0, linetype = "dotted", color = "steelblue") +
-  labs(x = "z", y = "σ(z)", title = "Logistic (Sigmoid)") +
+  annotate("text", x = 4, y = 0.55, label = "z = 0 → σ = 0.5", 
+           color = "steelblue", size = 4) +
+  annotate("text", x = 4.5, y = 0.92, label = "z → +∞ → σ → 1", 
+           color = "gray40", size = 3.5) +
+  annotate("text", x = 4.5, y = 0.08, label = "z → -∞ → σ → 0", 
+           color = "gray40", size = 3.5) +
+  labs(x = "z (Linear Predictor)", y = "σ(z)", title = "Logistic (Sigmoid) Function") +
   scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1)) +
-  theme_bw(base_size = 16)
+  theme_bw(base_size = 14)
 ```
 
--   $z \to +\infty$이면 $\sigma(z) \to 1$, $z \to -\infty$이면 $\sigma(z) \to 0$
+**직관**: 선형 예측자 $z = b_0 + b_1 x$가 아무리 크거나 작아도,  
+로지스틱 함수를 거치면 **반드시 0과 1 사이**로 나옴
 
 ------------------------------------------------------------------------
 
 ## 로지스틱 회귀 모형
 
--   선형 예측(linear predictor) $z_i = b_0 + b_1 x_i$를 로지스틱 함수에 통과:
+선형 예측자 $z_i = b_0 + b_1 x_i$를 로지스틱 함수에 통과:
 
-$$
-\Pr(y_i = 1 \mid x_i) = \frac{e^{b_0 + b_1 x_i}}{1 + e^{b_0 + b_1 x_i}}
-$$
-
--   채무 불이행 예제에 적용:
-
-$$
-\Pr(\text{default}_i = 1) = \frac{e^{b_0 + b_1 \cdot \text{balance}_i}}{1 + e^{b_0 + b_1 \cdot \text{balance}_i}}
-$$
+$$\Pr(\text{default}_i = 1 \mid \text{balance}_i) = \frac{e^{b_0 + b_1 \cdot \text{balance}_i}}{1 + e^{b_0 + b_1 \cdot \text{balance}_i}}$$
 
 ```{r, echo=FALSE, fig.height=3.5, fig.width=10}
 df <- Default |> mutate(default_num = as.integer(default == "Yes"))
@@ -250,270 +207,256 @@ ggplot(df, aes(x = balance, y = default_num)) +
   geom_point(alpha = 0.08, color = "#d90502", size = 1.5) +
   geom_smooth(method = "glm", method.args = list(family = "binomial"),
               se = TRUE, color = "steelblue", linewidth = 1.2) +
-  labs(x = "Balance)",
-       y = "Pr(default = 1)",
-       title = "Logistic Regression") +
-  theme_bw(base_size = 16)
+  labs(x = "Balance ($)", y = "Pr(Default = Yes)",
+       title = "Logistic Regression: S-curve fits the data well") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  theme_bw(base_size = 14)
 ```
 
-------------------------------------------------------------------------
-
-## 계수의 해석
-
--   Balance 가 1000달러라면?
-
-$$
-\Pr(\text{default}_i = 1) = \frac{e^{b_0 + b_1 \cdot \text{balance}_i}}{1 + e^{b_0 + b_1 \cdot \text{balance}_i}}
-$$ 
-
-$$
-p_0 = \frac{e^{b_0 + b_1 \cdot (1,000)}}{1 + e^{b_0 + b_1 \cdot (1,000)}}
-$$
-$$
-\frac{p_0}{1-p_0} = e^{b_0 + b_1 \cdot (1,000)}
-$$
-
-$$
-\log \left(\frac{p_0}{1-p_0} \right) = b_0 + b_1 \cdot (1,000)
-$$
-
-
-------------------------------------------------------------------------
-
-## 계수의 해석
-
--   Balance 가 1001달러라면?
-
-$$
-\Pr(\text{default}_i = 1) = \frac{e^{b_0 + b_1 \cdot \text{balance}_i}}{1 + e^{b_0 + b_1 \cdot \text{balance}_i}}
-$$ 
-
-$$
-p_1 = \frac{e^{b_0 + b_1 \cdot (1,001)}}{1 + e^{b_0 + b_1 \cdot (1,001)}}
-$$
-$$
-\frac{p_1}{1-p_1} = e^{b_0 + b_1 \cdot (1,001)}
-$$
-
-$$
-\log \left(\frac{p_1}{1-p_1} \right) = b_0 + b_1 \cdot (1,001)
-$$
-
-
-
-------------------------------------------------------------------------
-
-## 계수의 해석
-
--   Balance 가 1000달러에서 1001달러로 증가하면? 
-
-$$
-\log \left(\frac{p}{1-p} \right) \text{이} \;\; b_1 \;\;\text{만큼 증가}.
-$$ 
-
-$$
-\log \left(\frac{p_1}{1-p_1} \right) - \log \left(\frac{p_0}{1-p_0} \right) =b_1
-$$ 
-$$
-\log \frac{ \left(\frac{p_1}{1-p_1} \right)}{ \left(\frac{p_0}{1-p_0} \right)} =b_1
-$$ 
-$$
- \frac{ \left(\frac{p_1}{1-p_1} \right)}{ \left(\frac{p_0}{1-p_0} \right)} = e^{b_1}
-$$ 
+-   잔액이 낮으면 불이행 확률 ≈ 0%, 높으면 ≈ 100%
+-   중간 구간에서 확률이 **S자 형태**로 가파르게 증가
 
 ------------------------------------------------------------------------
 
 ## 오즈(Odds)
 
--   **오즈(Odds)**: 사건이 일어날 확률 vs. 일어나지 않을 확률의 **비율**
+**오즈(Odds)**: 사건이 일어날 확률 vs. 일어나지 않을 확률의 비율
 
-$$
-\text{Odds} = \frac{p}{1-p}
-$$
+$$\text{Odds} = \frac{p}{1-p}$$
 
--   스포츠 베팅에서 익숙한 개념: "이길 확률이 75%"라면 오즈 = 3 (3:1)
+| 확률 $p$ | 오즈 | 직관적 표현 |
+|:--------:|:----:|:------------|
+| 0.10 | 0.11 | 9번 중 1번 성공 |
+| 0.50 | 1.00 | 반반 |
+| 0.75 | 3.00 | 3:1 (이길 가능성이 질 가능성의 3배) |
+| 0.90 | 9.00 | 9:1 |
 
-| 확률 $p$ | 오즈 $\frac{p}{1-p}$ | 직관적 표현               |
-|:--------:|:--------------------:|:--------------------------|
-|   0.10   |        0.111         | 10번 중 1번 성공          |
-|   0.50   |        1.000         | 반반                      |
-|   0.75   |        3.000         | 4번 중 3번 성공, 1번 실패 |
-|   0.90   |        9.000         | 10번 중 9번 성공          |
+-   **역변환**: 오즈 → 확률: $\quad p = \dfrac{\text{Odds}}{1 + \text{Odds}}$
+
+-   예: 오즈 = 3 → $p = \frac{3}{4} = 0.75$
 
 . . .
 
--   **역변환**: 오즈 → 확률
-
-$$
-p = \frac{\text{Odds}}{1 + \text{Odds}}
-$$
-
--   예: 오즈 = 3 → $p = \frac{3}{1+3} = 0.75$
+**왜 오즈를 쓰는가?** 확률은 0\~1로 제한되지만,  
+오즈는 0\~∞ → 로그 오즈는 -∞\~+∞ → **선형 모형에 적합**
 
 ------------------------------------------------------------------------
 
-## 로그 오즈(Log-Odds)
+## 로그 오즈와 로지스틱 회귀의 연결
 
--   오즈는 항상 양수(0 \~ ∞). 로그를 취하면 → **로그 오즈(log-odds, logit)**: $(-\infty, +\infty)$
+$$\underbrace{p}_{\text{확률 }(0,1)} \xrightarrow{\div(1-p)} \underbrace{\frac{p}{1-p}}_{\text{오즈 }(0,\infty)} \xrightarrow{\log} \underbrace{\log\frac{p}{1-p}}_{\text{로그오즈 }(-\infty,+\infty)}$$
 
-$$
-\text{log-odds} = \log\left(\frac{p}{1-p}\right)
-$$
+로지스틱 회귀는 **로그 오즈**를 선형 함수로 모형화:
 
--   로지스틱 회귀는 이 **로그 오즈를 선형 함수로 모형화**:
+$$\log\left(\frac{p_i}{1-p_i}\right) = b_0 + b_1 x_i$$
 
-$$
-\underbrace{\log\left(\frac{p_i}{1-p_i}\right)}_{\text{log-odds}} = b_0 + b_1 x_i
-$$
+양변을 $p_i$에 대해 풀면 → 로지스틱 함수가 자연스럽게 등장:
 
--   양변을 $p$에 대해 풀면 → 로지스틱 함수:
+$$p_i = \frac{e^{b_0 + b_1 x_i}}{1 + e^{b_0 + b_1 x_i}}$$
 
-$$
-p_i = \frac{e^{b_0 + b_1 x_i}}{1 + e^{b_0 + b_1 x_i}}
-$$
-
-**세 가지 스케일의 관계:**
-
-$$
-\underbrace{p}_{\text{확률 (0~1)}} \longleftrightarrow \underbrace{\frac{p}{1-p}}_{\text{오즈 (0~∞)}} \longleftrightarrow \underbrace{\log\frac{p}{1-p}}_{\text{로그오즈 (-∞~+∞)}}
-$$
-
-------------------------------------------------------------------------
-
-## 오즈비(Odds Ratio)
-
--   **오즈비(OR)**: $x$가 1단위 증가했을 때 오즈의 **배율 변화**
-
-$$
-\text{OR} = \frac{\text{Odds}(x+1)}{\text{Odds}(x)} = \frac{ \left(\frac{p_1}{1-p_1} \right)}{ \left(\frac{p_0}{1-p_0} \right)}= e^{b_1}
-$$
-**해석:**
-
-|   OR 값   | 의미                                 |
-|:---------:|:-------------------------------------|
-|  OR = 1   | $x$와 무관 ($b_1 = 0$)               |
-|  OR = 2   | $x$ 1단위 증가 → 오즈가 **2배**      |
-| OR = 0.5  | $x$ 1단위 증가 → 오즈가 **절반**     |
-| OR = 1.10 | $x$ 1단위 증가 → 오즈가 **10% 증가** |
-
-. . .
-
-> ⚠️ OR은 확률의 변화가 아니라 **오즈의 배율** 변화임에 주의!
-
-------------------------------------------------------------------------
-
-## 계수 해석: 3단계로 이해하기
-
-로지스틱 회귀 계수 $b_1$은 직접 "확률 변화"를 의미하지 않음.\
-**3단계를 거쳐야** 최종 확률 변화를 알 수 있음.
-
-. . .
-
-**구체적인 예시**: $b_1 = 0.7$ 이라면?
-
-| 단계 | 계산 | 의미 |
-|:----------------------:|:-----------------------|:-----------------------|
-| **Step 1** 방향 파악 | $b_1 = 0.7 > 0$ | $x$ 증가 → 확률 **증가** |
-| **Step 2** 오즈비 계산 | $\text{OR} = e^{0.7} \approx 2.0$ | $x$ 1단위 증가 → 오즈가 **2배** |
-| **Step 3** 확률 변화 계산 | 기준 확률에 따라 다름 | 아래 참조 ↓ |
-
-. . .
-
-**기준 확률(baseline probability)** $p_0$: $x$가 변하기 **전**, 현재 고객의 채무 불이행 확률.\
-예) 잔액 1,000달러 고객의 불이행 확률이 3% → $p_0 = 0.03$
-
-**어디서 출발하느냐**에 따라 확률 변화폭이 달라짐.
-
-. . .
-
-**Step 3**: 기준 확률 $p_0$에서 $x$가 1 증가하면
-
-$$p_1 = \frac{\text{OR} \times p_0}{1 - p_0 + \text{OR} \times p_0}$$
-
-| 기준 확률 $p_0$ |          OR = 2 적용 후 $p_1$           | 변화 $\Delta p$ |
-|:---------------:|:---------------------------------------:|:---------------:|
-|       10%       | $\frac{2 \times 0.1}{0.9 + 0.2} = 18\%$ |    **+8%p**     |
-|       50%       | $\frac{2 \times 0.5}{0.5 + 1.0} = 67\%$ |    **+17%p**    |
-|       90%       | $\frac{2 \times 0.9}{0.1 + 1.8} = 95\%$ |    **+5%p**     |
-
-> OR은 같아도 **기준 확률에 따라 실제 확률 변화폭이 다름!**
-
+> 즉, 로지스틱 회귀 = "**로그 오즈를 $x$로 예측하는 선형 모형**"
 
 ------------------------------------------------------------------------
 
 ## R에서 로지스틱 회귀: `glm()`
 
--   로지스틱 회귀는 `glm()` 함수로 추정 (`lm()` 대신)
-
 ```{r, echo=TRUE, eval=FALSE}
-glm(formula = 종속변수 ~ 독립변수, data = 데이터, family = binomial)
+# lm() 대신 glm()을 사용, family = binomial 지정
+glm(종속변수 ~ 독립변수, data = 데이터, family = binomial)
 ```
 
--   `family = binomial`: 이진 종속변수를 위한 로지스틱 회귀 지정
-
-***채무 불이행 예제:***
+-   `family = binomial`: 종속변수가 이진형임을 지정 → 자동으로 **logit 링크** 사용
 
 ```{r, echo=TRUE}
 logit_fit <- glm(default ~ balance, data = Default, family = binomial)
-summary(logit_fit)
+broom::tidy(logit_fit)
+```
+
+**계수 읽기:**
+
+-   `(Intercept)` = $b_0 = -10.65$: balance = 0일 때 로그오즈
+-   `balance` = $b_1 = 0.0055$: balance가 $1 증가할 때 로그오즈 변화
+
+------------------------------------------------------------------------
+
+## 계수 해석 방법 1: 로그오즈
+
+> $b_1 = 0.0055$: balance가 **\$1 증가**할 때, 채무불이행 **로그오즈가 0.0055 증가**
+
+-   $b_1 > 0$ → balance ↑ 이면 불이행 확률 ↑ (방향 파악)
+-   로그오즈는 직관적이지 않음 → **오즈비**로 변환하면 더 이해하기 쉬움
+
+------------------------------------------------------------------------
+
+## 계수 해석 방법 2: 오즈비 (OR)
+
+**오즈비(OR)**: $x$가 1단위 증가할 때 오즈의 **배율 변화**
+
+$$\text{OR} = e^{b_1}$$
+
+**왜 $e^{b_1}$인가?**
+
+$$\log\text{Odds}(x+1) - \log\text{Odds}(x) = b_1 \quad\Rightarrow\quad \frac{\text{Odds}(x+1)}{\text{Odds}(x)} = e^{b_1}$$
+
+```{r, echo=TRUE}
+exp(coef(logit_fit))          # OR
+exp(confint(logit_fit))       # 95% CI for OR
+```
+
+**해석**: $\text{OR} = e^{0.0055} \approx 1.0055$  
+→ balance \$1 증가 시 채무불이행 오즈가 **0.55% 증가**  
+→ balance **\$1,000** 증가 시: $e^{0.0055 \times 1000} \approx 241$ → 오즈가 **241배** 증가
+
+> ⚠️ OR은 **오즈의 배율**이지, **확률의 변화**가 아님
+
+------------------------------------------------------------------------
+
+## 계수 해석 방법 3: 한계 효과 (Marginal Effect)
+
+**한계 효과(Marginal Effect)**: $x$가 1단위 증가할 때 **확률의 변화량** ($\Delta p$)
+
+$$\frac{\partial p}{\partial x} = b_1 \cdot p(1-p)$$
+
+-   OLS의 계수 해석과 가장 유사
+-   $p(1-p)$가 곱해지므로 → **기준 확률($p_0$)에 따라 값이 달라짐**
+
+**두 가지 방법:**
+
+| 방법 | 설명 | 언제 사용 |
+|:-----|:-----|:---------|
+| **AME** (Average Marginal Effect) | 모든 관측치에서 ME 계산 후 평균 | 전체 평균 효과를 보고 싶을 때 |
+| **MEM** (Marginal Effect at Mean) | 평균값($\bar{x}$)에서 ME 계산 | 대표적인 고객에서의 효과 |
+
+------------------------------------------------------------------------
+
+## 한계 효과: R로 계산하기
+
+**방법 1: `margins` 패키지 (AME)**
+
+```{r, echo=TRUE}
+if (!requireNamespace("margins", quietly = TRUE)) install.packages("margins")
+library(margins)
+
+# Average Marginal Effect
+ame <- margins(logit_fit)
+summary(ame)
+```
+
+→ balance \$1 증가 시 채무불이행 확률이 평균적으로 약 **0.012%p 증가**
+
+------------------------------------------------------------------------
+
+## 한계 효과: R로 계산하기 (계속)
+
+**방법 2: 직접 계산 (수식 이용)**
+
+$$\text{ME} = b_1 \times \hat{p} \times (1 - \hat{p})$$
+
+```{r, echo=TRUE}
+b1    <- coef(logit_fit)["balance"]
+
+# MEM: 평균 잔액에서의 한계 효과
+p_mean <- predict(logit_fit,
+                  newdata = data.frame(balance = mean(Default$balance)),
+                  type = "response")
+ME_mean <- b1 * p_mean * (1 - p_mean)
+cat("MEM:", round(ME_mean * 100, 4), "%p per $1 increase in balance\n")
+
+# AME: 각 관측치에서 계산 후 평균
+p_all <- predict(logit_fit, type = "response")
+ME_all <- b1 * p_all * (1 - p_all)
+cat("AME:", round(mean(ME_all) * 100, 4), "%p per $1 increase in balance\n")
 ```
 
 ------------------------------------------------------------------------
 
-## 추정 결과 해석
+## 한계 효과: 기준 확률에 따라 달라진다
+
+```{r, echo=FALSE, fig.height=4.5, fig.width=10}
+b1_val <- coef(logit_fit)["balance"]
+tibble(p0 = seq(0.001, 0.999, by = 0.001)) |>
+  mutate(ME = b1_val * p0 * (1 - p0)) |>
+  ggplot(aes(x = p0, y = ME * 100)) +
+  geom_line(color = "#d90502", linewidth = 1.5) +
+  geom_vline(xintercept = mean(predict(logit_fit, type = "response")),
+             linetype = "dashed", color = "steelblue") +
+  annotate("text",
+           x = mean(predict(logit_fit, type = "response")) + 0.05,
+           y = 0.08,
+           label = paste0("Sample avg p\n= ",
+                          round(mean(predict(logit_fit, type="response"))*100, 1), "%"),
+           color = "steelblue", size = 3.8, hjust = 0) +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(x = "Baseline probability p0",
+       y = "Marginal Effect (%p per $1)",
+       title = "Marginal Effect of balance: varies with baseline probability",
+       subtitle = "ME is largest when p0 = 50%, smallest near 0% or 100%") +
+  theme_bw(base_size = 14)
+```
+
+-   ME는 $p_0 = 0.5$에서 최대, 양 극단에서 0에 수렴
+-   표본 평균 불이행률(≈3.3%)에서 ME가 매우 작음 → **AME가 작게 나오는 이유**
+
+------------------------------------------------------------------------
+
+## 세 가지 해석 방법 비교
+
+| 방법 | 계산 | 해석 | 특징 |
+|:-----|:-----|:-----|:-----|
+| **로그오즈** | $b_1$ | balance $1 증가 → 로그오즈 0.0055 증가 | 직관적이지 않음 |
+| **오즈비(OR)** | $e^{b_1}$ | balance $1 증가 → 오즈 1.0055배 | 배율로 표현, 기준 확률 불필요 |
+| **한계 효과(ME)** | $b_1 \cdot p(1-p)$ | balance $1 증가 → 확률 0.012%p 증가 | OLS와 유사, 기준 확률 필요 |
+
+
+------------------------------------------------------------------------
+
+## 추정 결과 해석: 3단계 적용
 
 ```{r, echo=FALSE}
 logit_fit <- glm(default ~ balance, data = Default, family = binomial)
 coef_df <- broom::tidy(logit_fit)
 knitr::kable(coef_df, digits = 5) |>
-  kableExtra::kable_styling(bootstrap_options = "striped", font_size = 20)
+  kableExtra::kable_styling(bootstrap_options = "striped", font_size = 18)
 ```
 
-**계수 해석:**
+**`balance` 계수 ($\hat{b}_1 \approx 0.00550$) 3단계 해석:**
 
--   $\hat{b}_1 \approx 0.00550$: `balance`가 \$1 증가할 때, 채무 불이행의 로그 오즈가 0.00550 증가
+**Step 1 — 방향**: $b_1 > 0$ → balance 증가 → 채무불이행 확률 **증가**
 
--   **오즈비**: $e^{0.00550} \approx 1.0055$ → `balance` \$1 증가 시, 채무 불이행 오즈가 약 **0.55% 증가**
+**Step 2 — 오즈비**: $\text{OR} = e^{0.00550} \approx 1.0055$ → \$1 증가마다 오즈 **0.55% 증가**
 
--   `balance`가 **1,000달러 증가**하면: $e^{0.00550 \times 1000} \approx 241$ → 오즈가 약 **241배** 증가!
+**Step 3 — 한계 효과 (AME)**: `margins(logit_fit)` → balance \$1 증가 시 확률 약 **0.012%p 증가**  
+($1,000 증가 시 → 약 **+12%p**, 단 기준 확률에 따라 달라짐)
 
 ------------------------------------------------------------------------
 
 ## 예측 확률 계산
 
--   `predict()` 함수로 예측값을 구할 수 있음
--   `type = "response"`: 확률 스케일로 예측 (기본은 로그 오즈 스케일)
+-   `predict(..., type = "response")`: 확률 스케일로 예측
 
 ```{r, echo=TRUE}
-# 신용카드 잔액이 1000달러일 때 채무 불이행 확률
-predict(logit_fit, newdata = data.frame(balance = 1000), type = "response")
-
-# 신용카드 잔액이 2000달러일 때 채무 불이행 확률
-predict(logit_fit, newdata = data.frame(balance = 2000), type = "response")
+# balance = $1,000 vs $2,000
+predict(logit_fit,
+        newdata = data.frame(balance = c(1000, 2000)),
+        type = "response")
 ```
 
--   잔액이 두 배가 된다고 해서 확률이 단순히 두 배 되지 않음 → **비선형(non-linear) 관계**
+-   **잔액이 두 배**라고 확률이 두 배가 되지 않음 → **비선형**
 
-------------------------------------------------------------------------
-
-## 예측 확률: 시각화
-
-```{r, echo=FALSE, fig.height=5, fig.width=11}
+```{r, echo=FALSE, fig.height=3.5, fig.width=10}
 pred_df <- tibble(balance = seq(0, 3000, by = 10)) |>
   mutate(prob = predict(logit_fit, newdata = pick(everything()), type = "response"))
 
 ggplot(pred_df, aes(x = balance, y = prob)) +
   geom_line(color = "#d90502", linewidth = 1.5) +
   geom_hline(yintercept = 0.5, linetype = "dashed", color = "gray40") +
-  annotate("text", x = 200, y = 0.52, label = "Threshold = 0.5", 
-           size = 5, color = "gray40") +
-  labs(x = "Balance)",
-       y = "Pr(default = Yes)") +
+  geom_vline(xintercept = c(1000, 2000), linetype = "dotted", color = "steelblue") +
+  annotate("text", x = 1000, y = 0.55, label = "$1,000\n≈5%", color="steelblue", size=3.5) +
+  annotate("text", x = 2000, y = 0.65, label = "$2,000\n≈59%", color="steelblue", size=3.5) +
+  labs(x = "Balance ($)", y = "Pr(Default = Yes)") +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-  theme_bw(base_size = 16)
+  theme_bw(base_size = 14)
 ```
-
--   잔액이 일정 수준을 넘으면 채무 불이행 확률이 **급격히** 상승
 
 ------------------------------------------------------------------------
 
@@ -521,50 +464,56 @@ ggplot(pred_df, aes(x = balance, y = prob)) +
 
 `r countdown(minutes = 8, top = "20px", right = "10px", font_size = "0.8em")`
 
-1.  `Default` 데이터에서 `default`를 이진 변수(0/1)로 변환한 뒤, `balance`에 대해 **OLS 회귀**와 **로지스틱 회귀**를 각각 추정하시오.
+아래 코드를 순서대로 실행하며 결과를 확인해보자.
+
+**Step 1.** OLS와 로지스틱 회귀를 각각 추정:
 
 ```{r, echo=TRUE, eval=FALSE}
 df <- Default |> mutate(default_num = as.integer(default == "Yes"))
-ols_fit  <- lm(default_num ~ balance, data = df)
+ols_fit   <- lm(default_num ~ balance, data = df)
 logit_fit <- glm(default ~ balance, data = Default, family = binomial)
 ```
 
-2.  `balance = 500`, `balance = 2500`에서 두 모형의 **예측값**을 비교하시오. OLS와 로지스틱 회귀 결과가 어떻게 다른가? 왜 그런가?
+**Step 2.** balance = \$500과 \$2,500에서 두 모형의 예측값을 비교:
 
 ```{r, echo=TRUE, eval=FALSE}
 predict(ols_fit,   newdata = data.frame(balance = c(500, 2500)))
 predict(logit_fit, newdata = data.frame(balance = c(500, 2500)), type = "response")
 ```
 
-3.  `student` 변수(학생 여부)만을 독립변수로 한 로지스틱 회귀를 추정하시오. 계수를 해석하고, **오즈비(Odds Ratio)** 를 계산하시오.
+→ OLS 예측값이 이상한 이유는? 어떤 값이 나오는가?
+
+**Step 3.** `student` 변수만으로 로지스틱 회귀 추정 후 오즈비 계산:
 
 ```{r, echo=TRUE, eval=FALSE}
-logit_student <- glm(default ~ student, data = Default, family = binomial)
-summary(logit_student)
-exp(coef(logit_student))  # 오즈비
+logit_s <- glm(default ~ student, data = Default, family = binomial)
+broom::tidy(logit_s)       # 계수 확인
+exp(coef(logit_s))         # 오즈비: 학생이면 오즈가 몇 배?
 ```
+
+→ 학생이면 채무불이행 오즈가 몇 배 높은가? 계수의 부호는 무엇을 의미하는가?
 
 ------------------------------------------------------------------------
 
-## 다중 로지스틱 회귀 (Multiple Logistic Regression)
+## 다중 로지스틱 회귀
 
--   단순 로지스틱 회귀와 마찬가지로, **여러 개의 독립변수**를 포함할 수 있음:
+여러 독립변수를 동시에 포함:
 
-$$
-\log\left(\frac{p_i}{1-p_i}\right) = b_0 + b_1 x_{1i} + b_2 x_{2i} + \cdots + b_k x_{ki}
-$$
-
--   각 계수 $b_j$는 **다른 변수들을 통제한 후**, $x_j$가 1 단위 증가할 때 로그 오즈의 변화
+$$\log\left(\frac{p_i}{1-p_i}\right) = b_0 + b_1 \cdot \text{balance}_i + b_2 \cdot \text{income}_i + b_3 \cdot \text{student}_i$$
 
 ```{r, echo=TRUE}
 logit_multi <- glm(default ~ balance + income + student,
                    data = Default, family = binomial)
-summary(logit_multi)
+broom::tidy(logit_multi) |>
+  mutate(OR = exp(estimate)) |>
+  select(term, estimate, OR, p.value)
 ```
+
+-   각 계수: **다른 변수들을 통제한 후** 해당 변수의 로그오즈 변화
 
 ------------------------------------------------------------------------
 
-## 다중 로지스틱 회귀: OVB
+## 다중 회귀: 교란변수(OVB) 사례
 
 ::::: columns
 ::: {.column width="50%"}
@@ -578,7 +527,7 @@ broom::tidy(logit_s) |>
   kableExtra::kable_styling(font_size = 18)
 ```
 
-→ 학생일수록 채무 불이행 확률 **증가** ($b_1 > 0$)
+$b_\text{student} > 0$ → 학생 = 불이행 확률 **높음** ❓
 :::
 
 ::: {.column width="50%"}
@@ -591,75 +540,67 @@ broom::tidy(logit_multi) |>
   kableExtra::kable_styling(font_size = 18)
 ```
 
-→ `balance`, `income` 통제 후, 학생일수록 채무 불이행 확률 **감소** ($b_1 < 0$)
+$b_\text{student} < 0$ → 학생 = 불이행 확률 **낮음** ✅
 :::
 :::::
 
--   **누락변수**: 학생은 잔액이 높은 경향이 있어, 단변수 회귀에서 편향이 발생!
+**왜 방향이 바뀌었는가?**  
+학생은 잔액(`balance`)이 높은 경향 → 단변수 회귀에서 `balance` 효과가 `student`에 섞임  
+→ `balance`를 통제하면 진짜 `student` 효과가 드러남
 
 ------------------------------------------------------------------------
 
-## 모형 적합도: 혼동 행렬 (Confusion Matrix)
-
--   로지스틱 회귀의 예측 성능을 평가하는 방법 중 하나: **혼동 행렬(Confusion Matrix)**
-
--   예측 확률 \> 0.5이면 `Yes`로 분류 (기본 임계값, threshold)
+## 모형 적합도 ①: 혼동 행렬
 
 ```{r, echo=TRUE}
-pred_prob <- predict(logit_multi, type = "response")
+pred_prob  <- predict(logit_multi, type = "response")
 pred_class <- ifelse(pred_prob > 0.5, "Yes", "No")
-table(Predicted = pred_class, Actual = Default$default)
+cm <- table(Predicted = pred_class, Actual = Default$default)
+cm
 ```
 
-| 지표 | 설명 |
-|------------------------------------|------------------------------------|
-| **정확도(Accuracy)** | 전체 중 올바르게 분류된 비율 |
-| **민감도(Sensitivity)** | 실제 Yes 중 Yes로 분류된 비율 (True Positive Rate) |
-| **특이도(Specificity)** | 실제 No 중 No로 분류된 비율 (True Negative Rate) |
+```{r, echo=FALSE, fig.height=3, fig.width=8}
+cm_df <- as.data.frame(cm)
+ggplot(cm_df, aes(x = Actual, y = Predicted, fill = Freq)) +
+  geom_tile(color = "white", linewidth = 1.5) +
+  geom_text(aes(label = Freq), size = 8, fontface = "bold") +
+  scale_fill_gradient(low = "white", high = "#d90502") +
+  labs(title = "Confusion Matrix (threshold = 0.5)") +
+  theme_bw(base_size = 14) +
+  theme(legend.position = "none")
+```
+
+| 지표 | 계산 | 의미 |
+|:-----|:-----|:-----|
+| **정확도(Accuracy)** | (TP+TN) / 전체 | 전체 중 올바르게 분류된 비율 |
+| **민감도(Sensitivity)** | TP / 실제 Yes | 실제 불이행자 중 잡아낸 비율 |
+| **특이도(Specificity)** | TN / 실제 No | 정상 고객을 정상으로 분류한 비율 |
 
 ------------------------------------------------------------------------
 
-## 모형 적합도: Pseudo $R^2$
+## 모형 적합도 ②: Pseudo $R^2$
 
--   OLS의 $R^2$는 로지스틱 회귀에 직접 적용되지 않음 — 잔차 제곱합 개념이 없기 때문
+**우도(Likelihood)**: "이 모형이 맞다면, 관측된 데이터가 나올 확률"
 
-**우도(Likelihood)란?**
+-   10명 중 3명이 불이행 → 그 3명에게 높은 확률, 7명에게 낮은 확률 예측할수록 우도 ↑
+-   로그 우도(log-likelihood)는 항상 **음수**, 0에 가까울수록 좋음
 
-> "이 모형이 맞다면, 실제로 관측된 데이터가 나올 확률"
+**McFadden's Pseudo $R^2$**:
 
--   예) 10명 중 3명이 채무 불이행 → 모형이 이 3명에게 높은 확률을, 나머지 7명에게 낮은 확률을 예측할수록 우도가 높음
--   우도가 높을수록 → 모형이 데이터를 잘 설명함
--   계산 편의상 로그를 취한 **로그 우도(log-likelihood)** 사용: 항상 **음수**, 0에 가까울수록 좋음
+$$R^2_{\text{McFadden}} = 1 - \frac{\log L(\hat{M})}{\log L(M_0)}$$
 
-. . .
-
-**McFadden's Pseudo** $R^2$: 귀무모형 대비 얼마나 우도가 개선되었는가?
-
-$$
-R^2_{\text{McFadden}} = 1 - \frac{\log L(\hat{M})}{\log L(M_0)}
-$$
-
--   $\log L(M_0)$: 절편만 있는 귀무모형 — "아무것도 모를 때"의 기준선
--   $\log L(\hat{M})$: 추정 모형 — 설명변수 추가로 항상 귀무모형보다 우도가 높음
-
-. . .
-
-**왜 추정 모형이 좋을수록** $R^2$가 커지는가?
-
-로그 우도는 항상 음수이므로, 모형이 좋을수록 $\log L(\hat{M})$이 **0에 가까워짐** (덜 음수).
-
-| 상황        | $\log L(M_0)$ | $\log L(\hat{M})$ | 비율 |  $R^2$  |
-|:------------|:-------------:|:-----------------:|:----:|:-------:|
-| 개선 없음   |     -100      |       -100        | 1.00 |  **0**  |
-| 절반 개선   |     -100      |        -50        | 0.50 | **0.5** |
-| 완벽한 모형 |     -100      |        ≈ 0        | ≈ 0  | **≈ 1** |
-
--   통상 **0.2 \~ 0.4이면 양호**한 모형으로 간주
+| 상황 | $\log L(M_0)$ | $\log L(\hat{M})$ | 비율 | $R^2$ |
+|:-----|:-------------:|:-----------------:|:----:|:-----:|
+| 개선 없음 | -100 | -100 | 1.00 | **0** |
+| 절반 개선 | -100 | -50 | 0.50 | **0.5** |
+| 완벽한 모형 | -100 | ≈ 0 | ≈ 0 | **≈ 1** |
 
 ```{r, echo=TRUE}
 logit_null <- glm(default ~ 1, data = Default, family = binomial)
 1 - logLik(logit_multi) / logLik(logit_null)
 ```
+
+통상 **0.2 ~ 0.4이면 양호**
 
 ------------------------------------------------------------------------
 
@@ -667,96 +608,251 @@ logit_null <- glm(default ~ 1, data = Default, family = binomial)
 
 `r countdown(minutes = 10, top = "20px", right = "10px", font_size = "0.8em")`
 
-1.  `balance`, `income`, `student`를 모두 포함한 다중 로지스틱 회귀 결과에서, 각 변수의 **오즈비(Odds Ratio)** 를 계산하고 해석하시오.
+`logit_multi` (balance + income + student 모형)를 사용하자.
+
+**Step 1.** 오즈비와 95% CI 계산:
 
 ```{r, echo=TRUE, eval=FALSE}
-exp(coef(logit_multi))
-exp(confint(logit_multi))  # 95% 신뢰구간
+exp(coef(logit_multi))       # 오즈비
+exp(confint(logit_multi))    # 95% CI
 ```
 
-2.  다음 두 고객의 **채무 불이행 예측 확률**을 구하시오:
-    -   고객 A: 학생, 잔액 1,500달러, 소득 40,000달러
-    -   고객 B: 비학생, 잔액 1,500달러, 소득 40,000달러
+→ `balance` OR을 해석하시오. OR = 1보다 크면 어떤 의미인가?
+
+**Step 2.** 다음 두 고객의 채무불이행 확률을 예측:
 
 ```{r, echo=TRUE, eval=FALSE}
-new_customers <- data.frame(
+new_data <- data.frame(
   student = c("Yes", "No"),
   balance = c(1500, 1500),
   income  = c(40000, 40000)
 )
-predict(logit_multi, newdata = new_customers, type = "response")
+predict(logit_multi, newdata = new_data, type = "response")
 ```
 
-3.  혼동 행렬에서 **정확도(Accuracy)**, **민감도(Sensitivity)**, **특이도(Specificity)** 를 직접 계산하시오.
+→ 학생과 비학생의 확률 차이는? 그 차이의 방향이 Task 1의 단변수 결과와 다른 이유는?
+
+**Step 3.** AME 계산:
 
 ```{r, echo=TRUE, eval=FALSE}
-pred_prob  <- predict(logit_multi, type = "response")
-pred_class <- ifelse(pred_prob > 0.5, "Yes", "No")
-cm <- table(Predicted = pred_class, Actual = Default$default)
-accuracy    <- sum(diag(cm)) / sum(cm)
-sensitivity <- cm["Yes", "Yes"] / sum(cm[, "Yes"])
-specificity <- cm["No",  "No"]  / sum(cm[, "No"])
-c(Accuracy = accuracy, Sensitivity = sensitivity, Specificity = specificity)
+library(margins)
+summary(margins(logit_multi))
 ```
+
+→ `balance`의 AME를 해석하시오. OR 해석과 어떻게 다른가?
 
 ------------------------------------------------------------------------
 
 ## 임계값(Threshold)의 선택
 
-로지스틱 회귀는 확률을 예측함. 이 확률을 Yes/No로 **분류**하려면 기준선(threshold)이 필요.
+로지스틱 회귀는 확률을 예측함. **Yes/No로 분류**하려면 기준선(threshold)이 필요.
 
-> "예측 확률 \> threshold 이면 Default = Yes로 분류"
+**threshold를 바꾸면:**
 
-. . .
+| threshold | 결과 | Trade-off |
+|:---------:|:-----|:---------|
+| **낮게** (예: 0.1) | 조금만 의심스러워도 Yes | 불이행자를 많이 잡지만, 정상 고객도 많이 오분류 |
+| **높게** (예: 0.9) | 거의 확실할 때만 Yes | 정상 고객 보호, 하지만 실제 불이행자를 많이 놓침 |
 
-**threshold를 바꾸면 어떤 일이 생기는가?**
+→ **민감도** ↑ 이면 **특이도** ↓ (항상 trade-off)
 
-| threshold | 결과 | 문제 |
-|:--------------------------------:|:------------------|:------------------|
-| 낮게 설정 (예: 0.1) | 조금만 의심스러워도 Yes → **채무불이행자를 많이 잡음** | 정상 고객도 Yes로 잘못 분류 |
-| 높게 설정 (예: 0.9) | 거의 확실할 때만 Yes → **정상 고객을 거의 안 건드림** | 실제 채무불이행자를 많이 놓침 |
+**실무 판단**: 어떤 오류가 더 비용이 큰가?
 
-→ **민감도(Sensitivity)** 와 **특이도(Specificity)** 는 항상 trade-off 관계
+-   불이행자를 놓치는 것 (False Negative) vs. 정상 고객을 의심하는 것 (False Positive)
+-   신용카드사 → False Negative 비용이 큼 → **threshold를 낮게** 설정
 
 ------------------------------------------------------------------------
 
 ## ROC 곡선
 
-**ROC 곡선**: threshold를 0 → 1로 움직이면서 민감도/특이도 변화를 추적한 곡선
+Threshold 하나를 고르면 민감도와 특이도가 하나씩 결정됨.  
+ROC 곡선은 **모든 threshold에서의 (민감도, 특이도) 쌍**을 한 번에 시각화한 것.
 
-```{r, echo=FALSE, fig.height=4.0, fig.width=11}
-library(pROC)
-roc_obj <- roc(Default$default, predict(logit_multi, type = "response"), quiet = TRUE)
+**이상적인 분류기의 두 가지 목표:**
 
-ggroc(roc_obj, color = "#d90502", linewidth = 1.3) +
-  geom_abline(slope = 1, intercept = 1, linetype = "dashed", color = "gray50") +
-  annotate("text", x = 0.3, y = 0.3,
-           label = paste0("AUC = ", round(auc(roc_obj), 3)),
-           size = 6, color = "steelblue") +
-  annotate("text", x = 0.7, y = 0.7,
-           label = "Random classifier\n(coin flip level)",
-           size = 4, color = "gray50", hjust = 0) +
-  labs(title = "ROC Curve",
-       x = "1 - Specificity (lower is better)",
-       y = "Sensitivity (higher is better)") +
-  theme_bw(base_size = 14)
-```
+| 목표 | 의미 | 그래프 방향 |
+|:-----|:-----|:----------:|
+| 민감도 = 1 | 실제 불이행자를 **하나도 놓치지 않음** | y축 = 1 (위) |
+| 1-특이도 = 0 | 정상 고객을 **하나도 오분류하지 않음** | x축 = 0 (왼쪽) |
 
--   곡선이 **왼쪽 위 모서리**에 가까울수록 좋은 모형
--   **AUC**: 곡선 아래 면적. 1이면 완벽, **0.5면 동전 던지기와 동일** (점선)
+→ 두 목표를 동시에 달성하는 점 = **(0, 1) 왼쪽 위 꼭짓점**  
+→ 곡선이 왼쪽 위에 가까울수록 **모든 threshold에서 성능이 좋은** 모형
+
+. . .
+
+**세 가지 극단적 상황:**
+
+| 상황 | ROC 위치 | AUC |
+|:-----|:--------:|:---:|
+| 완벽한 모형 | 왼쪽 위 꼭짓점 (0, 1)을 지남 | **1.0** |
+| 동전 던지기 | 대각선 (점선) 위에 위치 | **0.5** |
+| 최악의 모형 | 오른쪽 아래 (대각선 아래) | **< 0.5** |
 
 ------------------------------------------------------------------------
 
-## OLS vs. 로지스틱 회귀: 정리
+## ROC 곡선: threshold 이동의 효과
 
-| 구분        | OLS                  | 로지스틱 회귀                 |
-|-------------|----------------------|-------------------------------|
-| 종속변수    | 연속형               | 이진형 (0/1)                  |
-| 추정 방법   | 최소제곱법 (OLS)     | 최대우도법 (MLE)              |
-| 예측값 범위 | $(-\infty, +\infty)$ | $(0, 1)$                      |
-| 계수 해석   | $y$의 변화량         | 로그 오즈의 변화량            |
-| 적합도 지표 | $R^2$                | Pseudo $R^2$, AUC             |
-| R 함수      | `lm()`               | `glm(..., family = binomial)` |
+**threshold를 낮추면** (예: 0.9 → 0.1):
+
+- 더 많은 고객을 Yes로 분류 → 민감도 ↑ (default를 더 많이 잡음)
+- 동시에 정상 고객도 더 많이 오분류 → 1-특이도 ↑ (x축 오른쪽으로 이동)
+
+```{r, echo=FALSE, fig.height=4.5, fig.width=11}
+library(pROC)
+roc_obj <- roc(Default$default, predict(logit_multi, type = "response"), quiet = TRUE)
+
+coords_df <- coords(roc_obj, x = c(0.05, 0.2, 0.5),
+                    input = "threshold",
+                    ret = c("threshold", "sensitivity", "specificity")) |>
+  as.data.frame() |>
+  mutate(fpr = 1 - specificity)
+
+ggroc(roc_obj, legacy.axes = TRUE, color = "#d90502", linewidth = 1.3) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "gray50") +
+  geom_point(data = coords_df, aes(x = fpr, y = sensitivity),
+             size = 4, color = "steelblue") +
+  geom_text(data = coords_df,
+            aes(x = fpr, y = sensitivity,
+                label = paste0("t = ", round(threshold, 2),
+                               "\nSens = ", round(sensitivity, 2),
+                               "\n1-Spec = ", round(fpr, 2))),
+            size = 3.2, color = "steelblue", vjust = -0.4, hjust = 0.5) +
+  annotate("point", x = 0, y = 0, size = 5, color = "gray40") +
+  annotate("text",  x = 0.05, y = 0.05,
+           label = "t = 1\n(predict No always)", size = 3, color = "gray40", hjust = 0) +
+  annotate("point", x = 1, y = 1, size = 5, color = "darkgreen") +
+  annotate("text",  x = 0.95, y = 0.95,
+           label = "t = 0\n(predict Yes always)", size = 3, color = "darkgreen", hjust = 1) +
+  annotate("text", x = 0.65, y = 0.35,
+           label = paste0("AUC = ", round(auc(roc_obj), 3)),
+           size = 5, color = "steelblue") +
+  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) +
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) +
+  labs(title = "ROC Curve: moving the threshold traces the curve",
+       x = "1 - Specificity (False Positive Rate, 0 → 1)",
+       y = "Sensitivity (True Positive Rate, 0 → 1)") +
+  theme_bw(base_size = 13)
+```
+
+- **t = 1** (왼쪽 아래): 모두 No → 불이행자를 하나도 못 잡음 (Sens = 0)
+- **t = 0** (오른쪽 위): 모두 Yes → 불이행자를 다 잡지만 정상 고객도 다 오분류 (1-Spec = 1) 
+- **threshold를 낮출수록** 점이 오른쪽 위 방향으로 이동
+
+------------------------------------------------------------------------
+
+## AUC
+
+**AUC가 의미하는 것**: 모형이 두 사람을 올바르게 **순위 매기는** 능력
+
+> 불이행자 1명과 정상 고객 1명을 무작위로 뽑았을 때,  
+> 모형이 불이행자에게 **더 높은 확률을 부여할 확률**
+
+. . .
+
+**예시:**
+
+| 상황 | 불이행자 예측 확률 | 정상 고객 예측 확률 | 올바른 순위? |
+|:----:|:-----------------:|:-------------------:|:------------:|
+| ✅ 좋은 예측 | 0.82 | 0.05 | Yes |
+| ✅ 좋은 예측 | 0.45 | 0.12 | Yes |
+| ❌ 나쁜 예측 | 0.18 | 0.67 | No |
+
+. . .
+
+이런 쌍을 **여러번 반복**해서 올바른 순위를 매긴 비율 = **AUC**
+
+| AUC | 해석 | 비유 |
+|:---:|:-----|:-----|
+| **1.0** | 항상 올바르게 순위 매김 | 완벽한 신용 심사관 |
+| **0.95** | 95%의 쌍에서 올바르게 순위 매김 | 매우 우수 |
+| **0.70** | 70%의 쌍에서 올바르게 순위 매김 | 양호 |
+| **0.50** | 50% — 동전 던지기와 동일 | 쓸모없는 모형 |
+
+------------------------------------------------------------------------
+
+## AUC: 예시
+
+모형이 각 고객에게 채무불이행 예측 확률을 부여함
+
+```{r, echo=FALSE}
+set.seed(42)
+example_df <- data.frame(
+  Customer = c("A (Defaulter)", "B (Defaulter)", "C (Normal)", "D (Normal)"),
+  Predicted_Prob = c(0.82, 0.45, 0.12, 0.05),
+  Actual = c("Yes", "Yes", "No", "No")
+)
+knitr::kable(example_df, col.names = c("Customer", "Predicted Prob", "Actual Default"),
+             align = "lcc") |>
+  kableExtra::kable_styling(font_size = 22) |>
+  kableExtra::row_spec(1:2, background = "#fff0f0") |>
+  kableExtra::row_spec(3:4, background = "#f0f0ff")
+```
+
+**AUC 계산**: 불이행자(A, B) vs. 정상 고객(C, D) 가능한 쌍 4개를 비교
+
+| 비교 쌍 | 불이행자 확률 | 정상 고객 확률 | 올바른 순위? |
+|:-------:|:------------:|:--------------:|:------------:|
+| A vs. C | 0.82 | 0.12 | ✅ Yes |
+| A vs. D | 0.82 | 0.05 | ✅ Yes |
+| B vs. C | 0.45 | 0.12 | ✅ Yes |
+| B vs. D | 0.45 | 0.05 | ✅ Yes |
+
+**AUC = 4/4 = 1.0** → 이 예시에서 완벽한 순위 부여
+
+. . .
+
+> AUC = 0.95 → 임의의 (불이행자, 정상 고객) 쌍 100개 중  
+> **95개**에서 불이행자에게 더 높은 확률을 부여함
+
+------------------------------------------------------------------------
+
+## AUC: ROC 곡선의 넓이
+
+```{r, echo=FALSE, fig.height=4.5, fig.width=11}
+library(pROC)
+roc_obj <- roc(Default$default, predict(logit_multi, type = "response"), quiet = TRUE)
+
+roc_df <- data.frame(
+  fpr = 1 - roc_obj$specificities,
+  tpr = roc_obj$sensitivities
+)
+
+# Random classifier line data
+diag_df <- data.frame(fpr = c(0, 1), tpr = c(0, 1))
+
+ggplot(roc_df, aes(x = fpr, y = tpr)) +
+  # AUC shading: above diagonal = model gain over random
+  geom_ribbon(aes(ymin = fpr, ymax = tpr), fill = "#d90502", alpha = 0.2) +
+  geom_ribbon(aes(ymin = 0, ymax = fpr), fill = "gray70", alpha = 0.2) +
+  geom_line(color = "#d90502", linewidth = 1.3) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "gray50", linewidth = 1) +
+  # Annotations
+  annotate("text", x = 0.25, y = 0.65,
+           label = paste0("Model gain\n(AUC - 0.5 = ",
+                          round(auc(roc_obj) - 0.5, 3), ")"),
+           size = 4, color = "#d90502", fontface = "bold") +
+  annotate("text", x = 0.65, y = 0.25,
+           label = "Random classifier\n(AUC = 0.5)",
+           size = 4, color = "gray50") +
+  annotate("text", x = 0.98, y = 0.08,
+           label = paste0("Total AUC\n= ", round(auc(roc_obj), 3)),
+           size = 4.5, color = "steelblue", hjust = 1, fontface = "bold") +
+  # Perfect classifier point
+  annotate("point", x = 0, y = 1, size = 4, color = "darkgreen") +
+  annotate("text",  x = 0.02, y = 0.97,
+           label = "Perfect\nclassifier", size = 3.2, color = "darkgreen", hjust = 0) +
+  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) +
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) +
+  labs(title = paste0("AUC = ", round(auc(roc_obj), 3),
+                      ": red curve area / total box area"),
+       x = "1 - Specificity: False Positive Rate (0 → 1)",
+       y = "Sensitivity: True Positive Rate (0 → 1)") +
+  theme_bw(base_size = 13)
+```
+
+- **빨간 음영** (곡선 위, 대각선 위): 무작위 분류 대비 **모형의 추가 성능**
+- **회색 음영** (대각선 아래): 동전 던지기도 얻을 수 있는 영역 (AUC = 0.5)
+- 전체 AUC = 빨간 + 회색 음영 합계
 
 ------------------------------------------------------------------------
 
@@ -764,34 +860,58 @@ ggroc(roc_obj, color = "#d90502", linewidth = 1.3) +
 
 `r countdown(minutes = 12, top = "20px", right = "10px", font_size = "0.8em")`
 
-1.  `Default` 데이터를 7:3 비율로 **훈련(train)** / **테스트(test)** 세트로 분리한 뒤, 훈련 세트로 다중 로지스틱 회귀를 추정하시오.
+모형을 훈련/테스트 세트로 나눠 실제 예측 성능을 평가해보자.
+
+**Step 1.** 7:3으로 분리 후 훈련 세트로 모형 추정:
 
 ```{r, echo=TRUE, eval=FALSE}
 set.seed(42)
-n <- nrow(Default)
-train_idx <- sample(1:n, size = 0.7 * n)
-train_df  <- Default[train_idx, ]
-test_df   <- Default[-train_idx, ]
+train_idx   <- sample(1:nrow(Default), size = 0.7 * nrow(Default))
+train_df    <- Default[train_idx, ]
+test_df     <- Default[-train_idx, ]
 
 logit_train <- glm(default ~ balance + income + student,
                    data = train_df, family = binomial)
 ```
 
-2.  테스트 세트에서 예측 확률을 계산한 뒤, threshold = 0.5를 기준으로 혼동 행렬을 구하시오. 훈련 세트와 비교하여 **과적합(overfitting)** 여부를 판단하시오.
+**Step 2.** 테스트 세트에서 혼동 행렬 계산:
 
 ```{r, echo=TRUE, eval=FALSE}
-pred_test <- predict(logit_train, newdata = test_df, type = "response")
-pred_class_test <- ifelse(pred_test > 0.5, "Yes", "No")
-table(Predicted = pred_class_test, Actual = test_df$default)
+pred_test   <- predict(logit_train, newdata = test_df, type = "response")
+pred_class  <- ifelse(pred_test > 0.5, "Yes", "No")
+table(Predicted = pred_class, Actual = test_df$default)
 ```
 
-3.  (Optional) `pROC` 패키지를 사용하여 테스트 세트의 **ROC 곡선**과 **AUC**를 계산하고 시각화하시오.
+→ 테스트 세트의 정확도(Accuracy)를 계산하시오. 훈련 세트와 크게 다른가?
+
+**Step 3 (Optional).** ROC와 AUC 계산:
 
 ```{r, echo=TRUE, eval=FALSE}
-if (!requireNamespace("pROC")) install.packages("pROC")
 library(pROC)
 roc_test <- roc(test_df$default, pred_test, quiet = TRUE)
-plot(roc_test, col = "#d90502", lwd = 2, main = paste("AUC =", round(auc(roc_test), 3)))
+plot(roc_test, col = "#d90502", lwd = 2,
+     main = paste("Test AUC =", round(auc(roc_test), 3)))
 ```
+
+→ AUC가 0.5에 가까우면 어떤 의미인가?
+
+------------------------------------------------------------------------
+
+## OLS vs. 로지스틱 회귀: 정리
+
+| 구분 | OLS | 로지스틱 회귀 |
+|:-----|:---:|:-------------:|
+| 종속변수 | 연속형 | 이진형 (0/1) |
+| 추정 방법 | 최소제곱법 | 최대우도법 (MLE) |
+| 예측값 범위 | $(-\infty, +\infty)$ | $(0, 1)$ |
+| 계수 직접 해석 | $y$의 변화량 | 로그오즈의 변화량 |
+| 확률 변화 해석 | 계수 그대로 | 한계 효과(ME) 별도 계산 필요 |
+| 적합도 지표 | $R^2$ | Pseudo $R^2$, AUC |
+| R 함수 | `lm()` | `glm(..., family = binomial)` |
+
+. . .
+
+> **핵심 메시지**: 로지스틱 회귀 계수는 **로그오즈의 변화**를 의미함.  
+> 확률 변화를 알고 싶으면 → **한계 효과(AME)** 를 계산할 것.
 
 # THE END!
